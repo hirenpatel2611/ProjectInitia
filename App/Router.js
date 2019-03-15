@@ -16,6 +16,7 @@ render() {
 
   return (
     <Router>
+    
       <Scene key='root'>
       <Scene key="SplashFront" component={SplashFront} hideNavBar={true} navTransparent="true" type={ActionConst.RESET} initial/>
         <Scene key="login1" component={login1} hideNavBar={true} navTransparent="true"  />
