@@ -14,6 +14,9 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Slider } from 'react-native-elements';
+import CheckBox from 'react-native-check-box';
+
 // import { Col, Row, Grid } from "react-native-easy-grid";
 import {
   MECHANIC,
@@ -28,6 +31,13 @@ import styles from "./ProfileStyle";
 import TimerMixin from "react-timer-mixin";
 
 class Game extends Component {
+  constructor(props){
+    super(props);
+    this.state ={isChecked:false}
+
+  }
+
+
 
   render() {
     const {
@@ -50,6 +60,8 @@ class Game extends Component {
           <View
             style={{ flex: 1, flexDirection: "column", alignItems: "stretch" }}
           >
+
+
             <Text
               style={{
                 paddingTop: 16,
@@ -234,7 +246,7 @@ class Game extends Component {
             </View>
             <View style={{ alignItems: "center" }}>
               <TouchableHighlight
-                onPress={() => Actions.login1()}
+                onPress={() => Actions.filter()}
                 underlayColor="white"
               >
                 <View style={createButton}>
