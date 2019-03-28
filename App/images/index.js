@@ -8,4 +8,7 @@ export const BITMAP1=require('../images/Bitmap1.png');
 export const BITMAP2=require('../images/Bitmap2.png');
 export const CAR=require('../images/car.png');
 export const MOTORCYCLE=require('../images/bike.png');
-
+export const MESSAGE=require('../images/message.png');
+export const DISCOVER=require('../images/discover.png');
+export const LOCATION=require('../images/location.png');
+export const PROFILE=require('../images/profile.png');
