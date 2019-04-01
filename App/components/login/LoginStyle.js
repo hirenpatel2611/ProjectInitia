@@ -74,10 +74,10 @@ var styles = StyleSheet.create({
       height: 44,
       width:280,
       borderRadius: 25,
-      fontSize:16,
+
       alignItems: 'center',
       marginBottom:10,
-      color: 'white',
+      // color: 'white',
       justifyContent:'center'
     },
   loginButton: {
@@ -88,7 +88,8 @@ var styles = StyleSheet.create({
       borderColor:'#7960FF',
       borderWidth:1,
       alignItems: 'center',
-      justifyContent:'center'
+      justifyContent:'center',
+      marginBottom:10
     },
   button_text:{
     color: '#ff0000',

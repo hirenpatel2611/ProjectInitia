@@ -12,3 +12,4 @@ export const MESSAGE=require('../images/message.png');
 export const DISCOVER=require('../images/discover.png');
 export const LOCATION=require('../images/location.png');
 export const PROFILE=require('../images/profile.png');
+export const ICON_REFRESH=require("../images/resendOTP.png");

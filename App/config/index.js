@@ -1,6 +1,6 @@
 import { Platform }  from 'react-native';
-export const URL_BASE="https://mobile.juntrax.com";
-export const URL_USER_LOGIN="/app/api/login";
+export const URL_BASE="http://ilifenetwork.com/api/web/v1";
+export const URL_USER_LOGIN="/customers/login";
 export const URL_USER_INFO='/app/api/userinfo';
 export const URL_TIMESHEETS='/app/api/timesheet_list';
 export const URL_TIMESHEET_WEEKWISE='/app/api/weekwise_data'

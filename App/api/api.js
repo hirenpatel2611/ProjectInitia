@@ -1,6 +1,7 @@
+import {URL_BASE} from '../config'
+
+import {Alert} from 'react-native';
 import {  Actions } from 'react-native-router-flux';
-
-
 class Api {
   static headers() {
     let headers = {
@@ -40,11 +41,11 @@ class Api {
     return fetch(url, options)
       .then((response) => response.json())
       .then((responseJson) => {
-        Logger.trace(responseJson, window.console.trace());
+  
         return responseJson;
       })
       .catch((error) => {
-        Logger.error(error, window.console.trace());
+
         return {
           status: 0,
           message: "something went wrong"

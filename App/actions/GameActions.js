@@ -3,20 +3,20 @@ import TimerMixin from 'react-timer-mixin';
 
 
 export const setTimer = () => {
-  return (dispatch) => {
-    var seconds = 120;
-    interval = TimerMixin.setInterval(() => {
-      seconds = seconds - 1;
-
-      if (seconds == 0) {
-        clearInterval(interval);
-      }
-      dispatch({
-        type: SET_TIMER,
-        payload: seconds
-      });
-    }, 1000);
-  }
+  // return (dispatch) => {
+  //   var seconds = 120;
+  //   interval = TimerMixin.setInterval(() => {
+  //     seconds = seconds - 1;
+  //
+  //     if (seconds == 0) {
+  //       clearInterval(interval);
+  //     }
+  //     dispatch({
+  //       type: SET_TIMER,
+  //       payload: seconds
+  //     });
+  //   }, 1000);
+  // }
 };
 
 

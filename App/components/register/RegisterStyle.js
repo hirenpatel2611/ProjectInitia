@@ -11,7 +11,7 @@ var styles = StyleSheet.create({
   containerStyle: {
     justifyContent: 'space-around',
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F7F6FB',
   },
   topImageStyle: {
     height: ScreenHeight * 0.247376,
@@ -74,10 +74,11 @@ var styles = StyleSheet.create({
       height: 44,
       width:280,
       borderRadius: 25,
-      fontSize:16,
+
       alignItems: 'center',
       marginBottom:10,
-      color: 'white',
+      // color: 'white',
+      justifyContent:'center'
     },
   loginButton: {
       backgroundColor: 'transparent',
@@ -87,6 +88,8 @@ var styles = StyleSheet.create({
       borderColor:'#7960FF',
       borderWidth:1,
       alignItems: 'center',
+      justifyContent:'center',
+      marginBottom:10
     },
   button_text:{
     color: '#ff0000',
@@ -102,6 +105,68 @@ var styles = StyleSheet.create({
   },
   whiteText: {
     color: 'white'
+  },
+  inputStyle: {
+	  width:280,
+	  borderRadius: 5,
+	  height: 48,
+	  borderColor: '#9D9D9D',
+	  borderWidth: 1,
+	  marginBottom:20,
+	  fontWeight:'bold',
+	  fontSize:19,
+	  paddingLeft:15,
+	  paddingRight:5
+	},
+  phoneinputStyle: {
+     width:170,
+    borderRadius: 5,
+    height: 44,
+    marginBottom:20,
+    fontWeight:'bold',
+    fontSize:19,
+    paddingLeft:5,
+    paddingRight:5
+  },
+  verificationInputStyle: {
+    width:40,
+    borderBottomWidth:2,
+    borderColor: '#7960FF',
+    marginBottom:40,
+    margin:10,
+    fontSize:20,
+    fontWeight:'bold',
+    textAlign:'center',
+
+  },
+   containertwo: {
+    alignItems: 'center',
+    marginTop: 120,
+    marginBottom:80,
+    marginLeft: 20,
+    marginRight:20,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    height: 410,
+    borderRadius:10,
+    borderColor:'#7960FF',
+    borderWidth:1,
+  },
+  textInputProfilStyle:{
+    fontSize: 16,
+    fontWeight: "bold"
+  },
+  subContainerProfile:{
+    paddingTop: 8,
+    paddingLeft: 16,
+    flex: 1,
+    flexDirection: "column",
+    borderBottomWidth: 1
+  },
+  profileHeadText:{
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "#9C9C9C"
   }
 
 });

@@ -73,6 +73,31 @@ class filter extends Component {
                  longitudeDelta: 0.0121,
                }}
              >
+             <MapView.Marker
+
+           coordinate={{
+             latitude: 23.0216238,
+             longitude: 72.5797068}}
+           title={'viren'}
+
+        />
+
+        <MapView.Marker
+
+      coordinate={{
+        latitude: 23.024338,
+        longitude: 72.5797068}}
+      title={'Devansh'}
+
+   />
+   <MapView.Marker
+
+ coordinate={{
+   latitude: 23.028338,
+   longitude: 72.5797068}}
+ title={'Devansh'}
+
+/>
              </MapView>
             </View>
           </View>

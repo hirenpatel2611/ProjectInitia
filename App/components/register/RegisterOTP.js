@@ -16,38 +16,22 @@ import {
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // import { Col, Row, Grid } from "react-native-easy-grid";
-import { BITMAP1, BITMAP2, CAR, MOTORCYCLE } from "../../images";
+import { BITMAP1, BITMAP2, CAR, MOTORCYCLE,ICON_REFRESH } from "../../images";
 import { Actions } from "react-native-router-flux";
-import { setTimer, setScore } from "../../actions";
+import { updateVehicleBool,updateCarBool,updateOTPTimeOut,setTimeOut,onOTPChange,toggleModalOtp} from "../../actions";
 import _ from "lodash";
-import styles from "./LoginStyle";
+import styles from "./RegisterStyle";
 import TimerMixin from "react-timer-mixin";
-
-class Game extends Component {
-
-  state = {
-    modalVisible: false,
-    modal1Visible: false,
-    containerOpac: 1
-  };
-  toggleModal(visible) {
-    if (visible == true) {
-      this.setState({ containerOpac: 0.5 });
-    }
-    this.setState({ modalVisible: visible });
-    // if(visible == false)
-    // this.setState({ modal1Visible: true });
-  }
-  toggleModal1(visible) {
-    this.setState({ modalVisible: false });
-    this.setState({ modal1Visible: visible });
-
-    if (visible == false) {
-      Actions.profile();
-    }
-  }
+import OtpInputs from 'react-native-otp-inputs'
 
 
+
+class RegisterOTP extends Component {
+
+ componentDidMount() {
+   this.props.updateOTPTimeOut()
+
+ }
 
   render() {
     const {
@@ -61,68 +45,12 @@ class Game extends Component {
       inputStyle,
       verificationInputStyle
     } = styles;
-
     return (
-      <View style={(containerStyle, [{ opacity: this.state.containerOpac }])}>
-        <Modal
-          visible={this.state.modalVisible}
-          animationType="slide"
-          onRequestClose={() => {
-            console.log("Modal has been closed.");
-          }}
-          transparent={true}
-          opacity={0.5}
-          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-        >
-          <View style={styles.containertwo}>
-            <View
-              style={{
-                flex: 1,
-                flexDirection: "column",
-                alignItems: "stretch",
-                marginTop: 50
-              }}
-            >
-              <View style={{ alignItems: "center" }}>
-                <Image style={{ width: 140, height: 140 }} source={BITMAP2} />
-              </View>
-              <View style={{ alignItems: "center", marginTop: 20, margin: 30 }}>
-                <Text
-                  style={{ fontSize: 16, fontWeight: "bold", color: "#7960FF" }}
-                >
-                  Congratulations
-                </Text>
-                <Text style={{ fontSize: 25, color: "#000000", marginTop: 13 }}>
-                  Now you are registered.
-                </Text>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    textAlign: "center",
-                    width: 350,
-                    marginTop: 13
-                  }}
-                >
-                  Get ready to find your mechanic
-                </Text>
-                <TouchableHighlight
-                  onPress={() => {
-                    this.toggleModal1(true);
-                  }}
-                  underlayColor="white"
-                  style={{ marginTop: 13 }}
-                >
-                  <View style={createButton}>
-                    <Text style={[buttonText, whiteText]}>Continue</Text>
-                  </View>
-                </TouchableHighlight>
-              </View>
-            </View>
-          </View>
-        </Modal>
+      <View style={(containerStyle, [{ opacity: this.props.visibleModalOtp?0.5:1 }])}>
+
 
         <Modal
-          visible={this.state.modal1Visible}
+          visible={this.props.visibleModalOtp?true:false}
           animationType="slide"
           transparent={true}
         >
@@ -137,7 +65,10 @@ class Game extends Component {
                     fontWeight: "bold"
                   }}
                 >
-                  Select your vechile Type
+                  Select your {
+                   this.props.isVendor?<Text>Service</Text>:<Text>Vehicle</Text>
+                  } Type
+
                 </Text>
               </View>
               <View
@@ -148,7 +79,9 @@ class Game extends Component {
                   marginTop: 84
                 }}
               >
-                <TouchableHighlight>
+                <TouchableOpacity
+                  onPress={() => this.props.updateVehicleBool()}
+                >
                   <View
                     elevation={5}
                     style={{
@@ -167,12 +100,12 @@ class Game extends Component {
                     }}
                   >
                     <Image
-                      style={{ width: 90, height: 90, resizeMode: "contain" }}
+                      style={{ width: 90, height: 90, resizeMode: "contain",opacity:this.props.isTwoWheeler?0.2:1 }}
                       source={MOTORCYCLE}
                     />
                   </View>
-                </TouchableHighlight>
-                <TouchableHighlight>
+                </TouchableOpacity>
+                <TouchableOpacity   onPress={() => this.props.updateCarBool()}>
                   <View
                     elevation={5}
                     style={{
@@ -190,21 +123,23 @@ class Game extends Component {
                     }}
                   >
                     <Image
-                      style={{ width: 90, height: 90, resizeMode: "contain" }}
+                     style={{ width: 90, height: 90, resizeMode: "contain",opacity:this.props.isFourWheeler?0.2:1 }}
                       source={CAR}
                     />
                   </View>
-                </TouchableHighlight>
+                </TouchableOpacity>
               </View>
               <View
                 style={{ alignItems: "center", marginTop: 114, margin: 30 }}
               >
                 <TouchableHighlight
+                  disabled={this.props.isTwoWheeler?false:true && this.props.isFourWheeler?false:true }
                   onPress={() => {
-                    this.toggleModal1(!this.state.modal1Visible);
+                    this.props.toggleModalOtp(false);
+                    Actions.profile();
                   }}
                   underlayColor="white"
-                  style={{ marginTop: 13 }}
+                  style={{ marginTop: 13, opacity:this.props.isTwoWheeler?1:0.8 && this.props.isFourWheeler?1:0.8}}
                 >
                   <View style={createButton}>
                     <Text style={[buttonText, whiteText]}>Continue</Text>
@@ -268,38 +203,16 @@ class Game extends Component {
             <View
               style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
             >
-              <TextInput
-                style={verificationInputStyle}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                maxLength={1}
-                keyboardType={"phone-pad"}
-              />
-              <TextInput
-                style={verificationInputStyle}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                maxLength={1}
-                keyboardType={"phone-pad"}
-              />
-              <TextInput
-                style={verificationInputStyle}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                maxLength={1}
-                keyboardType={"phone-pad"}
-              />
-              <TextInput
-                style={verificationInputStyle}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                maxLength={1}
-                keyboardType={"phone-pad"}
-              />
+
+
+  <OtpInputs focusedBorderColor = {'white'} handleChange={(code) => this.props.onOTPChange(code)} numberOfInputs={4}  inputStyles = {{backgroundColor:'white',borderBottomWidth:1,color: 'black',borderColor: '#7960FF'}} inputContainerStyles={{backgroundColor:'white'}} />
+
             </View>
             <TouchableHighlight
+              disabled={this.props.otp.length===4?false:true}
+              style={{opacity:this.props.otp.length===4?1:0.8}}
               onPress={() => {
-                this.toggleModal(true);
+                this.props.toggleModalOtp(true);
               }}
               underlayColor="white"
             >
@@ -310,7 +223,24 @@ class Game extends Component {
             <Text
               style={{ fontSize: 14, textAlign: "center", color: "#7960FF" }}
             >
-              Re-send code in 00:30 Second
+
+            {this.props.otpTimeOut?<Text> Re-send code in 00:{this.props.otpTimeOut} Second</Text>
+                                    :<TouchableOpacity
+
+                                    onPress={()=>{
+                                      this.props.setTimeOut();
+                                      this.props.updateOTPTimeOut()
+                                    }}
+                                    >
+                                    <View style={{flexDirection:'row', justifyContent: 'space-around',width:100,top:10}}>
+                                        <Image style={{ width: 13, height: 13, right:3 }} source={ICON_REFRESH} />
+                                      <Text style={{ fontSize: 14, textAlign: "center", color: "#7960FF" }}>
+                                        Resend OTP
+                                      </Text>
+
+                                    </View>
+                                    </TouchableOpacity>
+                                  }
             </Text>
           </View>
         </KeyboardAwareScrollView>
@@ -319,12 +249,12 @@ class Game extends Component {
   }
 }
 
-const mapStateToProps = ({ game }) => {
-  const { time, score } = game;
-  return { time, score };
+const mapStateToProps = ({ register }) => {
+  const { isTwoWheeler,isFourWheeler,isVendor,otpTimeOut,otp,visibleModalOtp} = register;
+  return { isTwoWheeler,isFourWheeler,isVendor,otpTimeOut,otp,visibleModalOtp};
 };
 
 export default connect(
   mapStateToProps,
-  { setTimer, setScore }
-)(Game);
+  { updateVehicleBool,updateCarBool,updateOTPTimeOut,setTimeOut,onOTPChange,toggleModalOtp }
+)(RegisterOTP);

@@ -10,7 +10,8 @@ import {
   ImageBackground,
   Dimensions,
   Button,
-  TouchableHighlight
+  TouchableHighlight,
+  ActivityIndicator
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -22,14 +23,12 @@ import {
   TIMING_BELT
 } from "../../images";
 import { Actions } from "react-native-router-flux";
-import { setTimer, setScore } from "../../actions";
+import { updateMobileNumber, updatePassword, loginUser } from "../../actions";
 import _ from "lodash";
 import styles from "./LoginStyle";
 import TimerMixin from "react-timer-mixin";
 
 class Game extends Component {
-
-
   render() {
     const {
       containerStyle,
@@ -42,7 +41,6 @@ class Game extends Component {
       phoneinputStyle,
       inputStyle
     } = styles;
-
 
     return (
       <View style={containerStyle}>
@@ -112,10 +110,6 @@ class Game extends Component {
               shadowOpacity: 1.0
             }}
           >
-            <TouchableHighlight
-              onPress={() => Actions.login1()}
-              underlayColor="white"
-            >
               <TextInput
                 style={inputStyle}
                 underlineColorAndroid="transparent"
@@ -123,27 +117,30 @@ class Game extends Component {
                 placeholderTextColor="#9D9D9D"
                 autoCapitalize="none"
                 keyboardType={"phone-pad"}
+                value = {this.props.mobileno}
+                onChangeText={text => {
+                  this.props.updateMobileNumber(text);
+                }}
               />
-            </TouchableHighlight>
-            <TouchableHighlight
-              onPress={() => Actions.login1()}
-              underlayColor="white"
-            >
               <TextInput
                 style={inputStyle}
                 underlineColorAndroid="transparent"
                 placeholder="Password"
                 placeholderTextColor="#9D9D9D"
                 autoCapitalize="none"
-                keyboardType={"phone-pad"}
+                value = {this.props.password}
+                onChangeText={text => {
+                  this.props.updatePassword(text);
+                }}
               />
-            </TouchableHighlight>
             <TouchableHighlight
-              onPress={() => Actions.login1()}
+              onPress={() =>{this.props.loginUser()}}
               underlayColor="white"
             >
               <View style={loginButton}>
-                <Text style={[buttonText, themeColor]}>Login</Text>
+              {
+                this.props.loading?<Text style={[buttonText, themeColor]}>Loading...</Text>:<Text style={[buttonText, themeColor]}>Login</Text>
+              }
               </View>
             </TouchableHighlight>
           </View>
@@ -153,12 +150,12 @@ class Game extends Component {
   }
 }
 
-const mapStateToProps = ({ game }) => {
-  const { time, score } = game;
-  return { time, score };
+const mapStateToProps = ({ login }) => {
+  const { mobileno, password,loading,loginFailed } = login;
+  return { mobileno, password,loading,loginFailed };
 };
 
 export default connect(
   mapStateToProps,
-  { setTimer, setScore }
+  { updateMobileNumber, updatePassword, loginUser }
 )(Game);

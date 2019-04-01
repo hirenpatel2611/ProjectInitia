@@ -17,9 +17,9 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 // import { Col, Row, Grid } from "react-native-easy-grid";
 import { BITMAP } from "../../images";
 import { Actions } from "react-native-router-flux";
-import { setTimer, setScore } from "../../actions";
+import { setTimer, setScore,updateUserType } from "../../actions";
 import _ from "lodash";
-import styles from "./LoginStyle";
+import styles from "./SplashStyles";
 import TimerMixin from "react-timer-mixin";
 import {
   MECHANIC,
@@ -95,9 +95,12 @@ class SplashFront extends Component {
             </Text>
           </View>
         </View>
-        <View style={{ alignItems: "center", marginBottom: 40 }}>
+        <View style={{ alignItems: "center", marginBottom: 40}}>
           <TouchableHighlight
-            onPress={() => Actions.login1()}
+            onPress={() => {
+              this.props.updateUserType(true)
+              Actions.registerMobile()
+            }}
             underlayColor="white"
           >
             <View style={createButton}>
@@ -105,11 +108,23 @@ class SplashFront extends Component {
             </View>
           </TouchableHighlight>
           <TouchableHighlight
-            onPress={() => Actions.login1()}
+            onPress={() =>{
+              this.props.updateUserType(false)
+              Actions.registerMobile()
+            }}
             underlayColor="white"
           >
             <View style={loginButton}>
               <Text style={[buttonText, themeColor]}>Looking for mechanic?</Text>
+            </View>
+          </TouchableHighlight>
+
+          <TouchableHighlight
+            onPress={() => Actions.login()}
+            underlayColor="white"
+          >
+            <View style={loginButton}>
+              <Text style={[buttonText, themeColor]}>Login</Text>
             </View>
           </TouchableHighlight>
         </View>
@@ -118,12 +133,12 @@ class SplashFront extends Component {
   }
 }
 
-const mapStateToProps = ({ game }) => {
-  const { time, score } = game;
-  return { time, score };
+const mapStateToProps = ({ register }) => {
+  const {isVendor} = register;
+  return { isVendor};
 };
 
 export default connect(
   mapStateToProps,
-  { setTimer, setScore }
+  { setTimer, setScore,updateUserType}
 )(SplashFront);
