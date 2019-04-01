@@ -11,7 +11,10 @@ import {
   TOGGLE_MODAL_OTP,
   UPDATE_NAME,
   UPDATE_ADDRESS,
-  UPDATE_EMAIL
+  UPDATE_EMAIL,
+  UPDATE_DATE_OF_BIRTH,
+  UPDATE_PASSWORD_PROFILE,
+  UPDATE_LANGUAGE
 }
 from '../actions/Register';
 
@@ -28,7 +31,7 @@ const INITIAL_STATE = {
   name: '',
   address: '',
   email: '',
-  datOfBirth: '',
+  dateOfBirth: '',
   password: '',
   language: ''
 };
@@ -134,11 +137,38 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-      case UPDATE_EMAIL:
+    case UPDATE_EMAIL:
+      {
+        return {
+          ...state,
+          email: action.payload
+        }
+      }
+      break;
+
+      case UPDATE_DATE_OF_BIRTH:
         {
           return {
             ...state,
-            email: action.payload
+            dateOfBirth: action.payload
+          }
+        }
+        break;
+
+    case UPDATE_PASSWORD_PROFILE:
+      {
+        return {
+          ...state,
+          password: action.payload
+        }
+      }
+      break;
+
+      case UPDATE_LANGUAGE:
+        {
+          return {
+            ...state,
+            langauge: action.payload
           }
         }
         break;

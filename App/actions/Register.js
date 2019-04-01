@@ -12,6 +12,10 @@ export const TOGGLE_MODAL_PROFILE = "register/TOGGLE_MODAL_PROFILE";
 export const TOGGLE_MODAL_OTP = "register/TOGGLE_MODAL_OTP";
 export const UPDATE_NAME= 'register/UPDATE_NAME';
 export const UPDATE_ADDRESS= 'register/UPDATE_ADDRESS';
+export const UPDATE_EMAIL= 'register/UPDATE_EMAIL';
+export const UPDATE_DATE_OF_BIRTH= 'register/UPDATE_DATE_OF_BIRTH';
+export const UPDATE_PASSWORD_PROFILE= 'register/UPDATE_PASSWORD_PROFILE';
+export const UPDATE_LANGUAGE= 'register/UPDATE_LANGUAGE';
 
 export const updateVehicleBool = () => dispatch => {
   dispatch({
@@ -79,6 +83,7 @@ export const toggleModalOtp = () => (dispatch, getState)=>{
 }
 
 export const updateName = val => (dispatch, getState)=>{
+console.log(val);
   dispatch({
     type:UPDATE_NAME,
     payload:val
@@ -86,6 +91,7 @@ export const updateName = val => (dispatch, getState)=>{
 }
 
 export const updateAddress = val => (dispatch, getState)=>{
+  console.log(val);
   dispatch({
     type:UPDATE_ADDRESS,
     payload:val
@@ -93,11 +99,37 @@ export const updateAddress = val => (dispatch, getState)=>{
 }
 
 export const updateEmail = val => (dispatch, getState)=>{
+  console.log(val);
   dispatch({
     type:UPDATE_EMAIL,
     payload:val
   })
 }
+
+export const updateDateOfBirth = val => (dispatch, getState)=>{
+  console.log(val);
+  dispatch({
+    type:UPDATE_DATE_OF_BIRTH,
+    payload:val
+  })
+}
+
+export const updatePasswordProfile = val => (dispatch, getState)=>{
+  console.log(val);
+  dispatch({
+    type:UPDATE_PASSWORD_PROFILE,
+    payload:val
+  })
+}
+
+export const updateLanguage = val => (dispatch, getState)=>{
+  console.log(val);
+  dispatch({
+    type:UPDATE_LANGUAGE,
+    payload:val
+  })
+}
+
 
 export const signupUser = () => (dispatch, getState)=>{
   dispatch({

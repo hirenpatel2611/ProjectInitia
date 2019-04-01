@@ -30,7 +30,10 @@ import { Actions } from "react-native-router-flux";
 import { toggleModalProfile,
          updateName,
          updateAddress,
-         updateEmail
+         updateEmail,
+         updateDateOfBirth,
+         updatePasswordProfile,
+         updateLanguage
         } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
@@ -161,6 +164,8 @@ class Profile extends Component {
                 placeholder="Date of Birth"
                 placeholderTextColor="#9D9D9D"
                 autoCapitalize="none"
+                value={this.props.dateOfBirth}
+                onChangeText={text => {this.props.updateDateOfBirth(text);}}
               />
             </View>
             <View
@@ -178,6 +183,8 @@ class Profile extends Component {
                 placeholder="Password"
                 placeholderTextColor="#9D9D9D"
                 autoCapitalize="none"
+                value={this.props.password}
+                onChangeText={text => {this.props.updatePasswordProfile(text);}}
               />
             </View>
             <View
@@ -195,6 +202,8 @@ class Profile extends Component {
                 placeholder="Password"
                 placeholderTextColor="#9D9D9D"
                 autoCapitalize="none"
+                value={this.props.password}
+                onChangeText={text => {this.props.updatePasswordProfile(text);}}
               />
             </View>
             <View
@@ -212,6 +221,8 @@ class Profile extends Component {
                 placeholder="Langauge"
                 placeholderTextColor="#9D9D9D"
                 autoCapitalize="none"
+                value={this.props.language}
+                onChangeText={text => {this.props.updateLanguage(text);}}
               />
             </View>
             <View style={{ alignItems: "center" }}>
@@ -294,8 +305,8 @@ class Profile extends Component {
 }
 
 const mapStateToProps = ({ register }) => {
-  const { visibleModalProfile,name,address,email } = register;
-  return { visibleModalProfile,name,address,email };
+  const { visibleModalProfile,name,address,email,dateOfBirth,password,language } = register;
+  return { visibleModalProfile,name,address,email,dateOfBirth,password,language };
 };
 
 export default connect(
@@ -303,6 +314,9 @@ export default connect(
   { toggleModalProfile,
     updateName,
     updateAddress,
-    updateEmail
+    updateEmail,
+    updateDateOfBirth,
+    updatePasswordProfile,
+    updateLanguage
    }
 )(Profile);
