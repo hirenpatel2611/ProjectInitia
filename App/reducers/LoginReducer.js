@@ -33,7 +33,9 @@ export default (state = INITIAL_STATE, action) => {
        break;
 
     case LOGIN_FAILED:{
-          return { ...state,loading:true}}
+          return { ...state,
+                  loading:true
+          }}
           break;
 
     default:

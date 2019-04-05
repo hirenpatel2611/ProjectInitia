@@ -17,7 +17,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 // import { Col, Row, Grid } from "react-native-easy-grid";
 import { BITMAP } from "../../images";
 import { Actions } from "react-native-router-flux";
-import { updateMobileNo } from "../../actions";
+import { updateMobileNo,requestOtp } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
 import TimerMixin from "react-timer-mixin";
@@ -108,7 +108,8 @@ class RegisterMobile extends Component {
             <TouchableHighlight
               disabled={this.props.mobileno.length===10?false:true}
               style={{opacity:this.props.mobileno.length===10?1:0.8}}
-              onPress={() => Actions.registerOTP()}
+              onPress={() => {
+                Actions.registerOTP()}}
               underlayColor="white"
             >
               <View style={createButton}>
@@ -129,5 +130,5 @@ const mapStateToProps = ({ register }) => {
 
 export default connect(
   mapStateToProps,
-  { updateMobileNo }
+  { updateMobileNo,requestOtp }
 )(RegisterMobile);

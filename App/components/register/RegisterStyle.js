@@ -167,7 +167,11 @@ var styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     color: "#9C9C9C"
-  }
+  },
+  textError: {
+   color: 'red',
+   marginTop: 5,
+ },
 
 });
 export default styles;

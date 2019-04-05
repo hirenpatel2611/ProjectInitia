@@ -12,9 +12,17 @@ import {
   UPDATE_NAME,
   UPDATE_ADDRESS,
   UPDATE_EMAIL,
+  UPDATE_MOBILE_NO_PROFILE,
   UPDATE_DATE_OF_BIRTH,
   UPDATE_PASSWORD_PROFILE,
-  UPDATE_LANGUAGE
+  UPDATE_CONFIRM_PASSWORD,
+  UPDATE_LANGUAGE,
+  SIGNUP_START,
+  SIGNUP_SUCCESSFUL,
+  REQUEST_OTP,
+  REQUEST_OTP_SUCCESS,
+  UPDATE_ON_SUBMEET_OTP,
+  UPDATE_ON_SUBMEET_SIGNUP
 }
 from '../actions/Register';
 
@@ -23,17 +31,24 @@ const INITIAL_STATE = {
   isFourWheeler: false,
   isVendor: false,
   mobileno: '',
-  otpTimeOut: 5,
+  otpTimeOut: 59,
   isOtpTimedOut: false,
   otp: '',
   visibleModalProfile: false,
   visibleModalOtp: false,
   name: '',
   address: '',
+  mobilenoProfile: '',
   email: '',
   dateOfBirth: '',
   password: '',
-  language: ''
+  confirmPassword: '',
+  language: '',
+  loadingSignup: false,
+  recievedOTP: '',
+  loading: false,
+  onSubmeetOtpForm: false,
+  onSubmeetSignupForm: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -76,9 +91,11 @@ export default (state = INITIAL_STATE, action) => {
 
     case UPDATE_OTP_TIMEOUT:
       {
+        //console.log(state.otpTimeOut);
         return {
           ...state,
-          otpTimeOut: state.otpTimeOut - 1
+          otpTimeOut: state.otpTimeOut - 1,
+          recievedOTP: state.otpTimeOut === 1 ? '' : state.recievedOTP
         }
       }
       break;
@@ -96,7 +113,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          otp: action.payload
+          otp: action.payload,
+          onSubmeetOtpForm: false
         }
       }
       break;
@@ -123,7 +141,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          name: action.payload
+          name: action.payload,
+          onSubmeetSignupForm: false
         }
       }
       break;
@@ -132,7 +151,18 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          address: action.payload
+          address: action.payload,
+          onSubmeetSignupForm: false
+        }
+      }
+      break;
+
+    case UPDATE_MOBILE_NO_PROFILE:
+      {
+        return {
+          ...state,
+          mobilenoProfile: action.payload,
+          onSubmeetSignupForm: false
         }
       }
       break;
@@ -141,37 +171,105 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          email: action.payload
+          email: action.payload,
+          onSubmeetSignupForm: false
         }
       }
       break;
 
-      case UPDATE_DATE_OF_BIRTH:
-        {
-          return {
-            ...state,
-            dateOfBirth: action.payload
-          }
+    case UPDATE_DATE_OF_BIRTH:
+      {
+        return {
+          ...state,
+          dateOfBirth: action.payload
         }
-        break;
+      }
+      break;
 
     case UPDATE_PASSWORD_PROFILE:
       {
         return {
           ...state,
-          password: action.payload
+          password: action.payload,
+          onSubmeetSignupForm: false
         }
       }
       break;
 
-      case UPDATE_LANGUAGE:
-        {
-          return {
-            ...state,
-            langauge: action.payload
-          }
+    case UPDATE_CONFIRM_PASSWORD:
+      {
+        return {
+          ...state,
+          confirmPassword: action.payload,
+          onSubmeetSignupForm: false
         }
-        break;
+      }
+      break;
+
+    case UPDATE_LANGUAGE:
+      {
+        return {
+          ...state,
+          langauge: action.payload
+        }
+      }
+      break;
+
+    case SIGNUP_START:
+      {
+        console.log(loadingSignup);
+        return {
+          ...state,
+          loadingSignup: true
+        }
+      }
+      break;
+
+    case SIGNUP_SUCCESSFUL:
+      {
+        return {
+          ...state,
+          loadingSignup: true
+        }
+      }
+      break;
+
+    case REQUEST_OTP:
+      {
+        return {
+          ...state,
+          loading: true
+        }
+      }
+
+    case REQUEST_OTP_SUCCESS:
+      {
+
+        return {
+          ...state,
+          recievedOTP: action.payload.toString(),
+          loading: false
+        }
+      }
+      break;
+
+    case UPDATE_ON_SUBMEET_OTP:
+      {
+        return {
+          ...state,
+          onSubmeetOtpForm: true,
+        }
+      }
+      break;
+
+    case UPDATE_ON_SUBMEET_SIGNUP:
+      {
+        return {
+          ...state,
+          onSubmeetSignupForm: true,
+        }
+      }
+      break;
 
     default:
       return state;

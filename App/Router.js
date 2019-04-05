@@ -24,8 +24,8 @@ render() {
         <Scene key="SplashFront" component={SplashFront} hideNavBar={true} navTransparent="true" type={ActionConst.RESET} initial/>
         <Scene key="login" component={Login} hideNavBar={true} navTransparent="true" />
         <Scene key="registerMobile" component={RegisterMobile} hideNavBar={true} navTransparent="true"  />
-    		<Scene key="registerOTP" component={RegisterOTP} hideNavBar={true} navTransparent="true" />
-    		<Scene key="profile" component={profile} hideNavBar={true} navTransparent="true" />
+    		<Scene key="registerOTP" component={RegisterOTP} hideNavBar={true} navTransparent="true"  />
+    		<Scene key="profile" component={profile} hideNavBar={true} navTransparent="true"  type={ActionConst.RESET}/>
         <Scene key="filter" component={filter} hideNavBar={true} navTransparent="true" />
         <Scene key="NearbyGaraje" component={NearbyGaraje} hideNavBar={true} navTransparent="true" />
         <Scene key="NearbyGarajeDiscover" component={NearbyGarajeDiscover} hideNavBar={true} navTransparent="true" />

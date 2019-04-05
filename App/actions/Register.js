@@ -1,5 +1,7 @@
 import TimerMixin from "react-timer-mixin";
 import Api from "../api/api";
+import {URL_USER_SIGNUP,URL_USER_OTP} from '../config';
+import { Actions } from "react-native-router-flux";
 
 export const UPDATE_VEHICLE_BOOL = "register/UPDATE_VEHICLE_BOOL";
 export const UPDATE_CAR_BOOL = "register/UPDATE_CAR_BOOL";
@@ -13,9 +15,17 @@ export const TOGGLE_MODAL_OTP = "register/TOGGLE_MODAL_OTP";
 export const UPDATE_NAME= 'register/UPDATE_NAME';
 export const UPDATE_ADDRESS= 'register/UPDATE_ADDRESS';
 export const UPDATE_EMAIL= 'register/UPDATE_EMAIL';
+export const UPDATE_MOBILE_NO_PROFILE= 'register/UPDATE_MOBILE_NO_PROFILE';
 export const UPDATE_DATE_OF_BIRTH= 'register/UPDATE_DATE_OF_BIRTH';
 export const UPDATE_PASSWORD_PROFILE= 'register/UPDATE_PASSWORD_PROFILE';
+export const UPDATE_CONFIRM_PASSWORD= 'register/UPDATE_CONFIRM_PASSWORD';
 export const UPDATE_LANGUAGE= 'register/UPDATE_LANGUAGE';
+export const SIGNUP_START= 'register/UPDATE_LANGUAGE';
+export const SIGNUP_SUCCESSFUL= 'register/UPDATE_LANGUAGE';
+export const REQUEST_OTP = 'register/REQUEST_OTP';
+export const REQUEST_OTP_SUCCESS = 'register/REQUEST_OTP_SUCCESS';
+export const UPDATE_ON_SUBMEET_OTP = 'register/UPDATE_ON_SUBMEET_OTP';
+export const UPDATE_ON_SUBMEET_SIGNUP = 'register/UPDATE_ON_SUBMEET_SIGNUP';
 
 export const updateVehicleBool = () => dispatch => {
   dispatch({
@@ -42,6 +52,28 @@ export const updateMobileNo = val => (dispatch, getState) => {
     payload: val
   });
 };
+
+export const requestOtp = () => (dispatch, getState)=>{
+  dispatch({
+    type:REQUEST_OTP,
+  });
+
+  const {mobileno} = getState().register;
+  let test = new FormData();
+  console.log(mobileno);
+  test.append("mobile", mobileno);
+  Api.post(URL_USER_OTP, test)
+    .then(response => {
+     console.log(response);
+      dispatch({
+        type: REQUEST_OTP_SUCCESS,
+        payload: response.OTP
+      });
+
+    }).catch((err)=>{
+    })
+}
+
 export const setTimeOut=() => (dispatch) => {
   dispatch({
     type: SET_TIME_OUT
@@ -52,6 +84,7 @@ export const updateOTPTimeOut = () => (dispatch, getState) => {
     const { otpTimeOut } = getState().register;
     if (otpTimeOut <= 0) {
       clearInterval(interval);
+
     } else {
       dispatch({
         type: UPDATE_OTP_TIMEOUT
@@ -83,7 +116,6 @@ export const toggleModalOtp = () => (dispatch, getState)=>{
 }
 
 export const updateName = val => (dispatch, getState)=>{
-console.log(val);
   dispatch({
     type:UPDATE_NAME,
     payload:val
@@ -91,15 +123,20 @@ console.log(val);
 }
 
 export const updateAddress = val => (dispatch, getState)=>{
-  console.log(val);
   dispatch({
     type:UPDATE_ADDRESS,
     payload:val
   })
 }
 
+export const updateMobileNoProfile = val => (dispatch, getState)=>{
+  dispatch({
+    type:UPDATE_MOBILE_NO_PROFILE,
+    payload:val
+  })
+}
+
 export const updateEmail = val => (dispatch, getState)=>{
-  console.log(val);
   dispatch({
     type:UPDATE_EMAIL,
     payload:val
@@ -107,7 +144,6 @@ export const updateEmail = val => (dispatch, getState)=>{
 }
 
 export const updateDateOfBirth = val => (dispatch, getState)=>{
-  console.log(val);
   dispatch({
     type:UPDATE_DATE_OF_BIRTH,
     payload:val
@@ -115,15 +151,20 @@ export const updateDateOfBirth = val => (dispatch, getState)=>{
 }
 
 export const updatePasswordProfile = val => (dispatch, getState)=>{
-  console.log(val);
   dispatch({
     type:UPDATE_PASSWORD_PROFILE,
     payload:val
   })
 }
 
+export const updateConfirmPassword = val => (dispatch, getState)=>{
+  dispatch({
+    type:UPDATE_CONFIRM_PASSWORD,
+    payload:val
+  })
+}
+
 export const updateLanguage = val => (dispatch, getState)=>{
-  console.log(val);
   dispatch({
     type:UPDATE_LANGUAGE,
     payload:val
@@ -132,7 +173,81 @@ export const updateLanguage = val => (dispatch, getState)=>{
 
 
 export const signupUser = () => (dispatch, getState)=>{
+
   dispatch({
     type:SIGNUP_START,
+    payload:true
+  })
+  const {name,address,email,dateOfBirth,password,language,mobilenoProfile,isVendor,isTwoWheeler,isFourWheeler,loadingSignup} = getState().register;
+   console.log(loadingSignup);
+  let vehicle_type='';
+  if(isTwoWheeler === true && isFourWheeler === false){
+      vehicle_type = 'bike';
+  } else if (isTwoWheeler === false && isFourWheeler === true) {
+    vehicle_type = 'Car';
+  } else if(isTwoWheeler === true && isFourWheeler === true) {
+    vehicle_type = 'Both';
+  }
+
+  let is_vendor=0;
+  if(isVendor === true){
+    is_vendor = 1;
+  } else {
+    is_vendor = 0;
+  }
+
+  let test = new FormData();
+  // console.log("username:", mobilenoProfile);
+  // console.log("password:", password);
+  // console.log("device_token:", 'djhsgdf87sfdfs7dfsfsfs');
+  // console.log("device_type:", "android");
+  // console.log("first_name:", name);
+  // console.log("last_name:", name);
+  // console.log("mobile:", mobilenoProfile);
+  // console.log("email:", email);
+  // console.log("address:", address);
+  // console.log("service_vehicle_type:", true);
+
+  test.append("username", mobilenoProfile);
+  test.append("password", password);
+  test.append("device_token", 'djhsgdf87sfdfs7dfsfsfs');
+  test.append("device_type", "android");
+  test.append("first_name", name);
+  test.append("last_name", name);
+  test.append("mobile", mobilenoProfile);
+  test.append("email", email);
+  test.append("address", address);
+  test.append("service_vehicle_type", vehicle_type);
+  test.append("is_vendor",0);
+  console.log(test);
+//   var object = {};
+//   test.forEach(function(value, key){
+//     object[key] = value;
+// });
+// var json = JSON.stringify(object);
+//console.log(json);
+
+  Api.post(URL_USER_SIGNUP, test)
+    .then(response => {
+        console.log(response);
+      dispatch({
+        type: SIGNUP_SUCCESSFUL,
+        payload: response
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+};
+
+export const updateOnSubmeetOtp=()=> (dispatch,getState) =>{
+  dispatch({
+    type:UPDATE_ON_SUBMEET_OTP,
+  })
+}
+
+export const updateOnSubmeetSignup=()=> (dispatch,getState) =>{
+  dispatch({
+    type:UPDATE_ON_SUBMEET_SIGNUP,
   })
 }

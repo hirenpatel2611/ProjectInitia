@@ -33,13 +33,24 @@ import { toggleModalProfile,
          updateEmail,
          updateDateOfBirth,
          updatePasswordProfile,
-         updateLanguage
+         updateConfirmPassword,
+         updateLanguage,
+         signupUser,
+         updateMobileNoProfile,
+         updateOnSubmeetSignup
         } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
 import TimerMixin from "react-timer-mixin";
+import withValidation from "simple-hoc-validator";
+import isEmpty from "is-empty";
 
 class Profile extends Component {
+
+componentDidMount() {
+
+}
+
   constructor(props){
     super(props);
     this.state ={isChecked:false}
@@ -59,10 +70,11 @@ class Profile extends Component {
       inputStyle,
       textInputProfilStyle,
       subContainerProfile,
-      profileHeadText
+      profileHeadText,
+      textError
     } = styles;
-
-
+    const { validate } = this.props;
+     errors=this.props.onSubmeetSignupForm?validate(this.props.register):{};
     return (
       <View style={(containerStyle,[{opacity:this.props.visibleModalProfile?0.5:1}])}>
         <KeyboardAwareScrollView>
@@ -112,6 +124,9 @@ class Profile extends Component {
                 onChangeText={text=> {this.props.updateName(text);}}
               >
               </TextInput>
+              {errors.name ? (
+                <Text style={styles.textError}>{errors.name[0]}</Text>
+              ) :null}
             </View>
             <View
               style={subContainerProfile}
@@ -130,6 +145,30 @@ class Profile extends Component {
                 value={this.props.address}
                 onChangeText={text => {this.props.updateAddress(text);}}
               />
+              {errors.address ? (
+                <Text style={styles.textError}>{errors.address[0]}</Text>
+              ) :null}
+            </View>
+            <View
+              style={subContainerProfile}
+            >
+              <Text
+                style={profileHeadText}
+              >
+                Mobile
+              </Text>
+              <TextInput
+                style={ textInputProfilStyle}
+                underlineColorAndroid="transparent"
+                placeholder="Mobile"
+                placeholderTextColor="#9D9D9D"
+                autoCapitalize="none"
+                value={this.props.mobilenoProfile}
+                onChangeText={text => {this.props.updateMobileNoProfile(text);}}
+              />
+              {errors.mobilenoProfile ? (
+                <Text style={styles.textError}>{errors.mobilenoProfile[0]}</Text>
+              ) :null}
             </View>
             <View
               style={subContainerProfile}
@@ -141,7 +180,6 @@ class Profile extends Component {
               </Text>
               <TextInput
                 style={ textInputProfilStyle}
-                value={""}
                 underlineColorAndroid="transparent"
                 placeholder="Email"
                 placeholderTextColor="#9D9D9D"
@@ -149,6 +187,9 @@ class Profile extends Component {
                 value={this.props.email}
                 onChangeText={text => {this.props.updateEmail(text);}}
               />
+              {errors.email ? (
+                <Text style={styles.textError}>{errors.email[0]}</Text>
+              ) :null}
             </View>
             <View
               style={subContainerProfile}
@@ -178,7 +219,6 @@ class Profile extends Component {
               </Text>
               <TextInput
                 style={textInputProfilStyle}
-                value={""}
                 underlineColorAndroid="transparent"
                 placeholder="Password"
                 placeholderTextColor="#9D9D9D"
@@ -186,6 +226,9 @@ class Profile extends Component {
                 value={this.props.password}
                 onChangeText={text => {this.props.updatePasswordProfile(text);}}
               />
+              {errors.password ? (
+                <Text style={styles.textError}>{errors.password[0]}</Text>
+              ) :null}
             </View>
             <View
               style={subContainerProfile}
@@ -197,14 +240,16 @@ class Profile extends Component {
               </Text>
               <TextInput
                 style={textInputProfilStyle}
-                value={""}
                 underlineColorAndroid="transparent"
                 placeholder="Password"
                 placeholderTextColor="#9D9D9D"
                 autoCapitalize="none"
-                value={this.props.password}
-                onChangeText={text => {this.props.updatePasswordProfile(text);}}
+                value={this.props.confirmPassword}
+                onChangeText={text => {this.props.updateConfirmPassword(text);}}
               />
+              {errors.confirmPassword ? (
+                <Text style={styles.textError}>{errors.confirmPassword[0]}</Text>
+              ) :null}
             </View>
             <View
               style={subContainerProfile}
@@ -216,7 +261,6 @@ class Profile extends Component {
               </Text>
               <TextInput
                 style={textInputProfilStyle}
-                value={""}
                 underlineColorAndroid="transparent"
                 placeholder="Langauge"
                 placeholderTextColor="#9D9D9D"
@@ -226,12 +270,17 @@ class Profile extends Component {
               />
             </View>
             <View style={{ alignItems: "center" }}>
+              console.error({this.props.loadingSignup});
               <TouchableHighlight
-                onPress={() => this.props.toggleModalProfile(true)}
+                onPress={() =>{
+                  this.props.updateOnSubmeetSignup();
+                  this.props.isValid(this.props.register)?this.props.signupUser():null;
+                  this.props.loadingSignup?this.props.toggleModalProfile():null;
+                  }}
                 underlayColor="white"
               >
                 <View style={createButton}>
-                  <Text style={[buttonText, whiteText]}>Continue</Text>
+                  { this.props.loadingSignup?<Text style={[buttonText, whiteText]}>Loading...</Text>:<Text style={[buttonText, whiteText]}>Continue</Text>}
                 </View>
               </TouchableHighlight>
             </View>
@@ -304,9 +353,73 @@ class Profile extends Component {
   }
 }
 
+const notEmpty = test => !isEmpty(test);
+const rules = [
+  {
+    field: "name",
+    condition: notEmpty,
+    error: "Name is Require"
+  },
+  {
+    field: "address",
+    condition: notEmpty,
+    error: "Address is Require"
+  },
+  {
+    field: "email",
+    condition: notEmpty,
+    error: "Email is Require"
+  },
+  {
+    field: "mobilenoProfile",
+    condition: notEmpty,
+    error: "Mobile No is Require"
+  },
+  {
+    field: "password",
+    condition: notEmpty,
+    error: "Password is Require"
+  },
+  {
+    field: "confirmPassword",
+    condition: (confirmPassword, state) => confirmPassword === state.password,
+    error: "Password is not match."
+  },
+
+  // {
+  //   field: 'avatar',
+  //   condition: avatar => avatar,
+  //   error: 'Please select a profile photo',
+  // },
+];
+
 const mapStateToProps = ({ register }) => {
-  const { visibleModalProfile,name,address,email,dateOfBirth,password,language } = register;
-  return { visibleModalProfile,name,address,email,dateOfBirth,password,language };
+  const { visibleModalProfile,
+          name,
+          address,
+          email,
+          dateOfBirth,
+          password,
+          language,
+          loadingSignup,
+          confirmPassword,
+          mobilenoProfile,
+          onSubmeetSignupForm,
+          isVendor} = register;
+  return { visibleModalProfile,
+           name,
+           address,
+           email,
+           dateOfBirth,
+           password,
+           language,
+           loadingSignup,
+           confirmPassword,
+           mobilenoProfile,
+           onSubmeetSignupForm,
+           isVendor,
+           register
+          };
 };
 
 export default connect(
@@ -317,6 +430,10 @@ export default connect(
     updateEmail,
     updateDateOfBirth,
     updatePasswordProfile,
-    updateLanguage
+    updateConfirmPassword,
+    updateLanguage,
+    signupUser,
+    updateMobileNoProfile,
+    updateOnSubmeetSignup
    }
-)(Profile);
+)(withValidation(rules,Profile));
