@@ -6,6 +6,7 @@ import {
 import TimerMixin from "react-timer-mixin";
 import Api from "../api/api";
 import {URL_USER_LOGIN} from '../config';
+import { Actions } from "react-native-router-flux";
 
 
 export const UPDATE_PASSWORD = "login/UPDATE_PASSWORD";
@@ -13,6 +14,7 @@ export const UPDATE_MOBILE_NUMBER = "login/UPDATE_MOBILE_NUMBER";
 export const LOGIN_START = "login/LOGIN_START";
 export const LOGIN_FAILED = 'login/LOGIN_FAILED';
 export const LOGIN_SUCCESSFUL = 'login/LOGIN_SUCCESSFUL';
+export const ON_SUBMEET_LOGIN_FORM = 'login/ON_SUBMEET_LOGIN_FORM';
 
 export const updateMobileNumber = val => (dispatch, getState) => {
   dispatch({
@@ -46,8 +48,13 @@ export const loginUser = () => (dispatch, getState) => {
           console.log(response);
         dispatch({
           type: LOGIN_SUCCESSFUL,
-          payload: response
+          payload: response.status
         });
+        if(response.status === 1){
+          Actions.filter();
+        }else {
+          alert("Authenticaton Fail!!!");
+        }
       })
       .catch(error => {
         dispatch({
@@ -56,4 +63,10 @@ export const loginUser = () => (dispatch, getState) => {
         });
       });
 
+};
+
+export const updateOnSubmeetLoginForm = () => (dispatch, getState) => {
+  dispatch({
+    type: ON_SUBMEET_LOGIN_FORM,
+  });
 };

@@ -45,6 +45,9 @@ import TimerMixin from "react-timer-mixin";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
 
+let ScreenHeight = Dimensions.get("window").height;
+let ScreenWidth = Dimensions.get("window").width;
+
 class Profile extends Component {
 
 componentDidMount() {
@@ -71,7 +74,8 @@ componentDidMount() {
       textInputProfilStyle,
       subContainerProfile,
       profileHeadText,
-      textError
+      textError,
+      headerTextStyle
     } = styles;
     const { validate } = this.props;
      errors=this.props.onSubmeetSignupForm?validate(this.props.register):{};
@@ -79,33 +83,18 @@ componentDidMount() {
       <View style={(containerStyle,[{opacity:this.props.visibleModalProfile?0.5:1}])}>
         <KeyboardAwareScrollView>
           <StatusBar backgroundColor="#7960FF" />
+
           <View
-            style={{ flex: 1, flexDirection: "column", alignItems: "stretch" }}
+            style={{ flex: 1, flexDirection: "column", alignItems: "stretch", height:ScreenHeight }}
           >
 
 
             <Text
-              style={{
-                paddingTop: 16,
-                paddingLeft: 16,
-                fontSize: 20,
-                fontWeight: "bold",
-                color: "#4B4B4B"
-              }}
+              style={headerTextStyle}
             >
               Personal Details
             </Text>
-
-            <View
-              style={{
-              }}
-            >
-            <Image
-              source={require("../../images/USER2.png")}
-              style={{ width: 64, height: 64, borderRadius:40, alignSelf:'center' }}
-            />
-
-            </View>
+            <View style={{height:0.7 * ScreenHeight}}>
             <View style={subContainerProfile}>
               <Text
                 style={profileHeadText}
@@ -191,24 +180,7 @@ componentDidMount() {
                 <Text style={styles.textError}>{errors.email[0]}</Text>
               ) :null}
             </View>
-            <View
-              style={subContainerProfile}
-            >
-              <Text
-                style={profileHeadText}
-              >
-                Date of Birth
-              </Text>
-              <TextInput
-                style={textInputProfilStyle}
-                underlineColorAndroid="transparent"
-                placeholder="Date of Birth"
-                placeholderTextColor="#9D9D9D"
-                autoCapitalize="none"
-                value={this.props.dateOfBirth}
-                onChangeText={text => {this.props.updateDateOfBirth(text);}}
-              />
-            </View>
+
             <View
               style={subContainerProfile}
             >
@@ -251,23 +223,6 @@ componentDidMount() {
                 <Text style={styles.textError}>{errors.confirmPassword[0]}</Text>
               ) :null}
             </View>
-            <View
-              style={subContainerProfile}
-            >
-              <Text
-                style={profileHeadText}
-              >
-                My Langauge
-              </Text>
-              <TextInput
-                style={textInputProfilStyle}
-                underlineColorAndroid="transparent"
-                placeholder="Langauge"
-                placeholderTextColor="#9D9D9D"
-                autoCapitalize="none"
-                value={this.props.language}
-                onChangeText={text => {this.props.updateLanguage(text);}}
-              />
             </View>
             <View style={{ alignItems: "center" }}>
               console.error({this.props.loadingSignup});
@@ -278,6 +233,7 @@ componentDidMount() {
                   this.props.loadingSignup?this.props.toggleModalProfile():null;
                   }}
                 underlayColor="white"
+                style={{paddingTop:0.15*ScreenHeight}}
               >
                 <View style={createButton}>
                   { this.props.loadingSignup?<Text style={[buttonText, whiteText]}>Loading...</Text>:<Text style={[buttonText, whiteText]}>Continue</Text>}

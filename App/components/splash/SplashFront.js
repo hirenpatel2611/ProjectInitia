@@ -28,6 +28,7 @@ import {
   TIMING_BELT
 } from "../../images";
 
+
 class SplashFront extends Component {
 
 
@@ -49,53 +50,49 @@ class SplashFront extends Component {
       button,
       buttonText,
       themeColor,
-      whiteText
+      whiteText,
+      midTextStyle,
+      mainViewStyle,
+      imageViewstyle,
+      imageMechanic,
+      image2,
+      image3,
+      image4,
+      subViewStyle,
+      titleTextStyle,
+      buttonViewstyle
     } = styles;
     return (
       <View style={containerStyle}>
         <StatusBar backgroundColor="#7960FF" />
         <View
-          style={{
-            flex: 1,
-            flexDirection: "column",
-            alignItems: "stretch",
-            marginTop: 75
-          }}
+          style={mainViewStyle}
         >
           <View style={{ alignItems: "center" }}>
-            <Image style={{ width: 96, height: 110 }} source={MECHANIC} />
+            <Image style={imageMechanic} source={MECHANIC} />
           </View>
           <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              marginTop: 24
-            }}
+            style={imageViewstyle}
           >
-            <Image style={{ width: 34, height: 48 }} source={HAND_HOLDING_UP} />
+            <Image style={image2} source={HAND_HOLDING_UP} />
             <Image
-              style={{ width: 64, height: 47, marginRight: 25, marginLeft: 25 }}
+              style={image3}
               source={CAR_ENGINE}
             />
-            <Image style={{ width: 48, height: 48 }} source={TIMING_BELT} />
+            <Image style={image4} source={TIMING_BELT} />
           </View>
-          <View style={{ alignItems: "center", marginTop: 16 }}>
-            <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+          <View style={subViewStyle}>
+            <Text style={titleTextStyle}>
               Lets Get Started
             </Text>
             <Text
-              style={{
-                fontSize: 16,
-                textAlign: "center",
-                width: 350,
-                marginTop: 16
-              }}
+              style={midTextStyle}
             >
               To find a best mechanic please create or login your account
             </Text>
           </View>
         </View>
-        <View style={{ alignItems: "center", marginBottom: 40}}>
+        <View style={buttonViewstyle}>
           <TouchableHighlight
             onPress={() => {
               this.props.updateUserType(true)

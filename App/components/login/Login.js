@@ -23,12 +23,14 @@ import {
   TIMING_BELT
 } from "../../images";
 import { Actions } from "react-native-router-flux";
-import { updateMobileNumber, updatePassword, loginUser } from "../../actions";
+import { updateMobileNumber, updatePassword, loginUser, updateOnSubmeetLoginForm } from "../../actions";
 import _ from "lodash";
 import styles from "./LoginStyle";
 import TimerMixin from "react-timer-mixin";
+import withValidation from "simple-hoc-validator";
+import isEmpty from "is-empty";
 
-class Game extends Component {
+class Login extends Component {
   render() {
     const {
       containerStyle,
@@ -39,55 +41,49 @@ class Game extends Component {
       themeColor,
       whiteText,
       phoneinputStyle,
-      inputStyle
+      inputStyle,
+      textError,
+      midViewLogin,
+      midTextStyle,
+      imageViewStyle,
+      imageCarEnginStyle,
+      mainViewStyle,
+      image1Style,
+      image2Style,
+      image3Style,
+      viewInnerStyle,
+      textInnerViewStyle
     } = styles;
-
+    const { validate } = this.props;
+     errors=this.props.onSubmeetLoginForm?validate(this.props.login):{};
+     errorse=this.props.loginFailed?validate(this.props.login):{};
     return (
       <View style={containerStyle}>
         <KeyboardAwareScrollView>
           <StatusBar backgroundColor="#7960FF" />
           <View
-            style={{
-              flex: 1,
-              flexDirection: "column",
-              alignItems: "stretch",
-              marginTop: 75
-            }}
+            style={mainViewStyle}
           >
             <View style={{ alignItems: "center" }}>
-              <Image style={{ width: 96, height: 110 }} source={MECHANIC} />
+              <Image style={image1Style} source={MECHANIC} />
             </View>
             <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "center",
-                marginTop: 24
-              }}
+              style={imageViewStyle}
             >
               <Image
-                style={{ width: 34, height: 48 }}
+                style={image2Style}
                 source={HAND_HOLDING_UP}
               />
               <Image
-                style={{
-                  width: 64,
-                  height: 47,
-                  marginRight: 25,
-                  marginLeft: 25
-                }}
+                style={imageCarEnginStyle}
                 source={CAR_ENGINE}
               />
-              <Image style={{ width: 48, height: 48 }} source={TIMING_BELT} />
+              <Image style={image3Style} source={TIMING_BELT} />
             </View>
-            <View style={{ alignItems: "center", marginTop: 16 }}>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>Login</Text>
+            <View style={viewInnerStyle}>
+              <Text style={textInnerViewStyle}>Login</Text>
               <Text
-                style={{
-                  fontSize: 16,
-                  textAlign: "center",
-                  width: 350,
-                  marginTop: 16
-                }}
+                style={midTextStyle}
               >
                 Enter your mobile number and password
               </Text>
@@ -95,20 +91,7 @@ class Game extends Component {
           </View>
           <View
             elevation={5}
-            style={{
-              alignItems: "center",
-              marginTop: 25,
-              backgroundColor: "white",
-              borderRadius: 5,
-              marginLeft: 30,
-              marginRight: 30,
-              marginBottom: 10,
-              padding: 30,
-              shadowColor: "#000000",
-              shadowOffset: { width: 0, height: 3 },
-              shadowRadius: 5,
-              shadowOpacity: 1.0
-            }}
+            style={midViewLogin}
           >
               <TextInput
                 style={inputStyle}
@@ -122,6 +105,9 @@ class Game extends Component {
                   this.props.updateMobileNumber(text);
                 }}
               />
+              {errors.mobileno ? (
+                <Text style={styles.textError}>{errors.mobileno[0]}</Text>
+              ) :null}
               <TextInput
                 style={inputStyle}
                 underlineColorAndroid="transparent"
@@ -132,9 +118,16 @@ class Game extends Component {
                 onChangeText={text => {
                   this.props.updatePassword(text);
                 }}
+
               />
+              {errors.password ? (
+                <Text style={styles.textError}>{errors.password[0]}</Text>
+              ) :null}
             <TouchableHighlight
-              onPress={() =>{this.props.loginUser()}}
+              onPress={() =>{
+                this.props.updateOnSubmeetLoginForm();
+                this.props.isValid(this.props.login)?this.props.loginUser():null;
+                }}
               underlayColor="white"
             >
               <View style={loginButton}>
@@ -150,12 +143,32 @@ class Game extends Component {
   }
 }
 
+
+const notEmpty = test => !isEmpty(test);
+const rules = [
+  {
+    field: "mobileno",
+    condition: notEmpty,
+    error: "Username is Require"
+  },
+  {
+    field: "password",
+    condition: notEmpty,
+    error: "Password is Require"
+  },
+  // {
+  //   field: "loginStatus",
+  //   condition: (loginStatus, state) => loginStatus === 1,
+  //   error: "Authentication Fial!!!"
+  // },
+];
+
 const mapStateToProps = ({ login }) => {
-  const { mobileno, password,loading,loginFailed } = login;
-  return { mobileno, password,loading,loginFailed };
+  const { mobileno, password,loading,loginFailed,onSubmeetLoginForm,loginStatus } = login;
+  return { mobileno, password,loading,loginFailed,onSubmeetLoginForm,loginStatus,login };
 };
 
 export default connect(
   mapStateToProps,
-  { updateMobileNumber, updatePassword, loginUser }
-)(Game);
+  { updateMobileNumber, updatePassword, loginUser, updateOnSubmeetLoginForm }
+)(withValidation(rules,Login));

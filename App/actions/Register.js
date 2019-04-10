@@ -24,6 +24,7 @@ export const SIGNUP_START= 'register/UPDATE_LANGUAGE';
 export const SIGNUP_SUCCESSFUL= 'register/UPDATE_LANGUAGE';
 export const REQUEST_OTP = 'register/REQUEST_OTP';
 export const REQUEST_OTP_SUCCESS = 'register/REQUEST_OTP_SUCCESS';
+export const REQUEST_OTP_FAIL = 'register/REQUEST_OTP_FAIL';
 export const UPDATE_ON_SUBMEET_OTP = 'register/UPDATE_ON_SUBMEET_OTP';
 export const UPDATE_ON_SUBMEET_SIGNUP = 'register/UPDATE_ON_SUBMEET_SIGNUP';
 
@@ -33,7 +34,7 @@ export const updateVehicleBool = () => dispatch => {
   });
 };
 
-export const updateCarBool = () => dispatch => {
+export const updateCarBool = () => async dispatch => {
   dispatch({
     type: UPDATE_CAR_BOOL
   });
@@ -58,17 +59,27 @@ export const requestOtp = () => (dispatch, getState)=>{
     type:REQUEST_OTP,
   });
 
-  const {mobileno} = getState().register;
+  const {mobileno,loading,requestOtpSuccess} = getState().register;
   let test = new FormData();
   console.log(mobileno);
   test.append("mobile", mobileno);
   Api.post(URL_USER_OTP, test)
     .then(response => {
+      console.log(requestOtpSuccess);
      console.log(response);
+     if(response.loggedIn === 1){
       dispatch({
         type: REQUEST_OTP_SUCCESS,
         payload: response.OTP
       });
+      Actions.registerOTP()
+    } else {
+      dispatch({
+        type: REQUEST_OTP_FAIL,
+        payload: response.message
+      });
+      //alert(response.message);
+    }
 
     }).catch((err)=>{
     })
@@ -197,16 +208,7 @@ export const signupUser = () => (dispatch, getState)=>{
   }
 
   let test = new FormData();
-  // console.log("username:", mobilenoProfile);
-  // console.log("password:", password);
-  // console.log("device_token:", 'djhsgdf87sfdfs7dfsfsfs');
-  // console.log("device_type:", "android");
-  // console.log("first_name:", name);
-  // console.log("last_name:", name);
-  // console.log("mobile:", mobilenoProfile);
-  // console.log("email:", email);
-  // console.log("address:", address);
-  // console.log("service_vehicle_type:", true);
+
 
   test.append("username", mobilenoProfile);
   test.append("password", password);
@@ -218,14 +220,8 @@ export const signupUser = () => (dispatch, getState)=>{
   test.append("email", email);
   test.append("address", address);
   test.append("service_vehicle_type", vehicle_type);
-  test.append("is_vendor",0);
+  test.append("is_vendor",is_vendor);
   console.log(test);
-//   var object = {};
-//   test.forEach(function(value, key){
-//     object[key] = value;
-// });
-// var json = JSON.stringify(object);
-//console.log(json);
 
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
@@ -234,6 +230,14 @@ export const signupUser = () => (dispatch, getState)=>{
         type: SIGNUP_SUCCESSFUL,
         payload: response
       });
+      if(response.status === 1){
+        Actions.login();
+      }else {
+        //alert(response.message);
+        if(response.errors !=={}) {
+          alert(response.errors.username);
+        }
+      }
     })
     .catch((err) => {
       console.log(err);

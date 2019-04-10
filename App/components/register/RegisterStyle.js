@@ -74,7 +74,6 @@ var styles = StyleSheet.create({
       height: 44,
       width:280,
       borderRadius: 25,
-
       alignItems: 'center',
       marginBottom:10,
       // color: 'white',
@@ -161,17 +160,196 @@ var styles = StyleSheet.create({
     paddingLeft: 16,
     flex: 1,
     flexDirection: "column",
-    borderBottomWidth: 1
+    borderTopWidth: 1,
   },
   profileHeadText:{
     fontSize: 14,
     fontWeight: "bold",
-    color: "#9C9C9C"
+    color: "#9C9C9C",
   },
   textError: {
    color: 'red',
    marginTop: 5,
+   fontFamily:'open-sans-bold'
  },
+  midViewRegiMobile:{
+    alignItems: "center",
+    marginTop: 30,
+    backgroundColor: "white",
+    borderRadius: 5,
+    marginLeft: 30,
+    marginRight: 30,
+    marginBottom: 10,
+    padding: 30,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    shadowOpacity: 1.0
+  },
+  midTextHeadStyle:{
+    fontSize: 16,
+    textAlign: "center",
+    width: 350,
+    marginTop: 16,
+    fontFamily:'open-sans-regular'
+  },
+  maunViewStyle:{
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "stretch",
+    marginTop: 93
+  },
+  buttonOtpStyle:{
+    alignItems: "center",
+    padding: 10,
+    marginTop: 50,
+    backgroundColor: "white",
+    borderRadius: 60,
+    marginRight: 20,
+    marginLeft: 50,
+    marginBottom: 10,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    shadowOpacity: 1.0
+  },
+  buttonOtpStyle1:{
+    alignItems: "center",
+    padding: 10,
+    marginTop: 50,
+    backgroundColor: "white",
+    borderRadius: 60,
+    marginRight: 20,
+    marginLeft: 20,
+    marginBottom: 10,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    shadowOpacity: 1.0
+  },
+  otpInputStyle:{
+    backgroundColor: "white",
+    borderBottomWidth: 1,
+    color: "black",
+    borderColor: "#7960FF",
+  },
+  otpViewStyle:{
+    alignItems: "center",
+    marginTop: 50,
+    backgroundColor: "white",
+    borderRadius: 5,
+    marginLeft: 30,
+    marginRight: 30,
+    marginBottom: 10,
+    paddingBottom: 30,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    shadowOpacity: 1.0
+  },
+  otpHText:{
+    fontSize: 16,
+    textAlign: "center",
+    width: 350,
+    marginTop: 16,
+    paddingRight: 33,
+    paddingLeft: 33,
+    fontFamily:'open-sans-regular',
+  },
+  resendViewStyle:{
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    width: 100,
+    top: 10
+  },
+  resendTextStyle:{
+    fontSize: 14,
+    textAlign: "center",
+    color: "#7960FF"
+  },
+  headerTextStyle:{
+    paddingTop: 16,
+    paddingLeft: 16,
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#4B4B4B",
+    fontFamily:'open-sans-bold'
+  },
+  imageMobileStyle:{
+    width: 140,
+    height: 140
+  },
+  titleViewStyle:{
+    alignItems: "center",
+    marginTop: 32,
+    margin: 30
+  },
+  titleTextStyle:{
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000000",
+    fontFamily:'open-sans-bold'
+  },
+  subContainorOtp:{
+    flex: 1,
+    flexDirection: "column"
+  },
+  modalHTextStyle:{
+    fontSize: 25,
+    color: "#000000",
+    marginTop: 13,
+    fontWeight: "bold"
+  },
+  modalButtonViewStyle:{
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 84
+  },
+  imageMotorcycle:{
+    width: 90,
+    height: 90,
+    resizeMode: "contain",
+  },
+  modalVahicle:{
+    alignItems: "center",
+    marginTop: 114,
+    margin: 30
+  },
+  image1Otp:{
+    width: 140,
+    height: 140
+  },
+  image1OtpView:{
+    alignItems: "center"
+  },
+  otpMainView:{
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "stretch",
+    marginTop: 75
+  },
+  headerOtpView:{
+    alignItems: "center",
+    marginTop: 32
+  },
+  otpResendText:{
+    fontSize: 14,
+    textAlign: "center",
+    color: "#7960FF"
+  },
+  headerOtpText:{
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#000000",
+    fontFamily:'open-sans-bold'
+  },
+  imageRefreshStyle:{
+    width: 13,
+    height: 13,
+    right: 3
+  }
+
 
 });
 export default styles;

@@ -152,6 +152,55 @@ var styles = StyleSheet.create({
     borderColor:'#7960FF',
     borderWidth:1,
   },
+  midTextStyle:{
+    fontSize: 16,
+    textAlign: "center",
+    width: 350,
+    marginTop: 16,
+    fontFamily:'open-sans-regular'
+  },
+  mainViewStyle:{
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "stretch",
+    marginTop: 75
+  },
+  imageViewstyle:{
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 24
+  },
+  imageMechanic:{
+    width: 96,
+    height: 110
+  },
+  image2:{
+    width: 34,
+    height: 48,
+  },
+  image3:{
+    width: 64,
+    height: 47,
+    marginRight: 25,
+    marginLeft: 25
+  },
+  image4:{
+    width: 48,
+    height: 48
+  },
+  subViewStyle:{
+    alignItems: "center",
+    marginTop: 16
+  },
+  titleTextStyle:{
+    fontSize: 18,
+    fontWeight: "bold",
+    fontFamily:'open-sans-bold'
+  },
+  buttonViewstyle:{
+    alignItems: "center",
+    marginBottom: 40
+  }
 
 });
 export default styles;

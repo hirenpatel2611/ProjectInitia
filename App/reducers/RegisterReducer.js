@@ -22,7 +22,8 @@ import {
   REQUEST_OTP,
   REQUEST_OTP_SUCCESS,
   UPDATE_ON_SUBMEET_OTP,
-  UPDATE_ON_SUBMEET_SIGNUP
+  UPDATE_ON_SUBMEET_SIGNUP,
+  REQUEST_OTP_FAIL
 }
 from '../actions/Register';
 
@@ -48,7 +49,11 @@ const INITIAL_STATE = {
   recievedOTP: '',
   loading: false,
   onSubmeetOtpForm: false,
-  onSubmeetSignupForm: false
+  onSubmeetSignupForm: false,
+  onSubmeetMobileForm:false,
+  requestOtpFail:false,
+  requestOtpMessage:'',
+  requestOtpSuccess:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -84,7 +89,10 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          mobileno: action.payload
+          mobileno: action.payload,
+          onSubmeetMobileForm:false,
+          loading:false,
+          requestOtpFail:false,
         }
       }
       break;
@@ -217,7 +225,6 @@ export default (state = INITIAL_STATE, action) => {
 
     case SIGNUP_START:
       {
-        console.log(loadingSignup);
         return {
           ...state,
           loadingSignup: true
@@ -238,7 +245,7 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          loading: true
+          loading: true,
         }
       }
 
@@ -248,10 +255,24 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           recievedOTP: action.payload.toString(),
-          loading: false
+          loading: false,
+          requestOtpFail:false,
+          requestOtpSuccess:true
         }
       }
       break;
+
+    case REQUEST_OTP_FAIL:
+        {
+          return {
+            ...state,
+            loading: false,
+            requestOtpFail:true,
+            requestOtpMessage:action.payload,
+            onSubmeetMobileForm:true
+          }
+        }
+        break;
 
     case UPDATE_ON_SUBMEET_OTP:
       {

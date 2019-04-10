@@ -152,6 +152,70 @@ var styles = StyleSheet.create({
     borderColor:'#7960FF',
     borderWidth:1,
   },
+  textError: {
+   color: 'red',
+   marginTop: 5,
+   fontFamily:'open-sans-bold'
+ },
+ midViewLogin:{
+   alignItems: "center",
+   marginTop: 25,
+   backgroundColor: "white",
+   borderRadius: 5,
+   marginLeft: 30,
+   marginRight: 30,
+   marginBottom: 10,
+   padding: 30,
+   shadowColor: "#000000",
+   shadowOffset: { width: 0, height: 3 },
+   shadowRadius: 5,
+   shadowOpacity: 1.0
+ },
+ midTextStyle:{
+   fontSize: 16,
+   textAlign: "center",
+   width: 350,
+   marginTop: 16
+ },
+ mainViewStyle:{
+   flex: 1,
+   flexDirection: "column",
+   alignItems: "stretch",
+   marginTop: 75
+ },
+ imageViewStyle:{
+   flexDirection: "row",
+   justifyContent: "center",
+   marginTop: 24
+ },
+ imageCarEnginStyle:{
+   width: 64,
+   height: 47,
+   marginRight: 25,
+   marginLeft: 25
+ },
+ image1Style:{
+   width: 96,
+   height: 110
+ },
+ image2Style:{
+   width: 34,
+   height: 48
+ },
+ image3Style:{
+    width: 48,
+    height: 48
+ },
+ viewInnerStyle:{
+   alignItems: "center",
+   marginTop: 16
+},
+textInnerViewStyle:{
+  fontSize: 18,
+  fontWeight: "bold",
+  fontFamily:'open-sans-bold'
+}
+
 
 });
 export default styles;

@@ -39,21 +39,37 @@ import isEmpty from "is-empty";
 class RegisterOTP extends Component {
   componentDidMount() {
     this.props.updateOTPTimeOut();
-    this.props.requestOtp();
+    //this.props.requestOtp();
   }
 
   render() {
     const {
       containerStyle,
-      loginButton,
       createButton,
       button,
       buttonText,
-      themeColor,
       whiteText,
-      inputStyle,
-      verificationInputStyle,
-      textError
+      textError,
+      buttonOtpStyle,
+      buttonOtpStyle1,
+      holeContainerStyle,
+      otpInputStyle,
+      otpViewStyle,
+      otpHText,
+      resendViewStyle,
+      resendTextStyle,
+      imageMotorcycle,
+      subContainorOtp,
+      modalHTextStyle,
+      modalButtonViewStyle,
+      modalVahicle,
+      image1Otp,
+      image1OtpView,
+      otpMainView,
+      headerOtpView,
+      otpResendText,
+      headerOtpText,
+      imageRefreshStyle
     } = styles;
     const { validate } = this.props;
     const {
@@ -63,6 +79,7 @@ class RegisterOTP extends Component {
         otpTimeOut,
         otp,
         visibleModalOtp,
+        mobileno,
         onSubmeetOtpForm} =this.props.register
 
 
@@ -80,15 +97,10 @@ class RegisterOTP extends Component {
           transparent={true}
         >
           <View style={styles.containertwo}>
-            <View style={{ flex: 1, flexDirection: "column" }}>
-              <View style={{ marginLeft: 40 }}>
+            <View style={subContainorOtp}>
+              <View style={{ marginLeft: 30 }}>
                 <Text
-                  style={{
-                    fontSize: 25,
-                    color: "#000000",
-                    marginTop: 13,
-                    fontWeight: "bold"
-                  }}
+                  style={modalHTextStyle}
                 >
                   Select your{" "}
                   {isVendor ? (
@@ -100,39 +112,21 @@ class RegisterOTP extends Component {
                 </Text>
               </View>
               <View
-                style={{
-                  flex: 1,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  marginTop: 84
-                }}
+                style={modalButtonViewStyle}
               >
                 <TouchableOpacity
                   onPress={() => this.props.updateVehicleBool()}
                 >
                   <View
                     elevation={5}
-                    style={{
-                      alignItems: "center",
-                      padding: 10,
-                      marginTop: 50,
-                      backgroundColor: "white",
-                      borderRadius: 60,
-                      marginRight: 20,
-                      marginLeft: 50,
-                      marginBottom: 10,
-                      shadowColor: "#000000",
-                      shadowOffset: { width: 0, height: 3 },
-                      shadowRadius: 5,
-                      shadowOpacity: 1.0
-                    }}
+                    style={buttonOtpStyle}
                   >
                     <Image
                       style={{
                         width: 90,
                         height: 90,
                         resizeMode: "contain",
-                        opacity: isTwoWheeler ? 0.2 : 1
+                        opacity: isTwoWheeler? 0.2 : 1
                       }}
                       source={MOTORCYCLE}
                     />
@@ -141,19 +135,7 @@ class RegisterOTP extends Component {
                 <TouchableOpacity onPress={() => this.props.updateCarBool()}>
                   <View
                     elevation={5}
-                    style={{
-                      alignItems: "center",
-                      padding: 10,
-                      marginTop: 50,
-                      backgroundColor: "white",
-                      borderRadius: 60,
-                      marginLeft: 20,
-                      marginBottom: 10,
-                      shadowColor: "#000000",
-                      shadowOffset: { width: 0, height: 3 },
-                      shadowRadius: 5,
-                      shadowOpacity: 1.0
-                    }}
+                    style={buttonOtpStyle1}
                   >
                     <Image
                       style={{
@@ -168,7 +150,7 @@ class RegisterOTP extends Component {
                 </TouchableOpacity>
               </View>
               <View
-                style={{ alignItems: "center", marginTop: 114, margin: 30 }}
+                style={modalVahicle}
               >
                 <TouchableHighlight
                   disabled={
@@ -203,53 +185,28 @@ class RegisterOTP extends Component {
         <KeyboardAwareScrollView>
           <StatusBar backgroundColor="#7960FF" />
           <View
-            style={{
-              flex: 1,
-              flexDirection: "column",
-              alignItems: "stretch",
-              marginTop: 75
-            }}
+            style={otpMainView}
           >
-            <View style={{ alignItems: "center" }}>
-              <Image style={{ width: 140, height: 140 }} source={BITMAP1} />
+            <View style={image1OtpView}>
+              <Image style={image1Otp} source={BITMAP1} />
             </View>
-            <View style={{ alignItems: "center", marginTop: 32 }}>
+            <View style={headerOtpView}>
               <Text
-                style={{ fontSize: 18, fontWeight: "bold", color: "#000000" }}
+                style={headerOtpText}
               >
                 Verification
               </Text>
               <Text
-                style={{
-                  fontSize: 16,
-                  textAlign: "center",
-                  width: 350,
-                  marginTop: 16,
-                  paddingRight: 33,
-                  paddingLeft: 33
-                }}
+                style={otpHText}
               >
                 {" "}
-                Enter 4 digit number that sent to
+                Enter 4 digit number that sent to {mobileno}
               </Text>
             </View>
           </View>
           <View
             elevation={5}
-            style={{
-              alignItems: "center",
-              marginTop: 50,
-              backgroundColor: "white",
-              borderRadius: 5,
-              marginLeft: 30,
-              marginRight: 30,
-              marginBottom: 10,
-              paddingBottom: 30,
-              shadowColor: "#000000",
-              shadowOffset: { width: 0, height: 3 },
-              shadowRadius: 5,
-              shadowOpacity: 1.0
-            }}
+            style={otpViewStyle}
           >
             <View
               style={{ flexDirection: "row", alignItems: "center", flex: 1 }}
@@ -258,12 +215,7 @@ class RegisterOTP extends Component {
                 focusedBorderColor={"white"}
                 handleChange={code => this.props.onOTPChange(code)}
                 numberOfInputs={4}
-                inputStyles={{
-                  backgroundColor: "white",
-                  borderBottomWidth: 1,
-                  color: "black",
-                  borderColor: "#7960FF"
-                }}
+                inputStyles={otpInputStyle}
                 inputContainerStyles={{ backgroundColor: "white" }}
               />
             </View>
@@ -271,6 +223,7 @@ class RegisterOTP extends Component {
               <Text style={styles.textError}>{errors.otp[0]}</Text>
             ) :null}
             <TouchableHighlight
+              disabled={otp.length===4?false:true}
               style={{ opacity: otp.length === 4 ? 1 : 0.8 }}
               onPress={() => {
               this.props.updateOnSubmeetOtp();
@@ -283,7 +236,7 @@ class RegisterOTP extends Component {
               </View>
             </TouchableHighlight>
             <Text
-              style={{ fontSize: 14, textAlign: "center", color: "#7960FF" }}
+              style={otpResendText}
             >
               {otpTimeOut ? (
                 <Text> Re-send code in 00:{otpTimeOut} Second</Text>
@@ -296,23 +249,14 @@ class RegisterOTP extends Component {
                   }}
                 >
                   <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-around",
-                      width: 100,
-                      top: 10
-                    }}
+                    style={resendViewStyle}
                   >
                     <Image
-                      style={{ width: 13, height: 13, right: 3 }}
+                      style={imageRefreshStyle}
                       source={ICON_REFRESH}
                     />
                     <Text
-                      style={{
-                        fontSize: 14,
-                        textAlign: "center",
-                        color: "#7960FF"
-                      }}
+                      style={resendTextStyle}
                     >
                       Resend OTP
                     </Text>
@@ -350,7 +294,8 @@ const mapStateToProps = ({ register }) => {
     otpTimeOut,
     otp,
     visibleModalOtp,
-    onSubmeetOtpForm
+    onSubmeetOtpForm,
+    mobileno
   } = register;
   return {
     isTwoWheeler,
@@ -360,6 +305,7 @@ const mapStateToProps = ({ register }) => {
     otp,
     visibleModalOtp,
     onSubmeetOtpForm,
+    mobileno,
     register,
   };
 };
