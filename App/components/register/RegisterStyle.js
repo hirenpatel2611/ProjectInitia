@@ -153,10 +153,10 @@ var styles = StyleSheet.create({
   },
   textInputProfilStyle:{
     fontSize: 16,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily:'open-sans-regular'
   },
   subContainerProfile:{
-    paddingTop: 8,
     paddingLeft: 16,
     flex: 1,
     flexDirection: "column",
@@ -166,6 +166,44 @@ var styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     color: "#9C9C9C",
+    fontFamily:'open-sans-bold'
+  },
+  profileNameText:{
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#4B4B4B",
+    fontFamily:'open-sans-bold'
+  },
+  profileModalView:{
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "stretch",
+    marginTop: 50
+  },
+  profileModal1View:{
+    alignItems: "center",
+    marginTop: 20,
+    margin: 30
+  },
+  profileModalText1:{
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#7960FF",
+    fontFamily:'open-sans-bold'
+  },
+  profileModalText2:{
+    fontSize: 25,
+    color: "#000000",
+    marginTop: 13,
+    fontFamily:'open-sans-regular'
+  },
+  profilImage1style:{
+    width: 140,
+    height: 140
+  },
+  profileButtonView:{
+    alignItems: "center",
+    justifyContent:'flex-end',
   },
   textError: {
    color: 'red',
@@ -265,15 +303,17 @@ var styles = StyleSheet.create({
   resendTextStyle:{
     fontSize: 14,
     textAlign: "center",
-    color: "#7960FF"
+    color: "#7960FF",
+    fontFamily:'open-sans-regular',
   },
   headerTextStyle:{
-    paddingTop: 16,
+    paddingTop: 20,
     paddingLeft: 16,
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#4B4B4B",
-    fontFamily:'open-sans-bold'
+    fontFamily:'open-sans-bold',
+    paddingBottom:10
   },
   imageMobileStyle:{
     width: 140,
@@ -348,6 +388,12 @@ var styles = StyleSheet.create({
     width: 13,
     height: 13,
     right: 3
+  },
+  headerViewProfile:{
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "stretch",
+    height:ScreenHeight,
   }
 
 

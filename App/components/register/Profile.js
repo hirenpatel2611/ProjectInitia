@@ -11,7 +11,8 @@ import {
   ImageBackground,
   Dimensions,
   Button,
-  TouchableHighlight
+  TouchableHighlight,
+  StyleSheet
 } from "react-native";
 import { connect } from "react-redux";
 import { BITMAP1, BITMAP2, CAR, MOTORCYCLE,ICON_REFRESH } from "../../images";
@@ -44,6 +45,7 @@ import styles from "./RegisterStyle";
 import TimerMixin from "react-timer-mixin";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -75,17 +77,25 @@ componentDidMount() {
       subContainerProfile,
       profileHeadText,
       textError,
-      headerTextStyle
+      headerTextStyle,
+      headerViewProfile,
+      profileNameText,
+      profileModalView,
+      profilImage1style,
+      profileModal1View,
+      profileModalText1,
+      profileModalText2,
+      profileButtonView
     } = styles;
     const { validate } = this.props;
      errors=this.props.onSubmeetSignupForm?validate(this.props.register):{};
     return (
       <View style={(containerStyle,[{opacity:this.props.visibleModalProfile?0.5:1}])}>
         <KeyboardAwareScrollView>
-          <StatusBar backgroundColor="#7960FF" />
+          <StatusBar backgroundColor="#FFFFFFFF" />
 
           <View
-            style={{ flex: 1, flexDirection: "column", alignItems: "stretch", height:ScreenHeight }}
+            style={headerViewProfile}
           >
 
 
@@ -94,7 +104,7 @@ componentDidMount() {
             >
               Personal Details
             </Text>
-            <View style={{height:0.7 * ScreenHeight}}>
+            <View style={{height:0.82 * ScreenHeight}}>
             <View style={subContainerProfile}>
               <Text
                 style={profileHeadText}
@@ -102,12 +112,7 @@ componentDidMount() {
                 Name
               </Text>
               <TextInput
-                style={{
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  color: "#4B4B4B",
-
-                }}
+                style={textInputProfilStyle}
                 placeholder="Name"
                 value={this.props.name}
                 onChangeText={text=> {this.props.updateName(text);}}
@@ -223,9 +228,53 @@ componentDidMount() {
                 <Text style={styles.textError}>{errors.confirmPassword[0]}</Text>
               ) :null}
             </View>
+            <View
+            hide={true}
+              style={{
+                height:0.24*ScreenHeight,
+                marginBottom:10,
+                marginRight:10,
+                marginLeft:10,
+
+              }}
+            >
+            <MapView
+               provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+               style={{...StyleSheet.absoluteFillObject,
+                 borderRadius:10,
+                 borderWidth:1,
+                 borderColor:'#7960FF',
+               }}
+               region={{
+                 latitude: 23.0216238,
+                 longitude: 72.5797068,
+                 latitudeDelta: 0.015,
+                 longitudeDelta: 0.0121,
+               }}
+             >
+                 <MapView.Marker
+                     coordinate={{
+                       latitude: 23.0216238,
+                       longitude: 72.5797068}}
+                     title={'Hiren'}
+                  />
+
+                  <MapView.Marker
+                      coordinate={{
+                        latitude: 23.024338,
+                        longitude: 72.5797068}}
+                      title={'Devansh'}
+                   />
+                   <MapView.Marker
+                   coordinate={{
+                     latitude: 23.028338,
+                     longitude: 72.5797068}}
+                   title={'Devansh'}
+                  />
+             </MapView>
             </View>
-            <View style={{ alignItems: "center" }}>
-              console.error({this.props.loadingSignup});
+            </View>
+            <View style={profileButtonView}>
               <TouchableHighlight
                 onPress={() =>{
                   this.props.updateOnSubmeetSignup();
@@ -233,7 +282,6 @@ componentDidMount() {
                   this.props.loadingSignup?this.props.toggleModalProfile():null;
                   }}
                 underlayColor="white"
-                style={{paddingTop:0.15*ScreenHeight}}
               >
                 <View style={createButton}>
                   { this.props.loadingSignup?<Text style={[buttonText, whiteText]}>Loading...</Text>:<Text style={[buttonText, whiteText]}>Continue</Text>}
@@ -253,23 +301,18 @@ componentDidMount() {
             >
               <View style={styles.containertwo}>
                 <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "column",
-                    alignItems: "stretch",
-                    marginTop: 50
-                  }}
+                  style={profileModalView}
                 >
                   <View style={{ alignItems: "center" }}>
-                    <Image style={{ width: 140, height: 140 }} source={BITMAP2} />
+                    <Image style={profilImage1style} source={BITMAP2} />
                   </View>
-                  <View style={{ alignItems: "center", marginTop: 20, margin: 30 }}>
+                  <View style={profileModal1View}>
                     <Text
-                      style={{ fontSize: 16, fontWeight: "bold", color: "#7960FF" }}
+                      style={profileModalText1}
                     >
                       Congratulations
                     </Text>
-                    <Text style={{ fontSize: 25, color: "#000000", marginTop: 13 }}>
+                    <Text style={profileModalText2}>
                       Now you are registered.
                     </Text>
                     <Text
