@@ -23,7 +23,12 @@ import {
   REQUEST_OTP_SUCCESS,
   UPDATE_ON_SUBMEET_OTP,
   UPDATE_ON_SUBMEET_SIGNUP,
-  REQUEST_OTP_FAIL
+  REQUEST_OTP_FAIL,
+  GET_LOCATION_START,
+  GET_LOCATION_FAIL,
+  GET_LOCATION_SUCCESS,
+  SET_LOCATION_VISIBILITY,
+  SET_LOCATION
 }
 from '../actions/Register';
 
@@ -45,7 +50,7 @@ const INITIAL_STATE = {
   password: '',
   confirmPassword: '',
   language: '',
-  loadingSignup: false,
+  loadingSignupB: false,
   recievedOTP: '',
   loading: false,
   onSubmeetOtpForm: false,
@@ -53,7 +58,15 @@ const INITIAL_STATE = {
   onSubmeetMobileForm:false,
   requestOtpFail:false,
   requestOtpMessage:'',
-  requestOtpSuccess:false
+  requestOtpSuccess:false,
+  location:null,
+  errorMessage:null,
+  latitude:0,
+  longitude:0,
+  latitudeDelta:0,
+  longitudeDelta:0,
+  setLocationVisible:false
+
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -227,7 +240,7 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          loadingSignup: true
+          loadingSignupB: true
         }
       }
       break;
@@ -236,7 +249,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          loadingSignup: true
+          loadingSignupB: false,
+          visibleModalProfile:true
         }
       }
       break;
@@ -291,6 +305,52 @@ export default (state = INITIAL_STATE, action) => {
         }
       }
       break;
+
+    case GET_LOCATION_START:
+      {
+        return {
+          ...state,
+          onSubmeetSignupForm: true,
+        }
+      }
+      break;
+
+    case GET_LOCATION_FAIL:
+      {
+        return {
+          ...state,
+          errorMessage: action.payload,
+        }
+      }
+      break;
+
+    case GET_LOCATION_SUCCESS:
+      {
+        return {
+          ...state,
+          location: action.payload,
+        }
+      }
+      break;
+
+      case SET_LOCATION_VISIBILITY:
+        {
+          return {
+            ...state,
+            setLocationVisible: action.payload,
+          }
+        }
+        break;
+
+        case SET_LOCATION:
+          {
+            return {
+              ...state,
+              setLocationVisible: action.payload,
+            }
+          }
+          break;
+
 
     default:
       return state;

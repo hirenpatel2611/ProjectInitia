@@ -10,7 +10,8 @@ import {
   ImageBackground,
   Dimensions,
   Button,
-  TouchableHighlight
+  TouchableHighlight,
+  KeyboardAvoidingView
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -65,8 +66,9 @@ class RegisterMobile extends Component {
     errors=this.props.onSubmeetMobileForm?validate(this.props.register):{};
 
     return (
-      <View style={containerStyle}>
-        <KeyboardAwareScrollView>
+      <KeyboardAwareScrollView contentContainerStyle={containerStyle}
+
+   enableOnAndroid>
           <StatusBar backgroundColor="#7960FF" />
           <View
             style={maunViewStyle}
@@ -116,8 +118,7 @@ class RegisterMobile extends Component {
               </View>
             </TouchableHighlight>
           </View>
-        </KeyboardAwareScrollView>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 }

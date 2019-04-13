@@ -182,7 +182,7 @@ class RegisterOTP extends Component {
             </View>
           </View>
         </Modal>
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView enableOnAndroid>
           <StatusBar backgroundColor="#7960FF" />
           <View
             style={otpMainView}

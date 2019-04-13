@@ -5,7 +5,7 @@ import {  Actions } from 'react-native-router-flux';
 class Api {
   static headers() {
     let headers = {
-      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'multipart/form-data'
     }
     return headers;
   }
@@ -41,7 +41,7 @@ class Api {
     return fetch(url, options)
       .then((response) => response.json())
       .then((responseJson) => {
-  
+
         return responseJson;
       })
       .catch((error) => {

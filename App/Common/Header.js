@@ -19,7 +19,7 @@ const styles ={
     fontWeight:'bold'
   },
   viewStyle:{
-    backgroundColor:'#f8f8f8',
+    backgroundColor:'#ffffff',
     flexDirection:'row',
     shadowColor:'#000',
     shadowOffset:{width:0, height:2},

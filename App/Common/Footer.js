@@ -50,7 +50,7 @@ const Footer = ()=>{
 const styles ={
   containerStyle:{
     flexDirection:'row',
-    backgroundColor:'f8f8f8',
+    backgroundColor:'#ffffff',
     justifyContent:'space-around'
   },
   touchableStyle:{

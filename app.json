@@ -20,8 +20,24 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+
     "ios": {
-      "supportsTablet": true
+          "supportsTablet": true,
+          "bundleIdentifier": "com.ilife.app",
+          "buildNumber": "1.1.0",
+          "infoPlist": {
+            "NSLocationWhenInUseUsageDescription": "We need to know your current location to find the near by golfers and courses. Do you allow this app to use location service on this device?",
+            "NSCameraUsageDescription": "We need to access to your camera in order to take avatar picture. Do you allow this app to access your camera?",
+            "NSPhotoLibraryAddUsageDescription": "We need access to you photo library in order to select photos for avatar and created games. Do allow this app to access you gallery?"
+          }
+        },
+        "android": {
+          "package": "com.ilife.app",
+          "config": {
+      "googleMaps": {
+        "apiKey": "AIzaSyAPNWNHL-B5L1RzJh7StNAR8comws7pcJA"
+      }
     }
+        }
   }
 }

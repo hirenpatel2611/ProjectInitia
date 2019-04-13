@@ -10,7 +10,6 @@ var styles = StyleSheet.create({
 
   containerStyle: {
     justifyContent: 'space-around',
-    flex: 1,
     backgroundColor: '#F7F6FB',
   },
   topImageStyle: {
