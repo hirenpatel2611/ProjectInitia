@@ -11,6 +11,7 @@ var styles = StyleSheet.create({
   containerStyle: {
     justifyContent: 'space-around',
     backgroundColor: '#F7F6FB',
+
   },
   topImageStyle: {
     height: ScreenHeight * 0.247376,
@@ -95,8 +96,9 @@ var styles = StyleSheet.create({
   },
   buttonText: {
     padding: 10,
-    fontSize:16,
-    fontWeight: 'bold'
+    fontSize:18,
+    fontWeight: 'bold',
+    fontFamily:'circular-book',
   },
   themeColor: {
     color: '#7960FF'
@@ -114,7 +116,8 @@ var styles = StyleSheet.create({
 	  fontWeight:'bold',
 	  fontSize:19,
 	  paddingLeft:15,
-	  paddingRight:5
+	  paddingRight:5,
+    fontFamily:'circular-book',
 	},
   phoneinputStyle: {
      width:170,
@@ -153,13 +156,15 @@ var styles = StyleSheet.create({
   textInputProfilStyle:{
     fontSize: 16,
     fontWeight: "bold",
-    fontFamily:'open-sans-regular'
+    fontFamily:'circular-book',
   },
   subContainerProfile:{
     paddingLeft: 16,
-    flex: 1,
     flexDirection: "column",
-    borderTopWidth: 1,
+    justifyContent:'center',
+    borderBottomWidth: 0.5,
+    borderColor:'grey',
+    minHeight:0.08 * ScreenHeight
   },
   profileHeadText:{
     fontSize: 14,
@@ -171,7 +176,7 @@ var styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#4B4B4B",
-    fontFamily:'open-sans-bold'
+    fontFamily:'circular-book'
   },
   profileModalView:{
     flex: 1,
@@ -188,7 +193,7 @@ var styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#7960FF",
-    fontFamily:'open-sans-bold'
+    fontFamily:'circular-book'
   },
   profileModalText2:{
     fontSize: 25,
@@ -206,9 +211,17 @@ var styles = StyleSheet.create({
   },
   textError: {
    color: 'red',
-   marginTop: 5,
-   fontFamily:'open-sans-bold'
+   fontSize:12,
+   fontFamily:'circular-book'
  },
+ textError1: {
+  color: 'red',
+  marginTop:-15,
+  marginBottom:5,
+  fontSize:12,
+  alignSelf:'flex-start',
+  fontFamily:'circular-book'
+},
   midViewRegiMobile:{
     alignItems: "center",
     marginTop: 30,
@@ -228,7 +241,8 @@ var styles = StyleSheet.create({
     textAlign: "center",
     width: 350,
     marginTop: 16,
-    fontFamily:'open-sans-regular'
+    fontFamily:'circular-book',
+    color:'#696969'
   },
   maunViewStyle:{
     flex: 1,
@@ -239,12 +253,9 @@ var styles = StyleSheet.create({
   buttonOtpStyle:{
     alignItems: "center",
     padding: 10,
-    marginTop: 50,
+    marginTop: 40,
     backgroundColor: "white",
     borderRadius: 60,
-    marginRight: 20,
-    marginLeft: 50,
-    marginBottom: 10,
     shadowColor: "#000000",
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
@@ -253,12 +264,9 @@ var styles = StyleSheet.create({
   buttonOtpStyle1:{
     alignItems: "center",
     padding: 10,
-    marginTop: 50,
+    marginTop: 40,
     backgroundColor: "white",
     borderRadius: 60,
-    marginRight: 20,
-    marginLeft: 20,
-    marginBottom: 10,
     shadowColor: "#000000",
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
@@ -291,11 +299,13 @@ var styles = StyleSheet.create({
     marginTop: 16,
     paddingRight: 33,
     paddingLeft: 33,
-    fontFamily:'open-sans-regular',
+    fontFamily:'circular-book',
+    color:'#696969'
   },
   resendViewStyle:{
     justifyContent: 'space-around',
     flexDirection: 'row',
+    flex:1,
     width: 100,
     top: 10
   },
@@ -303,7 +313,7 @@ var styles = StyleSheet.create({
     fontSize: 14,
     textAlign: "center",
     color: "#7960FF",
-    fontFamily:'open-sans-regular',
+    fontFamily:'circular-book',
   },
   headerTextStyle:{
     paddingTop: 20,
@@ -311,7 +321,7 @@ var styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     color: "#4B4B4B",
-    fontFamily:'open-sans-bold',
+    fontFamily:'circular-book',
     paddingBottom:10
   },
   imageMobileStyle:{
@@ -327,7 +337,8 @@ var styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#000000",
-    fontFamily:'open-sans-bold'
+    fontFamily:'circular-bold',
+    color:'#303030'
   },
   subContainorOtp:{
     flex: 1,
@@ -337,11 +348,13 @@ var styles = StyleSheet.create({
     fontSize: 25,
     color: "#000000",
     marginTop: 13,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    fontFamily:'circular-book'
   },
   modalButtonViewStyle:{
     flex: 1,
     flexDirection: "row",
+    justifyContent:'space-around',
     alignItems: "center",
     marginTop: 84
   },
@@ -381,7 +394,8 @@ var styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#000000",
-    fontFamily:'open-sans-bold'
+    fontFamily:'circular-bold',
+    color:'#303030'
   },
   imageRefreshStyle:{
     width: 13,

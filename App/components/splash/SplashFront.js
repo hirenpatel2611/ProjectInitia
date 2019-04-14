@@ -17,7 +17,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 // import { Col, Row, Grid } from "react-native-easy-grid";
 import { BITMAP } from "../../images";
 import { Actions } from "react-native-router-flux";
-import { setTimer, setScore,updateUserType } from "../../actions";
+import { setTimer, setScore, updateUserType } from "../../actions";
 import _ from "lodash";
 import styles from "./SplashStyles";
 import TimerMixin from "react-timer-mixin";
@@ -28,10 +28,7 @@ import {
   TIMING_BELT
 } from "../../images";
 
-
 class SplashFront extends Component {
-
-
   render() {
     const {
       containerStyle,
@@ -65,38 +62,27 @@ class SplashFront extends Component {
     return (
       <View style={containerStyle}>
         <StatusBar backgroundColor="#7960FF" />
-        <View
-          style={mainViewStyle}
-        >
+        <View style={mainViewStyle}>
           <View style={{ alignItems: "center" }}>
             <Image style={imageMechanic} source={MECHANIC} />
           </View>
-          <View
-            style={imageViewstyle}
-          >
+          <View style={imageViewstyle}>
             <Image style={image2} source={HAND_HOLDING_UP} />
-            <Image
-              style={image3}
-              source={CAR_ENGINE}
-            />
+            <Image style={image3} source={CAR_ENGINE} />
             <Image style={image4} source={TIMING_BELT} />
           </View>
           <View style={subViewStyle}>
-            <Text style={titleTextStyle}>
-              Lets Get Started
-            </Text>
-            <Text
-              style={midTextStyle}
-            >
-              To find a best mechanic please create or login your account
+            <Text style={titleTextStyle}>Lets Get Started</Text>
+            <Text style={midTextStyle}>
+              Sweet And Safe Voyage!!!
             </Text>
           </View>
         </View>
         <View style={buttonViewstyle}>
           <TouchableHighlight
             onPress={() => {
-              this.props.updateUserType(true)
-              Actions.registerMobile()
+              this.props.updateUserType(true);
+              Actions.registerMobile();
             }}
             underlayColor="white"
           >
@@ -105,14 +91,16 @@ class SplashFront extends Component {
             </View>
           </TouchableHighlight>
           <TouchableHighlight
-            onPress={() =>{
-              this.props.updateUserType(false)
-              Actions.registerMobile()
+            onPress={() => {
+              this.props.updateUserType(false);
+              Actions.registerMobile();
             }}
             underlayColor="white"
           >
             <View style={loginButton}>
-              <Text style={[buttonText, themeColor]}>Looking for mechanic?</Text>
+              <Text style={[buttonText, themeColor]}>
+                Looking for mechanic?
+              </Text>
             </View>
           </TouchableHighlight>
 
@@ -131,11 +119,11 @@ class SplashFront extends Component {
 }
 
 const mapStateToProps = ({ register }) => {
-  const {isVendor} = register;
-  return { isVendor};
+  const { isVendor } = register;
+  return { isVendor };
 };
 
 export default connect(
   mapStateToProps,
-  { setTimer, setScore,updateUserType}
+  { setTimer, setScore, updateUserType }
 )(SplashFront);

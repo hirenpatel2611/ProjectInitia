@@ -22,8 +22,8 @@ export const UPDATE_DATE_OF_BIRTH = "register/UPDATE_DATE_OF_BIRTH";
 export const UPDATE_PASSWORD_PROFILE = "register/UPDATE_PASSWORD_PROFILE";
 export const UPDATE_CONFIRM_PASSWORD = "register/UPDATE_CONFIRM_PASSWORD";
 export const UPDATE_LANGUAGE = "register/UPDATE_LANGUAGE";
-export const SIGNUP_START = "register/UPDATE_LANGUAGE";
-export const SIGNUP_SUCCESSFUL = "register/UPDATE_LANGUAGE";
+export const SIGNUP_START = "register/SIGNUP_START";
+export const SIGNUP_SUCCESSFUL = "register/SIGNUP_SUCCESSFUL";
 export const REQUEST_OTP = "register/REQUEST_OTP";
 export const REQUEST_OTP_SUCCESS = "register/REQUEST_OTP_SUCCESS";
 export const REQUEST_OTP_FAIL = "register/REQUEST_OTP_FAIL";
@@ -71,7 +71,7 @@ export const requestOtp = () => (dispatch, getState) => {
   test.append("mobile", mobileno);
   Api.post(URL_USER_OTP, test)
     .then(response => {
-      console.error(response);
+
       if (response.loggedIn === 1) {
         dispatch({
           type: REQUEST_OTP_SUCCESS,
@@ -108,7 +108,6 @@ export const updateOTPTimeOut = () => (dispatch, getState) => {
 };
 
 export const onOTPChange = code => (dispatch, getState) => {
-  console.log(code);
   dispatch({
     type: ON_OTP_CHANGE,
     payload: code
@@ -197,7 +196,7 @@ export const signupUser = () => (dispatch, getState) => {
     dateOfBirth,
     password,
     language,
-    mobilenoProfile,
+    mobileno,
     isVendor,
     isTwoWheeler,
     isFourWheeler,
@@ -229,7 +228,7 @@ export const signupUser = () => (dispatch, getState) => {
   test.append("device_type", "android");
   test.append("first_name", name);
   test.append("last_name", name);
-  test.append("mobile", mobilenoProfile);
+  test.append("mobile", mobileno);
   test.append("email", email);
   test.append("address", address);
   test.append("service_vehicle_type", vehicle_type);
@@ -238,21 +237,20 @@ export const signupUser = () => (dispatch, getState) => {
   test.append("latitude", location.coords.latitude);
   test.append("longitude", location.coords.longitude);
   }
-  console.log(test);
 
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
       console.log(response);
-      dispatch({
-        type: SIGNUP_SUCCESSFUL,
-        payload: response
-      });
-      if (response.status === 1) {
 
+      if (response.status === 1) {
+        dispatch({
+          type: SIGNUP_SUCCESSFUL,
+          payload: response
+        });
       } else {
-        //alert(response.message);
+        alert(response.message);
         if (response.errors !== {}) {
-          alert(response.errors.username);
+          //alert(response.errors.username);
         }
       }
     })
@@ -286,22 +284,18 @@ export const getLocationSuccess = (location) => (dispatch, getState) => {
     payload:location
   });
 };
-
-export const setLocationVisibility = () => (dispatch, getState) => {
-const {isVendor,setLocationVisible} = getState().register;
-console.log(setLocationVisible);
-  if(isVendor === true)
-  {
-      dispatch({
-        type:SET_LOCATION_VISIBILITY,
-        payload:true
-      });
-  }
-}
+//
+// export const setLocationVisibility = () => (dispatch, getState) => {
+// const {isVendor} = getState().register;
+//
+//       dispatch({
+//         type:SET_LOCATION_VISIBILITY,
+//       });
+//
+// }
 
 export const setLocation = () => (dispatch, getState) => {
       dispatch({
         type:SET_LOCATION,
-        payload:false
       });
 }

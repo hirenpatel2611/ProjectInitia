@@ -52,7 +52,8 @@ class RegisterMobile extends Component {
       imageMobileStyle,
       titleTextStyle,
       titleViewStyle,
-      textError
+      textError,
+      textError1
     } = styles;
 
     const { validate } = this.props;
@@ -85,7 +86,7 @@ class RegisterMobile extends Component {
               <Text
                 style={midTextHeadStyle}
               >
-                Enter your mobile number, we will send you OTP to verify later
+                Enter your mobile number, we will send you OTP to verify your number.
               </Text>
             </View>
           </View>
@@ -100,10 +101,11 @@ class RegisterMobile extends Component {
               placeholderTextColor="#9D9D9D"
               autoCapitalize="none"
               keyboardType={"phone-pad"}
+              maxLength={10}
               onChangeText={(val)=>this.props.updateMobileNo(val)}
               value = {this.props.mobileno}
             />
-            {this.props.requestOtpFail?<Text style={textError}>{this.props.requestOtpMessage}</Text>:null}
+            {this.props.requestOtpFail?<Text style={textError1}>{this.props.requestOtpMessage}</Text>:null}
             <TouchableHighlight
               disabled={this.props.mobileno.length===10?false:true}
               style={{opacity:this.props.mobileno.length===10?1:0.8}}

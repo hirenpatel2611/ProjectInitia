@@ -97,8 +97,9 @@ var styles = StyleSheet.create({
   },
   buttonText: {
     padding: 10,
-    fontSize:16,
-    fontWeight: 'bold'
+    fontSize:18,
+    fontWeight: 'bold',
+    fontFamily:'circular-book',
   },
   themeColor: {
     color: '#7960FF'
@@ -157,7 +158,8 @@ var styles = StyleSheet.create({
     textAlign: "center",
     width: 350,
     marginTop: 16,
-    fontFamily:'open-sans-regular'
+    fontFamily:'circular-book',
+    color:'#696969'
   },
   mainViewStyle:{
     flex: 1,
@@ -195,7 +197,8 @@ var styles = StyleSheet.create({
   titleTextStyle:{
     fontSize: 18,
     fontWeight: "bold",
-    fontFamily:'open-sans-bold'
+    fontFamily:'circular-bold',
+    color:'#303030'
   },
   buttonViewstyle:{
     alignItems: "center",

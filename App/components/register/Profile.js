@@ -58,18 +58,12 @@ let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
 class Profile extends Component {
-
-
-
   constructor(props) {
     super(props);
     this.state = { isChecked: false };
-
   }
 
   componentWillMount() {
-    this.props.setLocationVisibility();
-
     if (Platform.OS === "android" && !Constants.isDevice) {
       this.setState({
         errorMessage:
@@ -84,20 +78,21 @@ class Profile extends Component {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
 
     if (status !== "granted") {
-        this.props.getLocationFail();
+      this.props.getLocationFail();
     }
     let location = await Location.getCurrentPositionAsync({});
-      this.props.getLocationSuccess(location);
-
-    this._map.animateToRegion(
-      {
-        latitude: this.props.location.coords.latitude,
-        longitude: this.props.location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
-      },
-      1
-    );
+    this.props.getLocationSuccess(location);
+    {
+      this._map.animateToRegion(
+        {
+          latitude: this.props.location.coords.latitude,
+          longitude: this.props.location.coords.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421
+        },
+        1
+      );
+    }
   };
 
   render() {
@@ -133,7 +128,13 @@ class Profile extends Component {
       <View
         style={
           (containerStyle,
-          [{ opacity: this.props.visibleModalProfile ? 0.5 : 1 }])
+          [
+            {
+              opacity: this.props.visibleModalProfile ? 0.5 : 1,
+              padding: 10,
+              justifyContent: "center"
+            }
+          ])
         }
       >
         <KeyboardAwareScrollView enableOnAndroid>
@@ -141,179 +142,190 @@ class Profile extends Component {
 
           <View style={headerViewProfile}>
             <Text style={headerTextStyle}>Personal Details</Text>
-            <View style={{ height: 0.82 * ScreenHeight }}>
-            <View style={{ height: 0.51 * ScreenHeight }}>
-              <View style={subContainerProfile}>
-                <TextInput
-                  style={textInputProfilStyle}
-                  placeholder="Name"
-                  value={this.props.name}
-                  onChangeText={text => {
-                    this.props.updateName(text);
-                  }}
-                />
-                {errors.name ? (
-                  <Text style={styles.textError}>{errors.name[0]}</Text>
-                ) : null}
-              </View>
-              <View style={subContainerProfile}>
-                <TextInput
-                  style={textInputProfilStyle}
-                  underlineColorAndroid="transparent"
-                  placeholder="Address"
-                  placeholderTextColor="#9D9D9D"
-                  autoCapitalize="none"
-                  value={this.props.address}
-                  onChangeText={text => {
-                    this.props.updateAddress(text);
-                  }}
-                />
-                {errors.address ? (
-                  <Text style={styles.textError}>{errors.address[0]}</Text>
-                ) : null}
-              </View>
-              <View style={subContainerProfile}>
-                <TextInput
-                  style={textInputProfilStyle}
-                  underlineColorAndroid="transparent"
-                  placeholder="Mobile"
-                  keyboardType={"phone-pad"}
-                  placeholderTextColor="#9D9D9D"
-                  autoCapitalize="none"
-                  value={this.props.mobilenoProfile}
-                  onChangeText={text => {
-                    this.props.updateMobileNoProfile(text);
-                  }}
-                />
-                {errors.mobilenoProfile ? (
-                  <Text style={styles.textError}>
-                    {errors.mobilenoProfile[0]}
-                  </Text>
-                ) : null}
-              </View>
-              <View style={subContainerProfile}>
-                <TextInput
-                  style={textInputProfilStyle}
-                  underlineColorAndroid="transparent"
-                  placeholder="Email"
-                  placeholderTextColor="#9D9D9D"
-                  autoCapitalize="none"
-                  value={this.props.email}
-                  onChangeText={text => {
-                    this.props.updateEmail(text);
-                  }}
-                />
-                {errors.email ? (
-                  <Text style={styles.textError}>{errors.email[0]}</Text>
-                ) : null}
-              </View>
-
-              <View style={subContainerProfile}>
-                <TextInput
-                  style={textInputProfilStyle}
-                  underlineColorAndroid="transparent"
-                  placeholder="Password"
-                  placeholderTextColor="#9D9D9D"
-                  autoCapitalize="none"
-                  value={this.props.password}
-                  onChangeText={text => {
-                    this.props.updatePasswordProfile(text);
-                  }}
-                />
-                {errors.password ? (
-                  <Text style={styles.textError}>{errors.password[0]}</Text>
-                ) : null}
-              </View>
-              <View style={subContainerProfile}>
-                <TextInput
-                  style={textInputProfilStyle}
-                  underlineColorAndroid="transparent"
-                  placeholder="Password"
-                  placeholderTextColor="#9D9D9D"
-                  autoCapitalize="none"
-                  value={this.props.confirmPassword}
-                  onChangeText={text => {
-                    this.props.updateConfirmPassword(text);
-                  }}
-                />
-                {errors.confirmPassword ? (
-                  <Text style={styles.textError}>
-                    {errors.confirmPassword[0]}
-                  </Text>
-                ) : null}
-              </View>
-              </View>
-                  <Modal
-                    visible={this.props.setLocationVisible? true : false}
-                    animationType="slide"
-                    onRequestClose={() => {
-                      console.log("Modal has been closed.");
+            <View style={{ height: 0.78 * ScreenHeight, top:20 }}>
+              <View
+                style={{
+                  height: 0.51 * ScreenHeight,
+                  justifyContent: "space-around"
+                }}
+              >
+                <View style={subContainerProfile}>
+                  <TextInput
+                    style={textInputProfilStyle}
+                    underlineColorAndroid="transparent"
+                    placeholderTextColor="#9D9D9D"
+                    placeholder="Name"
+                    value={this.props.name}
+                    onChangeText={text => {
+                      this.props.updateName(text);
                     }}
-                    transparent={true}
-                    opacity={0.5}
-                    style={{ height: 0.24 * ScreenHeight,
-                      backgroundColor: "rgba(0,0,0,0.5)" }}
-                  >
+                  />
+                  {errors.name ? (
+                    <Text style={styles.textError}>{errors.name[0]}</Text>
+                  ) : null}
+                </View>
+                <View style={subContainerProfile}>
+                  <TextInput
+                    style={textInputProfilStyle}
+                    underlineColorAndroid="transparent"
+                    placeholder="Address"
+                    placeholderTextColor="#9D9D9D"
+                    autoCapitalize="none"
+                    value={this.props.address}
+                    onChangeText={text => {
+                      this.props.updateAddress(text);
+                    }}
+                  />
+                  {errors.address ? (
+                    <Text style={styles.textError}>{errors.address[0]}</Text>
+                  ) : null}
+                </View>
+              
+                <View style={subContainerProfile}>
+                  <TextInput
+                    style={textInputProfilStyle}
+                    underlineColorAndroid="transparent"
+                    placeholder="Email"
+                    placeholderTextColor="#9D9D9D"
+                    autoCapitalize="none"
+                    value={this.props.email}
+                    onChangeText={text => {
+                      this.props.updateEmail(text);
+                    }}
+                  />
+                  {errors.email ? (
+                    <Text style={styles.textError}>{errors.email[0]}</Text>
+                  ) : null}
+                </View>
+
+                <View style={subContainerProfile}>
+                  <TextInput
+                    style={textInputProfilStyle}
+                    underlineColorAndroid="transparent"
+                    placeholder="Password"
+                    placeholderTextColor="#9D9D9D"
+                    autoCapitalize="none"
+                    secureTextEntry={true}
+                    value={this.props.password}
+                    onChangeText={text => {
+                      this.props.updatePasswordProfile(text);
+                    }}
+                  />
+                  {errors.password ? (
+                    <Text style={styles.textError}>{errors.password[0]}</Text>
+                  ) : null}
+                </View>
+                <View style={subContainerProfile}>
+                  <TextInput
+                    style={textInputProfilStyle}
+                    underlineColorAndroid="transparent"
+                    placeholder="Confirm Password"
+                    placeholderTextColor="#9D9D9D"
+                    autoCapitalize="none"
+                    secureTextEntry={true}
+                    value={this.props.confirmPassword}
+                    onChangeText={text => {
+                      this.props.updateConfirmPassword(text);
+                    }}
+                  />
+                  {errors.confirmPassword ? (
+                    <Text style={styles.textError}>
+                      {errors.confirmPassword[0]}
+                    </Text>
+                  ) : null}
+                </View>
+              </View>
+              <Modal
+                visible={this.props.setLocationVisible}
+                animationType="slide"
+                onRequestClose={() => {
+                  console.log("Modal has been closed.");
+                }}
+                transparent={true}
+                opacity={0.5}
+                style={{
+                  height: 0.24 * ScreenHeight,
+                  backgroundColor: "rgba(0,0,0,0.5)"
+                }}
+              >
+                <View style={styles.containertwo}>
                   <View
-                  style={styles.containertwo}
+                    style={{
+                      borderRadius: 10,
+                      width: 0.83 * ScreenWidth,
+                      height: 0.5 * ScreenHeight
+                    }}
                   >
-                  <View style={{
-                    borderRadius:10,
-                    width:0.83 * ScreenWidth,
-                    height: 0.50 * ScreenHeight}}>
                     <MapView
                       style={{
                         ...StyleSheet.absoluteFillObject,
-                        borderRadius: 10,
+                        borderRadius: 15,
                         borderWidth: 1,
                         borderColor: "#7960FF",
-                        height: 0.50 * ScreenHeight,
+                        height: 0.48 * ScreenHeight
                       }}
+                      provider={PROVIDER_GOOGLE}
                       ref={component => (this._map = component)}
-                    >
-                      {this.props.location?<MapView.Marker.Animated
-                        coordinate={this.props.location.coords}
-                      />:null}
-                    </MapView>
-                    </View>
-                    <TouchableHighlight
-                      underlayColor="white"
-                      onPress={()=>{
-                        this.props.setLocation();
+                      onLayout={e => {
+                        this._map.animateToRegion(
+                          {
+                            latitude: this.props.location.coords.latitude,
+                            longitude: this.props.location.coords.longitude,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421
+                          },
+                          1
+                        );
                       }}
                     >
-                      <View
-                        style={{
-                          backgroundColor: '#7960FF',
-                          height: 44,
-                          width:280,
-                          borderRadius: 25,
-                          alignItems: 'center',
-                        }}
-                      >
-                          <Text style={[buttonText, whiteText]}>Set Location</Text>
-                      </View>
-                    </TouchableHighlight>
+                      {this.props.location ? (
+                        <MapView.Marker.Animated
+                          coordinate={this.props.location.coords}
+                        />
+                      ) : null}
+                    </MapView>
+                  </View>
+                  <TouchableHighlight
+                    underlayColor="white"
+                    onPress={() => {
+                      this.props.setLocation();
+                      this.props.signupUser();
+                      this.props.toggleModalProfile();
+                    }}
+                    disabled={this.props.location ? false : true}
+                    style={{ opacity: this.props.location ? 1 : 0.8 }}
+                  >
+                    <View
+                      style={{
+                        backgroundColor: "#7960FF",
+                        height: 44,
+                        width: 280,
+                        borderRadius: 25,
+                        alignItems: "center"
+                      }}
+                    >
+                      <Text style={[buttonText, whiteText]}>Set Location</Text>
                     </View>
-                  </Modal>
-
+                  </TouchableHighlight>
+                </View>
+              </Modal>
             </View>
-            {this.props.loadingSignupB?<Text>Hi</Text>:<Text>By</Text>}
             <View style={profileButtonView}>
               <TouchableHighlight
                 onPress={() => {
                   this.props.updateOnSubmeetSignup();
-                  this.props.isValid(this.props.register)
-                    ? this.props.signupUser()
-                    : null;
-                  this.props.loadingSignupB
-                    ? this.props.toggleModalProfile()
-                    : null;
+                  if (this.props.isValid(this.props.register)) {
+                    if (this.props.isVendor) {
+                      this.props.setLocation();
+                    } else {
+                      this.props.signupUser();
+                    }
+                  }
                 }}
                 underlayColor="white"
               >
                 <View style={createButton}>
-                  {this.props.loadingSignup ? (
+                  {this.props.loadingSignupB ? (
                     <Text style={[buttonText, whiteText]}>Loading...</Text>
                   ) : (
                     <Text style={[buttonText, whiteText]}>Continue</Text>
@@ -347,7 +359,8 @@ class Profile extends Component {
                         fontSize: 16,
                         textAlign: "center",
                         width: 350,
-                        marginTop: 13
+                        marginTop: 13,
+                        fontFamily: "circular-book"
                       }}
                     >
                       {this.props.isVendor ? (
@@ -359,7 +372,7 @@ class Profile extends Component {
                     <TouchableHighlight
                       onPress={() => {
                         this.props.toggleModalProfile(false);
-                        Actions.filter();
+                        Actions.login();
                       }}
                       underlayColor="white"
                       style={{ marginTop: 13 }}
@@ -411,7 +424,6 @@ const rules = [
     condition: (confirmPassword, state) => confirmPassword === state.password,
     error: "Password is not match."
   }
-
   // {
   //   field: 'avatar',
   //   condition: avatar => avatar,
@@ -435,7 +447,7 @@ const mapStateToProps = ({ register }) => {
     isVendor,
     errorMessage,
     location,
-    setLocationVisible,
+    setLocationVisible
   } = register;
   return {
     visibleModalProfile,

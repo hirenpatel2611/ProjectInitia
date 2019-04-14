@@ -333,23 +333,15 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-      case SET_LOCATION_VISIBILITY:
+      case SET_LOCATION:
         {
           return {
             ...state,
-            setLocationVisible: action.payload,
+            setLocationVisible: !state.setLocationVisible
           }
         }
         break;
 
-        case SET_LOCATION:
-          {
-            return {
-              ...state,
-              setLocationVisible: action.payload,
-            }
-          }
-          break;
 
 
     default:

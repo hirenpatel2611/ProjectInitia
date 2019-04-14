@@ -235,11 +235,9 @@ class RegisterOTP extends Component {
                 <Text style={[buttonText, whiteText]}>Continue</Text>
               </View>
             </TouchableHighlight>
-            <Text
-              style={otpResendText}
-            >
+
               {otpTimeOut ? (
-                <Text> Re-send code in 00:{otpTimeOut} Second</Text>
+                <Text style={otpResendText}> Re-send code in 00:{otpTimeOut} Second</Text>
               ) : (
                 <TouchableOpacity
                   onPress={() => {
@@ -263,7 +261,7 @@ class RegisterOTP extends Component {
                   </View>
                 </TouchableOpacity>
               )}
-            </Text>
+
           </View>
         </KeyboardAwareScrollView>
       </View>

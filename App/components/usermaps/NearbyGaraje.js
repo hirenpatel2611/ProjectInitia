@@ -92,7 +92,7 @@ class filter extends Component {
             />
             <View
               style={{
-                height: 0.78 * ScreenHeight
+                height:0.95*ScreenHeight
               }}
             >
               <Text />
@@ -101,10 +101,10 @@ class filter extends Component {
                   ...StyleSheet.absoluteFillObject,
                   marginLeft: 10,
                   marginRight: 10,
-                  marginTop: 20,
                   borderRadius: 10,
                   borderWidth: 1
                 }}
+                provider={PROVIDER_GOOGLE}
                 ref={component => (this._map = component)}
               >
                 {this.state.location ? (
@@ -116,7 +116,7 @@ class filter extends Component {
             </View>
           </View>
         </KeyboardAwareScrollView>
-        <Footer />
+
       </View>
     );
   }

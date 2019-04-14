@@ -51,7 +51,7 @@ export const loginUser = () => (dispatch, getState) => {
           payload: response.status
         });
         if(response.status === 1){
-          Actions.filter();
+          Actions.NearbyGaraje();
         }else {
           alert("Authenticaton Fail!!!");
         }

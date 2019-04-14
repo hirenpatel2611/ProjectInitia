@@ -10,7 +10,6 @@ var styles = StyleSheet.create({
 
   containerStyle: {
     justifyContent: 'space-around',
-    flex: 1,
     backgroundColor: '#F7F6FB',
   },
   topImageStyle: {
@@ -154,8 +153,11 @@ var styles = StyleSheet.create({
   },
   textError: {
    color: 'red',
-   marginTop: 5,
-   fontFamily:'open-sans-bold'
+   marginTop: -15,
+   marginBottom:5,
+   fontSize:12,
+   fontFamily:'circular-book',
+   alignSelf:'flex-start'
  },
  midViewLogin:{
    alignItems: "center",
@@ -175,7 +177,9 @@ var styles = StyleSheet.create({
    fontSize: 16,
    textAlign: "center",
    width: 350,
-   marginTop: 16
+   marginTop: 16,
+   fontFamily:'circular-book',
+   color:'#696969'
  },
  mainViewStyle:{
    flex: 1,
@@ -213,7 +217,8 @@ var styles = StyleSheet.create({
 textInnerViewStyle:{
   fontSize: 18,
   fontWeight: "bold",
-  fontFamily:'open-sans-bold'
+  fontFamily:'circular-bold',
+  color:'#303030'
 }
 
 
