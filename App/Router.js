@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View } from "react-native";
+import { View,TouchableOpacity,Text } from "react-native";
 import { Scene, Router, ActionConst } from "react-native-router-flux";
 import CardStackStyleInterpolator from "react-navigation/src/views/CardStack/CardStackStyleInterpolator";
 import Login from "./components/login/Login";
@@ -11,6 +11,7 @@ import filter from "./components/usermaps/filter";
 import NearbyGaraje from "./components/usermaps/NearbyGaraje";
 import NearbyGarajeDiscover from "./components/usermaps/NearbyGarajeDiscover";
 import MessageToNearbyMechanic from "./components/usermaps/MessageToNearbyMechanic";
+import { Actions } from "react-native-router-flux";
 import { loadFont } from "./actions";
 
 import { connect } from "react-redux";
@@ -46,6 +47,8 @@ class RouterComponent extends Component {
             component={Login}
             hideNavBar={true}
             navTransparent="true"
+            onBack={()=>Actions.SplashFront()}
+            type={ActionConst.RESET}
           />
           <Scene
             key="registerMobile"

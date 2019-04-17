@@ -66,7 +66,7 @@ class Profile extends Component {
   componentWillMount() {
     if (Platform.OS === "android" && !Constants.isDevice) {
       this.setState({
-        errorMessage:
+        errorMessages:
           "Oops, this will not work on Sketch in an Android emulator. Try it on your device!"
       });
     } else {
@@ -180,7 +180,7 @@ class Profile extends Component {
                     <Text style={styles.textError}>{errors.address[0]}</Text>
                   ) : null}
                 </View>
-              
+
                 <View style={subContainerProfile}>
                   <TextInput
                     style={textInputProfilStyle}
@@ -236,7 +236,7 @@ class Profile extends Component {
                 </View>
               </View>
               <Modal
-                visible={this.props.setLocationVisible}
+                visible={this.props.setLocationVisible?true:false}
                 animationType="slide"
                 onRequestClose={() => {
                   console.log("Modal has been closed.");
@@ -285,12 +285,14 @@ class Profile extends Component {
                       ) : null}
                     </MapView>
                   </View>
+                  {
+                    this.props.errorMessage?alert('location not found'):null
+                  }
                   <TouchableHighlight
                     underlayColor="white"
                     onPress={() => {
                       this.props.setLocation();
                       this.props.signupUser();
-                      this.props.toggleModalProfile();
                     }}
                     disabled={this.props.location ? false : true}
                     style={{ opacity: this.props.location ? 1 : 0.8 }}
@@ -310,18 +312,20 @@ class Profile extends Component {
                 </View>
               </Modal>
             </View>
+            {
+              this.props.signupFail?<View style={{ paddingLeft:0.09 * ScreenWidth }}><Text style={textError}> {this.props.signupFail} </Text></View>:null
+            }
             <View style={profileButtonView}>
               <TouchableHighlight
                 onPress={() => {
                   this.props.updateOnSubmeetSignup();
-                  if (this.props.isValid(this.props.register)) {
-                    if (this.props.isVendor) {
-                      this.props.setLocation();
-                    } else {
-                      this.props.signupUser();
+                  this.props.isValid(this.props.register)?
+                              this.props.isVendor === true?
+                              this.props.setLocation()
+                              :this.props.signupUser()
+                              :null;
                     }
                   }
-                }}
                 underlayColor="white"
               >
                 <View style={createButton}>
@@ -410,11 +414,6 @@ const rules = [
     error: "Email is Require"
   },
   {
-    field: "mobilenoProfile",
-    condition: notEmpty,
-    error: "Mobile No is Require"
-  },
-  {
     field: "password",
     condition: notEmpty,
     error: "Password is Require"
@@ -447,7 +446,8 @@ const mapStateToProps = ({ register }) => {
     isVendor,
     errorMessage,
     location,
-    setLocationVisible
+    setLocationVisible,
+    signupFail
   } = register;
   return {
     visibleModalProfile,
@@ -465,6 +465,7 @@ const mapStateToProps = ({ register }) => {
     errorMessage,
     location,
     setLocationVisible,
+    signupFail,
     register
   };
 };

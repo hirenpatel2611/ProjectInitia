@@ -20,7 +20,8 @@ import {
   MECHANIC,
   HAND_HOLDING_UP,
   CAR_ENGINE,
-  TIMING_BELT
+  TIMING_BELT,
+  BACK_ARROW
 } from "../../images";
 import { Actions } from "react-native-router-flux";
 import {
@@ -35,7 +36,25 @@ import TimerMixin from "react-timer-mixin";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
 
+
 class Login extends Component {
+  renderBackButton(){
+    <TouchableOpacity
+          onPress={() => Actions.SplashFront()}
+      >
+          <View style={{
+            backgroundColor: '#7960FF',
+            height: 44,
+            width:280,
+            borderRadius: 25,
+            alignItems: 'center',
+            marginBottom:10,
+            justifyContent:'center'
+          }}>
+            <Text>back</Text>
+          </View>
+      </TouchableOpacity>
+    }
   render() {
     const {
       containerStyle,
@@ -71,6 +90,15 @@ class Login extends Component {
         contentContainerStyle={containerStyle}
       >
         <StatusBar backgroundColor="#7960FF" />
+        <View>
+          <TouchableOpacity
+          onPress={()=>Actions.SplashFront()}
+          >
+            <View style={createButton}>
+            <Image style={{height:15,width:30}} source={BACK_ARROW} />
+            </View>
+          </TouchableOpacity>
+        </View>
         <View style={mainViewStyle}>
           <View style={{ alignItems: "center" }}>
             <Image style={image1Style} source={MECHANIC} />

@@ -19,6 +19,7 @@ import {
   UPDATE_LANGUAGE,
   SIGNUP_START,
   SIGNUP_SUCCESSFUL,
+  SIGNUP_FAIL,
   REQUEST_OTP,
   REQUEST_OTP_SUCCESS,
   UPDATE_ON_SUBMEET_OTP,
@@ -65,8 +66,8 @@ const INITIAL_STATE = {
   longitude:0,
   latitudeDelta:0,
   longitudeDelta:0,
-  setLocationVisible:false
-
+  setLocationVisible:false,
+  signupFail:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -163,7 +164,8 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           name: action.payload,
-          onSubmeetSignupForm: false
+          onSubmeetSignupForm: false,
+          signupFail:''
         }
       }
       break;
@@ -173,7 +175,8 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           address: action.payload,
-          onSubmeetSignupForm: false
+          onSubmeetSignupForm: false,
+          signupFail:''
         }
       }
       break;
@@ -193,7 +196,8 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           email: action.payload,
-          onSubmeetSignupForm: false
+          onSubmeetSignupForm: false,
+          signupFail:''
         }
       }
       break;
@@ -250,10 +254,21 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingSignupB: false,
-          visibleModalProfile:true
+          visibleModalProfile:true,
+          signupFail:''
         }
       }
       break;
+
+      case SIGNUP_FAIL:
+        {
+          return {
+            ...state,
+            loadingSignupB: false,
+            signupFail:action.payload
+          }
+        }
+        break;
 
     case REQUEST_OTP:
       {

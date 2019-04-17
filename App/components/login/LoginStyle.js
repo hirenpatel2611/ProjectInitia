@@ -70,12 +70,12 @@ var styles = StyleSheet.create({
   },
   createButton: {
       backgroundColor: '#7960FF',
-      height: 44,
-      width:280,
-      borderRadius: 25,
-
+      height:30,
+      width:50,
+      borderRadius: 15,
       alignItems: 'center',
-      marginBottom:10,
+      marginTop:25,
+      marginLeft:10,
       // color: 'white',
       justifyContent:'center'
     },
@@ -185,7 +185,7 @@ var styles = StyleSheet.create({
    flex: 1,
    flexDirection: "column",
    alignItems: "stretch",
-   marginTop: 75
+   marginTop: 35
  },
  imageViewStyle:{
    flexDirection: "row",

@@ -24,6 +24,7 @@ export const UPDATE_CONFIRM_PASSWORD = "register/UPDATE_CONFIRM_PASSWORD";
 export const UPDATE_LANGUAGE = "register/UPDATE_LANGUAGE";
 export const SIGNUP_START = "register/SIGNUP_START";
 export const SIGNUP_SUCCESSFUL = "register/SIGNUP_SUCCESSFUL";
+export const SIGNUP_FAIL = "register/SIGNUP_FAIL";
 export const REQUEST_OTP = "register/REQUEST_OTP";
 export const REQUEST_OTP_SUCCESS = "register/REQUEST_OTP_SUCCESS";
 export const REQUEST_OTP_FAIL = "register/REQUEST_OTP_FAIL";
@@ -71,7 +72,7 @@ export const requestOtp = () => (dispatch, getState) => {
   test.append("mobile", mobileno);
   Api.post(URL_USER_OTP, test)
     .then(response => {
-
+console.error(response.OTP);
       if (response.loggedIn === 1) {
         dispatch({
           type: REQUEST_OTP_SUCCESS,
@@ -222,7 +223,7 @@ export const signupUser = () => (dispatch, getState) => {
 
   let test = new FormData();
 
-  test.append("username", mobilenoProfile);
+  test.append("username", mobileno);
   test.append("password", password);
   test.append("device_token", "djhsgdf87sfdfs7dfsfsfs");
   test.append("device_type", "android");
@@ -241,17 +242,17 @@ export const signupUser = () => (dispatch, getState) => {
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
       console.log(response);
-
+      console.error(response);
       if (response.status === 1) {
         dispatch({
           type: SIGNUP_SUCCESSFUL,
           payload: response
         });
       } else {
-        alert(response.message);
-        if (response.errors !== {}) {
-          //alert(response.errors.username);
-        }
+        dispatch({
+          type: SIGNUP_FAIL,
+          payload: response.message
+        });
       }
     })
     .catch(err => {
@@ -266,6 +267,7 @@ export const updateOnSubmeetOtp = () => (dispatch, getState) => {
 };
 
 export const updateOnSubmeetSignup = () => (dispatch, getState) => {
+
   dispatch({
     type: UPDATE_ON_SUBMEET_SIGNUP
   });
