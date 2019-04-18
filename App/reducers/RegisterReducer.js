@@ -1,5 +1,4 @@
 import {
-
   UPDATE_VEHICLE_BOOL,
   UPDATE_CAR_BOOL,
   UPDATE_USER_TYPE,
@@ -30,44 +29,43 @@ import {
   GET_LOCATION_SUCCESS,
   SET_LOCATION_VISIBILITY,
   SET_LOCATION
-}
-from '../actions/Register';
+} from "../actions/Register";
 
 const INITIAL_STATE = {
   isTwoWheeler: false,
   isFourWheeler: false,
   isVendor: false,
-  mobileno: '',
+  mobileno: "",
   otpTimeOut: 59,
   isOtpTimedOut: false,
-  otp: '',
+  otp: "",
   visibleModalProfile: false,
   visibleModalOtp: false,
-  name: '',
-  address: '',
-  mobilenoProfile: '',
-  email: '',
-  dateOfBirth: '',
-  password: '',
-  confirmPassword: '',
-  language: '',
+  name: "",
+  address: "",
+  mobilenoProfile: "",
+  email: "",
+  dateOfBirth: "",
+  password: "",
+  confirmPassword: "",
+  language: "",
   loadingSignupB: false,
-  recievedOTP: '',
+  recievedOTP: "",
   loading: false,
   onSubmeetOtpForm: false,
   onSubmeetSignupForm: false,
-  onSubmeetMobileForm:false,
-  requestOtpFail:false,
-  requestOtpMessage:'',
-  requestOtpSuccess:false,
-  location:null,
-  errorMessage:null,
-  latitude:0,
-  longitude:0,
-  latitudeDelta:0,
-  longitudeDelta:0,
-  setLocationVisible:false,
-  signupFail:''
+  onSubmeetMobileForm: false,
+  requestOtpFail: false,
+  requestOtpMessage: "",
+  requestOtpSuccess: false,
+  location: null,
+  errorMessage: null,
+  latitude: 0,
+  longitude: 0,
+  latitudeDelta: 0,
+  longitudeDelta: 0,
+  setLocationVisible: false,
+  signupFail: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -77,7 +75,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isTwoWheeler: !state.isTwoWheeler
-        }
+        };
       }
       break;
 
@@ -86,7 +84,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isFourWheeler: !state.isFourWheeler
-        }
+        };
       }
       break;
 
@@ -95,7 +93,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isVendor: action.payload
-        }
+        };
       }
       break;
 
@@ -104,10 +102,10 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           mobileno: action.payload,
-          onSubmeetMobileForm:false,
-          loading:false,
-          requestOtpFail:false,
-        }
+          onSubmeetMobileForm: false,
+          loading: false,
+          requestOtpFail: false
+        };
       }
       break;
 
@@ -117,8 +115,8 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           otpTimeOut: state.otpTimeOut - 1,
-          recievedOTP: state.otpTimeOut === 1 ? '' : state.recievedOTP
-        }
+          recievedOTP: state.otpTimeOut === 1 ? "" : state.recievedOTP
+        };
       }
       break;
 
@@ -127,7 +125,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           otpTimeOut: INITIAL_STATE.otpTimeOut
-        }
+        };
       }
       break;
 
@@ -137,7 +135,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           otp: action.payload,
           onSubmeetOtpForm: false
-        }
+        };
       }
       break;
 
@@ -146,7 +144,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           visibleModalProfile: !state.visibleModalProfile
-        }
+        };
       }
       break;
 
@@ -155,7 +153,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           visibleModalOtp: !state.visibleModalOtp
-        }
+        };
       }
       break;
 
@@ -165,8 +163,8 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           name: action.payload,
           onSubmeetSignupForm: false,
-          signupFail:''
-        }
+          signupFail: ""
+        };
       }
       break;
 
@@ -176,8 +174,8 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           address: action.payload,
           onSubmeetSignupForm: false,
-          signupFail:''
-        }
+          signupFail: ""
+        };
       }
       break;
 
@@ -187,7 +185,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           mobilenoProfile: action.payload,
           onSubmeetSignupForm: false
-        }
+        };
       }
       break;
 
@@ -197,8 +195,8 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           email: action.payload,
           onSubmeetSignupForm: false,
-          signupFail:''
-        }
+          signupFail: ""
+        };
       }
       break;
 
@@ -207,7 +205,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           dateOfBirth: action.payload
-        }
+        };
       }
       break;
 
@@ -217,7 +215,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           password: action.payload,
           onSubmeetSignupForm: false
-        }
+        };
       }
       break;
 
@@ -227,7 +225,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           confirmPassword: action.payload,
           onSubmeetSignupForm: false
-        }
+        };
       }
       break;
 
@@ -236,7 +234,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           langauge: action.payload
-        }
+        };
       }
       break;
 
@@ -245,7 +243,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingSignupB: true
-        }
+        };
       }
       break;
 
@@ -254,61 +252,59 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingSignupB: false,
-          visibleModalProfile:true,
-          signupFail:''
-        }
+          visibleModalProfile: true,
+          signupFail: ""
+        };
       }
       break;
 
-      case SIGNUP_FAIL:
-        {
-          return {
-            ...state,
-            loadingSignupB: false,
-            signupFail:action.payload
-          }
-        }
-        break;
-
-    case REQUEST_OTP:
+    case SIGNUP_FAIL:
       {
         return {
           ...state,
-          loading: true,
-        }
+          loadingSignupB: false,
+          signupFail: action.payload
+        };
       }
+      break;
+
+    case REQUEST_OTP: {
+      return {
+        ...state,
+        loading: true
+      };
+    }
 
     case REQUEST_OTP_SUCCESS:
       {
-
         return {
           ...state,
           recievedOTP: action.payload.toString(),
           loading: false,
-          requestOtpFail:false,
-          requestOtpSuccess:true
-        }
+          requestOtpFail: false,
+          requestOtpSuccess: true
+        };
       }
       break;
 
     case REQUEST_OTP_FAIL:
-        {
-          return {
-            ...state,
-            loading: false,
-            requestOtpFail:true,
-            requestOtpMessage:action.payload,
-            onSubmeetMobileForm:true
-          }
-        }
-        break;
+      {
+        return {
+          ...state,
+          loading: false,
+          requestOtpMessage: action.payload,
+          onSubmeetMobileForm: true,
+          requestOtpFail: true
+        };
+      }
+      break;
 
     case UPDATE_ON_SUBMEET_OTP:
       {
         return {
           ...state,
-          onSubmeetOtpForm: true,
-        }
+          onSubmeetOtpForm: true
+        };
       }
       break;
 
@@ -316,8 +312,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          onSubmeetSignupForm: true,
-        }
+          onSubmeetSignupForm: true
+        };
       }
       break;
 
@@ -325,8 +321,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          onSubmeetSignupForm: true,
-        }
+          onSubmeetSignupForm: true
+        };
       }
       break;
 
@@ -334,8 +330,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          errorMessage: action.payload,
-        }
+          errorMessage: action.payload
+        };
       }
       break;
 
@@ -343,26 +339,22 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          location: action.payload,
-        }
+          location: action.payload
+        };
       }
       break;
 
-      case SET_LOCATION:
-        {
-          return {
-            ...state,
-            setLocationVisible: !state.setLocationVisible
-          }
-        }
-        break;
-
-
+    case SET_LOCATION:
+      {
+        return {
+          ...state,
+          setLocationVisible: !state.setLocationVisible
+        };
+      }
+      break;
 
     default:
       return state;
       break;
-
   }
-
-}
+};

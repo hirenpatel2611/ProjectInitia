@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View,TouchableOpacity,Text } from "react-native";
+import { View,TouchableOpacity,Text,AsyncStorage } from "react-native";
 import { Scene, Router, ActionConst } from "react-native-router-flux";
 import CardStackStyleInterpolator from "react-navigation/src/views/CardStack/CardStackStyleInterpolator";
 import Login from "./components/login/Login";
@@ -12,14 +12,33 @@ import NearbyGaraje from "./components/usermaps/NearbyGaraje";
 import NearbyGarajeDiscover from "./components/usermaps/NearbyGarajeDiscover";
 import MessageToNearbyMechanic from "./components/usermaps/MessageToNearbyMechanic";
 import { Actions } from "react-native-router-flux";
-import { loadFont } from "./actions";
+import { loadFont,updateLoggedInState } from "./actions";
 
 import { connect } from "react-redux";
 
 class RouterComponent extends Component {
   componentDidMount() {
     this.props.loadFont();
+    this._retrieveData ();
   }
+
+
+  _retrieveData = async () => {
+     try {
+
+       const valueUserName = await AsyncStorage.getItem('token');
+
+       if (valueUserName !== null) {
+       this.props.updateLoggedInState(true)
+       }
+       else{
+       this.props.updateLoggedInState(false)
+       }
+     } catch (error) {
+       // Error retrieving data
+       console.error(error);
+     }
+    };
 
   render() {
     if (!this.props.fontLoaded) {
@@ -40,7 +59,7 @@ class RouterComponent extends Component {
             hideNavBar={true}
             navTransparent="true"
             type={ActionConst.RESET}
-            initial
+            initial ={!this.props.isLoggedIn}
           />
           <Scene
             key="login"
@@ -80,6 +99,7 @@ class RouterComponent extends Component {
           />
           <Scene
             key="NearbyGaraje"
+            initial ={this.props.isLoggedIn}
             component={NearbyGaraje}
             hideNavBar={true}
             navTransparent="true"
@@ -102,11 +122,11 @@ class RouterComponent extends Component {
   }
 }
 const mapStateToProps = ({ ui }) => {
-  const { fontLoaded } = ui;
-  return { fontLoaded };
+  const { fontLoaded,isLoggedIn } = ui;
+  return { fontLoaded,isLoggedIn };
 };
 
 export default connect(
   mapStateToProps,
-  { loadFont }
+  { loadFont,updateLoggedInState }
 )(RouterComponent);

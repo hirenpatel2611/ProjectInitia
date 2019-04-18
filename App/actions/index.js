@@ -2,3 +2,4 @@ export * from './GameActions';
 export * from './Login';
 export * from './Register';
 export * from './ui';
+export * from './UserMaps';

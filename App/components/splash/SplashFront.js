@@ -73,9 +73,7 @@ class SplashFront extends Component {
           </View>
           <View style={subViewStyle}>
             <Text style={titleTextStyle}>Lets Get Started</Text>
-            <Text style={midTextStyle}>
-              Sweet And Safe Voyage!!!
-            </Text>
+            <Text style={midTextStyle}>Sweet And Safe Voyage!!!</Text>
           </View>
         </View>
         <View style={buttonViewstyle}>

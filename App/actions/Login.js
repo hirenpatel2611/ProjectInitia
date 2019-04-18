@@ -7,6 +7,7 @@ import TimerMixin from "react-timer-mixin";
 import Api from "../api/api";
 import {URL_USER_LOGIN} from '../config';
 import { Actions } from "react-native-router-flux";
+import {AsyncStorage} from 'react-native';
 
 
 export const UPDATE_PASSWORD = "login/UPDATE_PASSWORD";
@@ -24,7 +25,6 @@ export const updateMobileNumber = val => (dispatch, getState) => {
 };
 
 export const updatePassword = val => (dispatch, getState) => {
-  console.log('action',val);
   dispatch({
     type: UPDATE_PASSWORD,
     payload: val
@@ -37,30 +37,37 @@ export const loginUser = () => (dispatch, getState) => {
       type: LOGIN_START
     });
     const {mobileno,password} = getState().login;
-    //console.log(mobileno);
+
     let test = new FormData();
     test.append("username", mobileno);
     test.append("password", password);
     test.append("device_token", 'djhsgdf87sfdfs7dfsfsfs');
     test.append("device_type", "android");
     Api.post(URL_USER_LOGIN, test)
-      .then(response => {
-          console.log(response);
+      .then(async(response) => {
+
+
         dispatch({
           type: LOGIN_SUCCESSFUL,
           payload: response.status
         });
         if(response.status === 1){
           Actions.NearbyGaraje();
+          try {
+            await AsyncStorage.setItem('token', response.token);
+          } catch (error) {
+            console.log(error);
+            // Error saving data
+          }
+
         }else {
-          alert("Authenticaton Fail!!!");
+          dispatch({
+            type: LOGIN_FAILED,
+          });
         }
       })
       .catch(error => {
-        dispatch({
-          type: LOGIN_FAILED,
-          payload: error.message
-        });
+
       });
 
 };

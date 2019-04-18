@@ -1,25 +1,22 @@
-import {
-LOAD_FONT_SUCCESS
-} from '../actions/ui'
+import { LOAD_FONT_SUCCESS, UPDATE_LOGGED_IN_STATE } from "../actions/ui";
 
 const INITIAL_STATE = {
-  fontLoaded:false
+  fontLoaded: false,
+  isLoggedIn: false
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-
     case LOAD_FONT_SUCCESS:
-      return { ...state,fontLoaded:true}
+      return { ...state, fontLoaded: true };
       break;
 
-      default:
-        return state;
-        break;
-  
+    case UPDATE_LOGGED_IN_STATE:
+      return { ...state, isLoggedIn: action.payload };
+      break;
 
-
+    default:
+      return state;
+      break;
   }
-
-
-}
+};

@@ -11,7 +11,8 @@ import {
   Dimensions,
   Button,
   TouchableHighlight,
-  ActivityIndicator
+  ActivityIndicator,
+  AsyncStorage
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -36,25 +37,7 @@ import TimerMixin from "react-timer-mixin";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
 
-
 class Login extends Component {
-  renderBackButton(){
-    <TouchableOpacity
-          onPress={() => Actions.SplashFront()}
-      >
-          <View style={{
-            backgroundColor: '#7960FF',
-            height: 44,
-            width:280,
-            borderRadius: 25,
-            alignItems: 'center',
-            marginBottom:10,
-            justifyContent:'center'
-          }}>
-            <Text>back</Text>
-          </View>
-      </TouchableOpacity>
-    }
   render() {
     const {
       containerStyle,
@@ -83,92 +66,95 @@ class Login extends Component {
     errors = this.props.onSubmeetLoginForm ? validate(this.props.login) : {};
     errorse = this.props.loginFailed ? validate(this.props.login) : {};
     return (
-      <KeyboardAwareScrollView
-        enableOnAndroid
-        enableAutomaticScroll
-        ref={component => (this._scrollview = component)}
-        contentContainerStyle={containerStyle}
-      >
-        <StatusBar backgroundColor="#7960FF" />
+      <View style={containerStyle}>
         <View>
-          <TouchableOpacity
-          onPress={()=>Actions.SplashFront()}
-          >
+          <TouchableOpacity onPress={() => Actions.SplashFront()}>
             <View style={createButton}>
-            <Image style={{height:15,width:30}} source={BACK_ARROW} />
+              <Image style={{ height: 15, width: 30 }} source={BACK_ARROW} />
             </View>
           </TouchableOpacity>
         </View>
-        <View style={mainViewStyle}>
-          <View style={{ alignItems: "center" }}>
-            <Image style={image1Style} source={MECHANIC} />
-          </View>
-          <View style={imageViewStyle}>
-            <Image style={image2Style} source={HAND_HOLDING_UP} />
-            <Image style={imageCarEnginStyle} source={CAR_ENGINE} />
-            <Image style={image3Style} source={TIMING_BELT} />
-          </View>
-          <View style={viewInnerStyle}>
-            <Text style={textInnerViewStyle}>Login</Text>
-            <Text style={midTextStyle}>
-              Enter your mobile number and password
-            </Text>
-          </View>
-        </View>
-        <View elevation={5} style={midViewLogin}>
-          <TextInput
-            style={inputStyle}
-            underlineColorAndroid="transparent"
-            placeholder="Mobile Number"
-            placeholderTextColor="#9D9D9D"
-            autoCapitalize="none"
-            keyboardType={"phone-pad"}
-            maxLength={10}
-            value={this.props.mobileno}
-            onChangeText={text => {
-              this.props.updateMobileNumber(text);
-            }}
-          />
-          {errors.mobileno ? (
-            <Text style={styles.textError}>{errors.mobileno[0]}</Text>
-          ) : null}
-          <TextInput
-            style={inputStyle}
-            onFocus={e => {
-              this._scrollview.scrollToEnd({animated:false})
-            }}
-            underlineColorAndroid="transparent"
-            placeholder="Password"
-            placeholderTextColor="#9D9D9D"
-            autoCapitalize="none"
-            secureTextEntry={true}
-            value={this.props.password}
-            onChangeText={text => {
-              this.props.updatePassword(text);
-            }}
-          />
-          {errors.password ? (
-            <Text style={styles.textError}>{errors.password[0]}</Text>
-          ) : null}
-          <TouchableHighlight
-            onPress={() => {
-              this.props.updateOnSubmeetLoginForm();
-              this.props.isValid(this.props.login)
-                ? this.props.loginUser()
-                : null;
-            }}
-            underlayColor="white"
-          >
-            <View style={loginButton}>
-              {this.props.loading ? (
-                <Text style={[buttonText, themeColor]}>Loading...</Text>
-              ) : (
-                <Text style={[buttonText, themeColor]}>Login</Text>
-              )}
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          enableAutomaticScroll
+          ref={component => (this._scrollview = component)}
+        >
+          <StatusBar backgroundColor="#7960FF" />
+
+          <View style={mainViewStyle}>
+            <View style={{ alignItems: "center" }}>
+              <Image style={image1Style} source={MECHANIC} />
             </View>
-          </TouchableHighlight>
-        </View>
-      </KeyboardAwareScrollView>
+            <View style={imageViewStyle}>
+              <Image style={image2Style} source={HAND_HOLDING_UP} />
+              <Image style={imageCarEnginStyle} source={CAR_ENGINE} />
+              <Image style={image3Style} source={TIMING_BELT} />
+            </View>
+            <View style={viewInnerStyle}>
+              <Text style={textInnerViewStyle}>Login</Text>
+              <Text style={midTextStyle}>
+                Enter your mobile number and password
+              </Text>
+            </View>
+          </View>
+          <View elevation={5} style={midViewLogin}>
+            <TextInput
+              style={inputStyle}
+              underlineColorAndroid="transparent"
+              placeholder="Mobile Number"
+              placeholderTextColor="#9D9D9D"
+              autoCapitalize="none"
+              keyboardType={"phone-pad"}
+              maxLength={10}
+              value={this.props.mobileno}
+              onChangeText={text => {
+                this.props.updateMobileNumber(text);
+              }}
+            />
+            {errors.mobileno ? (
+              <Text style={styles.textError}>{errors.mobileno[0]}</Text>
+            ) : null}
+            <TextInput
+              style={inputStyle}
+              onFocus={e => {
+                this._scrollview.scrollToEnd({ animated: false });
+              }}
+              underlineColorAndroid="transparent"
+              placeholder="Password"
+              placeholderTextColor="#9D9D9D"
+              autoCapitalize="none"
+              secureTextEntry={true}
+              value={this.props.password}
+              onChangeText={text => {
+                this.props.updatePassword(text);
+              }}
+            />
+            {errors.password ? (
+              <Text style={styles.textError}>{errors.password[0]}</Text>
+            ) : null}
+            {errors.loginFailed ? (
+              <Text style={styles.textError}>{errors.loginFailed[0]}</Text>
+            ) : null}
+            <TouchableHighlight
+              onPress={() => {
+                this.props.updateOnSubmeetLoginForm();
+                this.props.isValid(this.props.login)
+                  ? this.props.loginUser()
+                  : null;
+              }}
+              underlayColor="white"
+            >
+              <View style={loginButton}>
+                {this.props.loading ? (
+                  <Text style={[buttonText, themeColor]}>Loading...</Text>
+                ) : (
+                  <Text style={[buttonText, themeColor]}>Login</Text>
+                )}
+              </View>
+            </TouchableHighlight>
+          </View>
+        </KeyboardAwareScrollView>
+      </View>
     );
   }
 }
@@ -184,6 +170,11 @@ const rules = [
     field: "password",
     condition: notEmpty,
     error: "Password is Require"
+  },
+  {
+    field: "loginFailed",
+    condition: (loginFailed, state) => loginFailed === false,
+    error: "Authentication Failed !!!"
   }
   // {
   //   field: "loginStatus",

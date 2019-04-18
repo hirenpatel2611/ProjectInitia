@@ -142,7 +142,7 @@ class Profile extends Component {
 
           <View style={headerViewProfile}>
             <Text style={headerTextStyle}>Personal Details</Text>
-            <View style={{ height: 0.78 * ScreenHeight, top:20 }}>
+            <View style={{ height: 0.78 * ScreenHeight, top: 20 }}>
               <View
                 style={{
                   height: 0.51 * ScreenHeight,
@@ -236,7 +236,7 @@ class Profile extends Component {
                 </View>
               </View>
               <Modal
-                visible={this.props.setLocationVisible?true:false}
+                visible={this.props.setLocationVisible ? true : false}
                 animationType="slide"
                 onRequestClose={() => {
                   console.log("Modal has been closed.");
@@ -285,9 +285,7 @@ class Profile extends Component {
                       ) : null}
                     </MapView>
                   </View>
-                  {
-                    this.props.errorMessage?alert('location not found'):null
-                  }
+                  {this.props.errorMessage ? alert("location not found") : null}
                   <TouchableHighlight
                     underlayColor="white"
                     onPress={() => {
@@ -312,20 +310,21 @@ class Profile extends Component {
                 </View>
               </Modal>
             </View>
-            {
-              this.props.signupFail?<View style={{ paddingLeft:0.09 * ScreenWidth }}><Text style={textError}> {this.props.signupFail} </Text></View>:null
-            }
+            {this.props.signupFail ? (
+              <View style={{ paddingLeft: 0.09 * ScreenWidth }}>
+                <Text style={textError}> {this.props.signupFail} </Text>
+              </View>
+            ) : null}
             <View style={profileButtonView}>
               <TouchableHighlight
                 onPress={() => {
                   this.props.updateOnSubmeetSignup();
-                  this.props.isValid(this.props.register)?
-                              this.props.isVendor === true?
-                              this.props.setLocation()
-                              :this.props.signupUser()
-                              :null;
-                    }
-                  }
+                  this.props.isValid(this.props.register)
+                    ? this.props.isVendor === true
+                      ? this.props.setLocation()
+                      : this.props.signupUser()
+                    : null;
+                }}
                 underlayColor="white"
               >
                 <View style={createButton}>

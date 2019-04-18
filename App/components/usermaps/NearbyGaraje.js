@@ -13,7 +13,8 @@ import {
   Slider,
   StyleSheet,
   Platform,
-  Animated
+  Animated,
+  AsyncStorage
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -24,11 +25,14 @@ import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { Constants, Location, Permissions } from "expo";
+import {
+  getVendors,
+} from "../../actions";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
-class filter extends Component {
+class NearbyGaraje extends Component {
   state = {
     location: null,
     errorMessage: null
@@ -43,6 +47,7 @@ class filter extends Component {
     } else {
       this._getLocationAsync();
     }
+    this.props.getVendors();
   }
 
   _getLocationAsync = async () => {
@@ -66,6 +71,15 @@ class filter extends Component {
     );
   };
 
+  _deleteUser = async () => {
+    try {
+      await AsyncStorage.removeItem("token");
+    } catch (error) {
+      // Error retrieving data
+      console.log(error.message);
+    }
+  };
+
   render() {
     const { containerStyle } = styles;
     let text = "Waiting..";
@@ -76,32 +90,59 @@ class filter extends Component {
     }
     return (
       <View style={containerStyle}>
-        <KeyboardAwareScrollView>
-          <StatusBar backgroundColor="#7960FF" />
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            this._deleteUser();
+            Actions.SplashFront();
+          }}
+        >
           <View
-            style={{ flex: 1, flexDirection: "column", alignItems: "stretch" }}
+            style={{
+              backgroundColor: "#7960FF",
+              height: 30,
+              width: 70,
+              borderRadius: 15,
+              alignItems: "center",
+              marginTop: 25,
+              marginLeft: 10,
+              justifyContent: "center"
+            }}
           >
             <Text
               style={{
-                paddingTop: 16,
-                paddingLeft: 16,
-                fontSize: 20,
+                fontSize: 16,
                 fontWeight: "bold",
-                color: "#4B4B4B"
+                color: "white"
               }}
-            />
+            >
+              Logout
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+        <KeyboardAwareScrollView>
+          <StatusBar backgroundColor="#7960FF" />
+
+          <View
+            style={{ flexDirection: "column", alignItems: "stretch" }}
+          >
+
             <View
               style={{
-                height:0.95*ScreenHeight
+                height: 0.89 * ScreenHeight,
+                marginTop:5,
+                borderWidth: 1,
+                marginLeft: 10,
+                marginRight: 10,
+                borderRadius: 10
               }}
             >
               <Text />
               <MapView
                 style={{
                   ...StyleSheet.absoluteFillObject,
-                  marginLeft: 10,
-                  marginRight: 10,
-                  borderRadius: 10,
+                  borderRadius: 15,
                   borderWidth: 1
                 }}
                 provider={PROVIDER_GOOGLE}
@@ -116,10 +157,23 @@ class filter extends Component {
             </View>
           </View>
         </KeyboardAwareScrollView>
-
       </View>
     );
   }
 }
 
-export default filter;
+const mapStateToProps = ({ usermaps }) => {
+  const {
+    loading,
+  vendors
+  } = usermaps;
+  return {
+    loading,
+    vendors
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { getVendors }
+)(NearbyGaraje);

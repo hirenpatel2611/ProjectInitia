@@ -18,7 +18,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 // import { Col, Row, Grid } from "react-native-easy-grid";
 import { BITMAP } from "../../images";
 import { Actions } from "react-native-router-flux";
-import { updateMobileNo,requestOtp } from "../../actions";
+import { updateMobileNo, requestOtp } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
 import TimerMixin from "react-timer-mixin";
@@ -61,39 +61,31 @@ class RegisterMobile extends Component {
       mobileno,
       loading,
       requestOtpFail,
-      requestOtpMessage} =this.props.register
+      onSubmeetMobileForm,
+      requestOtpMessage
+    } = this.props.register;
 
-
-    errors=this.props.onSubmeetMobileForm?validate(this.props.register):{};
+    errors = this.props.onSubmeetMobileForm
+      ? validate(this.props.register)
+      : {};
 
     return (
-      <KeyboardAwareScrollView contentContainerStyle={containerStyle}
-
-   enableOnAndroid>
+      <View style={containerStyle}>
+        <KeyboardAwareScrollView enableOnAndroid>
           <StatusBar backgroundColor="#7960FF" />
-          <View
-            style={maunViewStyle}
-          >
+          <View style={maunViewStyle}>
             <View style={{ alignItems: "center" }}>
               <Image style={imageMobileStyle} source={BITMAP} />
             </View>
             <View style={titleViewStyle}>
-              <Text
-                style={titleTextStyle}
-              >
-                Registration
-              </Text>
-              <Text
-                style={midTextHeadStyle}
-              >
-                Enter your mobile number, we will send you OTP to verify your number.
+              <Text style={titleTextStyle}>Registration</Text>
+              <Text style={midTextHeadStyle}>
+                Enter your mobile number, we will send you OTP to verify your
+                number.
               </Text>
             </View>
           </View>
-          <View
-            elevation={5}
-            style={midViewRegiMobile}
-          >
+          <View elevation={5} style={midViewRegiMobile}>
             <TextInput
               style={inputStyle}
               underlineColorAndroid="transparent"
@@ -102,25 +94,35 @@ class RegisterMobile extends Component {
               autoCapitalize="none"
               keyboardType={"phone-pad"}
               maxLength={10}
-              onChangeText={(val)=>this.props.updateMobileNo(val)}
-              value = {this.props.mobileno}
+              onChangeText={val => this.props.updateMobileNo(val)}
+              value={this.props.mobileno}
             />
-            {this.props.requestOtpFail?<Text style={textError1}>{this.props.requestOtpMessage}</Text>:null}
+            {errors.requestOtpFail ? (
+              <Text style={styles.textError1}>
+                {errors.requestOtpFail[0]}
+                {this.props.requestOtpMessage}
+              </Text>
+            ) : null}
             <TouchableHighlight
-              disabled={this.props.mobileno.length===10?false:true}
-              style={{opacity:this.props.mobileno.length===10?1:0.8}}
+              disabled={this.props.mobileno.length === 10 ? false : true}
+              style={{ opacity: this.props.mobileno.length === 10 ? 1 : 0.8 }}
               onPress={() => {
                 this.props.requestOtp();
-                this.props.requestOtpSuccess?Actions.registerOTP():null;
-                }}
+                this.props.requestOtpSuccess ? Actions.registerOTP() : null;
+              }}
               underlayColor="white"
             >
               <View style={createButton}>
-                {this.props.loading?<Text style={[buttonText, whiteText]}>Loading...</Text>:<Text style={[buttonText, whiteText]}>Continue</Text>}
+                {this.props.loading ? (
+                  <Text style={[buttonText, whiteText]}>Loading...</Text>
+                ) : (
+                  <Text style={[buttonText, whiteText]}>Continue</Text>
+                )}
               </View>
             </TouchableHighlight>
           </View>
-      </KeyboardAwareScrollView>
+        </KeyboardAwareScrollView>
+      </View>
     );
   }
 }
@@ -128,10 +130,10 @@ class RegisterMobile extends Component {
 const notEmpty = test => !isEmpty(test);
 const rules = [
   {
-    field: "mobileno",
-    condition: (requestOtpFail, state) => requestOtpFail === true,
-    error:"OTP Reqest Fail!!!",
-  },
+    field: "requestOtpFail",
+    condition: (requestOtpFail, state) => requestOtpFail === false,
+    error: ""
+  }
 
   // {
   //   field: 'avatar',
@@ -141,11 +143,26 @@ const rules = [
 ];
 
 const mapStateToProps = ({ register }) => {
-  const { mobileno,loading,requestOtpFail,requestOtpMessage,requestOtpSuccess } = register;
-  return { mobileno,loading,requestOtpFail,requestOtpMessage,requestOtpSuccess,register };
+  const {
+    mobileno,
+    loading,
+    requestOtpFail,
+    requestOtpMessage,
+    requestOtpSuccess,
+    onSubmeetMobileForm
+  } = register;
+  return {
+    mobileno,
+    loading,
+    requestOtpFail,
+    requestOtpMessage,
+    requestOtpSuccess,
+    onSubmeetMobileForm,
+    register
+  };
 };
 
 export default connect(
   mapStateToProps,
-  { updateMobileNo,requestOtp }
-)(withValidation(rules,RegisterMobile));
+  { updateMobileNo, requestOtp }
+)(withValidation(rules, RegisterMobile));

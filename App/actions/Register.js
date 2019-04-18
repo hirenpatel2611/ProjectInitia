@@ -72,7 +72,6 @@ export const requestOtp = () => (dispatch, getState) => {
   test.append("mobile", mobileno);
   Api.post(URL_USER_OTP, test)
     .then(response => {
-console.error(response.OTP);
       if (response.loggedIn === 1) {
         dispatch({
           type: REQUEST_OTP_SUCCESS,
@@ -238,11 +237,10 @@ export const signupUser = () => (dispatch, getState) => {
   test.append("latitude", location.coords.latitude);
   test.append("longitude", location.coords.longitude);
   }
-
+console.log(test);
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
       console.log(response);
-      console.error(response);
       if (response.status === 1) {
         dispatch({
           type: SIGNUP_SUCCESSFUL,
