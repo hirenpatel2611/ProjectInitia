@@ -82,6 +82,19 @@ class NearbyGaraje extends Component {
   };
 
   render() {
+    markers = [];
+    if (this.props.vendors.length){
+      markers=this.props.vendors.map((vendor)=>{
+        return   <MapView.Marker.Animated
+            key = {vendor.id}
+            coordinate={{
+              latitude:parseInt(vendor.latitude),
+              longitude:parseInt(vendor.longitude)
+            }}
+          />
+      })
+
+    }
     const { containerStyle } = styles;
     let text = "Waiting..";
     if (this.state.errorMessage) {
@@ -149,6 +162,8 @@ class NearbyGaraje extends Component {
                 provider={PROVIDER_GOOGLE}
                 ref={component => (this._map = component)}
               >
+                {markers}
+
                 {this.state.location ? (
                   <MapView.Marker.Animated
                     coordinate={this.state.location.coords}

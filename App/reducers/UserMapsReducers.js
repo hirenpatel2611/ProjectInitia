@@ -25,7 +25,7 @@ export default (state = INITIAL_STATE, action) => {
           return {
             ...state,
             loading: false,
-            vendors:actions.payload
+            vendors:action.payload
           };
         }
         break;
