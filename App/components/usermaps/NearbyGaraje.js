@@ -58,7 +58,8 @@ class NearbyGaraje extends Component {
         errorMessage: "Permission to access location was denied"
       });
     }
-    let location = await Location.getCurrentPositionAsync({});
+    let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
+
     this.setState({ location });
     this._map.animateToRegion(
       {

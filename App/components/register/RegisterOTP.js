@@ -91,6 +91,7 @@ class RegisterOTP extends Component {
           <StatusBar backgroundColor="#7960FF" />
           <Modal
             visible={visibleModalOtp ? true : false}
+            onRequestClose={()=>{}}
             animationType="slide"
             transparent={true}
           >

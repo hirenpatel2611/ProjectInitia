@@ -80,9 +80,10 @@ class Profile extends Component {
     if (status !== "granted") {
       this.props.getLocationFail();
     }
-    let location = await Location.getCurrentPositionAsync({});
+    let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
     this.props.getLocationSuccess(location);
     {
+      console.log(location);
       this._map.animateToRegion(
         {
           latitude: this.props.location.coords.latitude,
@@ -236,7 +237,7 @@ class Profile extends Component {
                 </View>
               </View>
               <Modal
-                visible={this.props.setLocationVisible ? true : false}
+                visible={this.props.setLocationVisible ? true : true}
                 animationType="slide"
                 onRequestClose={() => {
                   console.log("Modal has been closed.");
@@ -267,7 +268,7 @@ class Profile extends Component {
                       provider={PROVIDER_GOOGLE}
                       ref={component => (this._map = component)}
                       onLayout={e => {
-                        this._map.animateToRegion(
+                        this.props.location?this._map.animateToRegion(
                           {
                             latitude: this.props.location.coords.latitude,
                             longitude: this.props.location.coords.longitude,
@@ -275,7 +276,7 @@ class Profile extends Component {
                             longitudeDelta: 0.0421
                           },
                           1
-                        );
+                        ):null
                       }}
                     >
                       {this.props.location ? (

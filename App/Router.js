@@ -88,7 +88,6 @@ class RouterComponent extends Component {
             hideNavBar={true}
             navTransparent="true"
             type={ActionConst.RESET }
-
           />
           <Scene
             key="filter"
