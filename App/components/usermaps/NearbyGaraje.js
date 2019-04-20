@@ -27,6 +27,8 @@ import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { Constants, Location, Permissions } from "expo";
 import {
   getVendors,
+  getUserLocationFail,
+  getUserLocationSuccess
 } from "../../actions";
 
 let ScreenHeight = Dimensions.get("window").height;
@@ -54,22 +56,22 @@ class NearbyGaraje extends Component {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
 
     if (status !== "granted") {
-      this.setState({
-        errorMessage: "Permission to access location was denied"
-      });
+      this.props.getUserLocationFail();
     }
     let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
 
-    this.setState({ location });
-    this._map.animateToRegion(
+    this.props.getUserLocationSuccess(location);
+    {
+      this._map.animateToRegion(
       {
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
+        latitude: this.props.location.coords.latitude,
+        longitude: this.props.location.coords.longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
       },
       1
     );
+    }
   };
 
   _deleteUser = async () => {
@@ -161,12 +163,11 @@ class NearbyGaraje extends Component {
                 }}
                 provider={PROVIDER_GOOGLE}
                 ref={component => (this._map = component)}
-              >
+>
                 {markers}
-
-                {this.state.location ? (
+                {this.props.location ? (
                   <MapView.Marker.Animated
-                    coordinate={this.state.location.coords}
+                    coordinate={this.props.location.coords}
                   />
                 ) : null}
               </MapView>
@@ -181,15 +182,19 @@ class NearbyGaraje extends Component {
 const mapStateToProps = ({ usermaps }) => {
   const {
     loading,
-  vendors
+  vendors,
+  errorMessage,
+  location
   } = usermaps;
   return {
     loading,
-    vendors
+    vendors,
+    errorMessage,
+    location
   };
 };
 
 export default connect(
   mapStateToProps,
-  { getVendors }
+  { getVendors,getUserLocationFail,getUserLocationSuccess }
 )(NearbyGaraje);

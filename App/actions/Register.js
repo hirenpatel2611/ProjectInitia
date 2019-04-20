@@ -287,15 +287,7 @@ export const getLocationSuccess = (location) => (dispatch, getState) => {
     payload:location
   });
 };
-//
-// export const setLocationVisibility = () => (dispatch, getState) => {
-// const {isVendor} = getState().register;
-//
-//       dispatch({
-//         type:SET_LOCATION_VISIBILITY,
-//       });
-//
-// }
+
 
 export const setLocation = () => (dispatch, getState) => {
       dispatch({
