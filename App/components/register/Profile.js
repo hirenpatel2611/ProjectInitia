@@ -80,7 +80,9 @@ class Profile extends Component {
     if (status !== "granted") {
       this.props.getLocationFail();
     }
-    let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
+    let location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.Highest
+    });
     this.props.getLocationSuccess(location);
     {
       console.log(location);
@@ -268,15 +270,17 @@ class Profile extends Component {
                       provider={PROVIDER_GOOGLE}
                       ref={component => (this._map = component)}
                       onLayout={e => {
-                        this.props.location?this._map.animateToRegion(
-                          {
-                            latitude: this.props.location.coords.latitude,
-                            longitude: this.props.location.coords.longitude,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421
-                          },
-                          1
-                        ):null
+                        this.props.location
+                          ? this._map.animateToRegion(
+                              {
+                                latitude: this.props.location.coords.latitude,
+                                longitude: this.props.location.coords.longitude,
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421
+                              },
+                              1
+                            )
+                          : null;
                       }}
                     >
                       {this.props.location ? (
