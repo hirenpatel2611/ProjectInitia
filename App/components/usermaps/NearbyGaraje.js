@@ -95,6 +95,7 @@ class NearbyGaraje extends Component {
             }}
           />
       })
+      console.error(markers);
 
     }
     const { containerStyle } = styles;
