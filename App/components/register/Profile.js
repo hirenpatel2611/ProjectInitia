@@ -66,7 +66,7 @@ class Profile extends Component {
   componentWillMount() {
     if (Platform.OS === "android" && !Constants.isDevice) {
       this.setState({
-        errorMessages:
+        errorMessage:
           "Oops, this will not work on Sketch in an Android emulator. Try it on your device!"
       });
     } else {
@@ -80,22 +80,8 @@ class Profile extends Component {
     if (status !== "granted") {
       this.props.getLocationFail();
     }
-    let location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.Highest
-    });
+    let location = await Location.getCurrentPositionAsync({});
     this.props.getLocationSuccess(location);
-    {
-      console.log(location);
-      this._map.animateToRegion(
-        {
-          latitude: this.props.location.coords.latitude,
-          longitude: this.props.location.coords.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421
-        },
-        1
-      );
-    }
   };
 
   render() {
@@ -239,7 +225,7 @@ class Profile extends Component {
                 </View>
               </View>
               <Modal
-                visible={this.props.setLocationVisible ? true : true}
+                visible={this.props.setLocationVisible}
                 animationType="slide"
                 onRequestClose={() => {
                   console.log("Modal has been closed.");
@@ -247,7 +233,7 @@ class Profile extends Component {
                 transparent={true}
                 opacity={0.5}
                 style={{
-                  height: 0.24 * ScreenHeight,
+                  height: ScreenHeight,
                   backgroundColor: "rgba(0,0,0,0.5)"
                 }}
               >
@@ -264,23 +250,20 @@ class Profile extends Component {
                         ...StyleSheet.absoluteFillObject,
                         borderRadius: 15,
                         borderWidth: 1,
-                        borderColor: "#7960FF",
-                        height: 0.48 * ScreenHeight
+                        borderColor: "#7960FF"
                       }}
                       provider={PROVIDER_GOOGLE}
                       ref={component => (this._map = component)}
                       onLayout={e => {
-                        this.props.location
-                          ? this._map.animateToRegion(
-                              {
-                                latitude: this.props.location.coords.latitude,
-                                longitude: this.props.location.coords.longitude,
-                                latitudeDelta: 0.0922,
-                                longitudeDelta: 0.0421
-                              },
-                              1
-                            )
-                          : null;
+                        this._map.animateToRegion(
+                          {
+                            latitude: this.props.location.coords.latitude,
+                            longitude: this.props.location.coords.longitude,
+                            latitudeDelta: 0.0922,
+                            longitudeDelta: 0.0421
+                          },
+                          1
+                        );
                       }}
                     >
                       {this.props.location ? (
@@ -290,15 +273,15 @@ class Profile extends Component {
                       ) : null}
                     </MapView>
                   </View>
-                  {this.props.errorMessage ? alert("location not found") : null}
                   <TouchableHighlight
                     underlayColor="white"
                     onPress={() => {
                       this.props.setLocation();
                       this.props.signupUser();
+                      this.props.toggleModalProfile();
                     }}
                     disabled={this.props.location ? false : true}
-                    style={{ opacity: this.props.location ? 1 : 0.8 }}
+                    style={{ opacity: this.props.location ? 1 : 0.8, top: 10 }}
                   >
                     <View
                       style={{
@@ -315,20 +298,17 @@ class Profile extends Component {
                 </View>
               </Modal>
             </View>
-            {this.props.signupFail ? (
-              <View style={{ paddingLeft: 0.09 * ScreenWidth }}>
-                <Text style={textError}> {this.props.signupFail} </Text>
-              </View>
-            ) : null}
             <View style={profileButtonView}>
               <TouchableHighlight
                 onPress={() => {
                   this.props.updateOnSubmeetSignup();
-                  this.props.isValid(this.props.register)
-                    ? this.props.isVendor === true
-                      ? this.props.setLocation()
-                      : this.props.signupUser()
-                    : null;
+                  if (this.props.isValid(this.props.register)) {
+                    if (this.props.isVendor) {
+                      this.props.setLocation();
+                    } else {
+                      this.props.signupUser();
+                    }
+                  }
                 }}
                 underlayColor="white"
               >
@@ -417,6 +397,7 @@ const rules = [
     condition: notEmpty,
     error: "Email is Require"
   },
+
   {
     field: "password",
     condition: notEmpty,
@@ -450,8 +431,7 @@ const mapStateToProps = ({ register }) => {
     isVendor,
     errorMessage,
     location,
-    setLocationVisible,
-    signupFail
+    setLocationVisible
   } = register;
   return {
     visibleModalProfile,
@@ -469,7 +449,6 @@ const mapStateToProps = ({ register }) => {
     errorMessage,
     location,
     setLocationVisible,
-    signupFail,
     register
   };
 };
