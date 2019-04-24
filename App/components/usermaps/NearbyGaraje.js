@@ -30,6 +30,7 @@ import {
   getUserLocationFail,
   getUserLocationSuccess
 } from "../../actions";
+import { MECHANIC} from "../../images";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -92,8 +93,19 @@ class NearbyGaraje extends Component {
             coordinate={{
               latitude:parseInt(vendor.latitude),
               longitude:parseInt(vendor.longitude)
-            }}
-          />
+            }}>
+            <Image
+              style={{
+                borderRadius:15,
+                borderWidth:1,
+                borderColor:'#7960FF',
+                width: 20,
+                height: 20,
+                resizeMode: "contain",
+              }}
+              source={MECHANIC}
+            />
+          </MapView.Marker.Animated>
       })
       console.error(markers);
 
@@ -168,8 +180,26 @@ class NearbyGaraje extends Component {
                 {markers}
                 {this.props.location ? (
                   <MapView.Marker.Animated
-                    coordinate={this.props.location.coords}
-                  />
+                    coordinate={this.props.location.coords}>
+                    <View style={{
+                      borderWidth:1,
+                      height:18,
+                      width:18,
+                      borderRadius:10,
+                      borderColor:'#7960FF',
+                      alignItems:'center',
+                      justifyContent:'center'
+                    }}>
+                        <View style={{
+                          backgroundColor:'#7960FF',
+                          height:14,
+                          width:14,
+                          borderRadius:10
+                        }}
+                        >
+                        </View>
+                    </View>
+                  </MapView.Marker.Animated>
                 ) : null}
               </MapView>
             </View>
