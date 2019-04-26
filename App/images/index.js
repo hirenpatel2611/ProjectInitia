@@ -14,3 +14,6 @@ export const LOCATION=require('../images/location.png');
 export const PROFILE=require('../images/profile.png');
 export const ICON_REFRESH=require("../images/resendOTP.png");
 export const BACK_ARROW=require("../images/BackArrow.png");
+export const USER2=require("../images/USER2.png");
+export const FILTER=require("../images/filter_list.png");
+export const MENU=require("../images/menu.png");

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View,TouchableOpacity,Text,AsyncStorage } from "react-native";
+import { View, TouchableOpacity, Text, AsyncStorage } from "react-native";
 import { Scene, Router, ActionConst } from "react-native-router-flux";
 import CardStackStyleInterpolator from "react-navigation/src/views/CardStack/CardStackStyleInterpolator";
 import Login from "./components/login/Login";
@@ -11,34 +11,37 @@ import filter from "./components/usermaps/filter";
 import NearbyGaraje from "./components/usermaps/NearbyGaraje";
 import NearbyGarajeDiscover from "./components/usermaps/NearbyGarajeDiscover";
 import MessageToNearbyMechanic from "./components/usermaps/MessageToNearbyMechanic";
+import VendorHome from "./components/usermaps/VendorHome";
 import { Actions } from "react-native-router-flux";
-import { loadFont,updateLoggedInState } from "./actions";
+import { loadFont, updateLoggedInState, updateIsVendor } from "./actions";
 
 import { connect } from "react-redux";
 
 class RouterComponent extends Component {
   componentDidMount() {
     this.props.loadFont();
-    this._retrieveData ();
+    this._retrieveData();
   }
 
-
   _retrieveData = async () => {
-     try {
+    try {
+      const valueUserName = await AsyncStorage.getItem("token");
+      const valueIsvendor = await AsyncStorage.getItem("is_vendor");
 
-       const valueUserName = await AsyncStorage.getItem('token');
-
-       if (valueUserName !== null) {
-       this.props.updateLoggedInState(true)
-       }
-       else{
-       this.props.updateLoggedInState(false)
-       }
-     } catch (error) {
-       // Error retrieving data
-       console.error(error);
-     }
-    };
+      if (valueUserName !== null) {
+        if (valueIsvendor === "1") {
+          this.props.updateIsVendor(true);
+        } else {
+          this.props.updateLoggedInState(true);
+        }
+      } else {
+        this.props.updateLoggedInState(false);
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.error(error);
+    }
+  };
 
   render() {
     if (!this.props.fontLoaded) {
@@ -59,14 +62,14 @@ class RouterComponent extends Component {
             hideNavBar={true}
             navTransparent="true"
             type={ActionConst.RESET}
-            initial ={!this.props.isLoggedIn}
+            initial={!this.props.isLoggedIn}
           />
           <Scene
             key="login"
             component={Login}
             hideNavBar={true}
             navTransparent="true"
-            onBack={()=>Actions.SplashFront()}
+            onBack={() => Actions.SplashFront()}
             type={ActionConst.RESET}
           />
           <Scene
@@ -87,7 +90,7 @@ class RouterComponent extends Component {
             component={profile}
             hideNavBar={true}
             navTransparent="true"
-            type={ActionConst.RESET }
+            type={ActionConst.RESET}
           />
           <Scene
             key="filter"
@@ -98,7 +101,7 @@ class RouterComponent extends Component {
           />
           <Scene
             key="NearbyGaraje"
-            initial ={this.props.isLoggedIn}
+            initial={this.props.isLoggedIn}
             component={NearbyGaraje}
             hideNavBar={true}
             navTransparent="true"
@@ -115,17 +118,24 @@ class RouterComponent extends Component {
             hideNavBar={true}
             navTransparent="true"
           />
+          <Scene
+            key="VendorHome"
+            component={VendorHome}
+            hideNavBar={true}
+            navTransparent="true"
+            initial={this.props.isVendorLoggedIn}
+          />
         </Scene>
       </Router>
     );
   }
 }
 const mapStateToProps = ({ ui }) => {
-  const { fontLoaded,isLoggedIn } = ui;
-  return { fontLoaded,isLoggedIn };
+  const { fontLoaded, isLoggedIn, isVendorLoggedIn } = ui;
+  return { fontLoaded, isLoggedIn, isVendorLoggedIn };
 };
 
 export default connect(
   mapStateToProps,
-  { loadFont,updateLoggedInState }
+  { loadFont, updateLoggedInState, updateIsVendor }
 )(RouterComponent);

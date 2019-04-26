@@ -13,7 +13,7 @@ const INITIAL_STATE = {
   loading: false,
   loginFailed: false,
   loginStatus: 0,
-  onSubmeetLoginForm: false
+  onSubmeetLoginForm: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -52,7 +52,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loading: false,
           loginStatus: action.payload,
-          loginFailed: false
+          loginFailed: false,
         };
       }
       break;

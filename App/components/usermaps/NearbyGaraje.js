@@ -24,13 +24,14 @@ import styles from "./usermapsStyle";
 import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { Constants, Location, Permissions } from "expo";
+import { Constants, Location, Permissions, IntentLauncherAndroid } from "expo";
 import {
   getVendors,
   getUserLocationFail,
-  getUserLocationSuccess
+  getUserLocationSuccess,
+  isMenuVisible
 } from "../../actions";
-import { MECHANIC} from "../../images";
+import { MECHANIC,USER2,FILTER } from "../../images";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -59,19 +60,39 @@ class NearbyGaraje extends Component {
     if (status !== "granted") {
       this.props.getUserLocationFail();
     }
-    let location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Highest });
 
+    await Location.hasServicesEnabledAsync()
+      .then(async res => {
+        if (!res) {
+          perm = await IntentLauncherAndroid.startActivityAsync(
+            IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+          );
+        }
+        await Location.hasServicesEnabledAsync()
+          .then(async res => {
+            this.locationIsEnabled = res;
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      })
+      .catch(err => {
+        console.error(err);
+      });
+    let location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.BestForNavigation
+    });
     this.props.getUserLocationSuccess(location);
     {
       this._map.animateToRegion(
-      {
-        latitude: this.props.location.coords.latitude,
-        longitude: this.props.location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
-      },
-      1
-    );
+        {
+          latitude: this.props.location.coords.latitude,
+          longitude: this.props.location.coords.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421
+        },
+        1
+      );
     }
   };
 
@@ -86,29 +107,30 @@ class NearbyGaraje extends Component {
 
   render() {
     markers = [];
-    if (this.props.vendors.length){
-      markers=this.props.vendors.map((vendor)=>{
-        return   <MapView.Marker.Animated
-            key = {vendor.id}
+    if (this.props.vendors.length) {
+      markers = this.props.vendors.map(vendor => {
+        return (
+          <MapView.Marker.Animated
+            key={vendor.id}
             coordinate={{
-              latitude:parseInt(vendor.latitude),
-              longitude:parseInt(vendor.longitude)
-            }}>
+              latitude: parseFloat(vendor.latitude),
+              longitude: parseFloat(vendor.longitude)
+            }}
+          >
             <Image
               style={{
-                borderRadius:15,
-                borderWidth:1,
-                borderColor:'#7960FF',
+                borderRadius: 15,
+                borderColor: "#7960FF",
                 width: 20,
                 height: 20,
-                resizeMode: "contain",
+                resizeMode: "contain"
               }}
-              source={MECHANIC}
+              source={USER2}
             />
           </MapView.Marker.Animated>
-      })
-      console.error(markers);
-
+        );
+      });
+      console.log(markers);
     }
     const { containerStyle } = styles;
     let text = "Waiting..";
@@ -119,85 +141,53 @@ class NearbyGaraje extends Component {
     }
     return (
       <View style={containerStyle}>
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            this._deleteUser();
-            Actions.SplashFront();
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: "#7960FF",
-              height: 30,
-              width: 70,
-              borderRadius: 15,
-              alignItems: "center",
-              marginTop: 25,
-              marginLeft: 10,
-              justifyContent: "center"
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: "bold",
-                color: "white"
-              }}
-            >
-              Logout
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
+      <Header headerText="Near by Garaje"
+              onPressMenu={()=> {this.props.isMenuVisible(true)}}
+              onPressMenuCancle={()=> {this.props.isMenuVisible(false)}}
+              isModalVisible={this.props.isMenuModalVisible}>
+      </Header>
         <KeyboardAwareScrollView>
           <StatusBar backgroundColor="#7960FF" />
 
-          <View
-            style={{ flexDirection: "column", alignItems: "stretch" }}
-          >
-
+          <View style={{ flexDirection: "column", alignItems: "stretch" }}>
             <View
               style={{
-                height: 0.89 * ScreenHeight,
-                marginTop:5,
-                borderWidth: 1,
-                marginLeft: 10,
-                marginRight: 10,
-                borderRadius: 10
+                height: 0.82 * ScreenHeight,
               }}
             >
               <Text />
               <MapView
                 style={{
                   ...StyleSheet.absoluteFillObject,
-                  borderRadius: 15,
-                  borderWidth: 1
+
                 }}
                 provider={PROVIDER_GOOGLE}
                 ref={component => (this._map = component)}
->
+              >
                 {markers}
                 {this.props.location ? (
                   <MapView.Marker.Animated
-                    coordinate={this.props.location.coords}>
-                    <View style={{
-                      borderWidth:1,
-                      height:18,
-                      width:18,
-                      borderRadius:10,
-                      borderColor:'#7960FF',
-                      alignItems:'center',
-                      justifyContent:'center'
-                    }}>
-                        <View style={{
-                          backgroundColor:'#7960FF',
-                          height:14,
-                          width:14,
-                          borderRadius:10
+                    coordinate={this.props.location.coords}
+                  >
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        height: 18,
+                        width: 18,
+                        borderRadius: 10,
+                        borderColor: "#7960FF",
+                        alignItems: "center",
+                        justifyContent: "center"
+                      }}
+                    >
+                      <View
+                        style={{
+                          backgroundColor: "#7960FF",
+                          height: 14,
+                          width: 14,
+                          borderRadius: 10
                         }}
-                        >
-                        </View>
+                      />
                     </View>
                   </MapView.Marker.Animated>
                 ) : null}
@@ -205,27 +195,24 @@ class NearbyGaraje extends Component {
             </View>
           </View>
         </KeyboardAwareScrollView>
+        <Footer />
       </View>
     );
   }
 }
 
 const mapStateToProps = ({ usermaps }) => {
-  const {
-    loading,
-  vendors,
-  errorMessage,
-  location
-  } = usermaps;
+  const { loading, vendors, errorMessage, location,isMenuModalVisible } = usermaps;
   return {
     loading,
     vendors,
     errorMessage,
-    location
+    location,
+    isMenuModalVisible
   };
 };
 
 export default connect(
   mapStateToProps,
-  { getVendors,getUserLocationFail,getUserLocationSuccess }
+  { getVendors, getUserLocationFail, getUserLocationSuccess,isMenuVisible }
 )(NearbyGaraje);

@@ -24,13 +24,13 @@ import styles from "./usermapsStyle";
 import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { Constants, Location, Permissions, IntentLauncherAndroid } from "expo";
+import { Constants, Location, Permissions } from "expo";
 import {
   getVendors,
   getUserLocationFail,
   getUserLocationSuccess
 } from "../../actions";
-import { MECHANIC,USER2 } from "../../images";
+import { MECHANIC } from "../../images";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -59,28 +59,10 @@ class NearbyGaraje extends Component {
     if (status !== "granted") {
       this.props.getUserLocationFail();
     }
-
-    await Location.hasServicesEnabledAsync()
-      .then(async res => {
-        if (!res) {
-          perm = await IntentLauncherAndroid.startActivityAsync(
-            IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
-          );
-        }
-        await Location.hasServicesEnabledAsync()
-          .then(async res => {
-            this.locationIsEnabled = res;
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      })
-      .catch(err => {
-        console.error(err);
-      });
     let location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.BestForNavigation
+      accuracy: Location.Accuracy.Highest
     });
+
     this.props.getUserLocationSuccess(location);
     {
       this._map.animateToRegion(
@@ -119,12 +101,13 @@ class NearbyGaraje extends Component {
             <Image
               style={{
                 borderRadius: 15,
+                borderWidth: 1,
                 borderColor: "#7960FF",
                 width: 20,
                 height: 20,
                 resizeMode: "contain"
               }}
-              source={USER2}
+              source={MECHANIC}
             />
           </MapView.Marker.Animated>
         );
@@ -140,57 +123,64 @@ class NearbyGaraje extends Component {
     }
     return (
       <View style={containerStyle}>
-      <Header headerText="Near by Garaje"/>
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              this._deleteUser();
+              Actions.SplashFront();
+            }}
+            style={{ width: 71 }}
+          >
+            <View
+              style={{
+                backgroundColor: "#7960FF",
+                height: 30,
+                width: 70,
+                borderRadius: 15,
+                alignItems: "center",
+                marginTop: 25,
+                marginLeft: 10,
+                justifyContent: "center"
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: "bold",
+                  color: "white"
+                }}
+              >
+                Logout
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
         <KeyboardAwareScrollView>
           <StatusBar backgroundColor="#7960FF" />
 
           <View style={{ flexDirection: "column", alignItems: "stretch" }}>
             <View
               style={{
-                height: 0.82 * ScreenHeight,
+                height: 0.87 * ScreenHeight,
+                borderRadius: 10,
+                justifyContent: "center"
               }}
             >
               <Text />
-              <MapView
+              <Text
                 style={{
-                  ...StyleSheet.absoluteFillObject,
-
+                  alignSelf: "center",
+                  fontSize: 30,
+                  fontFamily: "circular-bold",
+                  color: "#7960FF",
+                  marginBottom: 40
                 }}
-                provider={PROVIDER_GOOGLE}
-                ref={component => (this._map = component)}
               >
-                {markers}
-                {this.props.location ? (
-                  <MapView.Marker.Animated
-                    coordinate={this.props.location.coords}
-                  >
-                    <View
-                      style={{
-                        borderWidth: 1,
-                        height: 18,
-                        width: 18,
-                        borderRadius: 10,
-                        borderColor: "#7960FF",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}
-                    >
-                      <View
-                        style={{
-                          backgroundColor: "#7960FF",
-                          height: 14,
-                          width: 14,
-                          borderRadius: 10
-                        }}
-                      />
-                    </View>
-                  </MapView.Marker.Animated>
-                ) : null}
-              </MapView>
+                Wel Come To ilife
+              </Text>
             </View>
           </View>
         </KeyboardAwareScrollView>
-        <Footer />
       </View>
     );
   }

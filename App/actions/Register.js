@@ -234,12 +234,12 @@ export const signupUser = () => (dispatch, getState) => {
   test.append("address", address);
   test.append("service_vehicle_type", vehicle_type);
   test.append("is_vendor", is_vendor);
-  if (isVendor === true){
-  test.append("latitude", location.coords.latitude);
-  test.append("longitude", location.coords.longitude);
+  if (isVendor === true) {
+    test.append("latitude", location.coords.latitude);
+    test.append("longitude", location.coords.longitude);
   }
   console.log(location.coords.latitude);
-console.log(test);
+  console.log(test);
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
       console.log(response);
@@ -267,7 +267,6 @@ export const updateOnSubmeetOtp = () => (dispatch, getState) => {
 };
 
 export const updateOnSubmeetSignup = () => (dispatch, getState) => {
-
   dispatch({
     type: UPDATE_ON_SUBMEET_SIGNUP
   });
@@ -276,21 +275,20 @@ export const updateOnSubmeetSignup = () => (dispatch, getState) => {
 export const getLocationFail = () => (dispatch, getState) => {
   dispatch({
     type: GET_LOCATION_FAIL,
-    payload:'Permission to access location was denied'
+    payload: "Permission to access location was denied"
   });
 };
 
-export const getLocationSuccess = (location) => (dispatch, getState) => {
+export const getLocationSuccess = location => (dispatch, getState) => {
   console.log(location);
   dispatch({
     type: GET_LOCATION_SUCCESS,
-    payload:location
+    payload: location
   });
 };
 
-
 export const setLocation = () => (dispatch, getState) => {
-      dispatch({
-        type:SET_LOCATION,
-      });
-}
+  dispatch({
+    type: SET_LOCATION
+  });
+};

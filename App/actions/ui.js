@@ -2,6 +2,7 @@ import { Font } from "expo";
 
 export const LOAD_FONT_SUCCESS = "ui/LOAD_FONT_SUCCESS";
 export const UPDATE_LOGGED_IN_STATE = "ui/UPDATE_LOGGED_IN_STATE";
+export const UPDATE_IS_VENDOR = "ui/UPDATE_IS_VENDOR";
 
 export const loadFont = () => async dispatch => {
   await Font.loadAsync({
@@ -20,6 +21,13 @@ export const loadFont = () => async dispatch => {
 export const updateLoggedInState = bool => (dispatch, getState) => {
   dispatch({
     type: UPDATE_LOGGED_IN_STATE,
+    payload: bool
+  });
+};
+
+export const updateIsVendor = bool => (dispatch, getState) => {
+  dispatch({
+    type: UPDATE_IS_VENDOR,
     payload: bool
   });
 };

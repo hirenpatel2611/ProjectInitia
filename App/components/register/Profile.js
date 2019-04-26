@@ -52,7 +52,7 @@ import TimerMixin from "react-timer-mixin";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { Constants, Location, Permissions } from "expo";
+import { Constants, Location, Permissions, IntentLauncherAndroid } from "expo";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -60,7 +60,7 @@ let ScreenWidth = Dimensions.get("window").width;
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = { isChecked: false };
+    this.locationIsEnabled = false;
   }
 
   componentWillMount() {
@@ -78,9 +78,30 @@ class Profile extends Component {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
 
     if (status !== "granted") {
-      this.props.getLocationFail();
+      this.props.getUserLocationFail();
     }
-    let location = await Location.getCurrentPositionAsync({});
+
+    await Location.hasServicesEnabledAsync()
+      .then(async res => {
+        if (!res) {
+          perm = await IntentLauncherAndroid.startActivityAsync(
+            IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+          );
+        }
+        await Location.hasServicesEnabledAsync()
+          .then(async res => {
+            this.locationIsEnabled = res;
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      })
+      .catch(err => {
+        console.error(err);
+      });
+    let location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.BestForNavigation
+    });
     this.props.getLocationSuccess(location);
   };
 
@@ -242,7 +263,7 @@ class Profile extends Component {
                     style={{
                       borderRadius: 10,
                       width: 0.83 * ScreenWidth,
-                      height: 0.5 * ScreenHeight
+                      height: 0.49 * ScreenHeight
                     }}
                   >
                     <MapView

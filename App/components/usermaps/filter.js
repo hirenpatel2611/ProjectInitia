@@ -16,7 +16,7 @@ import {
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // import { Col, Row, Grid } from "react-native-easy-grid";
-import { MOTORCYCLE, CAR, CAR_ENGINE, TIMING_BELT } from "../../images";
+import { MOTORCYCLE, CAR, BACK_ARROW } from "../../images";
 import { Actions } from "react-native-router-flux";
 import { setTimer, setScore } from "../../actions";
 import _ from "lodash";
@@ -41,7 +41,7 @@ class filter extends Component {
   getVal(val) {}
 
   render() {
-    const { containerStyle, continueButton, buttonText } = styles;
+    const { containerStyle, continueButton, buttonText, createButton } = styles;
 
     return (
       <View style={containerStyle}>
@@ -50,17 +50,50 @@ class filter extends Component {
           <View
             style={{ flex: 1, flexDirection: "column", alignItems: "stretch" }}
           >
-            <Text
+            <View
               style={{
-                paddingTop: 16,
-                paddingLeft: 16,
-                fontSize: 20,
-                fontWeight: "bold",
-                color: "#4B4B4B"
+                padding:10,
+                marginTop: 27,
+                shadowColor: "#000000",
+                shadowOffset: { width: 0, height: 3 },
+                shadowRadius: 5,
+                shadowOpacity: 1.0,
+                width:ScreenWidth,
+                flexDirection:'row',
+                marginBottom:12
               }}
             >
-              <Header headerText="Flter" />
-            </Text>
+              <TouchableOpacity
+                style={{ width: 27 }}
+                onPress={() => Actions.NearbyGaraje()}
+              >
+                <View
+                  style={{
+                    backgroundColor: "#7960FF",
+                    height: 25,
+                    width: 25,
+                    borderRadius: 25,
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    style={{ height: 12, width: 25 }}
+                    source={BACK_ARROW}
+                  />
+                </View>
+              </TouchableOpacity>
+              <Text
+                style={{
+                  paddingLeft: 16,
+                  fontSize: 20,
+                  fontFamily: "circular-bold",
+                  color: "#4B4B4B"
+                }}
+              >
+                Filter
+              </Text>
+            </View>
             <View
               style={{
                 height: 0.78 * ScreenHeight
@@ -71,7 +104,8 @@ class filter extends Component {
                   style={{
                     fontSize: 16,
                     paddingLeft: 20,
-                    fontWeight: "bold"
+                    color:'#4A4A4A',
+                    fontFamily:'circular-bold'
                   }}
                 >
                   Mechanic Type
@@ -136,15 +170,16 @@ class filter extends Component {
                   style={{
                     fontSize: 16,
                     paddingLeft: 20,
-                    fontWeight: "bold",
-                    paddingTop:10
+                    color:'#4A4A4A',
+                    fontFamily:'circular-bold',
+                    paddingTop: 10
                   }}
                 >
                   Ratting
                 </Text>
                 <View
                   style={{
-                    alignItems: "left",
+                    alignItems: "flex-start",
                     padding: 10
                   }}
                 >
@@ -159,17 +194,19 @@ class filter extends Component {
                   style={{
                     fontSize: 16,
                     paddingLeft: 20,
-                    fontWeight: "bold",
-                    paddingTop:10
+                    color:'#4A4A4A',
+                    fontFamily:'circular-bold',
+                    paddingTop: 10,
+                    flexDirection: "column",
                   }}
                 >
                   Cost
                 </Text>
                 <View
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    padding: 10
+                    flexDirection:'column',
+                    alignItems:'flex-start',
+                    width:ScreenWidth,
                   }}
                 >
                   <CheckBox
@@ -182,25 +219,7 @@ class filter extends Component {
                     }}
                   />
 
-                  <CheckBox
-                    isChecked={this.state.isChecked2}
-                    rightText={"₹₹₹"}
-                    onClick={() => {
-                      this.setState({
-                        isChecked2: !this.state.isChecked2
-                      });
-                    }}
-                  />
 
-                  <CheckBox
-                    isChecked={this.state.isChecked3}
-                    rightText={"₹₹₹"}
-                    onClick={() => {
-                      this.setState({
-                        isChecked3: !this.state.isChecked3
-                      });
-                    }}
-                  />
                 </View>
               </View>
               <View>
@@ -208,8 +227,9 @@ class filter extends Component {
                   style={{
                     fontSize: 16,
                     paddingLeft: 20,
-                    fontWeight: "bold",
-                    paddingTop:10
+                    color:'#4A4A4A',
+                    fontFamily:'circular-bold',
+                    paddingTop: 10
                   }}
                 >
                   Distance
@@ -217,7 +237,7 @@ class filter extends Component {
                 <View
                   style={{
                     padding: 10,
-                    justifyContent:'space-around'
+                    justifyContent: "space-around"
                   }}
                 >
                   <Slider
@@ -251,11 +271,9 @@ class filter extends Component {
             <View
               style={{
                 width: ScreenWidth,
-                paddingTop: 16,
                 paddingLeft: 16,
                 flex: 1,
                 flexDirection: "row",
-                alignItems: "row",
                 borderBottomWidth: 1,
                 paddingBottom: 16,
                 justifyContent: "center"

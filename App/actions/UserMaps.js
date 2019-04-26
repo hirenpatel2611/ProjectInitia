@@ -9,6 +9,7 @@ export const GET_VENDORS_START = "usermaps/GET_VENDORS_START";
 export const GET_VENDORS_SUCCESS = "usermaps/GET_VENDORS_SUCCESS";
 export const GET_USER_LOCATION_FAIL = "usermaps/GET_USER_LOCATION_FAIL";
 export const GET_USER_LOCATION_SUCCESS = "usermaps/GET_USER_LOCATION_SUCCESS";
+export const IS_MENU_VISIBLE = "usermaps/IS_MENU_VISIBLE";
 
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
@@ -39,5 +40,12 @@ export const getUserLocationSuccess = location => (dispatch, getState) => {
   dispatch({
     type: GET_USER_LOCATION_SUCCESS,
     payload: location
+  });
+};
+
+export const isMenuVisible = (bool) => (dispatch, getState) => {
+  dispatch({
+    type: IS_MENU_VISIBLE,
+    payload: bool
   });
 };
