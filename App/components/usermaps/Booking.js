@@ -51,6 +51,7 @@ class Booking extends Component {
             fontSize:14,
           }}>Distance</Text>
           </View>
+          
           <View style={{
             flexDirection:'row',
             justifyContent:'space-between'
