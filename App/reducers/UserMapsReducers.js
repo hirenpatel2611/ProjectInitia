@@ -89,6 +89,7 @@ export default (state = INITIAL_STATE, action) => {
             }
             break;
 
+
             case GET_VENDOR_BOOKING_START:
               {
                 return {
