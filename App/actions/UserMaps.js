@@ -13,6 +13,7 @@ export const IS_MENU_VISIBLE = "usermaps/IS_MENU_VISIBLE";
 export const GET_VENDOR_DETAILS = "usermaps/GET_VENDOR_DETAILS";
 export const GET_VENDOR_BOOKING = "usermaps/GET_VENDOR_BOOKING";
 export const GET_BOOKING_SUCCESS = "usermaps/GET_BOOKING_SUCCESS";
+export const GET_VENDOR_BOOKING_START = "usermaps/GET_VENDOR_BOOKING_START";
 
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
@@ -55,9 +56,14 @@ export const getVendorBooking = () => async(dispatch, getState) => {
   dispatch({
     type: GET_VENDOR_BOOKING,
   });
+
+};
+export const BookVendor= () => async(dispatch, getState) => {
+  dispatch({
+    type: GET_VENDOR_BOOKING_START,
+  });
     const { vendorsData, } = getState().usermaps;
     const valueUserId = await AsyncStorage.getItem("user_id");
-
     let test = new FormData();
     test.append("customer_id", valueUserId);
     test.append("vendor_id", vendorsData.id);

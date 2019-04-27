@@ -54,7 +54,7 @@ export const loginUser = () => (dispatch, getState) => {
         try {
           await AsyncStorage.setItem("token", response.token);
           await AsyncStorage.setItem("is_vendor", response.data.is_vendor);
-          // await AsyncStorage.setItem("user_id",response.data.id.toString());
+          await AsyncStorage.setItem("user_id",response.data.id.toString());
 
         } catch (error) {
           console.log(error);

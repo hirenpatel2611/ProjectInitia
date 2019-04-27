@@ -5,7 +5,8 @@ import {
   GET_USER_LOCATION_SUCCESS,
   GET_BOOKING_SUCCESS,
   GET_VENDOR_DETAILS,
-  GET_VENDOR_BOOKING
+  GET_VENDOR_BOOKING,
+  GET_VENDOR_BOOKING_START
 } from "../actions/UserMaps";
 
 const INITIAL_STATE = {
@@ -73,7 +74,7 @@ export default (state = INITIAL_STATE, action) => {
           {
             return {
               ...state,
-              loadingBookig:true
+                isBookModalVisible: !state.isBookModalVisible,
             };
           }
           break;
@@ -87,6 +88,15 @@ export default (state = INITIAL_STATE, action) => {
               };
             }
             break;
+
+            case GET_VENDOR_BOOKING_START:
+              {
+                return {
+                  ...state,
+                  loadingBookig:true,
+                };
+              }
+              break;
 
     default:
       return state;
