@@ -14,9 +14,9 @@ const INITIAL_STATE = {
   vendors: [],
   location: "",
   errorMessage: "",
-  isBookModalVisible:false,
-  vendorsData:'',
-  loadingBookig:false
+  isBookModalVisible: false,
+  vendorsData: "",
+  loadingBookig: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -30,17 +30,15 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-
-      case GET_VENDORS_SUCCESS:
-        {
-          return {
-            ...state,
-            loading: false,
-            vendors:action.payload
-          };
-        }
-        break;
-
+    case GET_VENDORS_SUCCESS:
+      {
+        return {
+          ...state,
+          loading: false,
+          vendors: action.payload
+        };
+      }
+      break;
 
     case GET_USER_LOCATION_FAIL:
       {
@@ -60,44 +58,43 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-      case GET_VENDOR_DETAILS:
-        {
-          return {
-            ...state,
-            isBookModalVisible: !state.isBookModalVisible,
-            vendorsData: action.payload
-          };
-        }
-        break;
+    case GET_VENDOR_DETAILS:
+      {
+        return {
+          ...state,
+          isBookModalVisible: !state.isBookModalVisible,
+          vendorsData: action.payload
+        };
+      }
+      break;
 
-        case GET_VENDOR_BOOKING:
-          {
-            return {
-              ...state,
-                isBookModalVisible: !state.isBookModalVisible,
-            };
-          }
-          break;
+    case GET_VENDOR_BOOKING:
+      {
+        return {
+          ...state,
+          isBookModalVisible: !state.isBookModalVisible
+        };
+      }
+      break;
 
-          case GET_BOOKING_SUCCESS:
-            {
-              return {
-                ...state,
-                loadingBookig:false,
-                isBookModalVisible: !state.isBookModalVisible,
-              };
-            }
-            break;
+    case GET_BOOKING_SUCCESS:
+      {
+        return {
+          ...state,
+          loadingBookig: false,
+          isBookModalVisible: !state.isBookModalVisible
+        };
+      }
+      break;
 
-
-            case GET_VENDOR_BOOKING_START:
-              {
-                return {
-                  ...state,
-                  loadingBookig:true,
-                };
-              }
-              break;
+    case GET_VENDOR_BOOKING_START:
+      {
+        return {
+          ...state,
+          loadingBookig: true
+        };
+      }
+      break;
 
     default:
       return state;
