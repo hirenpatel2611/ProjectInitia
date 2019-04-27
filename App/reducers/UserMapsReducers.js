@@ -19,6 +19,7 @@ const INITIAL_STATE = {
   loadingBookig: false
 };
 
+
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case GET_VENDORS_START:
