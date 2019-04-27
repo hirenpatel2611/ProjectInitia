@@ -196,18 +196,17 @@ class NearbyGaraje extends Component {
           opacity={0.5}
 
           style={{
-            height:0.3 * ScreenHeight,
+            height:0.20 * ScreenHeight,
             backgroundColor: "rgba(0,0,0,0.5)",
             justifyContent:'flex-end'
           }}>
           <TouchableOpacity onPress={()=>{this.props.getVendorBooking()}}>
                       <View
-
                         style={{
                           marginTop: 0.65 * ScreenHeight,
                           alignSelf:'stretch',
                           backgroundColor: "#FFFFFF",
-                          height: 0.3 * ScreenHeight,
+                          height: 0.23* ScreenHeight,
                           margin: 15,
                           borderRadius: 10,
                           padding:10,
@@ -238,7 +237,16 @@ class NearbyGaraje extends Component {
                                 margin: 10
                               }}
                             >
-                              <Text
+                              {this.props.loadingBookig?<Text
+                                style={{
+                                  padding: 3,
+                                  fontSize: 14,
+                                  fontFamily: "circular-bold",
+                                  color: "white"
+                                }}
+                              >
+                                Loading...
+                              </Text>:<Text
                                 style={{
                                   padding: 3,
                                   fontSize: 14,
@@ -247,7 +255,7 @@ class NearbyGaraje extends Component {
                                 }}
                               >
                                 Book
-                              </Text>
+                              </Text>}
                             </View>
                           </TouchableOpacity>
                         </View>
@@ -269,7 +277,7 @@ class NearbyGaraje extends Component {
                             fontSize: 14,
                             color: "#4A4A4A"
                           }}
-                        >{this.props.vendorsData?<Text>{this.props.vendorsData.mobile}</Text>:<Text>None</Text>}
+                        >
                         </Text>
                         <View
                           style={{
@@ -367,7 +375,8 @@ const mapStateToProps = ({ usermaps }) => {
     errorMessage,
     location,
     isBookModalVisible,
-    vendorsData
+    vendorsData,
+    loadingBookig
   } = usermaps;
   return {
     loading,
@@ -375,7 +384,8 @@ const mapStateToProps = ({ usermaps }) => {
     errorMessage,
     location,
     isBookModalVisible,
-    vendorsData
+    vendorsData,
+    loadingBookig
   };
 };
 

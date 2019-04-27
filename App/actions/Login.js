@@ -39,6 +39,7 @@ export const loginUser = () => (dispatch, getState) => {
   test.append("device_type", "android");
   Api.post(URL_USER_LOGIN, test)
     .then(async response => {
+      console.log( response.data.id);
       dispatch({
         type: LOGIN_SUCCESSFUL,
         payload: response.status
@@ -53,6 +54,8 @@ export const loginUser = () => (dispatch, getState) => {
         try {
           await AsyncStorage.setItem("token", response.token);
           await AsyncStorage.setItem("is_vendor", response.data.is_vendor);
+          // await AsyncStorage.setItem("user_id",response.data.id.toString());
+
         } catch (error) {
           console.log(error);
           // Error saving data

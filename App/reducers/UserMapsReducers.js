@@ -3,7 +3,7 @@ import {
   GET_VENDORS_SUCCESS,
   GET_USER_LOCATION_FAIL,
   GET_USER_LOCATION_SUCCESS,
-  IS_MENU_VISIBLE,
+  GET_BOOKING_SUCCESS,
   GET_VENDOR_DETAILS,
   GET_VENDOR_BOOKING
 } from "../actions/UserMaps";
@@ -14,7 +14,8 @@ const INITIAL_STATE = {
   location: "",
   errorMessage: "",
   isBookModalVisible:false,
-  vendorsData:''
+  vendorsData:'',
+  loadingBookig:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -72,10 +73,20 @@ export default (state = INITIAL_STATE, action) => {
           {
             return {
               ...state,
-              isBookModalVisible: !state.isBookModalVisible,
+              loadingBookig:true
             };
           }
           break;
+
+          case GET_BOOKING_SUCCESS:
+            {
+              return {
+                ...state,
+                loadingBookig:false,
+                isBookModalVisible: !state.isBookModalVisible,
+              };
+            }
+            break;
 
     default:
       return state;
