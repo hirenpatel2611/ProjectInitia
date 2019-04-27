@@ -14,7 +14,8 @@ import {
   StyleSheet,
   Platform,
   Animated,
-  AsyncStorage
+  AsyncStorage,
+  Modal
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -29,9 +30,11 @@ import {
   getVendors,
   getUserLocationFail,
   getUserLocationSuccess,
-  isMenuVisible
+  getVenderDetails,
+  getVendorBooking
 } from "../../actions";
-import { MECHANIC,USER2,FILTER } from "../../images";
+import { MECHANIC, USER2, FILTER } from "../../images";
+import { Rating, AirbnbRating } from "react-native-ratings";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -42,7 +45,9 @@ class NearbyGaraje extends Component {
     errorMessage: null
   };
 
-  componentWillMount() {
+  async componentWillMount() {
+    await this.props.getVendors();
+
     if (Platform.OS === "android" && !Constants.isDevice) {
       this.setState({
         errorMessage:
@@ -51,7 +56,6 @@ class NearbyGaraje extends Component {
     } else {
       this._getLocationAsync();
     }
-    this.props.getVendors();
   }
 
   _getLocationAsync = async () => {
@@ -94,15 +98,14 @@ class NearbyGaraje extends Component {
         1
       );
     }
-  };
-
-  _deleteUser = async () => {
-    try {
-      await AsyncStorage.removeItem("token");
-    } catch (error) {
-      // Error retrieving data
-      console.log(error.message);
-    }
+    await Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.BestForNavigation
+      },
+      location => {
+        this.props.getUserLocationSuccess(location);
+      }
+    );
   };
 
   render() {
@@ -116,13 +119,16 @@ class NearbyGaraje extends Component {
               latitude: parseFloat(vendor.latitude),
               longitude: parseFloat(vendor.longitude)
             }}
+            onPress={() => {
+              this.props.getVenderDetails(vendor);
+            }}
           >
             <Image
               style={{
                 borderRadius: 15,
                 borderColor: "#7960FF",
-                width: 20,
-                height: 20,
+                width: 25,
+                height: 25,
                 resizeMode: "contain"
               }}
               source={USER2}
@@ -141,78 +147,237 @@ class NearbyGaraje extends Component {
     }
     return (
       <View style={containerStyle}>
-      <Header headerText="Near by Garaje"
-              onPressMenu={()=> {this.props.isMenuVisible(true)}}
-              onPressMenuCancle={()=> {this.props.isMenuVisible(false)}}
-              isModalVisible={this.props.isMenuModalVisible}>
-      </Header>
-        <KeyboardAwareScrollView>
-          <StatusBar backgroundColor="#7960FF" />
+        <Header headerText="Near by Garaje" />
+        <StatusBar backgroundColor="#7960FF" />
+        <View
+          style={{
+            flex: 1
+          }}
+        >
+          <MapView
+            style={{
+              ...StyleSheet.absoluteFillObject
+            }}
+            provider={PROVIDER_GOOGLE}
+            ref={component => (this._map = component)}
+          >
+            {markers}
+            {this.props.location ? (
+              <MapView.Marker.Animated coordinate={this.props.location.coords}>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    height: 18,
+                    width: 18,
+                    borderRadius: 10,
+                    borderColor: "#7960FF",
+                    alignItems: "center",
+                    justifyContent: "center"
+                  }}
+                >
+                  <View
+                    style={{
+                      backgroundColor: "#7960FF",
+                      height: 14,
+                      width: 14,
+                      borderRadius: 10
+                    }}
+                  />
+                </View>
+              </MapView.Marker.Animated>
+            ) : null}
+          </MapView>
 
-          <View style={{ flexDirection: "column", alignItems: "stretch" }}>
-            <View
-              style={{
-                height: 0.82 * ScreenHeight,
-              }}
-            >
-              <Text />
-              <MapView
-                style={{
-                  ...StyleSheet.absoluteFillObject,
+          <Modal
+          visible={this.props.isBookModalVisible}
+          onBackdropPress={() =>{ this.props.getVenderDetails()}}
+          animationType="slide"
+          transparent={true}
+          opacity={0.5}
 
-                }}
-                provider={PROVIDER_GOOGLE}
-                ref={component => (this._map = component)}
-              >
-                {markers}
-                {this.props.location ? (
-                  <MapView.Marker.Animated
-                    coordinate={this.props.location.coords}
-                  >
-                    <View
-                      style={{
-                        borderWidth: 1,
-                        height: 18,
-                        width: 18,
-                        borderRadius: 10,
-                        borderColor: "#7960FF",
-                        alignItems: "center",
-                        justifyContent: "center"
-                      }}
-                    >
+          style={{
+            height:0.3 * ScreenHeight,
+            backgroundColor: "rgba(0,0,0,0.5)",
+            justifyContent:'flex-end'
+          }}>
+          <TouchableOpacity onPress={()=>{this.props.getVendorBooking()}}>
                       <View
+
                         style={{
-                          backgroundColor: "#7960FF",
-                          height: 14,
-                          width: 14,
+                          marginTop: 0.65 * ScreenHeight,
+                          alignSelf:'stretch',
+                          backgroundColor: "#FFFFFF",
+                          height: 0.3 * ScreenHeight,
+                          margin: 15,
                           borderRadius: 10
                         }}
-                      />
-                    </View>
-                  </MapView.Marker.Animated>
-                ) : null}
-              </MapView>
-            </View>
-          </View>
-        </KeyboardAwareScrollView>
-        <Footer />
+                      >
+                        <View
+                          style={{ flexDirection: "row", justifyContent: "space-between" }}
+                        >
+                          <Text
+                            style={{
+                              padding: 10,
+                              fontFamily: "circular-bold",
+                              fontSize: 20,
+                              color: "#4A4A4A"
+                            }}
+                          >
+                            {this.props.vendorsData?<Text>{this.props.vendorsData.first_name}</Text>:<Text>None</Text>}
+                          </Text>
+                          <TouchableOpacity underlayColor="white" onPress={()=>{this.props.getVendorBooking()}}>
+                            <View
+                              style={{
+                                backgroundColor: "#7960FF",
+                                height: 25,
+                                width: 60,
+                                borderRadius: 5,
+                                alignItems: "center",
+                                margin: 10
+                              }}
+                            >
+                              <Text
+                                style={{
+                                  padding: 3,
+                                  fontSize: 14,
+                                  fontFamily: "circular-bold",
+                                  color: "white"
+                                }}
+                              >
+                                Book
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        </View>
+                        <Text
+                          style={{
+                            marginTop: -15,
+                            padding: 10,
+                            fontFamily: "circular-book",
+                            fontSize: 14,
+                            color: "#4A4A4A"
+                          }}
+                        >{this.props.vendorsData?<Text>{this.props.vendorsData.address}</Text>:<Text>None</Text>}
+                        </Text>
+                        <Text
+                          style={{
+                            marginTop: -15,
+                            padding: 10,
+                            fontFamily: "circular-book",
+                            fontSize: 14,
+                            color: "#4A4A4A"
+                          }}
+                        >{this.props.vendorsData?<Text>{this.props.vendorsData.mobile}</Text>:<Text>None</Text>}
+                        </Text>
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                            marginTop: 20
+                          }}
+                        >
+                          <View
+                            style={{
+                              flexDirection: "column",
+                              justifyContent: "space-between"
+                            }}
+                          >
+                            <Text
+                              style={{
+                                padding: 10,
+                                fontFamily: "circular-book",
+                                fontSize: 16,
+                                color: "#4A4A4A"
+                              }}
+                            >
+                              Ratings
+                            </Text>
+                            <Rating style={{ padding: 10 }} imageSize={15} />
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: "column",
+                              justifyContent: "space-between"
+                            }}
+                          >
+                            <Text
+                              style={{
+                                padding: 10,
+                                fontFamily: "circular-book",
+                                fontSize: 16,
+                                color: "#4A4A4A"
+                              }}
+                            >
+                              Price
+                            </Text>
+                            <Text
+                              style={{
+                                fontFamily: "circular-book",
+                                fontSize: 16,
+                                padding: 10,
+                                color: "#7960FF"
+                              }}
+                            >
+                              ₹₹₹
+                            </Text>
+                          </View>
+                          <View
+                            style={{
+                              flexDirection: "column",
+                              justifyContent: "space-between"
+                            }}
+                          >
+                            <Text
+                              style={{
+                                padding: 10,
+                                fontFamily: "circular-book",
+                                fontSize: 16,
+                                color: "#4A4A4A"
+                              }}
+                            >
+                              Distance
+                            </Text>
+                            <Text
+                              style={{
+                                fontFamily: "circular-book",
+                                fontSize: 16,
+                                padding: 10,
+                                color: "#7960FF"
+                              }}
+                            >
+                              10 km
+                            </Text>
+                          </View>
+                        </View>
+                        </View>
+                </TouchableOpacity>
+          </Modal>
+        </View>
       </View>
     );
   }
 }
 
 const mapStateToProps = ({ usermaps }) => {
-  const { loading, vendors, errorMessage, location,isMenuModalVisible } = usermaps;
+  const {
+    loading,
+    vendors,
+    errorMessage,
+    location,
+    isBookModalVisible,
+    vendorsData
+  } = usermaps;
   return {
     loading,
     vendors,
     errorMessage,
     location,
-    isMenuModalVisible
+    isBookModalVisible,
+    vendorsData
   };
 };
 
 export default connect(
   mapStateToProps,
-  { getVendors, getUserLocationFail, getUserLocationSuccess,isMenuVisible }
+  { getVendors, getUserLocationFail, getUserLocationSuccess, getVenderDetails,getVendorBooking }
 )(NearbyGaraje);

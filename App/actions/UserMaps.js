@@ -10,6 +10,8 @@ export const GET_VENDORS_SUCCESS = "usermaps/GET_VENDORS_SUCCESS";
 export const GET_USER_LOCATION_FAIL = "usermaps/GET_USER_LOCATION_FAIL";
 export const GET_USER_LOCATION_SUCCESS = "usermaps/GET_USER_LOCATION_SUCCESS";
 export const IS_MENU_VISIBLE = "usermaps/IS_MENU_VISIBLE";
+export const GET_VENDOR_DETAILS = "usermaps/GET_VENDOR_DETAILS";
+export const GET_VENDOR_BOOKING = "usermaps/GET_VENDOR_BOOKING";
 
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
@@ -19,7 +21,6 @@ export const getVendors = () => (dispatch, getState) => {
   test.append("service_type", "both");
   Api.post(GET_VENDOR, test)
     .then(response => {
-      console.log(response);
       dispatch({
         type: GET_VENDORS_SUCCESS,
         payload: response
@@ -36,16 +37,21 @@ export const getUserLocationFail = () => (dispatch, getState) => {
 };
 
 export const getUserLocationSuccess = location => (dispatch, getState) => {
-  console.log(location);
   dispatch({
     type: GET_USER_LOCATION_SUCCESS,
     payload: location
   });
 };
 
-export const isMenuVisible = (bool) => (dispatch, getState) => {
+export const getVenderDetails = (val) => (dispatch, getState) => {
   dispatch({
-    type: IS_MENU_VISIBLE,
-    payload: bool
+    type: GET_VENDOR_DETAILS,
+    payload: val
+  });
+};
+
+export const getVendorBooking = () => (dispatch, getState) => {
+  dispatch({
+    type: GET_VENDOR_BOOKING,
   });
 };

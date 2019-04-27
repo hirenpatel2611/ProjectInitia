@@ -54,10 +54,6 @@ class filter extends Component {
               style={{
                 padding:10,
                 marginTop: 27,
-                shadowColor: "#000000",
-                shadowOffset: { width: 0, height: 3 },
-                shadowRadius: 5,
-                shadowOpacity: 1.0,
                 width:ScreenWidth,
                 flexDirection:'row',
                 marginBottom:12
@@ -204,22 +200,82 @@ class filter extends Component {
                 </Text>
                 <View
                   style={{
-                    flexDirection:'column',
+                    flexDirection:'row',
                     alignItems:'flex-start',
                     width:ScreenWidth,
+                    justifyContent:'space-around',
+                    padding:10
                   }}
                 >
+                  <View
+                  style={{
+                    flexDirection:'row',
+                    alignItems:'flex-start',
+                  }}
+                  >
                   <CheckBox
                     isChecked={this.state.isChecked1}
-                    rightText={"₹₹"}
                     onClick={() => {
                       this.setState({
                         isChecked1: !this.state.isChecked1
                       });
                     }}
                   />
+                  <Text
+                  style={{
+                    fontSize:16,
+                    fontFamily:'circular-book',
+                    paddingLeft:10,
+                    paddingTop:3
+                  }}
+                  >₹₹</Text>
+                  </View>
 
+                  <View
+                  style={{
+                    flexDirection:'row',
+                    alignItems:'flex-start',
+                  }}
+                  >
+                  <CheckBox
+                    isChecked={this.state.isChecked1}
+                    onClick={() => {
+                      this.setState({
+                        isChecked1: !this.state.isChecked1
+                      });
+                    }}
+                  />
+                  <Text
+                  style={{
+                    fontSize:16,
+                    fontFamily:'circular-book',
+                    paddingLeft:10,
+                    paddingTop:3
+                  }}>₹₹₹</Text>
+                  </View>
 
+                  <View
+                  style={{
+                    flexDirection:'row',
+                    alignItems:'flex-start',
+                  }}
+                  >
+                  <CheckBox
+                    isChecked={this.state.isChecked1}
+                    onClick={() => {
+                      this.setState({
+                        isChecked1: !this.state.isChecked1
+                      });
+                    }}
+                  />
+                  <Text
+                  style={{
+                    fontSize:16,
+                    fontFamily:'circular-book',
+                    paddingLeft:10,
+                    paddingTop:3
+                  }}>₹₹₹₹</Text>
+                  </View>
                 </View>
               </View>
               <View>
@@ -243,8 +299,8 @@ class filter extends Component {
                   <Slider
                     style={{ width: 0.92 * ScreenWidth }}
                     step={1}
-                    minimumValue={0}
-                    maximumValue={20}
+                    minimumValue={5}
+                    maximumValue={15}
                     value={this.state.km}
                     onValueChange={val => this.setState({ km: val })}
                     onSlidingComplete={val => this.getVal(val)}

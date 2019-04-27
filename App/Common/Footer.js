@@ -36,7 +36,7 @@ const Footer = ()=>{
           <Text>Nearby</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={()=>Actions.profile()} >
+          <TouchableOpacity onPress={()=>Actions.NearbyGaraje()} >
           <Image
             style={{ width: 25, height: 40, resizeMode: "contain", alignSelf:'center' }}
             source={PROFILE}

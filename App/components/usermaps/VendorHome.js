@@ -35,7 +35,7 @@ import { MECHANIC } from "../../images";
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
-class NearbyGaraje extends Component {
+class VendorHome extends Component {
   state = {
     location: null,
     errorMessage: null
@@ -199,4 +199,4 @@ const mapStateToProps = ({ usermaps }) => {
 export default connect(
   mapStateToProps,
   { getVendors, getUserLocationFail, getUserLocationSuccess }
-)(NearbyGaraje);
+)(VendorHome);

@@ -3,7 +3,9 @@ import {
   GET_VENDORS_SUCCESS,
   GET_USER_LOCATION_FAIL,
   GET_USER_LOCATION_SUCCESS,
-  IS_MENU_VISIBLE
+  IS_MENU_VISIBLE,
+  GET_VENDOR_DETAILS,
+  GET_VENDOR_BOOKING
 } from "../actions/UserMaps";
 
 const INITIAL_STATE = {
@@ -11,7 +13,8 @@ const INITIAL_STATE = {
   vendors: [],
   location: "",
   errorMessage: "",
-  isMenuModalVisible:false
+  isBookModalVisible:false,
+  vendorsData:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -55,14 +58,24 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-      case IS_MENU_VISIBLE:
+      case GET_VENDOR_DETAILS:
         {
           return {
             ...state,
-            isMenuModalVisible: action.payload
+            isBookModalVisible: !state.isBookModalVisible,
+            vendorsData: action.payload
           };
         }
         break;
+
+        case GET_VENDOR_BOOKING:
+          {
+            return {
+              ...state,
+              isBookModalVisible: !state.isBookModalVisible,
+            };
+          }
+          break;
 
     default:
       return state;

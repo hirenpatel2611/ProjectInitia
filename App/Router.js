@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, TouchableOpacity, Text, AsyncStorage } from "react-native";
+import { View, TouchableOpacity, Text, AsyncStorage,Dimensions } from "react-native";
 import { Scene, Router, ActionConst } from "react-native-router-flux";
 import CardStackStyleInterpolator from "react-navigation/src/views/CardStack/CardStackStyleInterpolator";
 import Login from "./components/login/Login";
@@ -9,13 +9,17 @@ import profile from "./components/register/Profile";
 import SplashFront from "./components/splash/SplashFront";
 import filter from "./components/usermaps/filter";
 import NearbyGaraje from "./components/usermaps/NearbyGaraje";
-import NearbyGarajeDiscover from "./components/usermaps/NearbyGarajeDiscover";
-import MessageToNearbyMechanic from "./components/usermaps/MessageToNearbyMechanic";
+import UserProfile from "./components/usermaps/Profile";
+import Booking from "./components/usermaps/Booking";
 import VendorHome from "./components/usermaps/VendorHome";
 import { Actions } from "react-native-router-flux";
 import { loadFont, updateLoggedInState, updateIsVendor } from "./actions";
+import SideMenu from "./components/drawer/SideMenu";
 
 import { connect } from "react-redux";
+
+let ScreenHeight = Dimensions.get("window").height;
+let ScreenWidth = Dimensions.get("window").width;
 
 class RouterComponent extends Component {
   componentDidMount() {
@@ -56,75 +60,88 @@ class RouterComponent extends Component {
             screenInterpolator: CardStackStyleInterpolator.forHorizontal
           })}
         >
-          <Scene
-            key="SplashFront"
-            component={SplashFront}
-            hideNavBar={true}
-            navTransparent="true"
-            type={ActionConst.RESET}
-            initial={!this.props.isLoggedIn}
-          />
-          <Scene
-            key="login"
-            component={Login}
-            hideNavBar={true}
-            navTransparent="true"
-            onBack={() => Actions.SplashFront()}
-            type={ActionConst.RESET}
-          />
-          <Scene
-            key="registerMobile"
-            component={RegisterMobile}
-            hideNavBar={true}
-            navTransparent="true"
-          />
-          <Scene
-            key="registerOTP"
-            component={RegisterOTP}
-            hideNavBar={true}
-            navTransparent="true"
-            type={ActionConst.RESET}
-          />
-          <Scene
-            key="profile"
-            component={profile}
-            hideNavBar={true}
-            navTransparent="true"
-            type={ActionConst.RESET}
-          />
-          <Scene
-            key="filter"
-            component={filter}
-            hideNavBar={true}
-            navTransparent="true"
-            type={ActionConst.RESET}
-          />
-          <Scene
-            key="NearbyGaraje"
-            initial={this.props.isLoggedIn}
-            component={NearbyGaraje}
-            hideNavBar={true}
-            navTransparent="true"
-          />
-          <Scene
-            key="NearbyGarajeDiscover"
-            component={NearbyGarajeDiscover}
-            hideNavBar={true}
-            navTransparent="true"
-          />
-          <Scene
-            key="MessageToNearbyMechanic"
-            component={MessageToNearbyMechanic}
-            hideNavBar={true}
-            navTransparent="true"
-          />
-          <Scene
-            key="VendorHome"
-            component={VendorHome}
-            hideNavBar={true}
-            navTransparent="true"
-            initial={this.props.isVendorLoggedIn}
-          />
+
+            <Scene
+              key="SplashFront"
+              component={SplashFront}
+              hideNavBar={true}
+              navTransparent="true"
+              type={ActionConst.RESET}
+              initial={!this.props.isLoggedIn}
+            />
+            <Scene
+              key="login"
+              component={Login}
+              hideNavBar={true}
+              navTransparent="true"
+              onBack={() => Actions.SplashFront()}
+              type={ActionConst.RESET}
+            />
+            <Scene
+              key="registerMobile"
+              component={RegisterMobile}
+              hideNavBar={true}
+              navTransparent="true"
+            />
+            <Scene
+              key="registerOTP"
+              component={RegisterOTP}
+              hideNavBar={true}
+              navTransparent="true"
+              type={ActionConst.RESET}
+            />
+            <Scene
+              key="profile"
+              component={profile}
+              hideNavBar={true}
+              navTransparent="true"
+              type={ActionConst.RESET}
+            />
+            <Scene
+              key="filter"
+              component={filter}
+              hideNavBar={true}
+              navTransparent="true"
+
+            />
+            <Scene
+              key="drawer"
+              type={ActionConst.RESET}
+              drawer
+              initial={this.props.isLoggedIn}
+              hideNavBar={true}
+              drawerPosition="left"
+              contentComponent={SideMenu}
+              drawerWidth={0.50 *ScreenWidth}
+            >
+            <Scene
+              key="NearbyGaraje"
+              component={NearbyGaraje}
+              hideNavBar={true}
+              navTransparent="true"
+            />
+
+
+            <Scene
+              key="UserProfile"
+              component={UserProfile}
+              hideNavBar={true}
+              navTransparent="true"
+            />
+            <Scene
+              key="Booking"
+              component={Booking}
+              hideNavBar={true}
+              navTransparent="true"
+            />
+            <Scene
+              key="VendorHome"
+              component={VendorHome}
+              hideNavBar={true}
+              navTransparent="true"
+              initial={this.props.isVendorLoggedIn}
+            />
+          </Scene>
         </Scene>
       </Router>
     );

@@ -40,7 +40,7 @@ var styles = StyleSheet.create({
   buttonText: {
     padding: 10,
     fontSize:16,
-    fontWeight: 'bold',
+    fontFamily:'circular-bold',
     color: 'white'
   },
 
