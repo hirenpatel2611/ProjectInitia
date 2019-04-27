@@ -5,6 +5,7 @@ export const URL_USER_OTP="/customers/send_otp";
 export const URL_USER_SIGNUP='/customers/signup';
 export const URL_USER_INFO='/app/api/userinfo';
 export const GET_VENDOR ='/customers/get_vendor';
+export const GET_BOOKING ='/bookings/booking';
 export const URL_TIMESHEETS='/app/api/timesheet_list';
 export const URL_TIMESHEET_WEEKWISE='/app/api/weekwise_data'
 export const URL_TIMESHEET_SAVE='/app/api/save';

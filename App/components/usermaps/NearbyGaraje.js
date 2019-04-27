@@ -209,7 +209,9 @@ class NearbyGaraje extends Component {
                           backgroundColor: "#FFFFFF",
                           height: 0.3 * ScreenHeight,
                           margin: 15,
-                          borderRadius: 10
+                          borderRadius: 10,
+                          padding:10,
+                          justifyContent: "space-between"
                         }}
                       >
                         <View

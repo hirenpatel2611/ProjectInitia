@@ -3,7 +3,8 @@ import {StyleSheet} from 'react-native';
 var styles = StyleSheet.create({
   viewContainer: {
     flex: 1,
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    paddingTop:10
   },
   container: {
     padding:0,

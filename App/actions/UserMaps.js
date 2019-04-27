@@ -54,4 +54,5 @@ export const getVendorBooking = () => (dispatch, getState) => {
   dispatch({
     type: GET_VENDOR_BOOKING,
   });
+    const { vendorsData } = getState().usermaps;
 };
