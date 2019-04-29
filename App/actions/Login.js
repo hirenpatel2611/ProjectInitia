@@ -39,12 +39,12 @@ export const loginUser = () => (dispatch, getState) => {
   test.append("device_type", "android");
   Api.post(URL_USER_LOGIN, test)
     .then(async response => {
-      console.log( response.data.id);
-      dispatch({
-        type: LOGIN_SUCCESSFUL,
-        payload: response.status
-      });
       if (response.status === 1) {
+        console.error();
+        dispatch({
+          type: LOGIN_SUCCESSFUL,
+          payload: response.status
+        });
         if (response.data.is_vendor == 1) {
           Actions.VendorHome();
         } else {
