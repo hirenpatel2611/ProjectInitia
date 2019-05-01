@@ -6,7 +6,9 @@ import {
   GET_BOOKING_SUCCESS,
   GET_VENDOR_DETAILS,
   GET_VENDOR_BOOKING,
-  GET_VENDOR_BOOKING_START
+  GET_VENDOR_BOOKING_START,
+  GET_BOOKING_LIST_START,
+  GET_BOOKING_LIST_SUCCESS
 } from "../actions/UserMaps";
 
 const INITIAL_STATE = {
@@ -16,7 +18,9 @@ const INITIAL_STATE = {
   errorMessage: "",
   isBookModalVisible: false,
   vendorsData: "",
-  loadingBookig: false
+  loadingBookig: false,
+  loadingBookigList:false,
+  vendorList:[],
 };
 
 
@@ -63,7 +67,7 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          isBookModalVisible: !state.isBookModalVisible,
+          isBookModalVisible: true,
           vendorsData: action.payload
         };
       }
@@ -83,7 +87,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingBookig: false,
-          isBookModalVisible: !state.isBookModalVisible
+          isBookModalVisible: false
         };
       }
       break;
@@ -96,6 +100,24 @@ export default (state = INITIAL_STATE, action) => {
         };
       }
       break;
+
+      case GET_BOOKING_LIST_START:
+        {
+          return {
+            ...state,
+            loadingBookigList:true,
+          };
+        }
+        break;
+        case GET_BOOKING_LIST_SUCCESS:
+          {
+            return {
+              ...state,
+              loadingBookigList:false,
+              vendorList:action.payload
+            };
+          }
+          break;
 
     default:
       return state;

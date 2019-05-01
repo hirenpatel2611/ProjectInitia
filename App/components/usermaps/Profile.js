@@ -10,7 +10,7 @@ import {
   Slider,
   StyleSheet,
   Platform,
-  Animated,
+  TextInput,
   AsyncStorage,
 } from "react-native";
 import { connect } from "react-redux";
@@ -26,11 +26,44 @@ class Profile extends Component {
 
   render() {
 
-    const { containerStyle } = styles;
+    const { containerStyle,
+      subContainerProfile,
+      textInputProfilStyle
+    } = styles;
     return (
       <View>
       <Header headerText="Profile"/>
-      
+      <View
+        style={{
+          marginTop:13,
+          height: 0.51 * ScreenHeight,
+          justifyContent: "space-around"
+        }}
+      >
+
+          <Text
+            style={textInputProfilStyle}
+          > Name</Text>
+
+        <Text
+          style={textInputProfilStyle}
+        >Address</Text>
+
+
+        <Text
+          style={textInputProfilStyle}
+        >Email</Text>
+
+        <Text
+          style={textInputProfilStyle}
+        >Mobile</Text>
+
+
+        <Text
+          style={textInputProfilStyle}>
+        </Text>
+
+      </View>
       </View>
     );
   }

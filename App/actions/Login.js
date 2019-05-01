@@ -40,7 +40,6 @@ export const loginUser = () => (dispatch, getState) => {
   Api.post(URL_USER_LOGIN, test)
     .then(async response => {
       if (response.status === 1) {
-        console.error();
         dispatch({
           type: LOGIN_SUCCESSFUL,
           payload: response.status

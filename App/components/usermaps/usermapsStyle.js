@@ -43,6 +43,23 @@ var styles = StyleSheet.create({
     fontFamily:'circular-bold',
     color: 'white'
   },
+  subContainerProfile: {
+    paddingLeft: 16,
+    flexDirection: "column",
+    justifyContent: "center",
+    borderBottomWidth: 0.5,
+    borderColor: "grey",
+    minHeight: 0.08 * ScreenHeight
+  },
+  textInputProfilStyle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    fontFamily: "circular-book",
+    paddingLeft: 16,
+    borderBottomWidth: 0.5,
+    borderColor: "grey",
+    minHeight: 0.05 * ScreenHeight
+  },
 
 });
 export default styles;

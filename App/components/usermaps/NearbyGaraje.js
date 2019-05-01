@@ -128,8 +128,8 @@ class NearbyGaraje extends Component {
               style={{
                 borderRadius: 15,
                 borderColor: "#7960FF",
-                width: 25,
-                height: 25,
+                width: 32,
+                height: 32,
                 resizeMode: "contain"
               }}
               source={USER2}
@@ -137,7 +137,6 @@ class NearbyGaraje extends Component {
           </MapView.Marker.Animated>
         );
       });
-      console.log(markers);
     }
     const { containerStyle } = styles;
     let text = "Waiting..";
@@ -168,9 +167,9 @@ class NearbyGaraje extends Component {
                 <View
                   style={{
                     borderWidth: 1,
-                    height: 18,
-                    width: 18,
-                    borderRadius: 10,
+                    height: 22,
+                    width: 22,
+                    borderRadius: 15,
                     borderColor: "#7960FF",
                     alignItems: "center",
                     justifyContent: "center"
@@ -179,8 +178,8 @@ class NearbyGaraje extends Component {
                   <View
                     style={{
                       backgroundColor: "#7960FF",
-                      height: 14,
-                      width: 14,
+                      height: 16,
+                      width: 16,
                       borderRadius: 10
                     }}
                   />
@@ -190,9 +189,9 @@ class NearbyGaraje extends Component {
           </MapView>
 
           <Modal
-            visible={this.props.isBookModalVisible}
-            onBackdropPress={() => {
-              this.props.getVenderDetails();
+            visible={this.props.isBookModalVisible?true:false}
+            onRequestClose={() => {
+              console.log("Modal has been closed.");
             }}
             animationType="slide"
             transparent={true}
@@ -252,7 +251,7 @@ class NearbyGaraje extends Component {
                       style={{
                         backgroundColor: "#7960FF",
                         height: 25,
-                        width: 60,
+                        width: 70,
                         borderRadius: 5,
                         alignItems: "center",
                         margin: 10
@@ -261,7 +260,7 @@ class NearbyGaraje extends Component {
                       {this.props.loadingBookig ? (
                         <Text
                           style={{
-                            padding: 3,
+                            paddingTop:2,
                             fontSize: 14,
                             fontFamily: "circular-bold",
                             color: "white"

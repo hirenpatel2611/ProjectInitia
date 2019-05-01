@@ -11,80 +11,68 @@ import {
   StyleSheet,
   Platform,
   Animated,
-  AsyncStorage
+  AsyncStorage,
+  ScrollView
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styles from "./usermapsStyle";
 import Header from "../../Common/Header";
+import {
+  getBookings,
+} from "../../actions";
+import BookingList from '../../Common/BookingList';
+
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
 class Booking extends Component {
+  async componentWillMount() {
+    this.props.getBookings();
+  }
+  renderBookingList(){
+    if(this.props.vendorList.length){
+      return this.props.vendorList.map(vendorsList=>
+        <BookingList key={vendorsList.booking_id} vendor={vendorsList.vendor}/>
+      );
+    }
+  }
+
   render() {
     const { containerStyle } = styles;
     return (
       <View>
         <Header headerText="Booking" />
-        <View
-          style={{
-            margin: 15,
-            backgroundColor: "white",
-            padding: 10,
-            borderRadius: 10
-          }}
+        <ScrollView
+        style={{
+          height:0.88*ScreenHeight,
+          paddingTop:10,
+          marginBottom:35
+        }}
         >
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between"
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "circular-bold",
-                fontSize: 16
-              }}
-            >
-              Name
-            </Text>
-            <Text
-              style={{
-                fontFamily: "circular-bold",
-                fontSize: 14
-              }}
-            >
-              Distance
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between"
-            }}
-          >
-            <Text
-              style={{
-                fontFamily: "circular-bold",
-                fontSize: 14
-              }}
-            >
-              Vehicle
-            </Text>
-            <Text
-              style={{
-                fontFamily: "circular-bold",
-                fontSize: 14
-              }}
-            >
-              10 km
-            </Text>
-          </View>
-        </View>
+        {this.renderBookingList()}
+        </ScrollView>
       </View>
     );
   }
 }
 
-export default Booking;
+
+const mapStateToProps = ({ usermaps }) => {
+  const {
+    loadingBookigList,
+    vendorList
+  } = usermaps;
+  return {
+    loadingBookigList,
+    vendorList
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  {
+    getBookings,
+  }
+)(Booking);
