@@ -52,7 +52,6 @@ export const getUserLocationFail = () => (dispatch, getState) => {
 };
 
 export const getUserLocationSuccess = location => (dispatch, getState) => {
-  console.error(location);
   dispatch({
     type: GET_USER_LOCATION_SUCCESS,
     payload: location

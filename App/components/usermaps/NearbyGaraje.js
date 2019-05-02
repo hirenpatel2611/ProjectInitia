@@ -90,6 +90,7 @@ class NearbyGaraje extends Component {
       accuracy: Location.Accuracy.BestForNavigation
     });
     this.props.getUserLocationSuccess(location);
+    console.log(location);
     {
       this._map.animateToRegion(
         {
@@ -107,7 +108,6 @@ class NearbyGaraje extends Component {
       },
       location => {
         this.props.getUserLocationSuccess(location);
-        console.error(location);
       }
     );
   };
