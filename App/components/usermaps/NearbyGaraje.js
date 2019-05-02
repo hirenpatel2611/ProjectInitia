@@ -92,7 +92,6 @@ class NearbyGaraje extends Component {
     console.error(location);
     this.props.getUserLocationSuccess(location);
     {
-        console.error(location);
       this._map.animateToRegion(
         {
           latitude: this.props.location.coords.latitude,
