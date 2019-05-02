@@ -89,7 +89,6 @@ class NearbyGaraje extends Component {
     let location = await Location.getCurrentPositionAsync({
       accuracy: Location.Accuracy.BestForNavigation
     });
-    console.error(location);
     this.props.getUserLocationSuccess(location);
     {
       this._map.animateToRegion(
