@@ -56,7 +56,7 @@ var styles = StyleSheet.create({
     fontWeight: "bold",
     fontFamily: "circular-book",
     paddingLeft: 16,
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 1,
     borderColor: "grey",
     minHeight: 0.05 * ScreenHeight
   },

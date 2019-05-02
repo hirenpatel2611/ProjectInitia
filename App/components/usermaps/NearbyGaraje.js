@@ -32,7 +32,8 @@ import {
   getUserLocationSuccess,
   getVenderDetails,
   getVendorBooking,
-  BookVendor
+  BookVendor,
+  getDistanceOneToOne
 } from "../../actions";
 import { MECHANIC, USER2, FILTER } from "../../images";
 import { Rating, AirbnbRating } from "react-native-ratings";
@@ -73,6 +74,7 @@ class NearbyGaraje extends Component {
             IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
           );
         }
+
         await Location.hasServicesEnabledAsync()
           .then(async res => {
             this.locationIsEnabled = res;
@@ -87,8 +89,10 @@ class NearbyGaraje extends Component {
     let location = await Location.getCurrentPositionAsync({
       accuracy: Location.Accuracy.BestForNavigation
     });
+    console.error(location);
     this.props.getUserLocationSuccess(location);
     {
+        console.error(location);
       this._map.animateToRegion(
         {
           latitude: this.props.location.coords.latitude,
@@ -105,6 +109,7 @@ class NearbyGaraje extends Component {
       },
       location => {
         this.props.getUserLocationSuccess(location);
+        console.error(location);
       }
     );
   };
@@ -147,7 +152,9 @@ class NearbyGaraje extends Component {
     }
     return (
       <View style={containerStyle}>
-        <Header headerText="Near by Garaje" />
+        <Header headerText="Near by Garaje"
+                filterIcon={FILTER}
+        />
         <StatusBar backgroundColor="#7960FF" />
         <View
           style={{
@@ -374,7 +381,7 @@ class NearbyGaraje extends Component {
                         color: "#7960FF"
                       }}
                     >
-                      10 km
+                      {this.props.vendorDistance} km
                     </Text>
                   </View>
                 </View>
@@ -395,7 +402,7 @@ const mapStateToProps = ({ usermaps }) => {
     location,
     isBookModalVisible,
     vendorsData,
-    loadingBookig
+    loadingBookig,
   } = usermaps;
   return {
     loading,
@@ -404,7 +411,7 @@ const mapStateToProps = ({ usermaps }) => {
     location,
     isBookModalVisible,
     vendorsData,
-    loadingBookig
+    loadingBookig,
   };
 };
 
@@ -416,6 +423,7 @@ export default connect(
     getUserLocationSuccess,
     getVenderDetails,
     getVendorBooking,
-    BookVendor
+    BookVendor,
+    getDistanceOneToOne
   }
 )(NearbyGaraje);

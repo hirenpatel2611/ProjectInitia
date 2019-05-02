@@ -53,7 +53,7 @@ const Header = props => {
             height: 30,
             resizeMode: "contain"
           }}
-          source={FILTER}
+          source={props.filterIcon}
         />
         </TouchableOpacity>
 
@@ -76,9 +76,9 @@ const styles = {
     shadowOpacity: 0.5,
     elevation: 2,
     width: ScreenWidth,
-    height:75,
+    height:77,
     alignItems: "center",
-    top:7,
+    paddingTop:15,
     justifyContent:'space-between',
   //   shadowOffset: {
   //   width: 0,
