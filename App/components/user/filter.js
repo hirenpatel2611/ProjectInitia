@@ -52,44 +52,26 @@ class filter extends Component {
         <KeyboardAwareScrollView>
           <StatusBar backgroundColor="#7960FF" />
           <View
-            style={{ flex: 1, flexDirection: "column", alignItems: "stretch"}}
+            style={inStyle.mainView}
           >
             <View
-              style={{
-                padding: 10,
-                marginTop: 27,
-                width: ScreenWidth,
-                flexDirection: "row",
-                marginBottom: 12,
-                justifyContent:'space-between'
-              }}
+              style={inStyle.headerView}
             >
               <TouchableOpacity
                 style={{ width: 27 }}
                 onPress={() => Actions.NearbyGaraje()}
               >
                 <View
-                  style={{
-                    height: 25,
-                    width: 25,
-                    borderRadius: 25,
-                    alignItems: "center",
-                    justifyContent: "center"
-                  }}
+                  style={inStyle.backButton}
                 >
                   <Image
-                    style={{ height: 17, width: 25,tintColor:'black' }}
+                    style={inStyle.ImageBack}
                     source={BACK_ARROW}
                   />
                 </View>
               </TouchableOpacity>
               <Text
-                style={{
-                  paddingLeft: 16,
-                  fontSize: 20,
-                  fontFamily: "circular-bold",
-                  color: "#4B4B4B"
-                }}
+                style={inStyle.headerTextMain}
               >
                 Filter
               </Text>
@@ -100,66 +82,39 @@ class filter extends Component {
               }}
               >
               <Text
-                style={{
-                  fontSize: 16,
-                  fontFamily: "circular-book",
-                  color: "#7960FF"
-                }}
+                style={inStyle.textReset}
               >
                 reset
               </Text>
               </TouchableOpacity>
             </View>
             <View
-              style={{
-                height: 0.55 * ScreenHeight,
-                justifyContent:'space-around'
-              }}
+              style={inStyle.bodyView}
             >
               <Text
-                style={{
-                  fontSize: 18,
-                  paddingLeft: 20,
-                  color: "#4A4A4A",
-                  fontFamily: "circular-book"
-                }}
+                style={inStyle.textMechanic}
               >
                 Mechanic Type
               </Text>
               <View
-                style={{
-                  flexDirection: "row",
-                  padding: 10,
-                  justifyContent: "space-around",
-                  width: 0.5 * ScreenWidth
-                }}
+                style={inStyle.viewMechanic}
               >
                 <TouchableHighlight
                   activeOpacity={1}
                   onPress={() => {
                     this.props.updateFilterVehicleBool();
                   }}
-                  style={{
-                    borderRadius: 100
-                  }}
+                  style={inStyle.buttonMechanic}
                 >
                   <View
                     elevation={5}
-                    style={{
-                      alignItems: "center",
-                      padding: 4,
-                      backgroundColor: this.props.isVehicle
-                        ? "#7960FF"
-                        : "white",
-                      borderRadius: 60,
-                      shadowColor: "#000000",
-                      shadowOffset: { width: 0, height: 3 },
-                      shadowRadius: 5,
-                      shadowOpacity: 1.0
-                    }}
+                    style={[inStyle.viewMechanicButton,
+                    {backgroundColor: this.props.isVehicle
+                      ? "#7960FF"
+                      : "white"}]}
                   >
                     <Image
-                      style={{ width: 33, height: 33, resizeMode: "contain" }}
+                      style={inStyle.imageMechanicType}
                       source={MOTORCYCLE}
                     />
                   </View>
@@ -169,47 +124,27 @@ class filter extends Component {
                   onPress={() => {
                     this.props.updateFilterCarBool();
                   }}
-                  style={{
-                    borderRadius: 100
-                  }}
+                  style={inStyle.buttonMechanic}
                 >
                   <View
                     elevation={5}
-                    style={{
-                      alignItems: "center",
-                      backgroundColor: this.props.isCar ? "#7960FF" : "white",
-                      padding: 4,
-                      borderRadius: 60,
-                      shadowColor: "#000000",
-                      shadowOffset: { width: 0, height: 3 },
-                      shadowRadius: 5,
-                      shadowOpacity: 1.0
-                    }}
+                    style={[inStyle.viewMechanicButton,
+                      {backgroundColor: this.props.isCar ? "#7960FF" : "white",}]}
                   >
                     <Image
-                      style={{ width: 33, height: 33, resizeMode: "contain" }}
+                      style={inStyle.imageMechanicType}
                       source={CAR}
                     />
                   </View>
                 </TouchableHighlight>
               </View>
               <Text
-                style={{
-                  fontSize: 18,
-                  paddingLeft: 20,
-                  color: "#4A4A4A",
-                  fontFamily: "circular-book",
-                  paddingTop: 10
-                }}
+                style={[inStyle.textMechanic,{paddingTop: 10}]}
               >
                 Rating
               </Text>
               <View
-                style={{
-                  alignItems: "flex-start",
-                  padding: 10,
-                  flexDirection: "row"
-                }}
+                style={inStyle.ratingView}
               >
                 <Rating
                   type="custom"
@@ -224,31 +159,18 @@ class filter extends Component {
               </View>
               <View>
                 <Text
-                  style={{
-                    fontSize: 18,
-                    paddingLeft: 20,
-                    color: "#4A4A4A",
-                    fontFamily: "circular-book",
-                    paddingTop: 10,
-                    flexDirection: "column"
-                  }}
+                  style={[inStyle.textMechanic,
+                    {paddingTop: 10,
+                    flexDirection: "column"}
+                  ]}
                 >
                   Cost
                 </Text>
                 <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "flex-start",
-                    width: ScreenWidth,
-                    justifyContent: "space-around",
-                    padding: 10
-                  }}
+                  style={inStyle.costView}
                 >
                   <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "flex-start"
-                    }}
+                    style={inStyle.costInnView}
                   >
                     <CheckBox
                       isChecked={this.props.isChecked1}
@@ -258,23 +180,15 @@ class filter extends Component {
                       }}
                     />
                     <Text
-                      style={{
-                        fontSize: 16,
-                        fontFamily: "circular-book",
-                        paddingLeft: 10,
-                        paddingTop: 3,
-                        color: this.props.isChecked1 ? "#7960FF" : "#4A4A4A"
-                      }}
+                      style={[inStyle.costInnText,
+                        {color: this.props.isChecked1 ? "#7960FF" : "#4A4A4A"}]}
                     >
                       ₹₹
                     </Text>
                   </View>
 
                   <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "flex-start"
-                    }}
+                    style={inStyle.costInnView}
                   >
                     <CheckBox
                       isChecked={this.props.isChecked2}
@@ -284,23 +198,15 @@ class filter extends Component {
                       }}
                     />
                     <Text
-                      style={{
-                        fontSize: 16,
-                        fontFamily: "circular-book",
-                        paddingLeft: 10,
-                        paddingTop: 3,
-                        color: this.props.isChecked2 ? "#7960FF" : "#4A4A4A"
-                      }}
+                      style={[inStyle.costInnText,
+                        {color: this.props.isChecked2 ? "#7960FF" : "#4A4A4A"}]}
                     >
                       ₹₹₹
                     </Text>
                   </View>
 
                   <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "flex-start"
-                    }}
+                    style={inStyle.costInnView}
                   >
                     <CheckBox
                       isChecked={this.props.isChecked3}
@@ -310,13 +216,8 @@ class filter extends Component {
                       }}
                     />
                     <Text
-                      style={{
-                        fontSize: 16,
-                        fontFamily: "circular-book",
-                        paddingLeft: 10,
-                        paddingTop: 3,
-                        color: this.props.isChecked3 ? "#7960FF" : "#4A4A4A"
-                      }}
+                      style={[inStyle.costInnText,
+                        {color: this.props.isChecked3? "#7960FF" : "#4A4A4A"}]}
                     >
                       ₹₹₹₹
                     </Text>
@@ -325,21 +226,13 @@ class filter extends Component {
               </View>
 
               <Text
-                style={{
-                  fontSize: 18,
-                  paddingLeft: 20,
-                  color: "#4A4A4A",
-                  fontFamily: "circular-book",
-                  paddingTop: 10
-                }}
+                style={[inStyle.textMechanic,
+                  {paddingTop: 10}]}
               >
                 Distance
               </Text>
               <View
-                style={{
-                  padding: 10,
-                  justifyContent: "space-around"
-                }}
+                style={inStyle.distanceView1}
               >
                 <Slider
                   style={{ width: 0.92 * ScreenWidth }}
@@ -354,36 +247,20 @@ class filter extends Component {
                 />
               </View>
               <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-around",
-                  marginTop:-10
-                }}
+                style={inStyle.distanceView2}
               >
                 <Text
-                  style={{
-                    fontSize: 18,
-                    fontFamily: "circular-book",
-                    color: "#4A4A4A"
-                  }}
+                  style={inStyle.distanceBlackText}
                 >
                   5 km
                 </Text>
                 <Text
-                  style={{
-                    color: "#7960FF",
-                    fontSize: 18,
-                    fontFamily: "circular-book"
-                  }}
+                  style={inStyle.distanceBlueText}
                 >
                   {this.props.distance} km
                 </Text>
                 <Text
-                  style={{
-                    fontSize: 18,
-                    fontFamily: "circular-book",
-                    color: "#4A4A4A"
-                  }}
+                  style={inStyle.distanceBlackText}
                 >
                   anyware
                 </Text>
@@ -392,10 +269,7 @@ class filter extends Component {
             <TouchableHighlight
               onPress={() => Actions.NearbyGaraje()}
               underlayColor="white"
-              style={{
-                alignSelf:'center',
-                marginTop:0.23 * ScreenHeight
-              }}
+              style={inStyle.mainButtonStyle}
             >
               <View style={continueButton}>
                 <Text style={buttonText}>See Mechanic</Text>
@@ -405,6 +279,123 @@ class filter extends Component {
         </KeyboardAwareScrollView>
       </View>
     );
+  }
+}
+
+const inStyle = {
+  mainView:{
+    flex: 1,
+    flexDirection: "column",
+    alignItems: "stretch"
+  },
+  headerView:{
+    padding: 10,
+    marginTop: 27,
+    width: ScreenWidth,
+    flexDirection: "row",
+    marginBottom: 12,
+    justifyContent:'space-between'
+  },
+  backButton:{
+    height: 25,
+    width: 25,
+    borderRadius: 25,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  ImageBack:{
+    height: 17,
+    width: 25,
+    tintColor:'black'
+  },
+  headerTextMain:{
+    paddingLeft: 16,
+    fontSize: 20,
+    fontFamily: "circular-bold",
+    color: "#4B4B4B"
+  },
+  textReset:{
+    fontSize: 16,
+    fontFamily: "circular-book",
+    color: "#7960FF"
+  },
+  bodyView:{
+    height: 0.55 * ScreenHeight,
+    justifyContent:'space-around'
+  },
+  textMechanic:{
+    fontSize: 18,
+    paddingLeft: 20,
+    color: "#4A4A4A",
+    fontFamily: "circular-book"
+  },
+  viewMechanic:{
+    flexDirection: "row",
+    padding: 10,
+    justifyContent: "space-around",
+    width: 0.5 * ScreenWidth
+  },
+  buttonMechanic:{
+    borderRadius: 100
+  },
+  imageMechanicType:{
+    width: 33,
+    height: 33,
+    resizeMode: "contain"
+  },
+  viewMechanicButton:{
+    alignItems: "center",
+    padding: 4,
+    borderRadius: 60,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
+    shadowOpacity: 1.0
+  },
+  ratingView:{
+    alignItems: "flex-start",
+    padding: 10,
+    flexDirection: "row"
+  },
+  costView:{
+    flexDirection: "row",
+    alignItems: "flex-start",
+    width: ScreenWidth,
+    justifyContent: "space-around",
+    padding: 10
+  },
+  costInnView:{
+    flexDirection: "row",
+    alignItems: "flex-start"
+  },
+  costInnText:{
+    fontSize: 16,
+    fontFamily: "circular-book",
+    paddingLeft: 10,
+    paddingTop: 3,
+  },
+  distanceView1:{
+    padding: 10,
+    justifyContent: "space-around"
+  },
+  distanceView2:{
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop:-10
+  },
+  distanceBlackText:{
+    fontSize: 18,
+    fontFamily: "circular-book",
+    color: "#4A4A4A"
+  },
+  distanceBlueText:{
+    color: "#7960FF",
+    fontSize: 18,
+    fontFamily: "circular-book"
+  },
+  mainButtonStyle:{
+    alignSelf:'center',
+    marginTop:0.23 * ScreenHeight
   }
 }
 

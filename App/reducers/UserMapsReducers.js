@@ -4,8 +4,9 @@ import {
   GET_USER_LOCATION_FAIL,
   GET_USER_LOCATION_SUCCESS,
   GET_BOOKING_SUCCESS,
+  GET_BOOKING_FAIL,
   GET_VENDOR_DETAILS,
-  GET_VENDOR_BOOKING,
+  CLOSE_VENDOR_DETAIL_MODAL,
   GET_VENDOR_BOOKING_START,
   GET_BOOKING_LIST_START,
   GET_BOOKING_LIST_SUCCESS,
@@ -18,6 +19,9 @@ import {
   UPDATE_FILTER_CHECKED3,
   UPDATE_FILTER_DISTANCE,
   RESET_FILTER,
+  GET_BOOKING_CANCLE,
+  GET_DISTANCE,
+  GET_DISTANCELIST
 } from "../actions/UserMaps";
 
 const INITIAL_STATE = {
@@ -38,6 +42,9 @@ const INITIAL_STATE = {
   isChecked2: false,
   isChecked3: false,
   distance: 10,
+  isBookingSuccess:false,
+  vendorDistance:[],
+  vendorDistanceList:[],
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -89,7 +96,7 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-    case GET_VENDOR_BOOKING:
+    case CLOSE_VENDOR_DETAIL_MODAL:
       {
         return {
           ...state,
@@ -103,10 +110,22 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingBookig: false,
-          isBookModalVisible: false
+          isBookModalVisible: true,
+          isBookingSuccess:true
         };
       }
       break;
+
+      case GET_BOOKING_FAIL:
+        {
+          return {
+            ...state,
+            loadingBookig: false,
+            isBookModalVisible: true,
+            isBookingSuccess:false
+          };
+        }
+        break;
 
     case GET_VENDOR_BOOKING_START:
       {
@@ -222,6 +241,35 @@ export default (state = INITIAL_STATE, action) => {
           };
         }
         break;
+
+    case GET_BOOKING_CANCLE:
+    {
+      return{
+        ...state,
+        loadingBookig: false,
+        isBookModalVisible: false,
+        isBookingSuccess:false
+      }
+    }
+    break;
+
+    case GET_DISTANCE:
+    {
+      return{
+        ...state,
+        vendorDistance:action.payload
+      }
+    }
+    break;
+
+    case GET_DISTANCELIST:
+    {
+      return{
+        ...state,
+        vendorList:action.payload
+        }
+    }
+    break;
 
     default:
       return state;

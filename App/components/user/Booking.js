@@ -18,23 +18,34 @@ import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styles from "./usermapsStyle";
 import Header from "../../Common/Header";
-import { getBookings } from "../../actions";
-import BookingList from "../../Common/BookingList";
+import { getBookings, getDistanceList} from "../../actions";
+import {BookingList,FutureBookingList} from "../../Common";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
+let isVandor;
 
 class Booking extends Component {
   async componentWillMount() {
-    this.props.getBookings();
+    const valueIsvendor = await AsyncStorage.getItem("is_vendor");
+    isVandor=await AsyncStorage.getItem("is_vendor");
+      this.props.getBookings();
+
   }
-  renderBookingList() {
-    if (this.props.vendorList.length) {
-      return this.props.vendorList.map(vendorsList => (
-        <BookingList key={vendorsList.booking_id} vendor={vendorsList.vendor} />
-      ));
+ renderBookingList() {
+      if (this.props.vendorList.length) {
+        if(isVandor === "1"){
+        return this.props.vendorList.map(vendorsList => (
+          <FutureBookingList key={vendorsList.booking_id} vendor={vendorsList.customer} />
+        ));
+        }else {
+          return this.props.vendorList.map(vendorsList => (
+            <BookingList key={vendorsList.booking_id} vendor={vendorsList.vendor} />
+          ));
+        }
+      }
     }
-  }
+
 
   render() {
     const { containerStyle } = styles;
@@ -42,20 +53,15 @@ class Booking extends Component {
       <View>
         <Header headerText="Booking" />
         <ScrollView
-          style={{
-            height: 0.88 * ScreenHeight,
-            paddingTop: 7,
-            paddingBottom: 10,
-            marginBottom: 35
-          }}
+          style={inStyle.ScrollViewStyle}
         >
           {this.props.loadingBookigList ? (
-            <Text style={{ alignSelf: "center", paddingTop: 20 }}>
+            <Text style={inStyle.textLoading}>
               Loading...
             </Text>
           ) : this.props.isBookingListFail ? (
             <TouchableOpacity
-              style={{ alignSelf: "center", paddingTop: 20 }}
+              style={inStyle.buttonReload}
               onPress={() => {
                 this.props.getBookings();
               }}
@@ -70,19 +76,36 @@ class Booking extends Component {
     );
   }
 }
-
+const inStyle ={
+  ScrollViewStyle:{
+    height: 0.88 * ScreenHeight,
+    paddingTop: 7,
+    paddingBottom: 10,
+    marginBottom: 35
+  },
+  textLoading:{
+    alignSelf: "center",
+    paddingTop: 20
+  },
+  buttonReload:{
+    alignSelf: "center",
+    paddingTop: 20
+  }
+};
 const mapStateToProps = ({ usermaps }) => {
-  const { loadingBookigList, vendorList, isBookingListFail } = usermaps;
+  const { loadingBookigList, vendorList, isBookingListFail,vendorDistanceList } = usermaps;
   return {
     loadingBookigList,
     vendorList,
-    isBookingListFail
+    isBookingListFail,
+    vendorDistanceList
   };
 };
 
 export default connect(
   mapStateToProps,
   {
-    getBookings
+    getBookings,
+    getDistanceList
   }
 )(Booking);

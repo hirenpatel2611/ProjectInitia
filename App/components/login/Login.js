@@ -29,7 +29,7 @@ import {
   updateMobileNumber,
   updatePassword,
   loginUser,
-  updateOnSubmeetLoginForm
+  updateOnSubmeetLoginForm,
 } from "../../actions";
 import _ from "lodash";
 import styles from "./LoginStyle";
@@ -199,7 +199,8 @@ const mapStateToProps = ({ login }) => {
     loginFailed,
     onSubmeetLoginForm,
     loginStatus,
-    login
+    login,
+
   };
 };
 

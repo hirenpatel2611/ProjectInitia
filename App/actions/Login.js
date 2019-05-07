@@ -49,7 +49,6 @@ export const loginUser = () => (dispatch, getState) => {
         } else {
           Actions.NearbyGaraje();
         }
-
         try {
           await AsyncStorage.setItem("token", response.token);
           await AsyncStorage.setItem("is_vendor", response.data.is_vendor);

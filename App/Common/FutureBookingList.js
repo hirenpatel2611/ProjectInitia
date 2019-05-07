@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Text,View,TouchableOpacity} from 'react-native';
 
-const BookingList = ({vendor})=>{
+const FutureBookingList = ({vendor})=>{
   return(
     <View
       style={{
@@ -54,7 +54,7 @@ const BookingList = ({vendor})=>{
             fontFamily:'circular-book'
           }}
         >
-          {vendor.mobile}
+          Vehicle
         </Text>
         <Text
           style={{
@@ -80,7 +80,7 @@ const BookingList = ({vendor})=>{
           fontFamily:'circular-book'
         }}
       >
-        {vendor.email}
+        {vendor.vehicle}
       </Text>
 
       <TouchableOpacity>
@@ -88,7 +88,25 @@ const BookingList = ({vendor})=>{
         style={{
           width:70,
           height:20,
-          backgroundColor:'#7960FF',
+          backgroundColor:'#4EA352',
+          alignItems:'center',
+          borderRadius:3
+        }}
+        >
+          <Text style={{
+            color:'white'
+          }}>
+          Book
+          </Text>
+        </View>
+      </TouchableOpacity>
+
+      <TouchableOpacity>
+        <View
+        style={{
+          width:70,
+          height:20,
+          backgroundColor:'#D35400',
           alignItems:'center',
           borderRadius:3
         }}
@@ -106,4 +124,4 @@ const BookingList = ({vendor})=>{
   )
 }
 
-export {BookingList};
+export {FutureBookingList};

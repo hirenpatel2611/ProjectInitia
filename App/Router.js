@@ -7,13 +7,13 @@ import RegisterMobile from "./components/register/RegisterMobile";
 import RegisterOTP from "./components/register/RegisterOTP";
 import profile from "./components/register/Profile";
 import SplashFront from "./components/splash/SplashFront";
-import filter from "./components/usermaps/filter";
-import NearbyGaraje from "./components/usermaps/NearbyGaraje";
-import UserProfile from "./components/usermaps/Profile";
-import Booking from "./components/usermaps/Booking";
-import VendorHome from "./components/usermaps/VendorHome";
+import filter from "./components/user/filter";
+import NearbyGaraje from "./components/user/NearbyGaraje";
+import UserProfile from "./components/user/Profile";
+import Booking from "./components/user/Booking";
+import VendorHome from "./components/vendors/VendorHome";
 import { Actions } from "react-native-router-flux";
-import { loadFont, updateLoggedInState, updateIsVendor } from "./actions";
+import { loadFont, updateLoggedInState, updateIsVendor,createSocketChannel } from "./actions";
 import SideMenu from "./components/drawer/SideMenu";
 
 import { connect } from "react-redux";
@@ -33,12 +33,17 @@ class RouterComponent extends Component {
       const valueIsvendor = await AsyncStorage.getItem("is_vendor");
 
       if (valueUserName !== null) {
-        if (valueIsvendor === "1") {
-          this.props.updateIsVendor(true);
-        } else {
-          this.props.updateLoggedInState(true);
-        }
-      } else {
+      //   if (valueIsvendor === "1") {
+      //     console.error(valueIsvendor);
+      //       this.props.updateIsVendor(true);
+      //   }else {
+      //     this.props.updateLoggedInState(true);
+      //   }
+      //
+      this.props.createSocketChannel();
+      this.props.updateLoggedInState(true);
+       }
+      else {
         this.props.updateLoggedInState(false);
       }
     } catch (error) {
@@ -154,5 +159,5 @@ const mapStateToProps = ({ ui }) => {
 
 export default connect(
   mapStateToProps,
-  { loadFont, updateLoggedInState, updateIsVendor }
+  { loadFont, updateLoggedInState, updateIsVendor,createSocketChannel }
 )(RouterComponent);
