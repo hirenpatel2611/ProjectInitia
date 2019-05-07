@@ -13,6 +13,7 @@ import {
   Slider,
   StyleSheet,
   Platform,
+  
   Animated,
   AsyncStorage
 } from "react-native";
