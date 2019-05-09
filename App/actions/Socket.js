@@ -14,8 +14,6 @@ export const createSocketChannel =()=> async(dispatch,getState)=>{
   //console.error( await BackgroundFetch.getStatusAsync());
 
 
-
-
  chatSocket = io('http://192.168.200.198:3000', {
     reconnection: true,
     reconnectionDelay: 500,
