@@ -85,6 +85,10 @@ class FutureBooking extends Component {
               backgroundColor: "rgba(0,0,0,0.9)"
             }}
           >
+          <View style={{
+              backgroundColor: "rgba(100,100,100, 0.5)",
+              height:ScreenHeight,
+              }}>
           <View
             style={{
               marginTop:0.40*ScreenHeight,
@@ -165,6 +169,7 @@ class FutureBooking extends Component {
                 10 km
               </Text>
             </View>
+          </View>
           </View>
           </Modal>
           <Modal
