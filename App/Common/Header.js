@@ -13,7 +13,7 @@ import { Actions } from "react-native-router-flux";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
-
+  const valueIsvendor = AsyncStorage.getItem("is_vendor");
 const Header = props => {
   _deleteUser = async () => {
     try {
@@ -26,7 +26,9 @@ const Header = props => {
   return (
     <View style={styles.viewStyle}>
 
-        <TouchableOpacity onPress={()=>{Actions.drawerOpen()}}>
+        <TouchableOpacity onPress={()=>{
+          Actions.drawerOpen()
+        }}>
           <Image
             style={{
               width: 25,

@@ -95,6 +95,7 @@ export const BookVendor = () => async (dispatch, getState) => {
   test.append("longitude",location.coords.longitude);
   Api.post(GET_BOOKING, test)
     .then(response => {
+      console.error(response);
       if (response.status === 1) {
         alert(response.message);
         dispatch({
@@ -123,16 +124,10 @@ export const getBookings = () => async (dispatch, getState) => {
   });
   const valueUserId = await AsyncStorage.getItem("user_id");
   const valueIsvendor = await AsyncStorage.getItem("is_vendor");
-  if (valueIsvendor === "1") {
-    var postApi = GET_VENDOR_BOOKINGLIST;
-    var parameter = "vendor_id";
-  } else {
-    postApi = GET_BOOKINGLIST;
-    parameter = "customer_id";
-  }
+
   let test = new FormData();
-  test.append(parameter, valueUserId);
-  Api.post(postApi, test)
+  test.append("customer_id", valueUserId);
+  Api.post(GET_BOOKINGLIST, test)
     .then(response => {
       console.log(response);
       if (response.status === 0) {
@@ -224,10 +219,25 @@ export const getDistance = () => async (dispatch, getState) => {
       console.log(responseJson);
       var disMile = responseJson.rows[0].elements[0].distance.text;
       disMile = disMile.split(" ", 2);
-      var dis = disMile[0];
-      dis = dis * 1.609;
+      var disUnit = disMile[1];
+      var dis=disMile[0];
+      if(disUnit !== "mi")
+      {
+        if(dis>100){
+          dis=dis/3280.8;
+          dis = parseFloat(dis.toFixed(3)) + ' ' +'km';
+        }else {
+          dis = responseJson.rows[0].elements[0].distance.text;
+        }
+
+      }
+      else {
+        dis = dis * 1.609;
+        dis = parseFloat(dis.toFixed(1))+ ' ' +'km';
+      }
       console.log(dis);
-      dis = parseFloat(dis.toFixed(1));
+
+
       dispatch({
         type: GET_DISTANCE,
         payload: dis

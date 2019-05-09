@@ -13,43 +13,7 @@ import {
   TIMING_BELT
 } from "../../images";
 
-// const contextTypes = {
-//   drawer: PropTypes.object,
-// };
-//
-// const propTypes = {
-//   name: PropTypes.string,
-//   sceneStyle: ViewPropTypes.style,
-//   title: PropTypes.string,
-// };
-
- class SideMenu extends Component {
-
-
-
-componentDidMount() {
-  // token = storage.getAccessToken('1').value;
-  // this.props.fetchUserInfo(token);
-}
-
-
-
-//
-// logout() {
-//     storage.deleteAccessToken();
-//     Actions.login();
-// }
-//
-// renderSpinner()
-// {
-// const {loading}=this.props;
-// if(loading)
-//  {
-//    return(<Spinner color={'white'} size={'small'} />)
-//
-//  }
-//
-// }
+ class SideMenuVendor extends Component {
 
 _deleteUser = async () => {
   try {
@@ -62,7 +26,7 @@ _deleteUser = async () => {
   }
 };
 
-  render(){
+  render() {
 
    const {container,textStyle,viewContainer,profileImageStyle,textViewStyle,userInfoTextStyle,image4,imageMechanic,image3,image2,imageViewstyle}=styles;
     return (
@@ -82,21 +46,14 @@ _deleteUser = async () => {
           <Button
             containerStyle={container}
             style={textStyle}
-            onPress={()=>{Actions.UserProfile()}}
+            onPress={()=>{Actions.VendorProfile()}}
           >Profile</Button>
           </CardSection>
-          <CardSection  style={{ flexDirection:'column',borderBottomWidth:0,borderTopWidth:0 }}>
-          <Button
-            containerStyle={container}
-            style={textStyle}
-            onPress={()=>{Actions.NearbyGaraje()}}
-          >Nearby Mechanic</Button>
-        </CardSection>
         <CardSection  style={{ flexDirection:'column',borderBottomWidth:0,borderTopWidth:0 }}>
         <Button
           containerStyle={container}
           style={textStyle}
-          onPress={()=>{Actions.Booking()}}
+          onPress={()=>{Actions.FutureBooking()}}
         >Bookings</Button>
         </CardSection>
         <CardSection  style={{ flexDirection:'column',borderBottomWidth:0,borderTopWidth:0 }}>
@@ -114,4 +71,4 @@ _deleteUser = async () => {
   }
 }
 
-export default  SideMenu;
+export default  SideMenuVendor;

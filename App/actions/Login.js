@@ -4,6 +4,7 @@ import Api from "../api/api";
 import { URL_USER_LOGIN } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage } from "react-native";
+import {updateIsVendor} from './ui';
 
 export const UPDATE_PASSWORD = "login/UPDATE_PASSWORD";
 export const UPDATE_MOBILE_NUMBER = "login/UPDATE_MOBILE_NUMBER";
@@ -39,13 +40,16 @@ export const loginUser = () => (dispatch, getState) => {
   test.append("device_type", "android");
   Api.post(URL_USER_LOGIN, test)
     .then(async response => {
+      console.log(response);
       if (response.status === 1) {
         dispatch({
           type: LOGIN_SUCCESSFUL,
           payload: response.status
         });
         if (response.data.is_vendor == 1) {
-          Actions.VendorHome();
+            dispatch(updateIsVendor(true));
+          Actions.FutureBooking();
+
         } else {
           Actions.NearbyGaraje();
         }
@@ -53,6 +57,8 @@ export const loginUser = () => (dispatch, getState) => {
           await AsyncStorage.setItem("token", response.token);
           await AsyncStorage.setItem("is_vendor", response.data.is_vendor);
           await AsyncStorage.setItem("user_id",response.data.id.toString());
+          await AsyncStorage.setItem("user_latitude",response.data.latitude.toString());
+          await AsyncStorage.setItem("user_longitude",response.data.longitude.toString());
 
         } catch (error) {
           console.log(error);

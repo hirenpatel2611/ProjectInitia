@@ -1,15 +1,22 @@
 import React, {Component} from 'react';
-import {Text,View,TouchableOpacity} from 'react-native';
+import {Text,View,TouchableOpacity,Dimensions} from 'react-native';
 
-const FutureBookingList = ({vendor})=>{
+let ScreenHeight = Dimensions.get("window").height;
+let ScreenWidth = Dimensions.get("window").width;
+
+const FutureBookingList = ({customer,props})=>{
   return(
     <View
       style={{
         margin: 5,
         backgroundColor: "white",
-        padding: 10,
-        borderRadius: 10,
-        justifyContent:'space-around'
+        padding: 15,
+        borderRadius: 4,
+        justifyContent:'space-around',
+        shadowColor: "#000000",
+        shadowOffset: { width: 0, height: 3 },
+        shadowRadius: 5,
+        shadowOpacity: 0.5
       }}
     >
       <View
@@ -21,17 +28,17 @@ const FutureBookingList = ({vendor})=>{
       <Text
           style={{
             fontFamily: "circular-bold",
-            fontSize: 18,
+            fontSize: 20,
             color: "#4A4A4A",
             fontFamily:'circular-bold'
           }}
         >
-         {vendor.first_name}
+         {customer.first_name}
         </Text>
         <Text
           style={{
             fontFamily: "circular-bold",
-            fontSize: 14,
+            fontSize: 16,
             color: "#4A4A4A",
             fontFamily:'circular-book'
           }}
@@ -49,27 +56,28 @@ const FutureBookingList = ({vendor})=>{
         <Text
           style={{
             fontFamily: "circular-bold",
-            fontSize: 14,
+            fontSize: 16,
             color: "#4A4A4A",
             fontFamily:'circular-book'
           }}
         >
-          Vehicle
+          {customer.mobile}
         </Text>
         <Text
           style={{
             fontFamily: "circular-bold",
-            fontSize: 14,
-            color: "#4A4A4A",
+            fontSize: 16,
+            color: "#7960FF",
             fontFamily:'circular-book'
           }}
         >
-          {vendor.distance}
+          {customer.distance} km
         </Text>
       </View>
       <View style={{
         flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        marginTop:10
       }}
       >
       <Text
@@ -80,45 +88,60 @@ const FutureBookingList = ({vendor})=>{
           fontFamily:'circular-book'
         }}
       >
-        {vendor.vehicle}
+        {customer.email}
       </Text>
-
-      <TouchableOpacity>
+      <View
+      style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+          width:0.45*ScreenWidth,
+      }}
+      >
+      <TouchableOpacity
+      style={{alignSelf:'flex-end'}}
+        onPress={()=>{props.ApprovedPress()}}>
         <View
         style={{
-          width:70,
-          height:20,
+          width:80,
+          height:28,
           backgroundColor:'#4EA352',
           alignItems:'center',
+          justifyContent:'center',
           borderRadius:3
         }}
+
         >
           <Text style={{
             color:'white'
           }}>
-          Book
+          Approv
           </Text>
         </View>
       </TouchableOpacity>
 
-      <TouchableOpacity>
+      <TouchableOpacity
+      style={{alignSelf:'flex-end'}}
+        onPress={()=>{props.CanceledPress()}}
+      >
         <View
         style={{
-          width:70,
-          height:20,
+          width:80,
+          height:28,
           backgroundColor:'#D35400',
           alignItems:'center',
+          justifyContent:'center',
           borderRadius:3
         }}
+
         >
           <Text style={{
             color:'white'
           }}>
-          Book
+          Cancel
           </Text>
         </View>
       </TouchableOpacity>
-
+      </View>
       </View>
     </View>
   )

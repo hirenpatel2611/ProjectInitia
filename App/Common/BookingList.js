@@ -55,6 +55,7 @@ const BookingList = ({vendor})=>{
           }}
         >
           {vendor.mobile}
+          {vendor.mobile}
         </Text>
         <Text
           style={{

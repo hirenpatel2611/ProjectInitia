@@ -1,6 +1,8 @@
 import Peer from 'peerjs';
 import {AsyncStorage} from 'react-native';
 import io from 'socket.io-client';
+import { BackgroundFetch } from 'expo';
+import {getBookingModal} from './Vendors';
 
 export const CONNECT_TO_SOCKET = 'socket/connectTosocket';
 export const CREATE_SOCKET_CHANNEL ='socket/createSocketChannel';
@@ -9,12 +11,12 @@ var peer =null;
 
 
 export const createSocketChannel =()=> async(dispatch,getState)=>{
-  console.log('dsadasdad');
+  //console.error( await BackgroundFetch.getStatusAsync());
 
 
 
 
- chatSocket = io('http://192.168.200.198:8081', {
+ chatSocket = io('http://192.168.200.198:3000', {
     reconnection: true,
     reconnectionDelay: 500,
     reconnectionAttempts: Infinity,
@@ -22,8 +24,14 @@ export const createSocketChannel =()=> async(dispatch,getState)=>{
   });
 
   const valueUserId = await AsyncStorage.getItem("user_id");
-  chatSocket.on('new_message', function (data) {
-   console.error(data);
+  chatSocket.emit('self_room', { room: `${valueUserId}`});
+
+  chatSocket.on('broadcast', function (data) {
+
+   if(data === "you have a booking")
+   {
+     dispatch(getBookingModal(true));
+   }
 });
 
 
@@ -36,7 +44,7 @@ export const connectTosocket =()=>async(dispatch,getState)=>{
 
   const valueUserId = await AsyncStorage.getItem("user_id");
 
-chatSocket.emit('new_message', { room: 'roomOne', message: 'kks' });
+chatSocket.emit('booking', { room: `${valueUserId} ${vendorsData.id}`, message: 'kks' });
 
   channelName = `${vendorsData.id} ${valueUserId}`;
 

@@ -11699,6 +11699,11 @@ react-native-otp-inputs@^2.0.0:
   dependencies:
     lodash.flatten "4.4.0"
 
+react-native-phone-call@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/react-native-phone-call/-/react-native-phone-call-1.0.9.tgz#4468ec6f95856557fbff9bd69a0db04b54c35e1d"
+  integrity sha512-OPWYg8qeWNG/U4bWGMAKcQTH/ifqJnsvUPCH4lOkvWFHbQS3fbH5M8rFhXCzcfS0GVNzHhZX9ZByMM368TFAUQ==
+
 react-native-platform-touchable@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/react-native-platform-touchable/-/react-native-platform-touchable-1.1.1.tgz#fde4acc65eea585d28b164d0c3716a42129a68e4"

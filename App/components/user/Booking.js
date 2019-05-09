@@ -34,15 +34,9 @@ class Booking extends Component {
   }
  renderBookingList() {
       if (this.props.vendorList.length) {
-        if(isVandor === "1"){
-        return this.props.vendorList.map(vendorsList => (
-          <FutureBookingList key={vendorsList.booking_id} vendor={vendorsList.customer} />
-        ));
-        }else {
           return this.props.vendorList.map(vendorsList => (
             <BookingList key={vendorsList.booking_id} vendor={vendorsList.vendor} />
           ));
-        }
       }
     }
 

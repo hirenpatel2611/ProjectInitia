@@ -188,7 +188,7 @@ class RegisterOTP extends Component {
                 handleChange={code => this.props.onOTPChange(code)}
                 numberOfInputs={4}
                 inputStyles={otpInputStyle}
-                inputContainerStyles={{ backgroundColor: "white" }}
+                inputContainerStyles={{ backgroundColor: "white",}}
               />
             </View>
             {errors.otp ? (

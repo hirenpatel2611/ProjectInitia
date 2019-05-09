@@ -12,9 +12,12 @@ import NearbyGaraje from "./components/user/NearbyGaraje";
 import UserProfile from "./components/user/Profile";
 import Booking from "./components/user/Booking";
 import VendorHome from "./components/vendors/VendorHome";
+import FutureBooking from "./components/vendors/FutureBooking";
+import VendorProfile from "./components/vendors/Profile";
 import { Actions } from "react-native-router-flux";
 import { loadFont, updateLoggedInState, updateIsVendor,createSocketChannel } from "./actions";
 import SideMenu from "./components/drawer/SideMenu";
+import SideMenuVendor from "./components/drawer/SideMenuVendor";
 
 import { connect } from "react-redux";
 
@@ -32,16 +35,12 @@ class RouterComponent extends Component {
       const valueUserName = await AsyncStorage.getItem("token");
       const valueIsvendor = await AsyncStorage.getItem("is_vendor");
 
+      if (valueIsvendor === "1") {
+          this.props.updateIsVendor(true);
+      }
       if (valueUserName !== null) {
-      //   if (valueIsvendor === "1") {
-      //     console.error(valueIsvendor);
-      //       this.props.updateIsVendor(true);
-      //   }else {
-      //     this.props.updateLoggedInState(true);
-      //   }
-      //
-      this.props.createSocketChannel();
-      this.props.updateLoggedInState(true);
+         this.props.updateLoggedInState(true);
+         this.props.createSocketChannel();
        }
       else {
         this.props.updateLoggedInState(false);
@@ -109,7 +108,11 @@ class RouterComponent extends Component {
               navTransparent="true"
 
             />
-            <Scene
+
+      {
+
+        !this.props.isVendorLoggedIn?
+         <Scene
               key="drawer"
               type={ActionConst.RESET}
               drawer
@@ -119,14 +122,27 @@ class RouterComponent extends Component {
               contentComponent={SideMenu}
               drawerWidth={0.50 *ScreenWidth}
             >
+          
+
             <Scene
               key="NearbyGaraje"
               component={NearbyGaraje}
               hideNavBar={true}
               navTransparent="true"
+              initial={!this.props.isVendorLoggedIn}
             />
-
-
+            <Scene
+              key="FutureBooking"
+              component={FutureBooking}
+              hideNavBar={true}
+              navTransparent="true"
+            />
+            <Scene
+              key="VendorProfile"
+              component={VendorProfile}
+              hideNavBar={true}
+              navTransparent="true"
+            />
             <Scene
               key="UserProfile"
               component={UserProfile}
@@ -139,14 +155,33 @@ class RouterComponent extends Component {
               hideNavBar={true}
               navTransparent="true"
             />
-            <Scene
-              key="VendorHome"
-              component={VendorHome}
-              hideNavBar={true}
-              navTransparent="true"
-              initial={this.props.isVendorLoggedIn}
-            />
-          </Scene>
+
+          </Scene>:
+          <Scene
+               key="drawer"
+               type={ActionConst.RESET}
+               drawer
+               initial={this.props.isLoggedIn}
+               hideNavBar={true}
+               drawerPosition="left"
+               contentComponent={SideMenuVendor}
+               drawerWidth={0.50 *ScreenWidth}
+             >
+
+             <Scene
+               key="FutureBooking"
+               component={FutureBooking}
+               hideNavBar={true}
+               navTransparent="true"
+             />
+             <Scene
+               key="VendorProfile"
+               component={VendorProfile}
+               hideNavBar={true}
+               navTransparent="true"
+             />
+           </Scene>
+        }
         </Scene>
       </Router>
     );

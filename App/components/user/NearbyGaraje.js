@@ -216,7 +216,7 @@ class NearbyGaraje extends Component {
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity
-        
+
                       underlayColor="white"
                       onPress={async() => {
                         await this.props.BookVendor();
@@ -260,7 +260,7 @@ class NearbyGaraje extends Component {
                     <Text style={inStyle.modalTextBlue}>
                       {
                         this.props.vendorDistance?<Text>{this.props.vendorDistance}</Text>:<Text>fail</Text>
-                      } km
+                      }
                     </Text>
                   </View>
                 </View>
