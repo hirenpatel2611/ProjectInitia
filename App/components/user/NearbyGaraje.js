@@ -182,7 +182,7 @@ class NearbyGaraje extends Component {
             <TouchableOpacity
               activeOpacity={1}
               onPress={() => {
-                this.props.closeVendorDetailModal();
+                this.props.isBookingSuccess?null:this.props.closeVendorDetailModal();
               }}
             >
               <View style={inStyle.modalBookTouch}>
@@ -242,6 +242,12 @@ class NearbyGaraje extends Component {
                   ) : (
                     <Text>None</Text>
                   )}
+                </Text>
+                <Text style={{
+                  alignSelf:'flex-end',
+                  fontFamily:'circular-bold'
+                }}>
+                {this.props.bookingStatusRes?<Text>Status :{this.props.bookingStatusRes.type}</Text>:null}
                 </Text>
                 <View
                   style={[inStyle.modalView1,{bottom: 10}]}
@@ -370,7 +376,8 @@ const mapStateToProps = ({ usermaps }) => {
     vendorsData,
     loadingBookig,
     isBookingSuccess,
-    vendorDistance
+    vendorDistance,
+    bookingStatusRes
   } = usermaps;
   return {
     loading,
@@ -381,7 +388,8 @@ const mapStateToProps = ({ usermaps }) => {
     vendorsData,
     loadingBookig,
     isBookingSuccess,
-    vendorDistance
+    vendorDistance,
+    bookingStatusRes
   };
 };
 

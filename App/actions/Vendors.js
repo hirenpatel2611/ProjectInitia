@@ -6,6 +6,7 @@ import {
   BOOKING_UPDATE,
   SEND_MECHANIC_OTP
 } from "../config";
+import connectTosocketApprov from './Socket';
 
 export const GET_FUTURE_BOOKING_LIST_START ="vendors/GET_FUTURE_BOOKING_LIST_START";
 export const GET_FUTURE_BOOKING_LIST_SUCCESS ="vendors/GET_FUTURE_BOOKING_LIST_SUCCESS";
@@ -14,6 +15,7 @@ export const GET_CUSTOMER_DISTANCELIST = "vendors/GET_CUSTOMER_DISTANCELIST";
 export const GET_BOOKING_MODAL = "vendors/GET_BOOKING_MODAL";
 export const GET_BOOKING_APPROV = "vendors/GET_BOOKING_APPROV";
 export const GET_MECHANIC_OTP = "vendors/GET_MECHANIC_OTP";
+export const OTP_DONE = "vendors/OTP_DONE";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -107,18 +109,18 @@ export const getBookingModal = val => async (dispatch, getState) => {
   });
 };
 
-export const getBookingApprove = () => (dispatch, getState) => {
+export const getBookingApprove = val => (dispatch, getState) => {
   const { bookingData } = getState().vendors;
 
   let test = new FormData();
   test.append("booking_id", bookingData.booking_id);
-  test.append("status", "accept");
+  test.append("status", val);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log(response);
       if(response.status === 1){
       dispatch({
         type: GET_BOOKING_APPROV,
+        payload:val
       });
       dispatch(getMechanicOtp());
       }
@@ -127,8 +129,6 @@ export const getBookingApprove = () => (dispatch, getState) => {
     .catch(err => {
       console.error(err);
     });
-
-
 };
 
 export const getMechanicOtp = () => (dispatch, getState) =>{
@@ -162,3 +162,9 @@ export const isBookingCancle = () => (dispatch, getState) => {
       console.error(err);
     });
 };
+
+export const otpDone = () => (dispatch, getState) => {
+  dispatch({
+    type: OTP_DONE,
+  });
+}

@@ -39,6 +39,7 @@ export const VENDOR_DISTANCE = "usermaps/VENDOR_DISTANCE";
 export const GET_DISTANCE = "usermaps/GET_DISTANCE";
 export const GET_DISTANCELIST = "usermaps/GET_DISTANCELIST";
 export const GET_BOOKING_CANCLE = "usermaps/GET_BOOKING_CANCLE";
+export const GET_BOOKING_STATUS = "usermaps/GET_BOOKING_STATUS";
 
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
@@ -305,3 +306,11 @@ export const getDistanceList = val => async (dispatch, getState) => {
     payload: vendorList
   });
 };
+
+export const getBookingStatus = val => async (dispatch, getState) => {
+  console.log(val);
+  dispatch({
+    type: GET_BOOKING_STATUS,
+    payload: val
+  });
+}

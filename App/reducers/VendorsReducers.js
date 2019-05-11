@@ -5,7 +5,8 @@ import {
         GET_CUSTOMER_DISTANCELIST,
         GET_BOOKING_MODAL,
         GET_BOOKING_APPROV,
-        GET_MECHANIC_OTP
+        GET_MECHANIC_OTP,
+        OTP_DONE
 } from '../actions/Vendors'
 
 const INITIAL_STATE = {
@@ -16,7 +17,8 @@ const INITIAL_STATE = {
   isBooking:false,
   bookingData:'',
   mechanicOTP:'',
-  isMechanicOtp:false
+  isMechanicOtp:false,
+  bookingStatus:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -74,6 +76,7 @@ export default (state = INITIAL_STATE, action) => {
             {
               return{
                 ...state,
+                bookingStatus:action.payload
                 }
             }
             break;
@@ -89,6 +92,16 @@ export default (state = INITIAL_STATE, action) => {
 
             }
               break;
+
+              case  OTP_DONE:
+              {
+                return{
+                  ...state,
+                  isMechanicOtp:false
+                }
+
+              }
+                break;
 
             default:
               return state;

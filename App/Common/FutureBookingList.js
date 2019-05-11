@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Text,View,TouchableOpacity,Dimensions} from 'react-native';
-import getBookingApprove from '../actions/Vendors';
+import {getBookingApprove,isBookingCancle} from '../actions/Vendors';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -121,6 +121,9 @@ const FutureBookingList = ({customer})=>{
 
       <TouchableOpacity
       style={{alignSelf:'flex-end'}}
+      onPress={()=>{
+        this.props.isBookingCancle();
+      }}
       >
         <View
         style={{

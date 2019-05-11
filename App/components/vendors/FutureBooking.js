@@ -22,7 +22,9 @@ import { getFutureBookings,
          getCustomerDistanceList,
          getBookingModal,
          getBookingApprove,
-         isBookingCancle
+         isBookingCancle,
+         connectTosocketApprov,
+         otpDone
        } from "../../actions";
 import { FutureBookingList } from "../../Common";
 import { CALL,BITMAP2 } from "../../images";
@@ -303,7 +305,9 @@ class FutureBooking extends Component {
             <TouchableOpacity
             style={{alignSelf:'flex-end'}}
             onPress={()=>{
-              this.props.getBookingApprove();
+              var status="accept";
+              this.props.getBookingApprove(status);
+              this.props.connectTosocketApprov();
             }}
             >
               <View
@@ -409,12 +413,12 @@ class FutureBooking extends Component {
               <TouchableOpacity
               style={{alignSelf:'flex-end'}}
               onPress={()=>{
-                this.props.isBookingCancle();
+                  this.props.otpDone();
               }}
               >
                 <View
                 style={{
-                  width:80,
+                  width:0.78*ScreenWidth,
                   height:28,
                   backgroundColor:'#7960FF',
                   alignItems:'center',
@@ -485,6 +489,8 @@ export default connect(
     getCustomerDistanceList,
     getBookingModal,
     getBookingApprove,
-    isBookingCancle
+    isBookingCancle,
+    connectTosocketApprov,
+    otpDone
   }
 )(FutureBooking);

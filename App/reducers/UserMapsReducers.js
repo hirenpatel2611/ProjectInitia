@@ -21,7 +21,8 @@ import {
   RESET_FILTER,
   GET_BOOKING_CANCLE,
   GET_DISTANCE,
-  GET_DISTANCELIST
+  GET_DISTANCELIST,
+  GET_BOOKING_STATUS
 } from "../actions/UserMaps";
 
 const INITIAL_STATE = {
@@ -45,7 +46,8 @@ const INITIAL_STATE = {
   isBookingSuccess:false,
   vendorDistance:[],
   vendorDistanceList:[],
-  bookData:''
+  bookData:'',
+  bookingStatusRes:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -269,6 +271,15 @@ export default (state = INITIAL_STATE, action) => {
       return{
         ...state,
         vendorList:action.payload
+        }
+    }
+    break;
+
+    case GET_BOOKING_STATUS:
+    {
+      return{
+        ...state,
+        bookingStatusRes:action.payload
         }
     }
     break;
