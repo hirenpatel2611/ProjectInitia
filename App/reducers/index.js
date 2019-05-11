@@ -5,6 +5,7 @@ import RegisterReducer from './RegisterReducer';
 import UIReducer from './UIReducer';
 import UserMaps from './UserMapsReducers';
 import VendorsReducers from './VendorsReducers';
+import UserReducer from './UserReducer';
 
 export default combineReducers({
   game: GameReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
   register:RegisterReducer,
   ui:UIReducer,
   usermaps:UserMaps,
-  vendors:VendorsReducers
+  vendors:VendorsReducers,
+  user:UserReducer
 });

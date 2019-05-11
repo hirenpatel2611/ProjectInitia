@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {Text,View,TouchableOpacity,Dimensions} from 'react-native';
+import getBookingApprove from '../actions/Vendors';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
-const FutureBookingList = ({customer,props})=>{
+const FutureBookingList = ({customer})=>{
   return(
     <View
       style={{
@@ -71,7 +72,7 @@ const FutureBookingList = ({customer,props})=>{
             fontFamily:'circular-book'
           }}
         >
-          {customer.distance} km
+          {customer.distance}
         </Text>
       </View>
       <View style={{
@@ -98,8 +99,7 @@ const FutureBookingList = ({customer,props})=>{
       }}
       >
       <TouchableOpacity
-      style={{alignSelf:'flex-end'}}
-        onPress={()=>{props.ApprovedPress()}}>
+      style={{alignSelf:'flex-end'}}>
         <View
         style={{
           width:80,
@@ -121,7 +121,6 @@ const FutureBookingList = ({customer,props})=>{
 
       <TouchableOpacity
       style={{alignSelf:'flex-end'}}
-        onPress={()=>{props.CanceledPress()}}
       >
         <View
         style={{

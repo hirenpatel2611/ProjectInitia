@@ -3,7 +3,9 @@ import {
         GET_FUTURE_BOOKING_LIST_SUCCESS,
         GET_FUTURE_BOOKING_LIST_FAIL,
         GET_CUSTOMER_DISTANCELIST,
-        GET_BOOKING_MODAL
+        GET_BOOKING_MODAL,
+        GET_BOOKING_APPROV,
+        GET_MECHANIC_OTP
 } from '../actions/Vendors'
 
 const INITIAL_STATE = {
@@ -11,7 +13,10 @@ const INITIAL_STATE = {
   isFutureBookingListFail:false,
   vendorBookingList:[],
   FutureBookingList:[],
-  isBooking:false
+  isBooking:false,
+  bookingData:'',
+  mechanicOTP:'',
+  isMechanicOtp:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -59,10 +64,31 @@ export default (state = INITIAL_STATE, action) => {
             {
               return{
                 ...state,
-                isBooking:action.payload
+                isBooking:true,
+                bookingData:action.payload
                 }
             }
             break;
+
+            case GET_BOOKING_APPROV:
+            {
+              return{
+                ...state,
+                }
+            }
+            break;
+
+            case  GET_MECHANIC_OTP:
+            {
+              return{
+                ...state,
+                mechanicOTP:action.payload,
+                isBooking:false,
+                isMechanicOtp:true
+              }
+
+            }
+              break;
 
             default:
               return state;

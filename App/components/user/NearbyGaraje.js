@@ -220,7 +220,6 @@ class NearbyGaraje extends Component {
                       underlayColor="white"
                       onPress={async() => {
                         await this.props.BookVendor();
-                        this.props.connectTosocket();
                       }}
                     >
                       <View style={inStyle.modalButtonCancle}>

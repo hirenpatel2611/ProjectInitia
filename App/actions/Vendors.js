@@ -1,19 +1,21 @@
 import TimerMixin from "react-timer-mixin";
 import Api from "../api/api";
-import {AsyncStorage,Alert} from 'react-native';
+import { AsyncStorage, Alert } from "react-native";
 import {
   GET_FUTURE_BOOKINGLIST,
-  BOOKING_UPDATE
+  BOOKING_UPDATE,
+  SEND_MECHANIC_OTP
 } from "../config";
 
-export const GET_FUTURE_BOOKING_LIST_START = "vendors/GET_FUTURE_BOOKING_LIST_START";
-export const GET_FUTURE_BOOKING_LIST_SUCCESS = "vendors/GET_FUTURE_BOOKING_LIST_SUCCESS";
-export const GET_FUTURE_BOOKING_LIST_FAIL = "vendors/GET_FUTURE_BOOKING_LIST_FAIL";
+export const GET_FUTURE_BOOKING_LIST_START ="vendors/GET_FUTURE_BOOKING_LIST_START";
+export const GET_FUTURE_BOOKING_LIST_SUCCESS ="vendors/GET_FUTURE_BOOKING_LIST_SUCCESS";
+export const GET_FUTURE_BOOKING_LIST_FAIL ="vendors/GET_FUTURE_BOOKING_LIST_FAIL";
 export const GET_CUSTOMER_DISTANCELIST = "vendors/GET_CUSTOMER_DISTANCELIST";
 export const GET_BOOKING_MODAL = "vendors/GET_BOOKING_MODAL";
+export const GET_BOOKING_APPROV = "vendors/GET_BOOKING_APPROV";
+export const GET_MECHANIC_OTP = "vendors/GET_MECHANIC_OTP";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
-
   dispatch({
     type: GET_FUTURE_BOOKING_LIST_START
   });
@@ -41,21 +43,20 @@ export const getFutureBookings = () => async (dispatch, getState) => {
 };
 
 export const getCustomerDistanceList = val => async (dispatch, getState) => {
-  const {vendorBookingList } = getState().vendors;
-  const {vendors} = getState().usermaps;
+  const { vendorBookingList } = getState().vendors;
+  const { vendors } = getState().usermaps;
   const vendorLatitude = await AsyncStorage.getItem("user_latitude");
   const vendorLongitude = await AsyncStorage.getItem("user_longitude");
 
-  var FutureBookingList=[];
+  var FutureBookingList = [];
   var url = "";
   const APIKEY = "AIzaSyAm_cQCYcozNa9WUVmASmSABGuuS6OSsIw";
-  var url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${
-    vendorLatitude
-  },${vendorLongitude}&destinations=${
+  var url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${vendorLatitude},${vendorLongitude}&destinations=${
     vendorBookingList[0].booking_latitude
   },${vendorBookingList[0].booking_longitude}`;
   vendorBookingList.map(customer => {
-    url = url +"|" + `${customer.booking_latitude},${customer.booking_longitude}`;
+    url =
+      url + "|" + `${customer.booking_latitude},${customer.booking_longitude}`;
   });
 
   url = url + `&key=${APIKEY}`;
@@ -72,53 +73,92 @@ export const getCustomerDistanceList = val => async (dispatch, getState) => {
 
         disMile = disMile.split(" ", 2);
         var disUnit = disMile[1];
-        var dis=disMile[0];
-        if(disUnit !== "mi")
-        {
-          if(dis>100){
-            dis=dis/3280.8;
-            dis = parseFloat(dis.toFixed(3)) + ' ' +'km';
-          }else {
+        var dis = disMile[0];
+        if (disUnit !== "mi") {
+          if (dis > 100) {
+            dis = dis / 3280.8;
+            dis = parseFloat(dis.toFixed(3)) + " " + "km";
+          } else {
             dis = responseJson.rows[0].elements[0].distance.text;
           }
-        }
-        else {
+        } else {
           dis = dis * 1.609;
-          dis = parseFloat(dis.toFixed(1))+ ' ' +'km';
+          dis = parseFloat(dis.toFixed(1)) + " " + "km";
         }
         vendorBookingList[i].customer.distance = dis;
-
       }
       console.log(dis);
     })
     .catch(e => {
       //console.warn(e);
     });
-    FutureBookingList= vendorBookingList;
-    console.log(FutureBookingList);
+  FutureBookingList = vendorBookingList;
+  console.log(FutureBookingList);
   dispatch({
     type: GET_CUSTOMER_DISTANCELIST,
     payload: FutureBookingList
   });
 };
 
-export const getBookingModal = val => (dispatch, getState) => {
+export const getBookingModal = val => async (dispatch, getState) => {
   dispatch({
-    type:GET_BOOKING_MODAL,
-    payload:val
+    type: GET_BOOKING_MODAL,
+    payload: val
   });
-}
+};
 
-export const getBookingApprove = () => (dispatch,getState) =>{
-const {vendorBookingList } = getState().vendors;
+export const getBookingApprove = () => (dispatch, getState) => {
+  const { bookingData } = getState().vendors;
+
   let test = new FormData();
-  test.append("booking_id", vendorBookingList.booking_id);
+  test.append("booking_id", bookingData.booking_id);
   test.append("status", "accept");
   Api.post(BOOKING_UPDATE, test)
-  .then(response=>{
+    .then(response => {
       console.log(response);
-  })
-  .catch(err=>{
-    console.error(err);
-  })
+      if(response.status === 1){
+      dispatch({
+        type: GET_BOOKING_APPROV,
+      });
+      dispatch(getMechanicOtp());
+      }
+
+    })
+    .catch(err => {
+      console.error(err);
+    });
+
+
+};
+
+export const getMechanicOtp = () => (dispatch, getState) =>{
+  const { bookingData } = getState().vendors;
+  let testOtp = new FormData();
+  testOtp.append("booking_id", bookingData.booking_id);
+  Api.post(SEND_MECHANIC_OTP, testOtp)
+    .then(response => {
+      console.log(response);
+      dispatch({
+        type: GET_MECHANIC_OTP,
+        payload:response.OTP
+      });
+    })
+    .catch(err => {
+      console.error(err);
+    });
 }
+
+export const isBookingCancle = () => (dispatch, getState) => {
+  const { bookingData } = getState().vendors;
+
+  let test = new FormData();
+  test.append("booking_id", bookingData.booking_id);
+  test.append("status", "cancle");
+  Api.post(BOOKING_UPDATE, test)
+    .then(response => {
+      console.log(response);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+};

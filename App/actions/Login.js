@@ -44,13 +44,14 @@ export const loginUser = () => (dispatch, getState) => {
       if (response.status === 1) {
         dispatch({
           type: LOGIN_SUCCESSFUL,
-          payload: response.status
+          payload: response
         });
         if (response.data.is_vendor == 1) {
             dispatch(updateIsVendor(true));
           Actions.FutureBooking();
 
         } else {
+          console.error(response.data.is_vendor);
           Actions.NearbyGaraje();
         }
         try {

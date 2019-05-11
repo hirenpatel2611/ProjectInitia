@@ -45,6 +45,7 @@ const INITIAL_STATE = {
   isBookingSuccess:false,
   vendorDistance:[],
   vendorDistanceList:[],
+  bookData:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -111,7 +112,8 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loadingBookig: false,
           isBookModalVisible: true,
-          isBookingSuccess:true
+          isBookingSuccess:true,
+          bookData:action.payload
         };
       }
       break;

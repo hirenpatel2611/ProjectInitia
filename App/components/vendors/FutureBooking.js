@@ -18,7 +18,12 @@ import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styles from "./vendorStyle";
 import Header from "../../Common/Header";
-import { getFutureBookings, getCustomerDistanceList,getBookingModal,getBookingApprove } from "../../actions";
+import { getFutureBookings,
+         getCustomerDistanceList,
+         getBookingModal,
+         getBookingApprove,
+         isBookingCancle
+       } from "../../actions";
 import { FutureBookingList } from "../../Common";
 import { CALL,BITMAP2 } from "../../images";
 import call from 'react-native-phone-call'
@@ -45,6 +50,7 @@ class FutureBooking extends Component {
         <FutureBookingList
           key={vendorBookingList.booking_id}
           customer={vendorBookingList.customer}
+          Approv={()=>{this.props.getBookingApprove()}}
         />
       ));
     }
@@ -190,7 +196,7 @@ class FutureBooking extends Component {
           >
           <View
             style={{
-              marginTop:0.37*ScreenHeight,
+              marginTop:0.30*ScreenHeight,
               alignSelf: "center",
               width: 0.85 * ScreenWidth,
               backgroundColor: "#FFFFFF",
@@ -286,6 +292,7 @@ class FutureBooking extends Component {
               </Text>
             </View>
             </View>
+
             <View
             style={{
               flexDirection: "row",
@@ -313,14 +320,16 @@ class FutureBooking extends Component {
                 <Text style={{
                   color:'white'
                 }}>
-                Approv
+                Approve
                 </Text>
               </View>
             </TouchableOpacity>
 
             <TouchableOpacity
             style={{alignSelf:'flex-end'}}
-              onPress={()=>{this.props.getBookingModal(false)}}
+            onPress={()=>{
+              this.props.isBookingCancle();
+            }}
             >
               <View
               style={{
@@ -343,6 +352,86 @@ class FutureBooking extends Component {
             </View>
           </View>
           </Modal>
+          <Modal
+            visible={this.props.isMechanicOtp}
+            onRequestClose={() => {
+              console.log("Modal has been closed.");
+            }}
+            animationType="slide"
+            transparent={true}
+            opacity={1}
+            style={{
+              justifyContent:'center',
+              alignItems:'center',
+              height:ScreenHeight,
+              backgroundColor: "rgba(0,0,0,0.5)"
+
+            }}
+          >
+            <View style={{
+              marginTop:0.30*ScreenHeight,
+              alignSelf: "center",
+              width: 0.85 * ScreenWidth,
+              backgroundColor: "#FFFFFF",
+              padding: 10,
+              borderRadius: 4,
+              justifyContent: "space-between",
+              flexDirection: "column",
+              shadowColor: "#000000",
+              shadowOffset: { width: 0, height: 3 },
+              shadowRadius: 5,
+              shadowOpacity: 0.5
+            }}>
+            <Text
+              style={{
+                fontFamily: "circular-bold",
+                fontSize: 20,
+                color: "#4A4A4A",
+                padding:10,
+                alignSelf:'center',
+                marginBottom:10
+              }}
+            >
+              You OTP for Mechanic.
+            </Text>
+              <Text
+                style={{
+                  fontFamily: "circular-bold",
+                  fontSize: 20,
+                  color: "#4A4A4A",
+                  padding:10,
+                  alignSelf:'center',
+                  marginBottom:10
+                }}
+              >
+              {this.props.mechanicOTP?<Text>{this.props.mechanicOTP}</Text>:null}
+              </Text>
+              <TouchableOpacity
+              style={{alignSelf:'flex-end'}}
+              onPress={()=>{
+                this.props.isBookingCancle();
+              }}
+              >
+                <View
+                style={{
+                  width:80,
+                  height:28,
+                  backgroundColor:'#7960FF',
+                  alignItems:'center',
+                  justifyContent:'center',
+                  borderRadius:3
+                }}
+
+                >
+                  <Text style={{
+                    color:'white'
+                  }}>
+                  continue
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            </Modal>
         </ScrollView>
       </View>
     );
@@ -372,14 +461,20 @@ const mapStateToProps = ({ vendors }) => {
     isFutureBookingListFail,
     vendorBookingList,
     FutureBookingList,
-    isBooking
+    isBooking,
+    bookingData,
+    mechanicOTP,
+    isMechanicOtp
   } = vendors;
   return {
     loadingFutureBookigList,
     isFutureBookingListFail,
     vendorBookingList,
     FutureBookingList,
-    isBooking
+    isBooking,
+    bookingData,
+    mechanicOTP,
+    isMechanicOtp
   };
 };
 
@@ -389,6 +484,7 @@ export default connect(
     getFutureBookings,
     getCustomerDistanceList,
     getBookingModal,
-    getBookingApprove
+    getBookingApprove,
+    isBookingCancle
   }
 )(FutureBooking);

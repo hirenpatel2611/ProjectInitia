@@ -9,6 +9,9 @@ import {
 } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage, Alert } from "react-native";
+import {
+  connectTosocket,
+} from "./Socket";
 
 export const GET_VENDORS_START = "usermaps/GET_VENDORS_START";
 export const GET_VENDORS_SUCCESS = "usermaps/GET_VENDORS_SUCCESS";
@@ -44,6 +47,7 @@ export const getVendors = () => (dispatch, getState) => {
   test.append("service_type", "both");
   Api.post(GET_VENDOR, test)
     .then(response => {
+      console.log(response);
       dispatch({
         type: GET_VENDORS_SUCCESS,
         payload: response
@@ -95,13 +99,13 @@ export const BookVendor = () => async (dispatch, getState) => {
   test.append("longitude",location.coords.longitude);
   Api.post(GET_BOOKING, test)
     .then(response => {
-      console.error(response);
       if (response.status === 1) {
         alert(response.message);
         dispatch({
           type: GET_BOOKING_SUCCESS,
           payload: response
         });
+        dispatch(connectTosocket());
       } else {
         alert(response.message);
         dispatch({

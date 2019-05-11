@@ -14,6 +14,8 @@ export const createSocketChannel =()=> async(dispatch,getState)=>{
   //console.error( await BackgroundFetch.getStatusAsync());
 
 
+
+
  chatSocket = io('http://192.168.200.198:3000', {
     reconnection: true,
     reconnectionDelay: 500,
@@ -25,41 +27,22 @@ export const createSocketChannel =()=> async(dispatch,getState)=>{
   chatSocket.emit('self_room', { room: `${valueUserId}`});
 
   chatSocket.on('broadcast', function (data) {
-
-   if(data === "you have a booking")
+    console.log(data);
+   if(data.message.message === "Your booking is completed.")
    {
-     dispatch(getBookingModal(true));
+     dispatch(getBookingModal(data.message));
    }
-});
-
-
+    });
 
 }
 
 
 export const connectTosocket =()=>async(dispatch,getState)=>{
-  const { vendorsData } = getState().usermaps;
-
+  const { vendorsData,bookData } = getState().usermaps;
   const valueUserId = await AsyncStorage.getItem("user_id");
-
-chatSocket.emit('booking', { room: `${valueUserId} ${vendorsData.id}`, message: 'kks' });
-
+  chatSocket.emit('booking', { room: `${valueUserId} ${vendorsData.id}`, message: bookData });
   channelName = `${vendorsData.id} ${valueUserId}`;
 
-
-
-
-
-//   const conn = await peer.connect()
-//
-// try{
-//   peer.on('open', () => {
-//     console.error();
-//     conn.send('hi!');
-//   });
-// }catch(e){
-//   console.error(e);
-// }
   dispatch({
     type:CONNECT_TO_SOCKET
   })
