@@ -13,7 +13,7 @@ var peer = null;
 export const createSocketChannel = () => async (dispatch, getState) => {
   //console.error( await BackgroundFetch.getStatusAsync());
 
-  chatSocket = io("http://103.68.166.65:8081", {
+  chatSocket = io("http://192.168.200.198:3000", {
     reconnection: true,
     reconnectionDelay: 500,
     reconnectionAttempts: Infinity,
@@ -33,6 +33,10 @@ export const createSocketChannel = () => async (dispatch, getState) => {
        case "ACCEPT":
             dispatch(getBookingStatus(data))
             break;
+
+            case "ON-THE-WAY":
+                 dispatch(getBookingStatus(data))
+                 break;
       default:
             return null;
     }
@@ -45,7 +49,6 @@ export const createSocketChannel = () => async (dispatch, getState) => {
 export const connectTosocket = () => async (dispatch, getState) => {
   const { vendorsData, bookData } = getState().usermaps;
   const valueUserId = await AsyncStorage.getItem("user_id");
-  console.log(vendorsData.id);
   chatSocket.emit("booking", {
     room: `${valueUserId} ${vendorsData.id}`,
     message: bookData,
