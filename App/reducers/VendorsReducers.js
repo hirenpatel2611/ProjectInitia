@@ -4,9 +4,14 @@ import {
         GET_FUTURE_BOOKING_LIST_FAIL,
         GET_CUSTOMER_DISTANCELIST,
         GET_BOOKING_MODAL,
-        GET_BOOKING_APPROV,
+        GET_BOOKING_UAPDATE_START,
+        GET_BOOKING_UAPDATE_SUCCESS,
+        GET_BOOKING_UAPDATE_FAIL,
         GET_MECHANIC_OTP,
-        OTP_DONE
+        OTP_DONE,
+        GET_BOOKINGLIST_APPROVE_START,
+        GET_BOOKINGLIST_APPROVE_SUCCESS,
+        GET_BOOKINGLIST_APPROVE_FAIL
 } from '../actions/Vendors'
 
 const INITIAL_STATE = {
@@ -16,6 +21,7 @@ const INITIAL_STATE = {
   FutureBookingList:[],
   isBooking:false,
   bookingData:'',
+  loadingBookigUpdate:false,
   mechanicOTP:'',
   isMechanicOtp:false,
   bookingStatus:''
@@ -72,11 +78,31 @@ export default (state = INITIAL_STATE, action) => {
             }
             break;
 
-            case GET_BOOKING_APPROV:
+            case GET_BOOKING_UAPDATE_SUCCESS:
             {
               return{
                 ...state,
-                bookingStatus:action.payload
+                loadingBookigUpdate:false,
+                bookingStatus:action.payload,
+                isBooking:false
+                }
+            }
+            break;
+
+            case GET_BOOKING_UAPDATE_FAIL:
+            {
+              return{
+                ...state,
+                loadingBookigUpdate:false,
+                }
+            }
+            break;
+
+            case GET_BOOKING_UAPDATE_START:
+            {
+              return{
+                ...state,
+                loadingBookigUpdate:true
                 }
             }
             break;
@@ -102,6 +128,36 @@ export default (state = INITIAL_STATE, action) => {
 
               }
                 break;
+
+                case  GET_BOOKINGLIST_APPROVE_START:
+                {
+                  return{
+                    ...state,
+                    loadingBookigUpdate:true
+                  }
+
+                }
+                  break;
+
+                  case  GET_BOOKINGLIST_APPROVE_SUCCESS:
+                  {
+                    return{
+                      ...state,
+                      loadingBookigUpdate:false
+                    }
+
+                  }
+                    break;
+
+                    case  GET_BOOKINGLIST_APPROVE_FAIL:
+                    {
+                      return{
+                        ...state,
+                        loadingBookigUpdate:false
+                      }
+
+                    }
+                      break;
 
             default:
               return state;

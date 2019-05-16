@@ -42,16 +42,11 @@ export const loginUser = () => (dispatch, getState) => {
     .then(async response => {
       console.log(response);
       if (response.status === 1) {
-        dispatch({
-          type: LOGIN_SUCCESSFUL,
-          payload: response
-        });
         if (response.data.is_vendor == 1) {
             dispatch(updateIsVendor(true));
           Actions.FutureBooking();
 
         } else {
-          console.error(response.data.is_vendor);
           Actions.NearbyGaraje();
         }
         try {
@@ -65,6 +60,10 @@ export const loginUser = () => (dispatch, getState) => {
           console.log(error);
           // Error saving data
         }
+        dispatch({
+          type: LOGIN_SUCCESSFUL,
+          payload: response
+        });
       } else {
         dispatch({
           type: LOGIN_FAILED

@@ -5,7 +5,13 @@ import {getBookingApprove,isBookingCancle} from '../actions/Vendors';
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
-const FutureBookingList = ({customer})=>{
+const FutureBookingList = ({customer,
+                            bookstatus,
+                            onPressApprove,
+                            disabledApprove,
+                            opacityApprove,
+                            disabledCancle,
+                            opacityCancle})=>{
   return(
     <View
       style={{
@@ -74,16 +80,24 @@ const FutureBookingList = ({customer})=>{
         >
           {customer.distance}
         </Text>
+        <Text
+          style={{
+            fontFamily: "circular-bold",
+            fontSize: 14,
+            color:'#7960FF',
+          }}
+        >
+          Status :{bookstatus}
+        </Text>
       </View>
       <View style={{
-        flexDirection: "row",
+        flexDirection:'row',
         justifyContent: "space-between",
         marginTop:10
       }}
       >
       <Text
         style={{
-          fontFamily: "circular-bold",
           fontSize: 14,
           color:'#7960FF',
           fontFamily:'circular-book'
@@ -91,6 +105,7 @@ const FutureBookingList = ({customer})=>{
       >
         {customer.email}
       </Text>
+
       <View
       style={{
         flexDirection: "row",
@@ -99,7 +114,10 @@ const FutureBookingList = ({customer})=>{
       }}
       >
       <TouchableOpacity
-      style={{alignSelf:'flex-end'}}>
+      style={{alignSelf:'flex-end',opacity:opacityApprove}}
+      onPress={onPressApprove}
+      disabled={disabledApprove}
+      >
         <View
         style={{
           width:80,
@@ -114,13 +132,14 @@ const FutureBookingList = ({customer})=>{
           <Text style={{
             color:'white'
           }}>
-          Approv
+          Approve
           </Text>
         </View>
       </TouchableOpacity>
 
       <TouchableOpacity
-      style={{alignSelf:'flex-end'}}
+      style={{alignSelf:'flex-end',opacity:opacityCancle}}
+      disabled={disabledCancle}
       onPress={()=>{
         this.props.isBookingCancle();
       }}

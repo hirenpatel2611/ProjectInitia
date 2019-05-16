@@ -104,6 +104,15 @@ _deleteUser = async () => {
           containerStyle={container}
           style={textStyle}
           onPress={()=>{
+            Actions.NavigationMap();
+          }}
+        >Navigation Map</Button>
+        </CardSection>
+        <CardSection  style={{ flexDirection:'column',borderBottomWidth:0,borderTopWidth:0 }}>
+        <Button
+          containerStyle={container}
+          style={textStyle}
+          onPress={()=>{
             this._deleteUser();
             Actions.SplashFront()
           }}

@@ -5,7 +5,8 @@ import {
   GET_VENDOR,
   GET_BOOKING,
   GET_BOOKINGLIST,
-  GET_VENDOR_BOOKINGLIST
+  GET_VENDOR_BOOKINGLIST,
+  BOOKING_UPDATE
 } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage, Alert } from "react-native";
@@ -38,8 +39,11 @@ export const RESET_FILTER = "usermaps/RESET_FILTER";
 export const VENDOR_DISTANCE = "usermaps/VENDOR_DISTANCE";
 export const GET_DISTANCE = "usermaps/GET_DISTANCE";
 export const GET_DISTANCELIST = "usermaps/GET_DISTANCELIST";
-export const GET_BOOKING_CANCLE = "usermaps/GET_BOOKING_CANCLE";
+export const GET_BOOKING_CANCLE_START = "usermaps/GET_BOOKING_CANCLE_START";
+export const GET_BOOKING_CANCLE_SUCCESS = "usermaps/GET_BOOKING_CANCLE_SUCCESS";
+export const GET_BOOKING_CANCLE_FAIL = "usermaps/GET_BOOKING_CANCLE_FAIL";
 export const GET_BOOKING_STATUS = "usermaps/GET_BOOKING_STATUS";
+export const GET_BOOKING_CANCEL_BY_VENDOR = "usermaps/GET_BOOKING_CANCEL_BY_VENDOR";
 
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
@@ -66,6 +70,7 @@ export const getUserLocationFail = () => (dispatch, getState) => {
 };
 
 export const getUserLocationSuccess = location => (dispatch, getState) => {
+  console.log(location);
   dispatch({
     type: GET_USER_LOCATION_SUCCESS,
     payload: location
@@ -118,10 +123,31 @@ export const BookVendor = () => async (dispatch, getState) => {
     .catch(error => {});
 };
 
-export const getBookingCancellation = () => dispatch => {
+export const getBookingCancellation = () => (dispatch,getState) => {
+
   dispatch({
-    type: GET_BOOKING_CANCLE
+    type: GET_BOOKING_CANCLE_START
   });
+  const {bookData} = getState().usermaps;
+  let test = new FormData();
+  test.append("booking_id", bookData.booking_id);
+  test.append("status", "cancle");
+  Api.post(BOOKING_UPDATE, test)
+    .then(response => {
+      console.log(response);
+      if(response.status !== 0){
+        dispatch({
+          type: GET_BOOKING_CANCLE_SUCCESS,
+        });
+      } else {
+        dispatch({
+          type: GET_BOOKING_CANCLE_FAIL,
+        });
+      }
+    })
+    .catch(err => {
+      console.error(err);
+    });
 };
 
 export const getBookings = () => async (dispatch, getState) => {
@@ -313,4 +339,13 @@ export const getBookingStatus = val => async (dispatch, getState) => {
     type: GET_BOOKING_STATUS,
     payload: val
   });
+  if(val.type === "ON-THE-WAY"){
+    Actions.NavigationMap();
+  }
+  if (val.type === "CANCEL") {
+    dispatch({
+      type: GET_BOOKING_CANCEL_BY_VENDOR,
+    });
+    alert('Your Booking request is Cancelled by Mechanic, Please Find another Mechanic.');
+  }
 }

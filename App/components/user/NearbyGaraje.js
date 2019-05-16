@@ -93,6 +93,7 @@ class NearbyGaraje extends Component {
     let location = await Location.getCurrentPositionAsync({
       accuracy: Location.Accuracy.BestForNavigation
     });
+
     this.props.getUserLocationSuccess(location);
     {
       this._map.animateToRegion(
@@ -188,11 +189,11 @@ class NearbyGaraje extends Component {
               <View style={inStyle.modalBookTouch}>
                 <View style={inStyle.modalView1}>
                   <Text style={inStyle.modalTextName}>
-                    {this.props.vendorsData ? (
-                      <Text>{this.props.vendorsData.first_name}</Text>
-                    ) : (
-                      <Text>None</Text>
-                    )}
+                    {this.props.vendorsData ?
+                      this.props.vendorsData.first_name
+                     :
+                      null
+                    }
                   </Text>
                   {this.props.isBookingSuccess ? (
                     <TouchableOpacity
@@ -209,7 +210,7 @@ class NearbyGaraje extends Component {
                           </Text>
                         ) : (
                           <Text style={inStyle.modalButtonCancleText}>
-                            Cancle
+                            Cancel
                           </Text>
                         )}
                       </View>
@@ -237,11 +238,11 @@ class NearbyGaraje extends Component {
                   )}
                 </View>
                 <Text style={inStyle.modalTextAddress}>
-                  {this.props.vendorsData ? (
-                    <Text>{this.props.vendorsData.address}</Text>
-                  ) : (
-                    <Text>None</Text>
-                  )}
+                  {this.props.vendorsData ?
+                    this.props.vendorsData.address
+                   :
+                    null
+                  }
                 </Text>
                 <Text style={{
                   alignSelf:'flex-end',

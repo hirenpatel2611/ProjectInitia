@@ -19,10 +19,13 @@ import {
   UPDATE_FILTER_CHECKED3,
   UPDATE_FILTER_DISTANCE,
   RESET_FILTER,
-  GET_BOOKING_CANCLE,
+  GET_BOOKING_CANCLE_START,
+  GET_BOOKING_CANCLE_SUCCESS,
+  GET_BOOKING_CANCLE_FAIL,
   GET_DISTANCE,
   GET_DISTANCELIST,
-  GET_BOOKING_STATUS
+  GET_BOOKING_STATUS,
+  GET_BOOKING_CANCEL_BY_VENDOR
 } from "../actions/UserMaps";
 
 const INITIAL_STATE = {
@@ -246,13 +249,31 @@ export default (state = INITIAL_STATE, action) => {
         }
         break;
 
-    case GET_BOOKING_CANCLE:
+    case GET_BOOKING_CANCLE_START:
+    {
+      return{
+        ...state,
+        loadingBookig: true,
+      }
+    }
+    break;
+
+    case GET_BOOKING_CANCLE_SUCCESS:
     {
       return{
         ...state,
         loadingBookig: false,
         isBookModalVisible: false,
         isBookingSuccess:false
+      }
+    }
+    break;
+
+    case GET_BOOKING_CANCLE_FAIL:
+    {
+      return{
+        ...state,
+        loadingBookig: false,
       }
     }
     break;
@@ -280,6 +301,16 @@ export default (state = INITIAL_STATE, action) => {
       return{
         ...state,
         bookingStatusRes:action.payload
+        }
+    }
+    break;
+
+    case GET_BOOKING_CANCEL_BY_VENDOR:
+    {
+      return{
+        ...state,
+      isBookModalVisible:false,
+      bookingStatusRes:null
         }
     }
     break;

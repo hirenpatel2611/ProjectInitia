@@ -10,6 +10,7 @@ import SplashFront from "./components/splash/SplashFront";
 import filter from "./components/user/filter";
 import NearbyGaraje from "./components/user/NearbyGaraje";
 import UserProfile from "./components/user/Profile";
+import NavigationMap from "./components/user/NavigationMap";
 import Booking from "./components/user/Booking";
 import VendorHome from "./components/vendors/VendorHome";
 import FutureBooking from "./components/vendors/FutureBooking";
@@ -122,7 +123,6 @@ class RouterComponent extends Component {
               contentComponent={SideMenu}
               drawerWidth={0.50 *ScreenWidth}
             >
-          
 
             <Scene
               key="NearbyGaraje"
@@ -152,6 +152,12 @@ class RouterComponent extends Component {
             <Scene
               key="Booking"
               component={Booking}
+              hideNavBar={true}
+              navTransparent="true"
+            />
+            <Scene
+              key="NavigationMap"
+              component={NavigationMap}
               hideNavBar={true}
               navTransparent="true"
             />

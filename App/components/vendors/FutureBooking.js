@@ -21,10 +21,11 @@ import Header from "../../Common/Header";
 import { getFutureBookings,
          getCustomerDistanceList,
          getBookingModal,
-         getBookingApprove,
-         isBookingCancle,
+         getBookingUpdate,
          connectTosocketApprov,
-         otpDone
+         otpDone,
+         connectTosocketBookingCancle,
+         BookingListApprove
        } from "../../actions";
 import { FutureBookingList } from "../../Common";
 import { CALL,BITMAP2 } from "../../images";
@@ -52,7 +53,15 @@ class FutureBooking extends Component {
         <FutureBookingList
           key={vendorBookingList.booking_id}
           customer={vendorBookingList.customer}
-          Approv={()=>{this.props.getBookingApprove()}}
+          bookstatus={vendorBookingList.status}
+          onPressApprove={()=>{
+            var status="accept";
+            this.props.BookingListApprove(vendorBookingList.booking_id);
+            this.props.connectTosocketApprov(vendorBookingList.customer.customer_id)}}
+            disabledApprove={vendorBookingList.status === "pending"?false:true}
+            opacityApprove={vendorBookingList.status === "pending"?1:0.5}
+            disabledCancle={vendorBookingList.status === "pending" || vendorBookingList.status === "reached"?false:true}
+            opacityCancle={vendorBookingList.status === "pending" || vendorBookingList.status === "reached"?1:0.5}
         />
       ));
     }
@@ -304,10 +313,10 @@ class FutureBooking extends Component {
             >
             <TouchableOpacity
             style={{alignSelf:'flex-end'}}
-            onPress={()=>{
+            onPress={async()=>{
               var status="accept";
-              this.props.getBookingApprove(status);
-              this.props.connectTosocketApprov();
+              await this.props.getBookingUpdate(status);
+              this.props.connectTosocketApprov(this.props.bookingData.customer_id);
             }}
             >
               <View
@@ -324,7 +333,7 @@ class FutureBooking extends Component {
                 <Text style={{
                   color:'white'
                 }}>
-                Approve
+                {this.props.loadingBookigUpdate?"loading...":"Approve"}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -332,7 +341,9 @@ class FutureBooking extends Component {
             <TouchableOpacity
             style={{alignSelf:'flex-end'}}
             onPress={()=>{
-              this.props.isBookingCancle();
+              var status="cancle";
+              this.props.getBookingUpdate(status);
+              this.props.connectTosocketBookingCancle();
             }}
             >
               <View
@@ -349,7 +360,7 @@ class FutureBooking extends Component {
                 <Text style={{
                   color:'white'
                 }}>
-                Cancel
+                {this.props.loadingBookigUpdate?"loading...":"Cancel"}
                 </Text>
               </View>
             </TouchableOpacity>
@@ -468,7 +479,8 @@ const mapStateToProps = ({ vendors }) => {
     isBooking,
     bookingData,
     mechanicOTP,
-    isMechanicOtp
+    isMechanicOtp,
+    loadingBookigUpdate
   } = vendors;
   return {
     loadingFutureBookigList,
@@ -478,7 +490,8 @@ const mapStateToProps = ({ vendors }) => {
     isBooking,
     bookingData,
     mechanicOTP,
-    isMechanicOtp
+    isMechanicOtp,
+    loadingBookigUpdate
   };
 };
 
@@ -488,9 +501,10 @@ export default connect(
     getFutureBookings,
     getCustomerDistanceList,
     getBookingModal,
-    getBookingApprove,
-    isBookingCancle,
+    getBookingUpdate,
     connectTosocketApprov,
-    otpDone
+    otpDone,
+    connectTosocketBookingCancle,
+    BookingListApprove
   }
 )(FutureBooking);
