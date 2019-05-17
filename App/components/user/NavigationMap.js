@@ -26,93 +26,17 @@ import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { Constants, Location, Permissions, IntentLauncherAndroid } from "expo";
-import {
-  getUserLocationSuccess
-} from "../../actions";
-
-import { Rating, AirbnbRating } from "react-native-ratings";
-import geolib from "geolib";
-import MapViewDirections from 'react-native-maps-directions';
+import { getUserLocationSuccess } from "../../actions";
+import { MapViewDirections } from "../../Common";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
 class NearbyGaraje extends Component {
-  state = {
-    location: null,
-    errorMessage: null
-  };
-
-  async componentWillMount() {
-
-    if (Platform.OS === "android" && !Constants.isDevice) {
-      this.setState({
-        errorMessage:
-          "Oops, this will not work on Sketch in an Android emulator. Try it on your device!"
-      });
-    } else {
-      this._getLocationAsync();
-    }
 
 
-  }
-
-  _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-
-    if (status !== "granted") {
-      this.props.getUserLocationFail();
-    }
-
-    await Location.hasServicesEnabledAsync()
-      .then(async res => {
-        if (!res) {
-          perm = await IntentLauncherAndroid.startActivityAsync(
-            IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
-          );
-        }
-        await Location.hasServicesEnabledAsync()
-          .then(async res => {
-            this.locationIsEnabled = res;
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      })
-      .catch(err => {
-        console.error(err);
-      });
-    let location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.BestForNavigation
-    });
-
-    this.props.getUserLocationSuccess(location);
-    {
-      this._map.animateToRegion(
-        {
-          latitude: this.props.location.coords.latitude,
-          longitude: this.props.location.coords.longitude,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421
-        },
-        1
-      );
-    }
-    await Location.watchPositionAsync(
-      {
-        accuracy: Location.Accuracy.BestForNavigation
-      },
-      location => {
-        this.props.getUserLocationSuccess(location);
-      }
-    );
-  };
 
   render() {
-    var GOOGLE_MAPS_APIKEY = 'AIzaSyAm_cQCYcozNa9WUVmASmSABGuuS6OSsIw';
-    var origin = {latitude: this.props.location.coords.latitude,
-                  longitude: this.props.location.coords.longitude};
-    var destination = {latitude:23.03155710,longitude:72.64532580};
     const { containerStyle } = styles;
     return (
       <View style={containerStyle}>
@@ -122,7 +46,6 @@ class NearbyGaraje extends Component {
             flex: 1
           }}
         >
-
           <MapView
             style={{
               ...StyleSheet.absoluteFillObject
@@ -130,18 +53,46 @@ class NearbyGaraje extends Component {
             provider={PROVIDER_GOOGLE}
             ref={component => (this._map = component)}
           >
-
-          <MapViewDirections
-          origin ={origin}
-          destination={destination}
-          strokeWidth={3}
-           strokeColor="hotpink"
-           apikey={GOOGLE_MAPS_APIKEY}
-          />
-
+            <MapView.Marker.Animated
+              coordinate={{
+                latitude: this.props.mechanicCurrentLocation.message[0].coords
+                  .latitude,
+                longitude: this.props.mechanicCurrentLocation.message[0].coords
+                  .longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421
+              }}
+            >
+              <View style={inStyle.markerView1}>
+                <View style={inStyle.markerView2} />
+              </View>
+            </MapView.Marker.Animated>
+        {this.props.mechanicCurrentLocation?  <MapViewDirections
+              origin={{
+                latitude: this.props.mechanicCurrentLocation.message[0].coords.latitude,
+                longitude: this.props.mechanicCurrentLocation.message[0].coords.longitude
+              }}
+              destination={{
+                latitude: this.props.location.coords.latitude,
+                longitude: this.props.location.coords.longitude
+              }}
+              apikey={"AIzaSyCYvMpmVhFc0ydILEuXGJNYNGFnBoKPCL8"}
+              strokeWidth={3}
+              strokeColor="hotpink"
+            />:null}
+            <MapView.Marker.Animated
+              coordinate={{
+                latitude: this.props.location.coords.latitude,
+                longitude: this.props.location.coords.longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421
+              }}
+            >
+              <View style={inStyle.markerView1}>
+                <View style={inStyle.markerView2} />
+              </View>
+            </MapView.Marker.Animated>
           </MapView>
-
-
         </View>
       </View>
     );
@@ -174,17 +125,17 @@ const inStyle = {
 };
 
 const mapStateToProps = ({ usermaps }) => {
-  const {
-location
-  } = usermaps;
+  const { location, bookData, mechanicCurrentLocation } = usermaps;
   return {
-location
+    location,
+    bookData,
+    mechanicCurrentLocation
   };
 };
 
 export default connect(
   mapStateToProps,
   {
-getUserLocationSuccess
+    getUserLocationSuccess
   }
 )(NearbyGaraje);

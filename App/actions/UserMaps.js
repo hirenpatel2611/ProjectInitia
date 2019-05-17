@@ -44,6 +44,7 @@ export const GET_BOOKING_CANCLE_SUCCESS = "usermaps/GET_BOOKING_CANCLE_SUCCESS";
 export const GET_BOOKING_CANCLE_FAIL = "usermaps/GET_BOOKING_CANCLE_FAIL";
 export const GET_BOOKING_STATUS = "usermaps/GET_BOOKING_STATUS";
 export const GET_BOOKING_CANCEL_BY_VENDOR = "usermaps/GET_BOOKING_CANCEL_BY_VENDOR";
+export const GET_MECHANIC_CURREN_LOCATION = "usermaps/GET_MECHANIC_CURREN_LOCATION";
 
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
@@ -53,7 +54,6 @@ export const getVendors = () => (dispatch, getState) => {
   test.append("service_type", "both");
   Api.post(GET_VENDOR, test)
     .then(response => {
-      console.log(response);
       dispatch({
         type: GET_VENDORS_SUCCESS,
         payload: response
@@ -70,7 +70,6 @@ export const getUserLocationFail = () => (dispatch, getState) => {
 };
 
 export const getUserLocationSuccess = location => (dispatch, getState) => {
-  console.log(location);
   dispatch({
     type: GET_USER_LOCATION_SUCCESS,
     payload: location
@@ -134,7 +133,6 @@ export const getBookingCancellation = () => (dispatch,getState) => {
   test.append("status", "cancle");
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log(response);
       if(response.status !== 0){
         dispatch({
           type: GET_BOOKING_CANCLE_SUCCESS,
@@ -161,7 +159,6 @@ export const getBookings = () => async (dispatch, getState) => {
   test.append("customer_id", valueUserId);
   Api.post(GET_BOOKINGLIST, test)
     .then(response => {
-      console.log(response);
       if (response.status === 0) {
         dispatch({
           type: GET_BOOKING_LIST_FAIL,
@@ -248,7 +245,6 @@ export const getDistance = () => async (dispatch, getState) => {
   fetch(url)
     .then(response => response.json())
     .then(responseJson => {
-      console.log(responseJson);
       var disMile = responseJson.rows[0].elements[0].distance.text;
       disMile = disMile.split(" ", 2);
       var disUnit = disMile[1];
@@ -267,9 +263,6 @@ export const getDistance = () => async (dispatch, getState) => {
         dis = dis * 1.609;
         dis = parseFloat(dis.toFixed(1))+ ' ' +'km';
       }
-      console.log(dis);
-
-
       dispatch({
         type: GET_DISTANCE,
         payload: dis
@@ -299,14 +292,12 @@ export const getDistanceList = val => async (dispatch, getState) => {
   });
 
   url = url + `&key=${APIKEY}`;
-  console.log(url);
 
   //  const list = await vendorList.map( async(vendor) => {
 
   await fetch(url)
     .then(response => response.json())
     .then(responseJson => {
-      console.log(responseJson);
 
       for (i = 0; i < vendorList.length; i++) {
         var disMile = responseJson.rows[0].elements[i].distance
@@ -321,8 +312,6 @@ export const getDistanceList = val => async (dispatch, getState) => {
 
         vendorList[i].vendor.distance = dis;
       }
-
-      console.log(dis);
     })
     .catch(e => {
       //console.warn(e);
@@ -334,18 +323,23 @@ export const getDistanceList = val => async (dispatch, getState) => {
 };
 
 export const getBookingStatus = val => async (dispatch, getState) => {
-  console.log(val);
+
   dispatch({
     type: GET_BOOKING_STATUS,
     payload: val
   });
-  if(val.type === "ON-THE-WAY"){
-    Actions.NavigationMap();
-  }
   if (val.type === "CANCEL") {
     dispatch({
       type: GET_BOOKING_CANCEL_BY_VENDOR,
     });
     alert('Your Booking request is Cancelled by Mechanic, Please Find another Mechanic.');
   }
+};
+
+export const getMechanicCurrentLocation = val => (dispatch) => {
+  dispatch({
+    type:GET_MECHANIC_CURREN_LOCATION,
+    payload:val
+  });
+  Actions.NavigationMap();
 }

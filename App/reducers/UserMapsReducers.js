@@ -25,7 +25,8 @@ import {
   GET_DISTANCE,
   GET_DISTANCELIST,
   GET_BOOKING_STATUS,
-  GET_BOOKING_CANCEL_BY_VENDOR
+  GET_BOOKING_CANCEL_BY_VENDOR,
+  GET_MECHANIC_CURREN_LOCATION
 } from "../actions/UserMaps";
 
 const INITIAL_STATE = {
@@ -50,8 +51,18 @@ const INITIAL_STATE = {
   vendorDistance:[],
   vendorDistanceList:[],
   bookData:'',
-  bookingStatusRes:''
+  bookingStatusRes:'',
+  mechanicCurrentLocation:''
 };
+
+
+
+
+
+
+
+
+
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -311,6 +322,15 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
       isBookModalVisible:false,
       bookingStatusRes:null
+        }
+    }
+    break;
+
+    case GET_MECHANIC_CURREN_LOCATION:
+    {
+      return{
+        ...state,
+      mechanicCurrentLocation:action.payload,
         }
     }
     break;

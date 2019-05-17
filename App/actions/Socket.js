@@ -2,8 +2,9 @@ import Peer from "peerjs";
 import { AsyncStorage } from "react-native";
 import io from "socket.io-client";
 import { BackgroundFetch } from "expo";
-import { getBookingModal,getFutureBookings } from "./Vendors";
-import {getBookingStatus} from './UserMaps';
+import { getBookingModal, getFutureBookings } from "./Vendors";
+import { getBookingStatus,getMechanicCurrentLocation } from "./UserMaps";
+import { Actions } from "react-native-router-flux";
 
 export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
@@ -13,7 +14,7 @@ var peer = null;
 export const createSocketChannel = () => async (dispatch, getState) => {
   //console.error( await BackgroundFetch.getStatusAsync());
 
-  chatSocket = io("http://192.168.100.23:3000", {
+  chatSocket = io("http://103.50.153.25:3000", {
     reconnection: true,
     reconnectionDelay: 500,
     reconnectionAttempts: Infinity,
@@ -25,42 +26,42 @@ export const createSocketChannel = () => async (dispatch, getState) => {
   chatSocket.emit("self_room", { room: `${valueUserId}` });
 
   chatSocket.on("broadcast", function(data) {
-    console.log(data);
     switch (data.type) {
-      case "BOOK" :
-      dispatch(getBookingModal(data.message));
-              break;
+      case "BOOK":
+        dispatch(getBookingModal(data.message));
+        break;
 
-       case "ACCEPT":
-            dispatch(getBookingStatus(data))
-            break;
+      case "ACCEPT":
+        dispatch(getBookingStatus(data));
+        break;
 
-            case "ON-THE-WAY":
-                 dispatch(getBookingStatus(data));
-                 dispatch(getFutureBookings());
-                 break;
+      case "ON-THE-WAY":
+        dispatch(getBookingStatus(data));
+        dispatch(getFutureBookings());
+        break;
 
-                 case "CANCEL":
-                      dispatch(getBookingStatus(data));
-                      dispatch(getFutureBookings());
-                      break;
+      case "CANCEL":
+        dispatch(getBookingStatus(data));
+        dispatch(getFutureBookings());
+        break;
+
+        case "MECHANIC_CURRENT_LOCATION":
+            dispatch(getMechanicCurrentLocation(data))
+          break;
+
       default:
-            return null;
+        return null;
     }
-
   });
-
-
 };
 
 export const connectTosocket = () => async (dispatch, getState) => {
   const { vendorsData, bookData } = getState().usermaps;
-  console.log(vendorsData);
   const valueUserId = await AsyncStorage.getItem("user_id");
   chatSocket.emit("booking", {
     room: `${valueUserId} ${vendorsData.id}`,
     message: bookData,
-    type:"BOOK"
+    type: "BOOK"
   });
   channelName = `${vendorsData.id} ${valueUserId}`;
 
@@ -72,7 +73,7 @@ export const connectTosocket = () => async (dispatch, getState) => {
 export const connectTosocketApprov = val => async (dispatch, getState) => {
   const { bookingData, bookingStatus } = getState().vendors;
   const valueUserId = await AsyncStorage.getItem("user_id");
-  console.log(bookingData);
+
   chatSocket.emit("booking_status", {
     room: `${val} ${valueUserId}`,
     message: bookingData,
@@ -85,10 +86,12 @@ export const connectTosocketApprov = val => async (dispatch, getState) => {
   });
 };
 
-export const connectTosocketBookingCancle = () => async (dispatch, getState) => {
+export const connectTosocketBookingCancle = () => async (
+  dispatch,
+  getState
+) => {
   const { bookingData, bookingStatus } = getState().vendors;
   const valueUserId = await AsyncStorage.getItem("user_id");
-  console.log(bookingData);
   chatSocket.emit("booking_status", {
     room: `${bookingData.customer_id} ${valueUserId}`,
     message: bookingData,

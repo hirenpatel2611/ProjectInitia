@@ -33,7 +33,6 @@ export const getFutureBookings = () => async (dispatch, getState) => {
   test.append("vendor_id", valueUserId);
   Api.post(GET_FUTURE_BOOKINGLIST, test)
     .then(response => {
-      console.log(response);
       if (response.status === 0) {
         dispatch({
           type: GET_FUTURE_BOOKING_LIST_FAIL,
@@ -72,7 +71,6 @@ export const getCustomerDistanceList = val => async (dispatch, getState) => {
   await fetch(url)
     .then(response => response.json())
     .then(responseJson => {
-      console.log(responseJson);
 
       for (i = 0; i < vendorBookingList.length; i++) {
         var disMile = responseJson.rows[0].elements[i].distance
@@ -95,13 +93,11 @@ export const getCustomerDistanceList = val => async (dispatch, getState) => {
         }
         vendorBookingList[i].customer.distance = dis;
       }
-      console.log(dis);
     })
     .catch(e => {
       //console.warn(e);
     });
   FutureBookingList = vendorBookingList;
-  console.log(FutureBookingList);
   dispatch({
     type: GET_CUSTOMER_DISTANCELIST,
     payload: FutureBookingList
@@ -136,7 +132,6 @@ export const getBookingUpdate = val => (dispatch, getState) => {
     } else {
       dispatch({
         type: GET_BOOKING_UAPDATE_FAIL,
-        payload:val
       });
     }
 
@@ -172,7 +167,6 @@ export const BookingListCancle = () => (dispatch, getState) => {
   test.append("status", "cancle");
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log(response);
     })
     .catch(err => {
       console.error(err);
@@ -189,7 +183,6 @@ export const BookingListApprove = val => (dispatch, getState) => {
   test.append("status", "accept");
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log(response);
       if(response.status === 1){
       dispatch({
         type: GET_BOOKINGLIST_APPROVE_SUCCESS,
