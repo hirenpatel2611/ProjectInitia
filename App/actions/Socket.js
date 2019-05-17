@@ -10,7 +10,6 @@ export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
 
 var peer = null;
-
 export const createSocketChannel = () => async (dispatch, getState) => {
   //console.error( await BackgroundFetch.getStatusAsync());
 
