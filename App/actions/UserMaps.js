@@ -10,10 +10,7 @@ import {
 } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage, Alert } from "react-native";
-import {
-  connectTosocket,
-} from "./Socket";
-
+import { connectTosocket } from "./Socket";
 
 export const GET_VENDORS_START = "usermaps/GET_VENDORS_START";
 export const GET_VENDORS_SUCCESS = "usermaps/GET_VENDORS_SUCCESS";
@@ -43,9 +40,12 @@ export const GET_BOOKING_CANCLE_START = "usermaps/GET_BOOKING_CANCLE_START";
 export const GET_BOOKING_CANCLE_SUCCESS = "usermaps/GET_BOOKING_CANCLE_SUCCESS";
 export const GET_BOOKING_CANCLE_FAIL = "usermaps/GET_BOOKING_CANCLE_FAIL";
 export const GET_BOOKING_STATUS = "usermaps/GET_BOOKING_STATUS";
-export const GET_BOOKING_CANCEL_BY_VENDOR = "usermaps/GET_BOOKING_CANCEL_BY_VENDOR";
-export const GET_MECHANIC_CURREN_LOCATION = "usermaps/GET_MECHANIC_CURREN_LOCATION";
-export const GET_DISTANCE_BETWEEN_USER_MECHANIC = "usermaps/GET_DISTANCE_BETWEEN_USER_MECHANIC";
+export const GET_BOOKING_CANCEL_BY_VENDOR =
+  "usermaps/GET_BOOKING_CANCEL_BY_VENDOR";
+export const GET_MECHANIC_CURREN_LOCATION =
+  "usermaps/GET_MECHANIC_CURREN_LOCATION";
+export const GET_DISTANCE_BETWEEN_USER_MECHANIC =
+  "usermaps/GET_DISTANCE_BETWEEN_USER_MECHANIC";
 export const GET_BOOKING_UPDATE_START = "usermaps/GET_BOOKING_UPDATE_START";
 export const GET_BOOKING_UPDATE_SUCCESS = "usermaps/GET_BOOKING_UPDATE_SUCCESS";
 export const GET_BOOKING_UPDATE_FAIL = "usermaps/GET_BOOKING_UPDATE_FAIL";
@@ -88,26 +88,23 @@ export const getVenderDetails = val => (dispatch, getState) => {
   });
 };
 
-
 export const closeVendorDetailModal = () => async (dispatch, getState) => {
   dispatch({
     type: CLOSE_VENDOR_DETAIL_MODAL
   });
 };
 
-
-
 export const BookVendor = () => async (dispatch, getState) => {
   dispatch({
     type: GET_VENDOR_BOOKING_START
   });
-  const { vendorsData,location } = getState().usermaps;
+  const { vendorsData, location } = getState().usermaps;
   const valueUserId = await AsyncStorage.getItem("user_id");
   let test = new FormData();
   test.append("customer_id", valueUserId);
   test.append("vendor_id", vendorsData.id);
-  test.append("latitude",location.coords.latitude);
-  test.append("longitude",location.coords.longitude);
+  test.append("latitude", location.coords.latitude);
+  test.append("longitude", location.coords.longitude);
   Api.post(GET_BOOKING, test)
     .then(response => {
       if (response.status === 1) {
@@ -127,24 +124,23 @@ export const BookVendor = () => async (dispatch, getState) => {
     .catch(error => {});
 };
 
-export const getBookingCancellation = () => (dispatch,getState) => {
-
+export const getBookingCancellation = () => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_CANCLE_START
   });
-  const {bookData} = getState().usermaps;
+  const { bookData } = getState().usermaps;
   let test = new FormData();
   test.append("booking_id", bookData.booking_id);
   test.append("status", "cancle");
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      if(response.status !== 0){
+      if (response.status !== 0) {
         dispatch({
-          type: GET_BOOKING_CANCLE_SUCCESS,
+          type: GET_BOOKING_CANCLE_SUCCESS
         });
       } else {
         dispatch({
-          type: GET_BOOKING_CANCLE_FAIL,
+          type: GET_BOOKING_CANCLE_FAIL
         });
       }
     })
@@ -253,20 +249,17 @@ export const getDistance = () => async (dispatch, getState) => {
       var disMile = responseJson.rows[0].elements[0].distance.text;
       disMile = disMile.split(" ", 2);
       var disUnit = disMile[1];
-      var dis=disMile[0];
-      if(disUnit !== "mi")
-      {
-        if(dis>100){
-          dis=dis/3280.8;
-          dis = parseFloat(dis.toFixed(3)) + ' ' +'km';
-        }else {
+      var dis = disMile[0];
+      if (disUnit !== "mi") {
+        if (dis > 100) {
+          dis = dis / 3280.8;
+          dis = parseFloat(dis.toFixed(3)) + " " + "km";
+        } else {
           dis = responseJson.rows[0].elements[0].distance.text;
         }
-
-      }
-      else {
+      } else {
         dis = dis * 1.609;
-        dis = parseFloat(dis.toFixed(1))+ ' ' +'km';
+        dis = parseFloat(dis.toFixed(1)) + " " + "km";
       }
       dispatch({
         type: GET_DISTANCE,
@@ -303,7 +296,6 @@ export const getDistanceList = val => async (dispatch, getState) => {
   await fetch(url)
     .then(response => response.json())
     .then(responseJson => {
-
       for (i = 0; i < vendorList.length; i++) {
         var disMile = responseJson.rows[0].elements[i].distance
           ? responseJson.rows[0].elements[i].distance.text
@@ -328,74 +320,78 @@ export const getDistanceList = val => async (dispatch, getState) => {
 };
 
 export const getBookingStatus = val => async (dispatch, getState) => {
-console.log(val);
+  console.log(val);
   dispatch({
     type: GET_BOOKING_STATUS,
     payload: val
   });
   if (val.type === "CANCEL") {
     dispatch({
-      type: GET_BOOKING_CANCEL_BY_VENDOR,
+      type: GET_BOOKING_CANCEL_BY_VENDOR
     });
-    alert('Your Booking request is Cancelled by Mechanic, Please Find another Mechanic.');
+    alert(
+      "Your Booking request is Cancelled by Mechanic, Please Find another Mechanic."
+    );
   }
 };
 
-export const getMechanicCurrentLocation = val => (dispatch,getState) => {
+export const getMechanicCurrentLocation = val => (dispatch, getState) => {
   dispatch({
-    type:GET_MECHANIC_CURREN_LOCATION,
-    payload:val
+    type: GET_MECHANIC_CURREN_LOCATION,
+    payload: val
   });
   Actions.NavigationMap();
-  const {mechanicCurrentLocation,location} = getState().usermaps;
+  const { mechanicCurrentLocation, location } = getState().usermaps;
 
-      var radlat1 = Math.PI * mechanicCurrentLocation.message[0].coords.latitude/180;
-  		var radlat2 = Math.PI * location.coords.latitude/180;
-  		var theta = mechanicCurrentLocation.message[0].coords.longitude-location.coords.longitude;
-  		var radtheta = Math.PI * theta/180;
-  		var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-  		if (dist > 1) {
-  			dist = 1;
-  		}
-  		dist = Math.acos(dist);
-  		dist = dist * 180/Math.PI;
-  		dist = dist * 60 * 1.1515;
-      dist = dist * 1.609344
-      console.log(dist);
-  		// if (unit=="K") { dist = dist * 1.609344 }
-  		// if (unit=="N") { dist = dist * 0.8684 }
+  var radlat1 =
+    (Math.PI * mechanicCurrentLocation.message[0].coords.latitude) / 180;
+  var radlat2 = (Math.PI * location.coords.latitude) / 180;
+  var theta =
+    mechanicCurrentLocation.message[0].coords.longitude -
+    location.coords.longitude;
+  var radtheta = (Math.PI * theta) / 180;
+  var dist =
+    Math.sin(radlat1) * Math.sin(radlat2) +
+    Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+  if (dist > 1) {
+    dist = 1;
+  }
+  dist = Math.acos(dist);
+  dist = (dist * 180) / Math.PI;
+  dist = dist * 60 * 1.1515;
+  dist = dist * 1.609344;
+  console.log(dist);
+  // if (unit=="K") { dist = dist * 1.609344 }
+  // if (unit=="N") { dist = dist * 0.8684 }
 
-      if(dist < 0.1)
-      {
-      dispatch({
-        type:GET_DISTANCE_BETWEEN_USER_MECHANIC,
-        payload:dist
-      });
-      var sts = 'reached'
-      dispatch(
-        getBookingUpdateUser(sts));
-    }
-}
+  if (dist < 0.1) {
+    dispatch({
+      type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
+      payload: dist
+    });
+    var sts = "reached";
+    dispatch(getBookingUpdateUser(sts));
+  }
+};
 
-export const getBookingUpdateUser = val => (dispatch,getState) => {
-
+export const getBookingUpdateUser = val => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_UPDATE_START
   });
-  const {bookingStatusRes} = getState().usermaps;
+  const { bookingStatusRes } = getState().usermaps;
   let test = new FormData();
   test.append("booking_id", bookingStatusRes.message.booking.booking_id);
   test.append("status", val);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      if(response.status !== 0){
+      if (response.status !== 0) {
         dispatch({
-          type: GET_BOOKING_UPDATE_SUCCESS,
+          type: GET_BOOKING_UPDATE_SUCCESS
         });
         Actions.NearbyGaraje();
       } else {
         dispatch({
-          type: GET_BOOKING_UPDATE_FAIL,
+          type: GET_BOOKING_UPDATE_FAIL
         });
       }
     })
