@@ -42,7 +42,7 @@ const INITIAL_STATE = {
   vendorsData: "",
   loadingBookig: false,
   loadingBookigList: false,
-  isBookingListFail:false,
+  isBookingListFail: false,
   vendorList: [],
   isVehicle: false,
   isCar: false,
@@ -51,15 +51,14 @@ const INITIAL_STATE = {
   isChecked2: false,
   isChecked3: false,
   distance: 10,
-  isBookingSuccess:false,
-  vendorDistance:[],
-  vendorDistanceList:[],
-  bookData:'',
-  bookingStatusRes:'',
-  mechanicCurrentLocation:'',
-  distanceBetweenUserMechanic:''
+  isBookingSuccess: false,
+  vendorDistance: [],
+  vendorDistanceList: [],
+  bookData: "",
+  bookingStatusRes: "",
+  mechanicCurrentLocation: "",
+  distanceBetweenUserMechanic: ""
 };
-
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -125,22 +124,22 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loadingBookig: false,
           isBookModalVisible: true,
-          isBookingSuccess:true,
-          bookData:action.payload
+          isBookingSuccess: true,
+          bookData: action.payload
         };
       }
       break;
 
-      case GET_BOOKING_FAIL:
-        {
-          return {
-            ...state,
-            loadingBookig: false,
-            isBookModalVisible: true,
-            isBookingSuccess:false
-          };
-        }
-        break;
+    case GET_BOOKING_FAIL:
+      {
+        return {
+          ...state,
+          loadingBookig: false,
+          isBookModalVisible: true,
+          isBookingSuccess: false
+        };
+      }
+      break;
 
     case GET_VENDOR_BOOKING_START:
       {
@@ -156,7 +155,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingBookigList: true,
-          isBookingListFail:false
+          isBookingListFail: false
         };
       }
       break;
@@ -165,20 +164,20 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingBookigList: false,
-          vendorList: action.payload,
+          vendorList: action.payload
         };
       }
       break;
 
-      case GET_BOOKING_LIST_FAIL:
-        {
-          return {
-            ...state,
-            loadingBookigList: false,
-            isBookingListFail:true
-          };
-        }
-        break;
+    case GET_BOOKING_LIST_FAIL:
+      {
+        return {
+          ...state,
+          loadingBookigList: false,
+          isBookingListFail: true
+        };
+      }
+      break;
 
     case UPDATE_FILTER_VEHICLE_BOOL:
       {
@@ -242,104 +241,104 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-      case RESET_FILTER:
-        {
-          return {
-            ...state,
-            isVehicle: false,
-            isCar: false,
-            rating: "",
-            isChecked1: false,
-            isChecked2: false,
-            isChecked3: false,
-            distance: 10,
-          };
-        }
-        break;
+    case RESET_FILTER:
+      {
+        return {
+          ...state,
+          isVehicle: false,
+          isCar: false,
+          rating: "",
+          isChecked1: false,
+          isChecked2: false,
+          isChecked3: false,
+          distance: 10
+        };
+      }
+      break;
 
     case GET_BOOKING_CANCLE_START:
-    {
-      return{
-        ...state,
-        loadingBookig: true,
+      {
+        return {
+          ...state,
+          loadingBookig: true
+        };
       }
-    }
-    break;
+      break;
 
     case GET_BOOKING_CANCLE_SUCCESS:
-    {
-      return{
-        ...state,
-        loadingBookig: false,
-        isBookModalVisible: false,
-        isBookingSuccess:false
+      {
+        return {
+          ...state,
+          loadingBookig: false,
+          isBookModalVisible: false,
+          isBookingSuccess: false
+        };
       }
-    }
-    break;
+      break;
 
     case GET_BOOKING_CANCLE_FAIL:
-    {
-      return{
-        ...state,
-        loadingBookig: false,
+      {
+        return {
+          ...state,
+          loadingBookig: false
+        };
       }
-    }
-    break;
+      break;
 
     case GET_DISTANCE:
-    {
-      return{
-        ...state,
-        vendorDistance:action.payload
+      {
+        return {
+          ...state,
+          vendorDistance: action.payload
+        };
       }
-    }
-    break;
+      break;
 
     case GET_DISTANCELIST:
-    {
-      return{
-        ...state,
-        vendorList:action.payload
-        }
-    }
-    break;
+      {
+        return {
+          ...state,
+          vendorList: action.payload
+        };
+      }
+      break;
 
     case GET_BOOKING_STATUS:
-    {
-      return{
-        ...state,
-        bookingStatusRes:action.payload
-        }
-    }
-    break;
+      {
+        return {
+          ...state,
+          bookingStatusRes: action.payload
+        };
+      }
+      break;
 
     case GET_BOOKING_CANCEL_BY_VENDOR:
-    {
-      return{
-        ...state,
-      isBookModalVisible:false,
-      bookingStatusRes:null
-        }
-    }
-    break;
+      {
+        return {
+          ...state,
+          isBookModalVisible: false,
+          bookingStatusRes: null
+        };
+      }
+      break;
 
     case GET_MECHANIC_CURREN_LOCATION:
-    {
-      return{
-        ...state,
-      mechanicCurrentLocation:action.payload,
-        }
-    }
-    break;
+      {
+        return {
+          ...state,
+          mechanicCurrentLocation: action.payload
+        };
+      }
+      break;
 
     case GET_DISTANCE_BETWEEN_USER_MECHANIC:
-    {
-      return{
-        ...state,
-      distanceBetweenUserMechanic:action.payload,
-        }
-    }
-    break;
+      {
+        return {
+          ...state,
+          distanceBetweenUserMechanic: action.payload
+        };
+      }
+      break;
 
     default:
       return state;
