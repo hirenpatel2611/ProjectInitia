@@ -33,11 +33,7 @@
         },
         "android": {
           "package": "com.ilife.app",
-          "config": {
-      "googleMaps": {
-        "apiKey": "AIzaSyAm_cQCYcozNa9WUVmASmSABGuuS6OSsIw"
-      }
-    }
+  
         }
   }
 }

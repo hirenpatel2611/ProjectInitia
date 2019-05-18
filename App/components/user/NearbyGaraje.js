@@ -24,7 +24,7 @@ import { setTimer, setScore } from "../../actions";
 import styles from "./usermapsStyle";
 import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import MapView,{ PROVIDER_GOOGLE } from "react-native-maps";
 import { Constants, Location, Permissions, IntentLauncherAndroid } from "expo";
 import {
   getVendors,
@@ -155,7 +155,7 @@ class NearbyGaraje extends Component {
         >
           <MapView
             style={{
-              ...StyleSheet.absoluteFillObject
+              ...StyleSheet.absoluteFillObject,
             }}
             provider={PROVIDER_GOOGLE}
             ref={component => (this._map = component)}
@@ -240,6 +240,13 @@ class NearbyGaraje extends Component {
                 <Text style={inStyle.modalTextAddress}>
                   {this.props.vendorsData ?
                     this.props.vendorsData.address
+                   :
+                    null
+                  }
+                </Text>
+                <Text style={inStyle.modalTextAddress}>
+                  {this.props.vendorsData ?
+                    this.props.vendorsData.mobile
                    :
                     null
                   }
