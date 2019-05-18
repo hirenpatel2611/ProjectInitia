@@ -1,15 +1,15 @@
-import React, {Component} from 'react';
-import {Text,View,TouchableOpacity} from 'react-native';
+import React, { Component } from "react";
+import { Text, View, TouchableOpacity } from "react-native";
 
-const BookingList = ({vendor})=>{
-  return(
+const BookingList = ({ vendor }) => {
+  return (
     <View
       style={{
         margin: 5,
         backgroundColor: "white",
         padding: 10,
         borderRadius: 10,
-        justifyContent:'space-around'
+        justifyContent: "space-around"
       }}
     >
       <View
@@ -18,22 +18,22 @@ const BookingList = ({vendor})=>{
           justifyContent: "space-between"
         }}
       >
-      <Text
+        <Text
           style={{
             fontFamily: "circular-bold",
             fontSize: 18,
             color: "#4A4A4A",
-            fontFamily:'circular-bold'
+            fontFamily: "circular-bold"
           }}
         >
-         {vendor.first_name}
+          {vendor.first_name}
         </Text>
         <Text
           style={{
             fontFamily: "circular-bold",
             fontSize: 14,
             color: "#4A4A4A",
-            fontFamily:'circular-book'
+            fontFamily: "circular-book"
           }}
         >
           Distance
@@ -43,7 +43,7 @@ const BookingList = ({vendor})=>{
         style={{
           flexDirection: "row",
           justifyContent: "space-between",
-          marginTop:10
+          marginTop: 10
         }}
       >
         <Text
@@ -51,10 +51,9 @@ const BookingList = ({vendor})=>{
             fontFamily: "circular-bold",
             fontSize: 14,
             color: "#4A4A4A",
-            fontFamily:'circular-book'
+            fontFamily: "circular-book"
           }}
         >
-          {vendor.mobile}
           {vendor.mobile}
         </Text>
         <Text
@@ -62,49 +61,51 @@ const BookingList = ({vendor})=>{
             fontFamily: "circular-bold",
             fontSize: 14,
             color: "#4A4A4A",
-            fontFamily:'circular-book'
+            fontFamily: "circular-book"
           }}
         >
           {vendor.distance}
         </Text>
       </View>
-      <View style={{
-        flexDirection: "row",
-        justifyContent: "space-between"
-      }}
-      >
-      <Text
+      <View
         style={{
-          fontFamily: "circular-bold",
-          fontSize: 14,
-          color:'#7960FF',
-          fontFamily:'circular-book'
+          flexDirection: "row",
+          justifyContent: "space-between"
         }}
       >
-        {vendor.email}
-      </Text>
-
-      <TouchableOpacity>
-        <View
-        style={{
-          width:70,
-          height:20,
-          backgroundColor:'#7960FF',
-          alignItems:'center',
-          borderRadius:3
-        }}
+        <Text
+          style={{
+            fontFamily: "circular-bold",
+            fontSize: 14,
+            color: "#7960FF",
+            fontFamily: "circular-book"
+          }}
         >
-          <Text style={{
-            color:'white'
-          }}>
-          Book
-          </Text>
-        </View>
-      </TouchableOpacity>
+          {vendor.email}
+        </Text>
 
+        <TouchableOpacity>
+          <View
+            style={{
+              width: 70,
+              height: 20,
+              backgroundColor: "#7960FF",
+              alignItems: "center",
+              borderRadius: 3
+            }}
+          >
+            <Text
+              style={{
+                color: "white"
+              }}
+            >
+              Book
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
-  )
-}
+  );
+};
 
-export {BookingList};
+export { BookingList };
