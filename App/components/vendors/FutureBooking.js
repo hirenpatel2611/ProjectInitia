@@ -87,108 +87,7 @@ class FutureBooking extends Component {
           ) : (
             this.renderBookingList()
           )}
-          <Modal
-            visible={false}
-            onRequestClose={() => {
-              console.log("Modal has been closed.");
-            }}
-            animationType="slide"
-            transparent={true}
-            opacity={1}
-            style={{
-              justifyContent:'center',
-              alignItems:'center',
-              height:ScreenHeight,
-              backgroundColor: "rgba(0,0,0,0.9)"
-            }}
-          >
-          <View style={{
-              backgroundColor: "rgba(100,100,100, 0.5)",
-              height:ScreenHeight,
-              }}>
-          <View
-            style={{
-              marginTop:0.40*ScreenHeight,
-              alignSelf: "center",
-              width: 0.95 * ScreenWidth,
-              backgroundColor: "#FFFFFF",
-              padding: 10,
-              borderRadius: 4,
-              justifyContent: "space-around",
-              flexDirection: "row",
-              shadowColor: "#000000",
-              shadowOffset: { width: 0, height: 3 },
-              shadowRadius: 5,
-              shadowOpacity: 0.5
-            }}
-          >
-            <View
-              style={{
-                justifyContent: "space-around"
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: "circular-bold",
-                  fontSize: 20,
-                  color: "#4A4A4A"
-                }}
-              >
-                Name
-              </Text>
-              <TouchableOpacity
-                style={{
-                  justifyContent: "space-between",
-                  flexDirection: "row",
-                  width: 0.3 * ScreenWidth
-                }}
-                onPress={()=>{
-                  this.calltocutomer();
-                }}
-              >
-                <Text
-                  style={{
-                    fontFamily: "circular-book",
-                    fontSize: 16,
-                    color: "#4A4A4A",
-                    marginTop: 3
-                  }}
-                >
-                  9601944914
-                </Text>
-                <Image
-                  style={{ height: 20, width: 20, borderRadius: 10 }}
-                  source={CALL}
-                />
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                justifyContent: "space-around"
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: "circular-book",
-                  fontSize: 16,
-                  color: "#4A4A4A"
-                }}
-              >
-                Distance
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "circular-book",
-                  fontSize: 16,
-                  color: "#7960FF"
-                }}
-              >
-                10 km
-              </Text>
-            </View>
-          </View>
-          </View>
-          </Modal>
+
           <Modal
             visible={this.props.isBooking}
             onRequestClose={() => {
@@ -201,8 +100,13 @@ class FutureBooking extends Component {
               justifyContent:'center',
               alignItems:'center',
               height:ScreenHeight,
-              backgroundColor: "rgba(0,0,0,0.5)"
-
+              backgroundColor: "white",
+            }}
+          >
+          <View
+            style={{
+              backgroundColor: "rgba(100,100,100, 0.5)",
+              height: ScreenHeight
             }}
           >
           <View
@@ -251,7 +155,7 @@ class FutureBooking extends Component {
                   color: "#4A4A4A"
                 }}
               >
-                Name
+                {this.props.bookingData?this.props.bookingData.userFullName:null}
               </Text>
               <TouchableOpacity
                 style={{
@@ -270,7 +174,7 @@ class FutureBooking extends Component {
                     marginTop: 3
                   }}
                 >
-                  9601944914
+                  {this.props.bookingData?this.props.bookingData.userFullName:null}
                 </Text>
                 <Image
                   style={{ height: 20, width: 20, borderRadius: 10 }}
@@ -316,7 +220,7 @@ class FutureBooking extends Component {
             onPress={async()=>{
               var status="accept";
               await this.props.getBookingUpdate(status);
-              this.props.connectTosocketApprov(this.props.bookingData.customer_id);
+              this.props.connectTosocketApprov(this.props.bookingData.userId);
             }}
             >
               <View
@@ -366,6 +270,7 @@ class FutureBooking extends Component {
             </TouchableOpacity>
             </View>
           </View>
+          </View>
           </Modal>
           <Modal
             visible={this.props.isMechanicOtp}
@@ -381,6 +286,12 @@ class FutureBooking extends Component {
               height:ScreenHeight,
               backgroundColor: "rgba(0,0,0,0.5)"
 
+            }}
+          >
+          <View
+            style={{
+              backgroundColor: "rgba(100,100,100, 0.5)",
+              height: ScreenHeight
             }}
           >
             <View style={{
@@ -445,6 +356,7 @@ class FutureBooking extends Component {
                   </Text>
                 </View>
               </TouchableOpacity>
+            </View>
             </View>
             </Modal>
         </ScrollView>

@@ -27,10 +27,10 @@ export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
     type: GET_FUTURE_BOOKING_LIST_START
   });
-  const valueUserId = await AsyncStorage.getItem("user_id");
+  const {userId} = getState().user;
 
   let test = new FormData();
-  test.append("vendor_id", valueUserId);
+  test.append("vendor_id", userId);
   Api.post(GET_FUTURE_BOOKINGLIST, test)
     .then(response => {
       if (response.status === 0) {

@@ -30,7 +30,12 @@ import {
   GET_DISTANCE_BETWEEN_USER_MECHANIC,
   GET_BOOKING_UPDATE_START,
   GET_BOOKING_UPDATE_SUCCESS,
-  GET_BOOKING_UPDATE_FAIL
+  GET_BOOKING_UPDATE_FAIL,
+   GET_REASON_CHECKBOX,
+  GET_REASON_CHECKBOX2,
+  GET_REASON_CHECKBOX3,
+  GET_CONFIRM_BOOKING_CANCEL,
+  GET_CANCEL_BOOKING_MODAL
 } from "../actions/UserMaps";
 
 const INITIAL_STATE = {
@@ -57,7 +62,11 @@ const INITIAL_STATE = {
   bookData: "",
   bookingStatusRes: "",
   mechanicCurrentLocation: "",
-  distanceBetweenUserMechanic: ""
+  distanceBetweenUserMechanic: "",
+  reasonCheckbox:[false,false,false],
+  reasonCheckbox2:false,
+  reasonCheckbox3:false,
+  isBookCancelModal:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -339,6 +348,58 @@ export default (state = INITIAL_STATE, action) => {
         };
       }
       break;
+
+    case GET_REASON_CHECKBOX:
+    {
+      newReasonCheckbox=[false,false,false]
+      newReasonCheckbox[action.payload]=true;
+      return{
+        ...state,
+        reasonCheckbox:newReasonCheckbox,
+      };
+    }
+    break;
+
+    case GET_REASON_CHECKBOX2:
+    {
+      return{
+        ...state,
+        reasonCheckbox1:false,
+        reasonCheckbox2:!state.reasonCheckbox2,
+        reasonCheckbox3:false
+      };
+    }
+    break;
+
+    case GET_REASON_CHECKBOX3:
+    {
+      return{
+        ...state,
+        reasonCheckbox1:false,
+        reasonCheckbox2:false,
+        reasonCheckbox3:!state.reasonCheckbox3
+      };
+    }
+    break;
+
+    case GET_CONFIRM_BOOKING_CANCEL:
+    {
+      return{
+        ...state,
+        isBookCancelModal:false
+      };
+    }
+    break;
+
+    case GET_CANCEL_BOOKING_MODAL:
+    {
+      return{
+        ...state,
+        isBookModalVisible:false,
+        isBookCancelModal:true,
+      };
+    }
+    break;
 
     default:
       return state;

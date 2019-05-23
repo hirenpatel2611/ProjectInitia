@@ -26,15 +26,30 @@ import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { Constants, Location, Permissions, IntentLauncherAndroid } from "expo";
-import { getUserLocationSuccess,getBookingCancellation,getBookingUpdateUser } from "../../actions";
+import {
+  getUserLocationSuccess,
+  getBookingCancellation,
+  getBookingUpdateUser,
+  getReasonCheckbox,
+  getConfirmBookingCancel,
+  getCancelBookingModal
+} from "../../actions";
 import { MapViewDirections } from "../../Common";
+import CheckBox from "react-native-check-box";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
 class NearbyGaraje extends Component {
-
-
+  componentDidMount() {
+    this._map.animateToRegion(
+      {
+        latitude: this.props.location.coords.latitude,
+        longitude: this.props.location.coords.longitude
+      },
+      1
+    );
+  }
 
   render() {
     const { containerStyle } = styles;
@@ -49,38 +64,44 @@ class NearbyGaraje extends Component {
           <MapView
             style={{
               ...StyleSheet.absoluteFillObject,
-              height:0.91 * ScreenHeight
+              height: 0.86 * ScreenHeight
             }}
             provider={PROVIDER_GOOGLE}
             ref={component => (this._map = component)}
           >
-          { this.props.mechanicCurrentLocation? <MapView.Marker.Animated
-              coordinate={{
-                latitude: this.props.mechanicCurrentLocation.message[0].coords
-                  .latitude,
-                longitude: this.props.mechanicCurrentLocation.message[0].coords
-                  .longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
-              }}
-            >
-              <View style={inStyle.markerView1}>
-                <View style={inStyle.markerView2} />
-              </View>
-            </MapView.Marker.Animated>:null}
-        {this.props.mechanicCurrentLocation?  <MapViewDirections
-              origin={{
-                latitude: this.props.mechanicCurrentLocation.message[0].coords.latitude,
-                longitude: this.props.mechanicCurrentLocation.message[0].coords.longitude
-              }}
-              destination={{
-                latitude: this.props.location.coords.latitude,
-                longitude: this.props.location.coords.longitude
-              }}
-              apikey={"AIzaSyCYvMpmVhFc0ydILEuXGJNYNGFnBoKPCL8"}
-              strokeWidth={5}
-              strokeColor="#7960FF"
-            />:null}
+            {this.props.mechanicCurrentLocation ? (
+              <MapView.Marker.Animated
+                coordinate={{
+                  latitude: this.props.mechanicCurrentLocation.message[0].coords
+                    .latitude,
+                  longitude: this.props.mechanicCurrentLocation.message[0]
+                    .coords.longitude,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421
+                }}
+              >
+                <View style={inStyle.markerView1}>
+                  <View style={inStyle.markerView2} />
+                </View>
+              </MapView.Marker.Animated>
+            ) : null}
+            {this.props.mechanicCurrentLocation ? (
+              <MapViewDirections
+                origin={{
+                  latitude: this.props.mechanicCurrentLocation.message[0].coords
+                    .latitude,
+                  longitude: this.props.mechanicCurrentLocation.message[0]
+                    .coords.longitude
+                }}
+                destination={{
+                  latitude: this.props.location.coords.latitude,
+                  longitude: this.props.location.coords.longitude
+                }}
+                apikey={"AIzaSyCYvMpmVhFc0ydILEuXGJNYNGFnBoKPCL8"}
+                strokeWidth={5}
+                strokeColor="#7960FF"
+              />
+            ) : null}
             <MapView.Marker.Animated
               coordinate={{
                 latitude: this.props.location.coords.latitude,
@@ -95,59 +116,137 @@ class NearbyGaraje extends Component {
             </MapView.Marker.Animated>
           </MapView>
 
-        </View>
-        <View style={{ height:0.10 * ScreenHeight,
-                       backgroundColor:'white',
-                       padding:10,
-                       shadowColor: "#000",
-                       shadowOffset: { width: 0, height: 2 },
-                       shadowOpacity: 0.5,
-                       elevation: 2,
-                    }}>
-        <Text style={{fontSize:16, fontFamily:'circular-book'}}>
-         Mechanic is  {this.props.bookingStatusRes?this.props.bookingStatusRes.type:null}
-        </Text>
-        {this.props.distanceBetweenUserMechanic?
-          <TouchableOpacity
-            activeOpacity={1}
-            underlayColor="white"
-            onPress={()=>{
-              var sts="completed";
-              this.props.getBookingUpdateUser()}}
+          <Modal
+            visible={this.props.isBookCancelModal}
+            animationType="slide"
+            transparent={true}
+            opacity={0.5}
+            style={{
+                height: 0.2 * ScreenHeight,
+              }}
           >
-            <View style={inStyle.modalButtonCancle}>
-              {this.props.loadingBookig ? (
-                <Text style={inStyle.modalButtonCancleText}>
-                  Loading...
+            <View
+              style={{
+                backgroundColor: "rgba(100,100,100, 0.5)",
+                height: ScreenHeight
+              }}
+            >
+              <View
+                style={{
+                  marginTop:0.40 * ScreenHeight,
+                  alignSelf: "stretch",
+                  backgroundColor: "#FFFFFF",
+                  height: 0.25 * ScreenHeight,
+                  margin: 15,
+                  borderRadius: 10,
+                  padding: 10,
+                  justifyContent: "space-around"
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontFamily: "circular-bold",
+                    alignSelf: "center"
+                  }}
+                >
+                  Reason of Cancel
                 </Text>
-              ) : (
-                <Text style={inStyle.modalButtonCancleText}>
-                  Complete
-                </Text>
-              )}
+                <CheckBox
+                  isChecked={this.props.reasonCheckbox[0]}
+                  checkedCheckBoxColor="#7960FF"
+                  rightText="Mechanic is responding on booking."
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                  onClick={() => {
+                    this.props.getReasonCheckbox(0);
+                  }}
+                />
+                <CheckBox
+                  isChecked={this.props.reasonCheckbox[1]}
+                  checkedCheckBoxColor="#7960FF"
+                  rightText="Mechanic is not good deal."
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                  onClick={() => {
+                    this.props.getReasonCheckbox(1);
+                  }}
+                />
+                <CheckBox
+                  isChecked={this.props.reasonCheckbox[2]}
+                  checkedCheckBoxColor="#7960FF"
+                  rightText="I Choose better option."
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                  onClick={() => {
+                    this.props.getReasonCheckbox(2);
+                  }}
+                />
+                <TouchableOpacity
+                  style={{ alignSelf: "center" }}
+                  activeOpacity={1}
+                  underlayColor="white"
+                  onPress={() => {
+                    this.props.getConfirmBookingCancel();
+                  }}
+                >
+                  <View
+                    style={{
+                      backgroundColor: "#7960FF",
+                      width: 0.4 * ScreenWidth,
+                      borderRadius: 5,
+                      alignItems: "center",
+                      margin: 10,
+                      padding: 5,
+                      alignItems: "center",
+                      justifyContent: "center"
+                    }}
+                  >
+                    {this.props.loadingBookig ? (
+                      <Text style={inStyle.modalButtonCancleText}>
+                        Loading...
+                      </Text>
+                    ) : (
+                      <Text style={inStyle.modalButtonCancleText}>Confirm</Text>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
-          </TouchableOpacity>
-          :
+          </Modal>
+        </View>
+        <View
+          style={{
+            height: 0.15 * ScreenHeight,
+            backgroundColor: "white",
+            padding: 10,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.5,
+            elevation: 2
+          }}
+        >
+          <Text style={{ fontSize: 16, fontFamily: "circular-book" }}>
+            Mechanic is{" "}
+            {this.props.bookingStatusRes
+              ? this.props.bookingStatusRes.type
+              : null}
+          </Text>
           <TouchableOpacity
             activeOpacity={1}
             underlayColor="white"
             onPress={() => {
-              this.props.getBookingCancellation();
+              this.props.getCancelBookingModal();
             }}
           >
             <View style={inStyle.modalButtonCancle}>
               {this.props.loadingBookig ? (
-                <Text style={inStyle.modalButtonCancleText}>
-                  Loading...
-                </Text>
+                <Text style={inStyle.modalButtonCancleText}>Loading...</Text>
               ) : (
-                <Text style={inStyle.modalButtonCancleText}>
-                  Cancel
-                </Text>
+                <Text style={inStyle.modalButtonCancleText}>Cancel</Text>
               )}
             </View>
           </TouchableOpacity>
-        }
         </View>
       </View>
     );
@@ -180,7 +279,7 @@ const inStyle = {
   modalButtonCancle: {
     backgroundColor: "#7960FF",
     height: 25,
-    width: 0.90 * ScreenWidth,
+    width: 0.9 * ScreenWidth,
     borderRadius: 5,
     alignItems: "center",
     margin: 10,
@@ -191,21 +290,27 @@ const inStyle = {
     fontSize: 14,
     fontFamily: "circular-bold",
     color: "white"
-  },
+  }
 };
 
 const mapStateToProps = ({ usermaps }) => {
-  const { location,
-        bookData,
-        mechanicCurrentLocation,
-        bookingStatusRes,
-        distanceBetweenUserMechanic} = usermaps;
+  const {
+    location,
+    bookData,
+    mechanicCurrentLocation,
+    bookingStatusRes,
+    distanceBetweenUserMechanic,
+    reasonCheckbox,
+    isBookCancelModal
+  } = usermaps;
   return {
     location,
     bookData,
     mechanicCurrentLocation,
     bookingStatusRes,
-    distanceBetweenUserMechanic
+    distanceBetweenUserMechanic,
+    reasonCheckbox,
+    isBookCancelModal
   };
 };
 
@@ -214,6 +319,9 @@ export default connect(
   {
     getUserLocationSuccess,
     getBookingCancellation,
-    getBookingUpdateUser
+    getBookingUpdateUser,
+    getReasonCheckbox,
+    getConfirmBookingCancel,
+    getCancelBookingModal
   }
 )(NearbyGaraje);

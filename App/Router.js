@@ -16,7 +16,7 @@ import VendorHome from "./components/vendors/VendorHome";
 import FutureBooking from "./components/vendors/FutureBooking";
 import VendorProfile from "./components/vendors/Profile";
 import { Actions } from "react-native-router-flux";
-import { loadFont, updateLoggedInState, updateIsVendor,createSocketChannel } from "./actions";
+import { loadFont, updateLoggedInState, updateIsVendor,createSocketChannel,getUserData } from "./actions";
 import SideMenu from "./components/drawer/SideMenu";
 import SideMenuVendor from "./components/drawer/SideMenuVendor";
 
@@ -40,12 +40,13 @@ class RouterComponent extends Component {
           this.props.updateIsVendor(true);
       }
       if (valueUserName !== null) {
-         this.props.updateLoggedInState(true);
+        await  this.props.updateLoggedInState(true);
          this.props.createSocketChannel();
        }
       else {
         this.props.updateLoggedInState(false);
       }
+      this.props.getUserData()
     } catch (error) {
       // Error retrieving data
       console.error(error);
@@ -200,5 +201,5 @@ const mapStateToProps = ({ ui }) => {
 
 export default connect(
   mapStateToProps,
-  { loadFont, updateLoggedInState, updateIsVendor,createSocketChannel }
+  { loadFont, updateLoggedInState, updateIsVendor,createSocketChannel,getUserData }
 )(RouterComponent);

@@ -49,6 +49,11 @@ export const GET_DISTANCE_BETWEEN_USER_MECHANIC =
 export const GET_BOOKING_UPDATE_START = "usermaps/GET_BOOKING_UPDATE_START";
 export const GET_BOOKING_UPDATE_SUCCESS = "usermaps/GET_BOOKING_UPDATE_SUCCESS";
 export const GET_BOOKING_UPDATE_FAIL = "usermaps/GET_BOOKING_UPDATE_FAIL";
+export const GET_REASON_CHECKBOX = "usermaps/GET_REASON_CHECKBOX";
+export const GET_REASON_CHECKBOX2 = "usermaps/GET_REASON_CHECKBOX2";
+export const GET_REASON_CHECKBOX3 = "usermaps/GET_REASON_CHECKBOX3";
+export const GET_CONFIRM_BOOKING_CANCEL = "usermaps/GET_CONFIRM_BOOKING_CANCEL";
+export const GET_CANCEL_BOOKING_MODAL = "usermaps/GET_CANCEL_BOOKING_MODAL";
 
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
@@ -99,9 +104,10 @@ export const BookVendor = () => async (dispatch, getState) => {
     type: GET_VENDOR_BOOKING_START
   });
   const { vendorsData, location } = getState().usermaps;
-  const valueUserId = await AsyncStorage.getItem("user_id");
+  const { userId } = getState().user;
+
   let test = new FormData();
-  test.append("customer_id", valueUserId);
+  test.append("customer_id", userId);
   test.append("vendor_id", vendorsData.id);
   test.append("latitude", location.coords.latitude);
   test.append("longitude", location.coords.longitude);
@@ -153,11 +159,10 @@ export const getBookings = () => async (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_LIST_START
   });
-  const valueUserId = await AsyncStorage.getItem("user_id");
-  const valueIsvendor = await AsyncStorage.getItem("is_vendor");
+  const { userId } = getState().user;
 
   let test = new FormData();
-  test.append("customer_id", valueUserId);
+  test.append("customer_id", userId);
   Api.post(GET_BOOKINGLIST, test)
     .then(response => {
       if (response.status === 0) {
@@ -291,8 +296,6 @@ export const getDistanceList = val => async (dispatch, getState) => {
 
   url = url + `&key=${APIKEY}`;
 
-  //  const list = await vendorList.map( async(vendor) => {
-
   await fetch(url)
     .then(response => response.json())
     .then(responseJson => {
@@ -325,6 +328,9 @@ export const getBookingStatus = val => async (dispatch, getState) => {
     type: GET_BOOKING_STATUS,
     payload: val
   });
+  if (val.type === "ON-THE-WAY") {
+    Actions.NavigationMap();
+  }
   if (val.type === "CANCEL") {
     dispatch({
       type: GET_BOOKING_CANCEL_BY_VENDOR
@@ -340,7 +346,7 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
     type: GET_MECHANIC_CURREN_LOCATION,
     payload: val
   });
-  Actions.NavigationMap();
+
   const { mechanicCurrentLocation, location } = getState().usermaps;
 
   var radlat1 =
@@ -360,10 +366,6 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
   dist = (dist * 180) / Math.PI;
   dist = dist * 60 * 1.1515;
   dist = dist * 1.609344;
-  console.log(dist);
-  // if (unit=="K") { dist = dist * 1.609344 }
-  // if (unit=="N") { dist = dist * 0.8684 }
-
   if (dist < 0.1) {
     dispatch({
       type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
@@ -373,14 +375,14 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
     dispatch(getBookingUpdateUser(sts));
   }
 };
-
+//
 export const getBookingUpdateUser = val => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_UPDATE_START
   });
   const { bookingStatusRes } = getState().usermaps;
   let test = new FormData();
-  test.append("booking_id", bookingStatusRes.message.booking.booking_id);
+  test.append("booking_id", bookingStatusRes.message.userData.userId);
   test.append("status", val);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
@@ -388,7 +390,6 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
         dispatch({
           type: GET_BOOKING_UPDATE_SUCCESS
         });
-        Actions.NearbyGaraje();
       } else {
         dispatch({
           type: GET_BOOKING_UPDATE_FAIL
@@ -399,3 +400,35 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
       console.error(err);
     });
 };
+
+export const getReasonCheckbox = (index) => (dispatch) => {
+  dispatch({
+    type:GET_REASON_CHECKBOX,
+    payload:index
+  });
+}
+
+export const getReasonCheckbox2 = () => (dispatch) => {
+  dispatch({
+    type:GET_REASON_CHECKBOX2,
+  });
+}
+
+export const getReasonCheckbox3 = () => (dispatch) => {
+  dispatch({
+    type:GET_REASON_CHECKBOX3,
+  });
+}
+
+export const getConfirmBookingCancel = () => (dispatch) => {
+  dispatch({
+    type:GET_CONFIRM_BOOKING_CANCEL,
+  });
+}
+
+export const getCancelBookingModal = () => (dispatch) => {
+  dispatch({
+    type:GET_CANCEL_BOOKING_MODAL,
+  });
+  Actions.NearbyGaraje();
+}

@@ -13,49 +13,15 @@ import {
   TIMING_BELT
 } from "../../images";
 
-// const contextTypes = {
-//   drawer: PropTypes.object,
-// };
-//
-// const propTypes = {
-//   name: PropTypes.string,
-//   sceneStyle: ViewPropTypes.style,
-//   title: PropTypes.string,
-// };
-
  class SideMenu extends Component {
-
-
-
-componentDidMount() {
-  // token = storage.getAccessToken('1').value;
-  // this.props.fetchUserInfo(token);
-}
-
-
-
-//
-// logout() {
-//     storage.deleteAccessToken();
-//     Actions.login();
-// }
-//
-// renderSpinner()
-// {
-// const {loading}=this.props;
-// if(loading)
-//  {
-//    return(<Spinner color={'white'} size={'small'} />)
-//
-//  }
-//
-// }
 
 _deleteUser = async () => {
   try {
     await AsyncStorage.removeItem("token");
     await AsyncStorage.removeItem("is_vendor");
     await AsyncStorage.removeItem("user_id");
+    await AsyncStorage.removeItem("user_latitude");
+    await AsyncStorage.removeItem("user_longitude");
   } catch (error) {
     // Error retrieving data
     console.log(error.message);
@@ -99,13 +65,15 @@ _deleteUser = async () => {
           onPress={()=>{Actions.Booking()}}
         >Bookings</Button>
         </CardSection>
-        <CardSection  style={{ flexDirection:'column',borderBottomWidth:0,borderTopWidth:0 }}>
-        <Button
-          containerStyle={container}
-          style={textStyle}
-          onPress={()=>{Actions.NavigationMap()}}
-        >Navigation Map</Button>
-        </CardSection>
+        {
+        // <CardSection  style={{ flexDirection:'column',borderBottomWidth:0,borderTopWidth:0 }}>
+        // <Button
+        //   containerStyle={container}
+        //   style={textStyle}
+        //   onPress={()=>{Actions.NavigationMap()}}
+        // >Navigation Map</Button>
+        // </CardSection>
+        }
         <CardSection  style={{ flexDirection:'column',borderBottomWidth:0,borderTopWidth:0 }}>
         <Button
           containerStyle={container}
