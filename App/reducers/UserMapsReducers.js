@@ -349,6 +349,7 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
+
     case GET_REASON_CHECKBOX:
     {
       newReasonCheckbox=[false,false,false]
