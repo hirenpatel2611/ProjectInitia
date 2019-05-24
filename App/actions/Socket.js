@@ -2,7 +2,7 @@ import Peer from "peerjs";
 import { AsyncStorage } from "react-native";
 import io from "socket.io-client";
 import { BackgroundFetch } from "expo";
-import { getBookingModal, getFutureBookings } from "./Vendors";
+import { getBookingModal, getBookingVendorStatus } from "./Vendors";
 import { getBookingStatus, getMechanicCurrentLocation } from "./UserMaps";
 import { Actions } from "react-native-router-flux";
 
@@ -20,28 +20,36 @@ export const createSocketChannel = () => async (dispatch, getState) => {
   const { isUserVendor, userId } = getState().user;
   chatSocket.emit("self_room", { room: `${userId}` });
   chatSocket.on("broadcast", function(data) {
-    console.log(data);
+  
     switch (data.type) {
       case "BOOK":
         dispatch(getBookingModal(data.message));
         break;
 
       case "ACCEPT":
-        dispatch(getBookingStatus(data));
+      if (isUserVendor !== "1") {
+        dispatch(getBookingStatus(data));}
+        else {
+          dispatch(getBookingVendorStatus(data));
+        }
+
         break;
 
       case "ON-THE-WAY":
         if (isUserVendor !== "1") {
           dispatch(getBookingStatus(data));
-        }
-        dispatch(getFutureBookings());
+        }else {
+            dispatch(getBookingVendorStatus(data));
+          }
+
         break;
 
       case "CANCEL":
         if (isUserVendor !== "1") {
           dispatch(getBookingStatus(data));
-        }
-        dispatch(getFutureBookings());
+        } else {
+            dispatch(getBookingVendorStatus(data));
+          }
         break;
 
       case "MECHANIC_CURRENT_LOCATION":
@@ -76,9 +84,8 @@ export const connectTosocket = () => async (dispatch, getState) => {
 };
 
 export const connectTosocketApprov = val => async (dispatch, getState) => {
-  const { bookingData, bookingStatus } = getState().vendors;
+  const { bookingData } = getState().vendors;
   const { userId } = getState().user;
-  console.log(val);
   chatSocket.emit("booking_status", {
     room: `${val} ${userId}`,
     message: bookingData,

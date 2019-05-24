@@ -20,8 +20,6 @@ _deleteUser = async () => {
     await AsyncStorage.removeItem("token");
     await AsyncStorage.removeItem("is_vendor");
     await AsyncStorage.removeItem("user_id");
-    await AsyncStorage.removeItem("user_latitude");
-    await AsyncStorage.removeItem("user_longitude");
   } catch (error) {
     // Error retrieving data
     console.log(error.message);

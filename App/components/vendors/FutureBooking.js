@@ -28,7 +28,7 @@ import {
   connectTosocketBookingCancle,
   BookingListApprove
 } from "../../actions";
-import { FutureBookingList } from "../../Common";
+import { FutureBookingList,Spinner } from "../../Common";
 import { CALL, BITMAP2 } from "../../images";
 import call from "react-native-phone-call";
 
@@ -73,6 +73,9 @@ class FutureBooking extends Component {
           }
         />
       ));
+    }
+    else {
+      return <Spinner />
     }
   }
 
@@ -225,7 +228,7 @@ class FutureBooking extends Component {
                       var status = "accept";
                       await this.props.getBookingUpdate(status);
                       this.props.connectTosocketApprov(
-                        this.props.bookingData.customer_id
+                        this.props.bookUserData.userId
                       );
                     }}
                   >

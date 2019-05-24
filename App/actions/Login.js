@@ -42,16 +42,18 @@ export const loginUser = () => (dispatch, getState) => {
   Api.post(URL_USER_LOGIN, test)
     .then(async response => {
       if (response.status === 1) {
-        if (response.data.is_vendor == 1) {
-          dispatch(updateIsVendor(true));
-          dispatch(createSocketChannel());
-          Actions.FutureBooking();
-        } else {
-          Actions.NearbyGaraje();
-        }
+
           await AsyncStorage.setItem("token", response.token);
           await AsyncStorage.setItem("is_vendor", response.data.is_vendor);
           await AsyncStorage.setItem("user_id",response.data.id.toString());
+
+          if (response.data.is_vendor == 1) {
+            dispatch(updateIsVendor(true));
+            dispatch(createSocketChannel());
+            Actions.FutureBooking();
+          } else {
+            Actions.NearbyGaraje();
+          }
 
         dispatch({
           type: LOGIN_SUCCESSFUL,

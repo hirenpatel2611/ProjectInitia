@@ -25,7 +25,7 @@ import styles from "./usermapsStyle";
 import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView,{ PROVIDER_GOOGLE } from "react-native-maps";
-import { Constants, Location, Permissions, IntentLauncherAndroid } from "expo";
+import { Constants, Location, Permissions, IntentLauncherAndroid,Asset, SplashScreen } from "expo";
 import {
   getVendors,
   getUserLocationFail,
@@ -100,6 +100,7 @@ class NearbyGaraje extends Component {
 
     this.props.getUserLocationSuccess(location);
     {
+      SplashScreen.hide()
       this._map.animateToRegion(
         {
           latitude: this.props.location.coords.latitude,

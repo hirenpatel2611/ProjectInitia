@@ -19,6 +19,7 @@ import { Actions } from "react-native-router-flux";
 import { loadFont, updateLoggedInState, updateIsVendor,createSocketChannel,getUserData } from "./actions";
 import SideMenu from "./components/drawer/SideMenu";
 import SideMenuVendor from "./components/drawer/SideMenuVendor";
+import {Asset, SplashScreen} from 'expo';
 
 import { connect } from "react-redux";
 
@@ -29,6 +30,7 @@ class RouterComponent extends Component {
   componentWillMount() {
     this.props.loadFont();
     this._retrieveData();
+    //SplashScreen.preventAutoHide();
   }
 
   _retrieveData = async () => {
@@ -49,6 +51,7 @@ class RouterComponent extends Component {
        }
       else {
         await this.props.updateLoggedInState(false);
+        SplashScreen.hide()
       }
 
     } catch (error) {

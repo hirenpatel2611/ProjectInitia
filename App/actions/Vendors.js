@@ -7,6 +7,7 @@ import {
   SEND_MECHANIC_OTP
 } from "../config";
 import connectTosocketApprov from './Socket';
+import {Asset, SplashScreen} from 'expo';
 
 export const GET_FUTURE_BOOKING_LIST_START ="vendors/GET_FUTURE_BOOKING_LIST_START";
 export const GET_FUTURE_BOOKING_LIST_SUCCESS ="vendors/GET_FUTURE_BOOKING_LIST_SUCCESS";
@@ -21,6 +22,7 @@ export const OTP_DONE = "vendors/OTP_DONE";
 export const GET_BOOKINGLIST_APPROVE_START = "vendors/GET_BOOKINGLIST_APPROVE_START";
 export const GET_BOOKINGLIST_APPROVE_SUCCESS = "vendors/GET_BOOKINGLIST_APPROVE_SUCCESS";
 export const GET_BOOKINGLIST_APPROVE_FAIL = "vendors/GET_BOOKINGLIST_APPROVE_FAIL";
+export const GET_BOOKING_VENDOR_STATUS = "vendors/GET_BOOKING_VENDOR_STATUS";
 
 
 export const getFutureBookings = () => async (dispatch, getState) => {
@@ -99,10 +101,12 @@ export const getCustomerDistanceList = val => async (dispatch, getState) => {
       //console.warn(e);
     });
   FutureBookingList = vendorBookingList;
+
   dispatch({
     type: GET_CUSTOMER_DISTANCELIST,
     payload: FutureBookingList
   });
+  SplashScreen.hide();
 };
 
 export const getBookingModal = val => async (dispatch, getState) => {
@@ -207,4 +211,11 @@ export const otpDone = () => (dispatch, getState) => {
   dispatch({
     type: OTP_DONE,
   });
+}
+
+export const getBookingVendorStatus = data => (dispatch) =>{
+  dispatch({
+    type:GET_BOOKING_VENDOR_STATUS,
+    payload:data
+  })
 }

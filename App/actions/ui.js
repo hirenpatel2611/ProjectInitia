@@ -31,7 +31,7 @@ export const updateLoggedInState = bool => async (dispatch, getState) => {
   });
   const valueUserId = await AsyncStorage.getItem("user_id");
   const valueIsvendor = await AsyncStorage.getItem("is_vendor");
-  // console.error(valueUserId);
+  
   dispatch({
     type:SET_USER_INFO,
     userId:valueUserId,
