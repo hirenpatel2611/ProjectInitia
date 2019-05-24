@@ -251,13 +251,6 @@ class NearbyGaraje extends Component {
                     null
                   }
                 </Text>
-                <Text style={inStyle.modalTextAddress}>
-                  {this.props.vendorsData ?
-                    this.props.vendorsData.mobile
-                   :
-                    null
-                  }
-                </Text>
                 <View
                   style={[inStyle.modalView1,{bottom: 10}]}
                 >
@@ -273,7 +266,7 @@ class NearbyGaraje extends Component {
                     <Text style={inStyle.modalTextBlack}>Distance</Text>
                     <Text style={inStyle.modalTextBlue}>
                       {
-                        this.props.vendorDistance?<Text>{this.props.vendorDistance}</Text>:<Text>fail</Text>
+                        this.props.vendorDistance?this.props.vendorDistance:null
                       }
                     </Text>
                   </View>

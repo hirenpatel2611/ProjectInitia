@@ -24,7 +24,8 @@ const INITIAL_STATE = {
   loadingBookigUpdate:false,
   mechanicOTP:'',
   isMechanicOtp:false,
-  bookingStatus:''
+  bookingStatus:'',
+  bookUserData:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -41,6 +42,7 @@ export default (state = INITIAL_STATE, action) => {
           break;
         case GET_FUTURE_BOOKING_LIST_SUCCESS:
           {
+
             return {
               ...state,
               loadingFutureBookigList: false,
@@ -69,11 +71,16 @@ export default (state = INITIAL_STATE, action) => {
             break;
 
             case GET_BOOKING_MODAL:
+
+            // let newFuturBookingList = state.FutureBookingList;
+            // newFuturBookingList.push();
             {
               return{
                 ...state,
                 isBooking:true,
-                bookingData:action.payload
+
+                bookingData:action.payload.bookData,
+                bookUserData:action.payload.userData
                 }
             }
             break;

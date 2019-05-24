@@ -68,11 +68,9 @@ export const requestOtp = () => (dispatch, getState) => {
 
   const { mobileno, loading, requestOtpSuccess } = getState().register;
   let test = new FormData();
-  console.log(mobileno);
   test.append("mobile", mobileno);
   Api.post(URL_USER_OTP, test)
     .then(response => {
-      console.log(response.OTP);
       if (response.loggedIn === 1) {
         dispatch({
           type: REQUEST_OTP_SUCCESS,
@@ -204,7 +202,6 @@ export const signupUser = () => (dispatch, getState) => {
     loadingSignupB,
     location
   } = getState().register;
-  console.log(loadingSignupB);
   let vehicle_type = "";
   if (isTwoWheeler === true && isFourWheeler === false) {
     vehicle_type = "bike";
@@ -238,11 +235,8 @@ export const signupUser = () => (dispatch, getState) => {
     test.append("latitude", location.coords.latitude);
     test.append("longitude", location.coords.longitude);
   }
-  console.log(location.coords.latitude);
-  console.log(test);
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
-      console.log(response);
       if (response.status === 1) {
         dispatch({
           type: SIGNUP_SUCCESSFUL,
@@ -280,7 +274,6 @@ export const getLocationFail = () => (dispatch, getState) => {
 };
 
 export const getLocationSuccess = location => (dispatch, getState) => {
-  console.log(location);
   dispatch({
     type: GET_LOCATION_SUCCESS,
     payload: location

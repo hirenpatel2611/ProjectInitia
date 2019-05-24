@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
 
-const BookingList = ({ vendor }) => {
+const BookingList = ({ vendor,status }) => {
   return (
     <View
       style={{
@@ -28,15 +28,13 @@ const BookingList = ({ vendor }) => {
         >
           {vendor.first_name}
         </Text>
-        <Text
-          style={{
-            fontFamily: "circular-bold",
-            fontSize: 14,
-            color: "#4A4A4A",
-            fontFamily: "circular-book"
-          }}
-        >
-          Distance
+        <Text style={{
+          fontFamily: "circular-bold",
+          fontSize: 18,
+          color: "#4A4A4A",
+          fontFamily: "circular-bold"
+        }}>
+        {status}
         </Text>
       </View>
       <View
@@ -56,16 +54,6 @@ const BookingList = ({ vendor }) => {
         >
           {vendor.mobile}
         </Text>
-        <Text
-          style={{
-            fontFamily: "circular-bold",
-            fontSize: 14,
-            color: "#4A4A4A",
-            fontFamily: "circular-book"
-          }}
-        >
-          {vendor.distance}
-        </Text>
       </View>
       <View
         style={{
@@ -84,25 +72,6 @@ const BookingList = ({ vendor }) => {
           {vendor.email}
         </Text>
 
-        <TouchableOpacity>
-          <View
-            style={{
-              width: 70,
-              height: 20,
-              backgroundColor: "#7960FF",
-              alignItems: "center",
-              borderRadius: 3
-            }}
-          >
-            <Text
-              style={{
-                color: "white"
-              }}
-            >
-              Book
-            </Text>
-          </View>
-        </TouchableOpacity>
       </View>
     </View>
   );

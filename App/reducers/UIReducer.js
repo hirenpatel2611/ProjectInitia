@@ -1,13 +1,11 @@
 import {
   LOAD_FONT_SUCCESS,
   UPDATE_LOGGED_IN_STATE,
-  UPDATE_IS_VENDOR
 } from "../actions/ui";
 
 const INITIAL_STATE = {
   fontLoaded: false,
   isLoggedIn: false,
-  isVendorLoggedIn: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -20,9 +18,6 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, isLoggedIn: action.payload };
       break;
 
-    case UPDATE_IS_VENDOR:
-      return { ...state, isVendorLoggedIn: action.payload };
-      break;
 
     default:
       return state;

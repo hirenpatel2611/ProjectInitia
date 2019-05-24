@@ -5,6 +5,7 @@ import { URL_USER_LOGIN } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage } from "react-native";
 import {updateIsVendor} from './ui';
+import {createSocketChannel} from './Socket';
 
 export const UPDATE_PASSWORD = "login/UPDATE_PASSWORD";
 export const UPDATE_MOBILE_NUMBER = "login/UPDATE_MOBILE_NUMBER";
@@ -40,26 +41,18 @@ export const loginUser = () => (dispatch, getState) => {
   test.append("device_type", "android");
   Api.post(URL_USER_LOGIN, test)
     .then(async response => {
-      console.log(response);
       if (response.status === 1) {
         if (response.data.is_vendor == 1) {
-            dispatch(updateIsVendor(true));
+          dispatch(updateIsVendor(true));
+          dispatch(createSocketChannel());
           Actions.FutureBooking();
-
         } else {
           Actions.NearbyGaraje();
         }
-        try {
           await AsyncStorage.setItem("token", response.token);
           await AsyncStorage.setItem("is_vendor", response.data.is_vendor);
           await AsyncStorage.setItem("user_id",response.data.id.toString());
-          await AsyncStorage.setItem("user_latitude",response.data.latitude.toString());
-          await AsyncStorage.setItem("user_longitude",response.data.longitude.toString());
 
-        } catch (error) {
-          console.log(error);
-          // Error saving data
-        }
         dispatch({
           type: LOGIN_SUCCESSFUL,
           payload: response

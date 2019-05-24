@@ -11,7 +11,6 @@ export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
 
 var peer = null;
 export const createSocketChannel = () => async (dispatch, getState) => {
-
   chatSocket = io("http://103.50.153.25:3000", {
     reconnection: true,
     reconnectionDelay: 500,
@@ -19,10 +18,9 @@ export const createSocketChannel = () => async (dispatch, getState) => {
     transports: ["websocket"]
   });
   const { isUserVendor, userId } = getState().user;
-
   chatSocket.emit("self_room", { room: `${userId}` });
-
   chatSocket.on("broadcast", function(data) {
+    console.log(data);
     switch (data.type) {
       case "BOOK":
         dispatch(getBookingModal(data.message));
@@ -59,12 +57,15 @@ export const createSocketChannel = () => async (dispatch, getState) => {
 };
 
 export const connectTosocket = () => async (dispatch, getState) => {
-  const { vendorsData, bookData } = getState().usermaps;
-  const { userId } = getState().user;
+  const { vendorsData, bookData,vendorDistance,location } = getState().usermaps;
+  const { userId,userData } = getState().user;
+  userData.userLatitude=location.coords.latitude;
+  userData.userLongitude=location.coords.longitude;
+
 
   chatSocket.emit("booking", {
     room: `${userId} ${vendorsData.id}`,
-    message: bookData,
+    message: {bookData,userData,vendorDistance},
     type: "BOOK"
   });
   channelName = `${vendorsData.id} ${userId}`;
@@ -77,7 +78,7 @@ export const connectTosocket = () => async (dispatch, getState) => {
 export const connectTosocketApprov = val => async (dispatch, getState) => {
   const { bookingData, bookingStatus } = getState().vendors;
   const { userId } = getState().user;
-
+  console.log(val);
   chatSocket.emit("booking_status", {
     room: `${val} ${userId}`,
     message: bookingData,

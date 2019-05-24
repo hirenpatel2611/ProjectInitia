@@ -35,7 +35,7 @@ class Booking extends Component {
  renderBookingList() {
       if (this.props.vendorList.length) {
           return this.props.vendorList.map(vendorsList => (
-            <BookingList key={vendorsList.booking_id} vendor={vendorsList.vendor} />
+            <BookingList key={vendorsList.booking_id} vendor={vendorsList.vendor} status={vendorsList.status} />
           ));
       }
     }
@@ -49,22 +49,7 @@ class Booking extends Component {
         <ScrollView
           style={inStyle.ScrollViewStyle}
         >
-          {this.props.loadingBookigList ? (
-            <Text style={inStyle.textLoading}>
-              Loading...
-            </Text>
-          ) : this.props.isBookingListFail ? (
-            <TouchableOpacity
-              style={inStyle.buttonReload}
-              onPress={() => {
-                this.props.getBookings();
-              }}
-            >
-              <Text>Reload</Text>
-            </TouchableOpacity>
-          ) : (
-            this.renderBookingList()
-          )}
+        {this.renderBookingList()}
         </ScrollView>
       </View>
     );

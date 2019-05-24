@@ -5,7 +5,7 @@ import {GET_USER_DATA} from "../config";
 
 export const LOAD_FONT_SUCCESS = "ui/LOAD_FONT_SUCCESS";
 export const UPDATE_LOGGED_IN_STATE = "ui/UPDATE_LOGGED_IN_STATE";
-export const UPDATE_IS_VENDOR = "ui/UPDATE_IS_VENDOR";
+export const UPDATE_IS_VENDOR = "user/UPDATE_IS_VENDOR";
 export const SET_USER_INFO = "ui/SET_USER_INFO";
 export const GET_USER_PROFILE_DATA_START = "ui/GET_USER_PROFILE_DATA_START";
 export const GET_USER_PROFILE_DATA = "ui/GET_USER_PROFILE_DATA";
@@ -31,6 +31,7 @@ export const updateLoggedInState = bool => async (dispatch, getState) => {
   });
   const valueUserId = await AsyncStorage.getItem("user_id");
   const valueIsvendor = await AsyncStorage.getItem("is_vendor");
+  // console.error(valueUserId);
   dispatch({
     type:SET_USER_INFO,
     userId:valueUserId,

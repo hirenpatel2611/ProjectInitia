@@ -86,7 +86,6 @@ export const getUserLocationSuccess = location => (dispatch, getState) => {
 };
 
 export const getVenderDetails = val => (dispatch, getState) => {
-  console.log(val);
   dispatch({
     type: GET_VENDOR_DETAILS,
     payload: val
@@ -323,7 +322,6 @@ export const getDistanceList = val => async (dispatch, getState) => {
 };
 
 export const getBookingStatus = val => async (dispatch, getState) => {
-  console.log(val);
   dispatch({
     type: GET_BOOKING_STATUS,
     payload: val
@@ -430,5 +428,6 @@ export const getCancelBookingModal = () => (dispatch) => {
   dispatch({
     type:GET_CANCEL_BOOKING_MODAL,
   });
+  dispatch(getBookingCancellation());
   Actions.NearbyGaraje();
 }

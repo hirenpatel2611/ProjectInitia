@@ -1,7 +1,11 @@
 import {
   LOGIN_SUCCESSFUL,
 } from "../actions/Login";
-import {SET_USER_INFO,GET_USER_PROFILE_DATA,GET_USER_PROFILE_DATA_START} from '../actions/ui';
+import {SET_USER_INFO,
+        GET_USER_PROFILE_DATA,
+        GET_USER_PROFILE_DATA_START,
+        UPDATE_IS_VENDOR,
+        } from '../actions/ui';
 
 
 const INITIAL_STATE = {
@@ -10,7 +14,9 @@ const INITIAL_STATE = {
   userFullName: '',
   userAddress: '',
   isUserVendor:'',
-  userData:''
+  userData:'',
+  isVendorLoggedIn:false
+
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -43,6 +49,7 @@ export default (state = INITIAL_STATE, action) => {
               ...state,
               userData:{
               userId:action.payload.id,
+              userEmail:action.payload.email,
               userMobileno: action.payload.mobile,
               userFullName: action.payload.first_name,
               userAddress: action.payload.address,
@@ -52,6 +59,11 @@ export default (state = INITIAL_STATE, action) => {
             };
           }
           break;
+
+          case UPDATE_IS_VENDOR:
+            return { ...state, isVendorLoggedIn: action.payload };
+            break;
+
 
     default:
       return state;

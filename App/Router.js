@@ -26,7 +26,7 @@ let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
 class RouterComponent extends Component {
-  componentDidMount() {
+  componentWillMount() {
     this.props.loadFont();
     this._retrieveData();
   }
@@ -35,18 +35,22 @@ class RouterComponent extends Component {
     try {
       const valueUserName = await AsyncStorage.getItem("token");
       const valueIsvendor = await AsyncStorage.getItem("is_vendor");
+      const myId = await AsyncStorage.getItem("user_id");
 
-      if (valueIsvendor === "1") {
-          this.props.updateIsVendor(true);
-      }
+
       if (valueUserName !== null) {
-        await  this.props.updateLoggedInState(true);
+        if (valueIsvendor === '1') {
+            this.props.updateIsVendor(true);
+        }
+
+        await this.props.updateLoggedInState(true);
+         this.props.getUserData();
          this.props.createSocketChannel();
        }
       else {
-        this.props.updateLoggedInState(false);
+        await this.props.updateLoggedInState(false);
       }
-      this.props.getUserData()
+
     } catch (error) {
       // Error retrieving data
       console.error(error);
@@ -130,7 +134,6 @@ class RouterComponent extends Component {
               component={NearbyGaraje}
               hideNavBar={true}
               navTransparent="true"
-              initial={!this.props.isVendorLoggedIn}
             />
             <Scene
               key="FutureBooking"
@@ -194,8 +197,10 @@ class RouterComponent extends Component {
     );
   }
 }
-const mapStateToProps = ({ ui }) => {
-  const { fontLoaded, isLoggedIn, isVendorLoggedIn } = ui;
+const mapStateToProps = ({ ui ,user}) => {
+  const { fontLoaded, isLoggedIn,  } = ui;
+  const {isVendorLoggedIn} = user;
+
   return { fontLoaded, isLoggedIn, isVendorLoggedIn };
 };
 
