@@ -10,8 +10,8 @@ import {
 } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage, Alert } from "react-native";
-import { connectTosocket } from "./Socket";
-import {Asset, SplashScreen} from 'expo';
+import { connectTosocket, connectTosocketReached } from "./Socket";
+import { Asset, SplashScreen } from "expo";
 
 export const GET_VENDORS_START = "usermaps/GET_VENDORS_START";
 export const GET_VENDORS_SUCCESS = "usermaps/GET_VENDORS_SUCCESS";
@@ -36,7 +36,6 @@ export const UPDATE_FILTER_DISTANCE = "usermaps/UPDATE_FILTER_DISTANCE";
 export const RESET_FILTER = "usermaps/RESET_FILTER";
 export const VENDOR_DISTANCE = "usermaps/VENDOR_DISTANCE";
 export const GET_DISTANCE = "usermaps/GET_DISTANCE";
-export const GET_DISTANCELIST = "usermaps/GET_DISTANCELIST";
 export const GET_BOOKING_CANCLE_START = "usermaps/GET_BOOKING_CANCLE_START";
 export const GET_BOOKING_CANCLE_SUCCESS = "usermaps/GET_BOOKING_CANCLE_SUCCESS";
 export const GET_BOOKING_CANCLE_FAIL = "usermaps/GET_BOOKING_CANCLE_FAIL";
@@ -53,25 +52,26 @@ export const GET_BOOKING_UPDATE_FAIL = "usermaps/GET_BOOKING_UPDATE_FAIL";
 export const GET_REASON_CHECKBOX = "usermaps/GET_REASON_CHECKBOX";
 export const GET_REASON_CHECKBOX2 = "usermaps/GET_REASON_CHECKBOX2";
 export const GET_REASON_CHECKBOX3 = "usermaps/GET_REASON_CHECKBOX3";
-export const GET_CONFIRM_BOOKING_CANCEL = "usermaps/GET_CONFIRM_BOOKING_CANCEL";
 export const GET_CANCEL_BOOKING_MODAL = "usermaps/GET_CANCEL_BOOKING_MODAL";
 
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
     type: GET_VENDORS_START
   });
+  const {userCurrentBooking} =getState().user;
   let test = new FormData();
   test.append("service_type", "both");
   Api.post(GET_VENDOR, test)
     .then(response => {
-      console.log(response);
-      if(response.status === 0){
-
-      }else {
-      dispatch({
-        type: GET_VENDORS_SUCCESS,
-        payload: response
-      });}
+      if (response.status === 0) {
+        dispatch(getVendors());
+      } else {
+        dispatch({
+          type: GET_VENDORS_SUCCESS,
+          payload: response
+        });
+      
+      }
     })
     .catch(error => {});
 };
@@ -95,6 +95,7 @@ export const getVenderDetails = val => (dispatch, getState) => {
     type: GET_VENDOR_DETAILS,
     payload: val
   });
+  dispatch(getDistance());
 };
 
 export const closeVendorDetailModal = () => async (dispatch, getState) => {
@@ -108,10 +109,9 @@ export const BookVendor = () => async (dispatch, getState) => {
     type: GET_VENDOR_BOOKING_START
   });
   const { vendorsData, location } = getState().usermaps;
-  const { userId } = getState().user;
-
+  const { userData } = getState().user;
   let test = new FormData();
-  test.append("customer_id", userId);
+  test.append("customer_id", userData.userId);
   test.append("vendor_id", vendorsData.id);
   test.append("latitude", location.coords.latitude);
   test.append("longitude", location.coords.longitude);
@@ -138,10 +138,11 @@ export const getBookingCancellation = () => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_CANCLE_START
   });
-  const { bookData } = getState().usermaps;
+  const { bookData, cancleReason } = getState().usermaps;
   let test = new FormData();
   test.append("booking_id", bookData.booking_id);
   test.append("status", "cancle");
+  test.append("reason", cancleReason);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       if (response.status !== 0) {
@@ -179,7 +180,6 @@ export const getBookings = () => async (dispatch, getState) => {
           type: GET_BOOKING_LIST_SUCCESS,
           payload: response
         });
-        dispatch(getDistanceList());
       }
     })
     .catch(error => {});
@@ -251,7 +251,6 @@ export const getDistance = () => async (dispatch, getState) => {
   },${origin.longitude}&destinations=${destination.latitude},${
     destination.longitude
   }&key=${APIKEY}`;
-
   fetch(url)
     .then(response => response.json())
     .then(responseJson => {
@@ -278,52 +277,6 @@ export const getDistance = () => async (dispatch, getState) => {
     .catch(e => {
       //console.warn(e);
     });
-};
-
-export const getDistanceList = val => async (dispatch, getState) => {
-  const { vendorList, location } = getState().usermaps;
-
-  const mode = "driving"; // 'walking';
-  const origin = location.coords;
-  var destinationList = [];
-  var originList = [];
-  var url = "";
-  const APIKEY = "AIzaSyAm_cQCYcozNa9WUVmASmSABGuuS6OSsIw";
-  var url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${
-    location.coords.latitude
-  },${location.coords.longitude}&destinations=${
-    vendorList[0].vendor.latitude
-  },${vendorList[0].vendor.latitude}`;
-  vendorList.map(vendor => {
-    url = url + "|" + `${vendor.vendor.latitude},${vendor.vendor.longitude}`;
-  });
-
-  url = url + `&key=${APIKEY}`;
-
-  await fetch(url)
-    .then(response => response.json())
-    .then(responseJson => {
-      for (i = 0; i < vendorList.length; i++) {
-        var disMile = responseJson.rows[0].elements[i].distance
-          ? responseJson.rows[0].elements[i].distance.text
-          : "0 mi";
-
-        disMile = disMile.split(" ", 2);
-        var dis = disMile[0];
-        dis = dis * 1.609;
-
-        dis = parseFloat(dis.toFixed(1));
-
-        vendorList[i].vendor.distance = dis;
-      }
-    })
-    .catch(e => {
-      //console.warn(e);
-    });
-  dispatch({
-    type: GET_DISTANCELIST,
-    payload: vendorList
-  });
 };
 
 export const getBookingStatus = val => async (dispatch, getState) => {
@@ -369,7 +322,8 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
   dist = (dist * 180) / Math.PI;
   dist = dist * 60 * 1.1515;
   dist = dist * 1.609344;
-  if (dist < 0.1) {
+  console.log(dist);
+  if (dist < 0.055) {
     dispatch({
       type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
       payload: dist
@@ -383,16 +337,20 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_UPDATE_START
   });
-  const { bookingStatusRes } = getState().usermaps;
+  const { bookingStatusRes, bookData } = getState().usermaps;
+
   let test = new FormData();
-  test.append("booking_id", bookingStatusRes.message.userData.userId);
+  test.append("booking_id", bookData.booking_id);
   test.append("status", val);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       if (response.status !== 0) {
+        bookingStatusRes.type = "REACHED";
         dispatch({
-          type: GET_BOOKING_UPDATE_SUCCESS
+          type: GET_BOOKING_UPDATE_SUCCESS,
+          payload: bookingStatusRes
         });
+        dispatch(connectTosocketReached());
       } else {
         dispatch({
           type: GET_BOOKING_UPDATE_FAIL
@@ -404,35 +362,16 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
     });
 };
 
-export const getReasonCheckbox = (index) => (dispatch) => {
+export const getReasonCheckbox = index => dispatch => {
   dispatch({
-    type:GET_REASON_CHECKBOX,
-    payload:index
+    type: GET_REASON_CHECKBOX,
+    payload: index
   });
-}
+};
 
-export const getReasonCheckbox2 = () => (dispatch) => {
+export const getCancelBookingModal = () => dispatch => {
   dispatch({
-    type:GET_REASON_CHECKBOX2,
+    type: GET_CANCEL_BOOKING_MODAL
   });
-}
-
-export const getReasonCheckbox3 = () => (dispatch) => {
-  dispatch({
-    type:GET_REASON_CHECKBOX3,
-  });
-}
-
-export const getConfirmBookingCancel = () => (dispatch) => {
-  dispatch({
-    type:GET_CONFIRM_BOOKING_CANCEL,
-  });
-}
-
-export const getCancelBookingModal = () => (dispatch) => {
-  dispatch({
-    type:GET_CANCEL_BOOKING_MODAL,
-  });
-  dispatch(getBookingCancellation());
   Actions.NearbyGaraje();
-}
+};

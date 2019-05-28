@@ -30,7 +30,7 @@ class RouterComponent extends Component {
   componentWillMount() {
     this.props.loadFont();
     this._retrieveData();
-    //SplashScreen.preventAutoHide();
+    SplashScreen.preventAutoHide();
   }
 
   _retrieveData = async () => {

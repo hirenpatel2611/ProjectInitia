@@ -51,54 +51,29 @@ class filter extends Component {
       <View style={containerStyle}>
         <KeyboardAwareScrollView>
           <StatusBar backgroundColor="#7960FF" />
-          <View
-            style={inStyle.mainView}
-          >
-            <View
-              style={inStyle.headerView}
-            >
+          <View style={inStyle.mainView}>
+            <View style={inStyle.headerView}>
               <TouchableOpacity
                 style={{ width: 27 }}
                 onPress={() => Actions.NearbyGaraje()}
               >
-                <View
-                  style={inStyle.backButton}
-                >
-                  <Image
-                    style={inStyle.ImageBack}
-                    source={BACK_ARROW}
-                  />
+                <View style={inStyle.backButton}>
+                  <Image style={inStyle.ImageBack} source={BACK_ARROW} />
                 </View>
               </TouchableOpacity>
-              <Text
-                style={inStyle.headerTextMain}
-              >
-                Filter
-              </Text>
+              <Text style={inStyle.headerTextMain}>Filter</Text>
 
               <TouchableOpacity
-              onPress={()=>{
-                this.props.resetFilter()
-              }}
+                onPress={() => {
+                  this.props.resetFilter();
+                }}
               >
-              <Text
-                style={inStyle.textReset}
-              >
-                reset
-              </Text>
+                <Text style={inStyle.textReset}>reset</Text>
               </TouchableOpacity>
             </View>
-            <View
-              style={inStyle.bodyView}
-            >
-              <Text
-                style={inStyle.textMechanic}
-              >
-                Mechanic Type
-              </Text>
-              <View
-                style={inStyle.viewMechanic}
-              >
+            <View style={inStyle.bodyView}>
+              <Text style={inStyle.textMechanic}>Mechanic Type</Text>
+              <View style={inStyle.viewMechanic}>
                 <TouchableHighlight
                   activeOpacity={1}
                   onPress={() => {
@@ -108,10 +83,14 @@ class filter extends Component {
                 >
                   <View
                     elevation={5}
-                    style={[inStyle.viewMechanicButton,
-                    {backgroundColor: this.props.isVehicle
-                      ? "#7960FF"
-                      : "white"}]}
+                    style={[
+                      inStyle.viewMechanicButton,
+                      {
+                        backgroundColor: this.props.isVehicle
+                          ? "#7960FF"
+                          : "white"
+                      }
+                    ]}
                   >
                     <Image
                       style={inStyle.imageMechanicType}
@@ -128,30 +107,29 @@ class filter extends Component {
                 >
                   <View
                     elevation={5}
-                    style={[inStyle.viewMechanicButton,
-                      {backgroundColor: this.props.isCar ? "#7960FF" : "white",}]}
+                    style={[
+                      inStyle.viewMechanicButton,
+                      {
+                        backgroundColor: this.props.isCar ? "#7960FF" : "white"
+                      }
+                    ]}
                   >
-                    <Image
-                      style={inStyle.imageMechanicType}
-                      source={CAR}
-                    />
+                    <Image style={inStyle.imageMechanicType} source={CAR} />
                   </View>
                 </TouchableHighlight>
               </View>
-              <Text
-                style={[inStyle.textMechanic,{paddingTop: 10}]}
-              >
+              <Text style={[inStyle.textMechanic, { paddingTop: 10 }]}>
                 Rating
               </Text>
-              <View
-                style={inStyle.ratingView}
-              >
-                <Rating
-                  type="custom"
+              <View style={inStyle.ratingView}>
+                <AirbnbRating
+                  type="star"
                   ratingBackgroundColor="transparent"
-                  imageSize={30}
-                  startingValue={this.props.rating.toString()}
+                  imageSize={25}
+                  defaultRating={this.props.rating.toString()}
+                  showRating={false}
                   onFinishRating={rating => {
+                    console.log(rating);
                     this.props.getFilterRating(rating);
                   }}
                 />
@@ -159,19 +137,15 @@ class filter extends Component {
               </View>
               <View>
                 <Text
-                  style={[inStyle.textMechanic,
-                    {paddingTop: 10,
-                    flexDirection: "column"}
+                  style={[
+                    inStyle.textMechanic,
+                    { paddingTop: 10, flexDirection: "column" }
                   ]}
                 >
                   Cost
                 </Text>
-                <View
-                  style={inStyle.costView}
-                >
-                  <View
-                    style={inStyle.costInnView}
-                  >
+                <View style={inStyle.costView}>
+                  <View style={inStyle.costInnView}>
                     <CheckBox
                       isChecked={this.props.isChecked1}
                       checkedCheckBoxColor="#7960FF"
@@ -180,16 +154,16 @@ class filter extends Component {
                       }}
                     />
                     <Text
-                      style={[inStyle.costInnText,
-                        {color: this.props.isChecked1 ? "#7960FF" : "#4A4A4A"}]}
+                      style={[
+                        inStyle.costInnText,
+                        { color: this.props.isChecked1 ? "#7960FF" : "#4A4A4A" }
+                      ]}
                     >
                       ₹₹
                     </Text>
                   </View>
 
-                  <View
-                    style={inStyle.costInnView}
-                  >
+                  <View style={inStyle.costInnView}>
                     <CheckBox
                       isChecked={this.props.isChecked2}
                       checkedCheckBoxColor="#7960FF"
@@ -198,16 +172,16 @@ class filter extends Component {
                       }}
                     />
                     <Text
-                      style={[inStyle.costInnText,
-                        {color: this.props.isChecked2 ? "#7960FF" : "#4A4A4A"}]}
+                      style={[
+                        inStyle.costInnText,
+                        { color: this.props.isChecked2 ? "#7960FF" : "#4A4A4A" }
+                      ]}
                     >
                       ₹₹₹
                     </Text>
                   </View>
 
-                  <View
-                    style={inStyle.costInnView}
-                  >
+                  <View style={inStyle.costInnView}>
                     <CheckBox
                       isChecked={this.props.isChecked3}
                       checkedCheckBoxColor="#7960FF"
@@ -216,8 +190,10 @@ class filter extends Component {
                       }}
                     />
                     <Text
-                      style={[inStyle.costInnText,
-                        {color: this.props.isChecked3? "#7960FF" : "#4A4A4A"}]}
+                      style={[
+                        inStyle.costInnText,
+                        { color: this.props.isChecked3 ? "#7960FF" : "#4A4A4A" }
+                      ]}
                     >
                       ₹₹₹₹
                     </Text>
@@ -225,15 +201,10 @@ class filter extends Component {
                 </View>
               </View>
 
-              <Text
-                style={[inStyle.textMechanic,
-                  {paddingTop: 10}]}
-              >
+              <Text style={[inStyle.textMechanic, { paddingTop: 10 }]}>
                 Distance
               </Text>
-              <View
-                style={inStyle.distanceView1}
-              >
+              <View style={inStyle.distanceView1}>
                 <Slider
                   style={{ width: 0.92 * ScreenWidth }}
                   step={1}
@@ -246,24 +217,12 @@ class filter extends Component {
                   onSlidingComplete={val => this.props.getFilterDistance(val)}
                 />
               </View>
-              <View
-                style={inStyle.distanceView2}
-              >
-                <Text
-                  style={inStyle.distanceBlackText}
-                >
-                  5 km
-                </Text>
-                <Text
-                  style={inStyle.distanceBlueText}
-                >
+              <View style={inStyle.distanceView2}>
+                <Text style={inStyle.distanceBlackText}>5 km</Text>
+                <Text style={inStyle.distanceBlueText}>
                   {this.props.distance} km
                 </Text>
-                <Text
-                  style={inStyle.distanceBlackText}
-                >
-                  anyware
-                </Text>
+                <Text style={inStyle.distanceBlackText}>anyware</Text>
               </View>
             </View>
             <TouchableHighlight
@@ -283,67 +242,67 @@ class filter extends Component {
 }
 
 const inStyle = {
-  mainView:{
+  mainView: {
     flex: 1,
     flexDirection: "column",
     alignItems: "stretch"
   },
-  headerView:{
+  headerView: {
     padding: 10,
     marginTop: 27,
     width: ScreenWidth,
     flexDirection: "row",
     marginBottom: 12,
-    justifyContent:'space-between'
+    justifyContent: "space-between"
   },
-  backButton:{
+  backButton: {
     height: 25,
     width: 25,
     borderRadius: 25,
     alignItems: "center",
     justifyContent: "center"
   },
-  ImageBack:{
+  ImageBack: {
     height: 17,
     width: 25,
-    tintColor:'black'
+    tintColor: "black"
   },
-  headerTextMain:{
+  headerTextMain: {
     paddingLeft: 16,
     fontSize: 20,
     fontFamily: "circular-bold",
     color: "#4B4B4B"
   },
-  textReset:{
+  textReset: {
     fontSize: 16,
     fontFamily: "circular-book",
     color: "#7960FF"
   },
-  bodyView:{
+  bodyView: {
     height: 0.55 * ScreenHeight,
-    justifyContent:'space-around'
+    justifyContent: "space-around"
   },
-  textMechanic:{
+  textMechanic: {
     fontSize: 18,
     paddingLeft: 20,
     color: "#4A4A4A",
     fontFamily: "circular-book"
   },
-  viewMechanic:{
+  viewMechanic: {
     flexDirection: "row",
     padding: 10,
     justifyContent: "space-around",
     width: 0.5 * ScreenWidth
   },
-  buttonMechanic:{
+  buttonMechanic: {
     borderRadius: 100
   },
-  imageMechanicType:{
+  imageMechanicType: {
     width: 33,
     height: 33,
     resizeMode: "contain"
   },
-  viewMechanicButton:{
+  viewMechanicButton: {
     alignItems: "center",
     padding: 4,
     borderRadius: 60,
@@ -352,52 +311,52 @@ const inStyle = {
     shadowRadius: 5,
     shadowOpacity: 1.0
   },
-  ratingView:{
+  ratingView: {
     alignItems: "flex-start",
     padding: 10,
     flexDirection: "row"
   },
-  costView:{
+  costView: {
     flexDirection: "row",
     alignItems: "flex-start",
     width: ScreenWidth,
     justifyContent: "space-around",
     padding: 10
   },
-  costInnView:{
+  costInnView: {
     flexDirection: "row",
     alignItems: "flex-start"
   },
-  costInnText:{
+  costInnText: {
     fontSize: 16,
     fontFamily: "circular-book",
     paddingLeft: 10,
-    paddingTop: 3,
+    paddingTop: 3
   },
-  distanceView1:{
+  distanceView1: {
     padding: 10,
     justifyContent: "space-around"
   },
-  distanceView2:{
+  distanceView2: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop:-10
+    marginTop: -10
   },
-  distanceBlackText:{
+  distanceBlackText: {
     fontSize: 18,
     fontFamily: "circular-book",
     color: "#4A4A4A"
   },
-  distanceBlueText:{
+  distanceBlueText: {
     color: "#7960FF",
     fontSize: 18,
     fontFamily: "circular-book"
   },
-  mainButtonStyle:{
-    alignSelf:'center',
-    marginTop:0.23 * ScreenHeight
+  mainButtonStyle: {
+    alignSelf: "center",
+    marginTop: 0.23 * ScreenHeight
   }
-}
+};
 
 const mapStateToProps = ({ usermaps }) => {
   const {

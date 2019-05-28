@@ -15,7 +15,8 @@ const INITIAL_STATE = {
   userAddress: '',
   isUserVendor:'',
   userData:'',
-  isVendorLoggedIn:false
+  isVendorLoggedIn:false,
+  userCurrentBooking:''
 
 };
 
@@ -55,7 +56,8 @@ export default (state = INITIAL_STATE, action) => {
               userAddress: action.payload.address,
               userLatitude:action.payload.latitude,
               userLongitude:action.payload.longitude,
-              userVehicleType:action.payload.service_vehicle_type,}
+              userVehicleType:action.payload.service_vehicle_type,},
+              userCurrentBooking:action.payload.current_booking
             };
           }
           break;

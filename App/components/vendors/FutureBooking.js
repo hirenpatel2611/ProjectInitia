@@ -26,18 +26,22 @@ import {
   connectTosocketApprov,
   otpDone,
   connectTosocketBookingCancle,
-  BookingListApprove
+  BookingListApprove,
+  BookingListCancle,
+  getCancleBookingModal,
+  getReasonCheckboxVendor
 } from "../../actions";
-import { FutureBookingList,Spinner } from "../../Common";
+import { FutureBookingList, Spinner } from "../../Common";
 import { CALL, BITMAP2 } from "../../images";
 import call from "react-native-phone-call";
+import CheckBox from "react-native-check-box";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 let isVandor;
 
 class FutureBooking extends Component {
-   componentDidMount() {
+  componentDidMount() {
     this.props.getFutureBookings();
   }
 
@@ -49,37 +53,38 @@ class FutureBooking extends Component {
           customer={vendorBookingList.customer}
           bookstatus={vendorBookingList.status}
           onPressApprove={() => {
-            var status = "accept";
             this.props.BookingListApprove(vendorBookingList.booking_id);
             this.props.connectTosocketApprov(
               vendorBookingList.customer.customer_id
             );
           }}
+          onPressCancle={() => {
+            var cancleBookingData = {
+              booking_id: vendorBookingList.booking_id,
+              customer_id: vendorBookingList.customer.customer_id
+            };
+            this.props.getCancleBookingModal(cancleBookingData);
+          }}
+          opacityApprove={vendorBookingList.status === "pending" ? 1 : 0}
+          opacityCancle={vendorBookingList.status === "cancle" ? 0 : 1}
           disabledApprove={
             vendorBookingList.status === "pending" ? false : true
           }
-          opacityApprove={vendorBookingList.status === "pending" ? 1 : 0.5}
-          disabledCancle={
-            vendorBookingList.status === "pending" ||
-            vendorBookingList.status === "reached"
-              ? false
-              : true
-          }
-          opacityCancle={
-            vendorBookingList.status === "pending" ||
-            vendorBookingList.status === "reached"
-              ? 1
-              : 0.5
-          }
+          disabledCancle={vendorBookingList.status === "cancle" ? true : false}
         />
       ));
-    }
-    else {
-      return <Spinner />
+    } else {
+      return this.props.loadingFutureBookigList ? (
+        <Spinner />
+      ) : (
+        <Text style={{ fontFamily: "circular-bold", alignSelf: "center" }}>
+          No booking found
+        </Text>
+      );
     }
   }
 
-   render() {
+  render() {
     const { containerStyle } = styles;
     return (
       <View>
@@ -257,9 +262,11 @@ class FutureBooking extends Component {
                   <TouchableOpacity
                     style={{ alignSelf: "flex-end" }}
                     onPress={() => {
-                      var status = "cancle";
-                      this.props.getBookingUpdate(status);
-                      this.props.connectTosocketBookingCancle();
+                      var cancleBookingData = {
+                        booking_id: this.props.bookingData.booking_id,
+                        customer_id: this.props.bookUserData.userId
+                      };
+                      this.props.getCancleBookingModal(cancleBookingData);
                     }}
                   >
                     <View
@@ -334,7 +341,7 @@ class FutureBooking extends Component {
                     marginBottom: 10
                   }}
                 >
-                  You OTP for Mechanic.
+                  Your OTP for Mechanic.
                 </Text>
                 <Text
                   style={{
@@ -378,6 +385,111 @@ class FutureBooking extends Component {
               </View>
             </View>
           </Modal>
+          <Modal
+            visible={this.props.isConfirmModal}
+            animationType="slide"
+            transparent={true}
+            opacity={0.5}
+            style={inStyle.modalStyle}
+          >
+            <View
+              style={{
+                backgroundColor: "rgba(100,100,100, 0.5)",
+                height: ScreenHeight
+              }}
+            >
+              <View
+                style={{
+                  marginTop: 0.4 * ScreenHeight,
+                  alignSelf: "stretch",
+                  backgroundColor: "#FFFFFF",
+                  height: 0.25 * ScreenHeight,
+                  margin: 15,
+                  borderRadius: 10,
+                  padding: 10,
+                  justifyContent: "space-around"
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontFamily: "circular-bold",
+                    alignSelf: "center"
+                  }}
+                >
+                  Reason of Cancel
+                </Text>
+                <CheckBox
+                  isChecked={this.props.reasonCheckboxVendor[0]}
+                  checkedCheckBoxColor="#7960FF"
+                  rightText="Mechanic is not responding on booking."
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                  onClick={() => {
+                    this.props.getReasonCheckboxVendor(0);
+                  }}
+                />
+                <CheckBox
+                  isChecked={this.props.reasonCheckboxVendor[1]}
+                  checkedCheckBoxColor="#7960FF"
+                  rightText="Mechanic is not done good deal."
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                  onClick={() => {
+                    this.props.getReasonCheckboxVendor(1);
+                  }}
+                />
+                <CheckBox
+                  isChecked={this.props.reasonCheckboxVendor[2]}
+                  checkedCheckBoxColor="#7960FF"
+                  rightText="I Choose better option."
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                  onClick={() => {
+                    this.props.getReasonCheckboxVendor(2);
+                  }}
+                />
+                <TouchableOpacity
+                  disabled={this.props.confirmDisableVendor ? false : true}
+                  style={{
+                    alignSelf: "center",
+                    opacity: this.props.confirmDisableVendor ? 1 : 0.5
+                  }}
+                  activeOpacity={1}
+                  underlayColor="white"
+                  onPress={() => {
+                    this.props.BookingListCancle(
+                      this.props.cancleBookingId.booking_id
+                    );
+                    this.props.connectTosocketBookingCancle(
+                      this.props.cancleBookingId.customer_id
+                    );
+                  }}
+                >
+                  <View
+                    style={{
+                      backgroundColor: "#7960FF",
+                      width: 0.4 * ScreenWidth,
+                      borderRadius: 5,
+                      alignItems: "center",
+                      margin: 10,
+                      padding: 5,
+                      alignItems: "center",
+                      justifyContent: "center"
+                    }}
+                  >
+                    {this.props.loadingBookig ? (
+                      <Text style={inStyle.modalButtonCancleText}>
+                        Loading...
+                      </Text>
+                    ) : (
+                      <Text style={inStyle.modalButtonCancleText}>Confirm</Text>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </ScrollView>
       </View>
     );
@@ -399,6 +511,26 @@ const inStyle = {
   buttonReload: {
     alignSelf: "center",
     paddingTop: 20
+  },
+  modalButtonCancle: {
+    backgroundColor: "#7960FF",
+    height: 25,
+    width: 70,
+    borderRadius: 5,
+    alignItems: "center",
+    margin: 10,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  modalButtonCancleText: {
+    fontSize: 14,
+    fontFamily: "circular-bold",
+    color: "white"
+  },
+  modalStyle: {
+    height: 0.2 * ScreenHeight,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "flex-end"
   }
 };
 const mapStateToProps = ({ vendors }) => {
@@ -412,7 +544,12 @@ const mapStateToProps = ({ vendors }) => {
     mechanicOTP,
     isMechanicOtp,
     loadingBookigUpdate,
-    bookUserData
+    bookUserData,
+    cancleBookingId,
+    reasonCheckboxVendor,
+    cancleReasonVendor,
+    isConfirmModal,
+    confirmDisableVendor
   } = vendors;
   return {
     loadingFutureBookigList,
@@ -424,7 +561,12 @@ const mapStateToProps = ({ vendors }) => {
     mechanicOTP,
     isMechanicOtp,
     loadingBookigUpdate,
-    bookUserData
+    bookUserData,
+    cancleBookingId,
+    isConfirmModal,
+    reasonCheckboxVendor,
+    cancleReasonVendor,
+    confirmDisableVendor
   };
 };
 
@@ -438,6 +580,9 @@ export default connect(
     connectTosocketApprov,
     otpDone,
     connectTosocketBookingCancle,
-    BookingListApprove
+    BookingListApprove,
+    BookingListCancle,
+    getCancleBookingModal,
+    getReasonCheckboxVendor
   }
 )(FutureBooking);

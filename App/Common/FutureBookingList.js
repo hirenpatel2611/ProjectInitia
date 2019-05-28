@@ -8,10 +8,11 @@ let ScreenWidth = Dimensions.get("window").width;
 const FutureBookingList = ({customer,
                             bookstatus,
                             onPressApprove,
-                            disabledApprove,
                             opacityApprove,
+                            disabledApprove,
+                            opacityCancle,
                             disabledCancle,
-                            opacityCancle})=>{
+                            onPressCancle})=>{
   return(
     <View
       style={{
@@ -115,8 +116,8 @@ const FutureBookingList = ({customer,
       >
       <TouchableOpacity
       style={{alignSelf:'flex-end',opacity:opacityApprove}}
-      onPress={onPressApprove}
       disabled={disabledApprove}
+      onPress={onPressApprove}
       >
         <View
         style={{
@@ -140,9 +141,7 @@ const FutureBookingList = ({customer,
       <TouchableOpacity
       style={{alignSelf:'flex-end',opacity:opacityCancle}}
       disabled={disabledCancle}
-      onPress={()=>{
-        this.props.isBookingCancle();
-      }}
+      onPress={onPressCancle}
       >
         <View
         style={{

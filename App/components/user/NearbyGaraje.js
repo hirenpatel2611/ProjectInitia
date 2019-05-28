@@ -24,8 +24,15 @@ import { setTimer, setScore } from "../../actions";
 import styles from "./usermapsStyle";
 import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
-import MapView,{ PROVIDER_GOOGLE } from "react-native-maps";
-import { Constants, Location, Permissions, IntentLauncherAndroid,Asset, SplashScreen } from "expo";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import {
+  Constants,
+  Location,
+  Permissions,
+  IntentLauncherAndroid,
+  Asset,
+  SplashScreen
+} from "expo";
 import {
   getVendors,
   getUserLocationFail,
@@ -60,10 +67,7 @@ class NearbyGaraje extends Component {
     await this.props.getVendors();
 
     if (Platform.OS === "android" && !Constants.isDevice) {
-      this.setState({
-        errorMessage:
-          "Oops, this will not work on Sketch in an Android emulator. Try it on your device!"
-      });
+    
     } else {
       this._getLocationAsync();
     }
@@ -94,13 +98,13 @@ class NearbyGaraje extends Component {
       .catch(err => {
         console.error(err);
       });
+
     let location = await Location.getCurrentPositionAsync({
       accuracy: Location.Accuracy.BestForNavigation
     });
-
     this.props.getUserLocationSuccess(location);
     {
-      SplashScreen.hide()
+      SplashScreen.hide();
       this._map.animateToRegion(
         {
           latitude: this.props.location.coords.latitude,
@@ -134,7 +138,7 @@ class NearbyGaraje extends Component {
             }}
             onPress={() => {
               this.props.getVenderDetails(vendor);
-              this.props.getDistance();
+              //this.props.getDistance();
             }}
           >
             <Image style={inStyle.imageVendor} source={USER2} />
@@ -154,13 +158,18 @@ class NearbyGaraje extends Component {
         <Header headerText="Near by Garaje" filterIcon={FILTER} />
         <StatusBar backgroundColor="#7960FF" />
         <View
-          style={{
-            flex: 1
-          }}
+          style={[
+            {
+              flex: 1
+            },
+            this.props.isBookModalVisible || this.props.isBookCancelModal
+              ? { opacity: 0.6 }
+              : null
+          ]}
         >
           <MapView
             style={{
-              ...StyleSheet.absoluteFillObject,
+              ...StyleSheet.absoluteFillObject
             }}
             provider={PROVIDER_GOOGLE}
             ref={component => (this._map = component)}
@@ -185,98 +194,83 @@ class NearbyGaraje extends Component {
             opacity={0.5}
             style={inStyle.modalStyle}
           >
-
             <TouchableOpacity
-            style={{backgroundColor: "rgba(100,100,100, 0.5)",
-                          height: ScreenHeight}}
+              style={{ height: ScreenHeight }}
               activeOpacity={1}
               onPress={() => {
-                this.props.isBookingSuccess?null:this.props.closeVendorDetailModal();
+                this.props.isBookingSuccess
+                  ? null
+                  : this.props.closeVendorDetailModal();
               }}
             >
               <View style={inStyle.modalBookTouch}>
                 <View style={inStyle.modalView1}>
                   <Text style={inStyle.modalTextName}>
-                    {this.props.vendorsData ?
-                      this.props.vendorsData.first_name
-                     :
-                      null
-                    }
+                    {this.props.vendorsData
+                      ? this.props.vendorsData.first_name
+                      : null}
                   </Text>
-                  {this.props.isBookingSuccess ? (
-                    <TouchableOpacity
-                      activeOpacity={1}
-                      underlayColor="white"
-                      onPress={() => {
-                        this.props.getCancelBookingModal();
-                      }}
-                    >
-                      <View style={inStyle.modalButtonCancle}>
-                        {this.props.loadingBookig ? (
-                          <Text style={inStyle.modalButtonCancleText}>
-                            Loading...
-                          </Text>
-                        ) : (
-                          <Text style={inStyle.modalButtonCancleText}>
-                            Cancel
-                          </Text>
-                        )}
-                      </View>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-
-                      underlayColor="white"
-                      onPress={async() => {
-                        await this.props.BookVendor();
-                      }}
-                    >
-                      <View style={inStyle.modalButtonCancle}>
-                        {this.props.loadingBookig ? (
-                          <Text style={inStyle.modalButtonCancleText}>
-                            Loading...
-                          </Text>
-                        ) : (
-                          <Text style={inStyle.modalButtonCancleText}>
-                            Book
-                          </Text>
-                        )}
-                      </View>
-                    </TouchableOpacity>
-                  )}
-                </View>
-                <Text style={inStyle.modalTextAddress}>
-                  {this.props.vendorsData ?
-                    this.props.vendorsData.address
-                   :
-                    null
-                  }
-                </Text>
-                <View
-                  style={[inStyle.modalView1,{bottom: 10}]}
-                >
                   <View style={inStyle.modalInnerView1}>
-                    <Text style={inStyle.modalTextBlack}>Ratings</Text>
-                    <Rating imageSize={15} />
-                  </View>
-                  <View style={inStyle.modalInnerView1}>
-                    <Text style={inStyle.modalTextBlack}>Price</Text>
-                    <Text style={inStyle.modalTextBlue}>₹₹₹</Text>
-                  </View>
-                  <View style={inStyle.modalInnerView1}>
-                    <Text style={inStyle.modalTextBlack}>Distance</Text>
                     <Text style={inStyle.modalTextBlue}>
-                      {
-                        this.props.vendorDistance?this.props.vendorDistance:null
-                      }
+                      {this.props.vendorDistance
+                        ? this.props.vendorDistance
+                        : "0 km"}
                     </Text>
                   </View>
+
+                  <View style={inStyle.modalInnerView1}>
+                    <Rating imageSize={20}
+                    readonly={true}
+                      startingValue={this.props.vendorsData.rating === null?0:this.props.vendorsData.rating}
+                     />
+                  </View>
                 </View>
-                <Text style={{
-                  fontFamily:'circular-bold'
-                }}>
-                {this.props.bookingStatusRes?<Text>Status :{this.props.bookingStatusRes.type}</Text>:null}
+                <Text style={inStyle.modalTextAddress}>
+                  {this.props.vendorsData
+                    ? this.props.vendorsData.address
+                    : null}
                 </Text>
+
+
+                  {this.props.bookingStatusRes ? (
+                    <Text
+                      style={{
+                        fontFamily: "circular-bold"
+                      }}
+                    >Status :{this.props.bookingStatusRes.type}</Text>
+                  ) : null
+                  }
+
+                {this.props.isBookingSuccess ? (
+                  <TouchableOpacity
+                    activeOpacity={1}
+                    underlayColor="white"
+                    onPress={() => {
+                      this.props.getCancelBookingModal();
+                    }}
+                  >
+                    <View style={inStyle.modalButtonCancle}>
+                      <Text style={inStyle.modalButtonCancleText}>Cancel</Text>
+                    </View>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    underlayColor="white"
+                    onPress={async () => {
+                      await this.props.BookVendor();
+                    }}
+                  >
+                    <View style={inStyle.modalButtonCancle}>
+                      {this.props.loadingBookig ? (
+                        <Text style={inStyle.modalButtonCancleText}>
+                          Loading...
+                        </Text>
+                      ) : (
+                        <Text style={inStyle.modalButtonCancleText}>Book</Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                )}
               </View>
             </TouchableOpacity>
           </Modal>
@@ -287,87 +281,97 @@ class NearbyGaraje extends Component {
             opacity={0.5}
             style={inStyle.modalStyle}
           >
-          <View
-            style={{
-              backgroundColor: "rgba(100,100,100, 0.5)",
-              height: ScreenHeight
-            }}
-          >
-          <View style={{
-              marginTop: 0.40 * ScreenHeight,
-              alignSelf: "stretch",
-              backgroundColor: "#FFFFFF",
-              height: 0.25 * ScreenHeight,
-              margin: 15,
-              borderRadius: 10,
-              padding: 10,
-              justifyContent:'space-around'}}>
-          <Text
-          style={{fontSize:18,fontFamily:'circular-bold',alignSelf:'center'}}
-          >
-          Reason of Cancel
-          </Text>
-          <CheckBox
-            isChecked={this.props.reasonCheckbox[0]}
-            checkedCheckBoxColor="#7960FF"
-            rightText='Mechanic is responding on booking.'
-            checkedIcon='dot-circle-o'
-            uncheckedIcon='circle-o'
-            onClick={() => {
-              this.props.getReasonCheckbox(0);
-            }}
-          />
-          <CheckBox
-            isChecked={this.props.reasonCheckbox[1]}
-            checkedCheckBoxColor="#7960FF"
-            rightText='Mechanic is not good deal.'
-            checkedIcon='dot-circle-o'
-            uncheckedIcon='circle-o'
-            onClick={() => {
-              this.props.getReasonCheckbox(1);
-            }}
-          />
-          <CheckBox
-            isChecked={this.props.reasonCheckbox[2]}
-            checkedCheckBoxColor="#7960FF"
-            rightText='I Choose better option.'
-            checkedIcon='dot-circle-o'
-            uncheckedIcon='circle-o'
-            onClick={() => {
-              this.props.getReasonCheckbox(2);
-            }}
-          />
-          <TouchableOpacity
-            style={{alignSelf:'center'}}
-            activeOpacity={1}
-            underlayColor="white"
-            onPress={() => {
-              this.props.getConfirmBookingCancel();
-            }}
-          >
-            <View style={{
-              backgroundColor: "#7960FF",
-              width: 0.40 * ScreenWidth,
-              borderRadius: 5,
-              alignItems: "center",
-              margin: 10,
-              padding:5,
-              alignItems: "center",
-              justifyContent: "center"
-            }}>
-              {this.props.loadingBookig ? (
-                <Text style={inStyle.modalButtonCancleText}>
-                  Loading...
+            <View
+              style={{
+                height: ScreenHeight
+              }}
+            >
+              <View
+                style={{
+                  marginTop: 0.4 * ScreenHeight,
+                  alignSelf: "stretch",
+                  backgroundColor: "#FFFFFF",
+                  height: 0.25 * ScreenHeight,
+                  margin: 15,
+                  borderRadius: 10,
+                  padding: 10,
+                  justifyContent: "space-around"
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 18,
+                    fontFamily: "circular-bold",
+                    alignSelf: "center"
+                  }}
+                >
+                  Reason of Cancel
                 </Text>
-              ) : (
-                <Text style={inStyle.modalButtonCancleText}>
-                  Confirm
-                </Text>
-              )}
+                <CheckBox
+                  isChecked={this.props.reasonCheckbox[0]}
+                  checkedCheckBoxColor="#7960FF"
+                  rightText="Mechanic is not responding on booking."
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                  onClick={() => {
+                    this.props.getReasonCheckbox(0);
+                  }}
+                />
+                <CheckBox
+                  isChecked={this.props.reasonCheckbox[1]}
+                  checkedCheckBoxColor="#7960FF"
+                  rightText="Mechanic is not done good deal."
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                  onClick={() => {
+                    this.props.getReasonCheckbox(1);
+                  }}
+                />
+                <CheckBox
+                  isChecked={this.props.reasonCheckbox[2]}
+                  checkedCheckBoxColor="#7960FF"
+                  rightText="I Choose better option."
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                  onClick={() => {
+                    this.props.getReasonCheckbox(2);
+                  }}
+                />
+                <TouchableOpacity
+                  disabled={this.props.confirmDisable ? false : true}
+                  style={{
+                    alignSelf: "center",
+                    opacity: this.props.confirmDisable ? 1 : 0.5
+                  }}
+                  activeOpacity={1}
+                  underlayColor="white"
+                  onPress={() => {
+                    this.props.getBookingCancellation();
+                  }}
+                >
+                  <View
+                    style={{
+                      backgroundColor: "#7960FF",
+                      width: 0.4 * ScreenWidth,
+                      borderRadius: 5,
+                      alignItems: "center",
+                      margin: 10,
+                      padding: 5,
+                      alignItems: "center",
+                      justifyContent: "center"
+                    }}
+                  >
+                    {this.props.loadingBookig ? (
+                      <Text style={inStyle.modalButtonCancleText}>
+                        Loading...
+                      </Text>
+                    ) : (
+                      <Text style={inStyle.modalButtonCancleText}>Confirm</Text>
+                    )}
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
-          </TouchableOpacity>
-          </View>
-          </View>
           </Modal>
         </View>
       </View>
@@ -397,7 +401,7 @@ const inStyle = {
     justifyContent: "flex-end"
   },
   modalBookTouch: {
-    marginTop: 0.65 * ScreenHeight,
+    marginTop: 0.7 * ScreenHeight,
     alignSelf: "stretch",
     backgroundColor: "#FFFFFF",
     height: 0.25 * ScreenHeight,
@@ -413,13 +417,13 @@ const inStyle = {
   modalTextName: {
     padding: 10,
     fontFamily: "circular-bold",
-    fontSize: 20,
+    fontSize: 14,
     color: "#4A4A4A"
   },
   modalButtonCancle: {
     backgroundColor: "#7960FF",
-    height: 25,
-    width: 70,
+    height: 30,
+    alignSelf: "stretch",
     borderRadius: 5,
     alignItems: "center",
     margin: 10,
@@ -432,15 +436,16 @@ const inStyle = {
     color: "white"
   },
   modalTextAddress: {
-    marginTop: -15,
+
     padding: 10,
     fontFamily: "circular-book",
     fontSize: 14,
-    color: "#4A4A4A"
+    color: "#4A4A4A",
+    marginLeft: 2
   },
   modalInnerView1: {
     flexDirection: "column",
-    justifyContent: "space-between"
+    justifyContent: "space-around"
   },
   modalTextBlack: {
     fontFamily: "circular-book",
@@ -449,7 +454,7 @@ const inStyle = {
   },
   modalTextBlue: {
     fontFamily: "circular-book",
-    fontSize: 16,
+    fontSize: 14,
     color: "#7960FF"
   },
   imageVendor: {
@@ -474,7 +479,8 @@ const mapStateToProps = ({ usermaps }) => {
     vendorDistance,
     bookingStatusRes,
     reasonCheckbox,
-    isBookCancelModal
+    isBookCancelModal,
+    confirmDisable
   } = usermaps;
   return {
     loading,
@@ -488,7 +494,8 @@ const mapStateToProps = ({ usermaps }) => {
     vendorDistance,
     bookingStatusRes,
     reasonCheckbox,
-    isBookCancelModal
+    isBookCancelModal,
+    confirmDisable
   };
 };
 

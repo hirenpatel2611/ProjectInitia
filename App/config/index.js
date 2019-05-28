@@ -17,3 +17,18 @@ export const URL_TIMESHEET_SUBMIT='/app/api/submit';
 export const URL_CREATE_TIMESHEETS='/app/api/create_timesheet';
 export const WEBCALL_SUCCESSFUL_FLAG=100;
 export const URL_USER_LOGOUT="/app/api/logout";
+
+
+
+export const statusToPhrase = () =>{
+
+
+  switch (expression) {
+    case expression:
+
+      break;
+    default:
+
+  }
+  
+}

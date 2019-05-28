@@ -1,14 +1,15 @@
 import Peer from "peerjs";
 import { AsyncStorage } from "react-native";
 import io from "socket.io-client";
-import { BackgroundFetch } from "expo";
+import { BackgroundFetch, TaskManager, Location } from "expo";
 import { getBookingModal, getBookingVendorStatus } from "./Vendors";
 import { getBookingStatus, getMechanicCurrentLocation } from "./UserMaps";
 import { Actions } from "react-native-router-flux";
 
 export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
-
+const BOOKING_STATUS_RECEIVE_TASK_NAME =
+  "background-booking-scoket-receive-task";
 var peer = null;
 export const createSocketChannel = () => async (dispatch, getState) => {
   chatSocket = io("http://103.50.153.25:3000", {
@@ -19,17 +20,17 @@ export const createSocketChannel = () => async (dispatch, getState) => {
   });
   const { isUserVendor, userId } = getState().user;
   chatSocket.emit("self_room", { room: `${userId}` });
+
   chatSocket.on("broadcast", function(data) {
-  
     switch (data.type) {
       case "BOOK":
         dispatch(getBookingModal(data.message));
         break;
 
       case "ACCEPT":
-      if (isUserVendor !== "1") {
-        dispatch(getBookingStatus(data));}
-        else {
+        if (isUserVendor !== "1") {
+          dispatch(getBookingStatus(data));
+        } else {
           dispatch(getBookingVendorStatus(data));
         }
 
@@ -38,9 +39,9 @@ export const createSocketChannel = () => async (dispatch, getState) => {
       case "ON-THE-WAY":
         if (isUserVendor !== "1") {
           dispatch(getBookingStatus(data));
-        }else {
-            dispatch(getBookingVendorStatus(data));
-          }
+        } else {
+          dispatch(getBookingVendorStatus(data));
+        }
 
         break;
 
@@ -48,8 +49,8 @@ export const createSocketChannel = () => async (dispatch, getState) => {
         if (isUserVendor !== "1") {
           dispatch(getBookingStatus(data));
         } else {
-            dispatch(getBookingVendorStatus(data));
-          }
+          dispatch(getBookingVendorStatus(data));
+        }
         break;
 
       case "MECHANIC_CURRENT_LOCATION":
@@ -58,22 +59,87 @@ export const createSocketChannel = () => async (dispatch, getState) => {
         }
         break;
 
+      case "REACHED":
+        if (isUserVendor === "1") {
+        }
+        break;
+
       default:
         return null;
     }
   });
+  await Location.startLocationUpdatesAsync(BOOKING_STATUS_RECEIVE_TASK_NAME, {
+    accuracy: Location.Accuracy.BestForNavigation
+  });
+
+  TaskManager.defineTask(
+    BOOKING_STATUS_RECEIVE_TASK_NAME,
+    ({ data, error }) => {
+      chatSocket.on("broadcast", function(data) {
+        switch (data.type) {
+          case "BOOK":
+            dispatch(getBookingModal(data.message));
+            break;
+
+          case "ACCEPT":
+            if (isUserVendor !== "1") {
+              dispatch(getBookingStatus(data));
+            } else {
+              dispatch(getBookingVendorStatus(data));
+            }
+
+            break;
+
+          case "ON-THE-WAY":
+            if (isUserVendor !== "1") {
+              dispatch(getBookingStatus(data));
+            } else {
+              dispatch(getBookingVendorStatus(data));
+            }
+
+            break;
+
+          case "CANCEL":
+            if (isUserVendor !== "1") {
+              dispatch(getBookingStatus(data));
+            } else {
+              dispatch(getBookingVendorStatus(data));
+            }
+            break;
+
+          case "MECHANIC_CURRENT_LOCATION":
+            if (isUserVendor !== "1") {
+              dispatch(getMechanicCurrentLocation(data));
+            }
+            break;
+
+          case "REACHED":
+            if (isUserVendor === "1") {
+            }
+            break;
+
+          default:
+            return null;
+        }
+      });
+    }
+  );
 };
 
 export const connectTosocket = () => async (dispatch, getState) => {
-  const { vendorsData, bookData,vendorDistance,location } = getState().usermaps;
-  const { userId,userData } = getState().user;
-  userData.userLatitude=location.coords.latitude;
-  userData.userLongitude=location.coords.longitude;
-
+  const {
+    vendorsData,
+    bookData,
+    vendorDistance,
+    location
+  } = getState().usermaps;
+  const { userId, userData } = getState().user;
+  userData.userLatitude = location.coords.latitude;
+  userData.userLongitude = location.coords.longitude;
 
   chatSocket.emit("booking", {
     room: `${userId} ${vendorsData.id}`,
-    message: {bookData,userData,vendorDistance},
+    message: { bookData, userData, vendorDistance },
     type: "BOOK"
   });
   channelName = `${vendorsData.id} ${userId}`;
@@ -98,18 +164,33 @@ export const connectTosocketApprov = val => async (dispatch, getState) => {
   });
 };
 
-export const connectTosocketBookingCancle = () => async (
+export const connectTosocketBookingCancle = val => async (
   dispatch,
   getState
 ) => {
   const { bookingData, bookingStatus } = getState().vendors;
   const { userId } = getState().user;
   chatSocket.emit("booking_status", {
-    room: `${bookingData.customer_id} ${userId}`,
+    room: `${val} ${userId}`,
     message: bookingData,
     type: "CANCEL"
   });
-  channelName = `${userId} ${bookingData.customer_id}`;
+  channelName = `${userId} ${val}`;
+
+  dispatch({
+    type: CONNECT_TO_SOCKET
+  });
+};
+
+export const connectTosocketReached = val => async (dispatch, getState) => {
+  const { bookingStatusRes, bookData } = getState().usermaps;
+  const { userId } = getState().usermaps;
+  chatSocket.emit("booking_status", {
+    room: `${bookingStatusRes.booking.vendor.vendor_id} ${userId}`,
+    message: bookingStatusRes,
+    type: "REACHED"
+  });
+  channelName = `${userId} ${bookingStatusRes.booking.vendor.vendor_id}`;
 
   dispatch({
     type: CONNECT_TO_SOCKET

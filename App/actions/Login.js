@@ -4,7 +4,7 @@ import Api from "../api/api";
 import { URL_USER_LOGIN } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage } from "react-native";
-import {updateIsVendor} from './ui';
+import {updateIsVendor,getUserData} from './ui';
 import {createSocketChannel} from './Socket';
 
 export const UPDATE_PASSWORD = "login/UPDATE_PASSWORD";
@@ -54,7 +54,7 @@ export const loginUser = () => (dispatch, getState) => {
           } else {
             Actions.NearbyGaraje();
           }
-
+          dispatch(getUserData());
         dispatch({
           type: LOGIN_SUCCESSFUL,
           payload: response

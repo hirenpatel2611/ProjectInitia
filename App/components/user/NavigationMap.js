@@ -36,6 +36,7 @@ import {
 } from "../../actions";
 import { MapViewDirections } from "../../Common";
 import CheckBox from "react-native-check-box";
+import { MOTORCYCLE } from "../../images";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -82,9 +83,8 @@ class NearbyGaraje extends Component {
                   longitudeDelta: 0.0421
                 }}
               >
-                <View style={inStyle.markerView1}>
-                  <View style={inStyle.markerView2} />
-                </View>
+                  <Image style={inStyle.imageStyle} source={MOTORCYCLE} />
+
               </MapView.Marker.Animated>
             ) : null}
             {this.props.mechanicCurrentLocation ? (
@@ -185,11 +185,12 @@ class NearbyGaraje extends Component {
                   }}
                 />
                 <TouchableOpacity
-                  style={{ alignSelf: "center" }}
+                  disabled={this.props.confirmDisable}
+                  style={{ alignSelf: "center",opacity:this.props.confirmDisable?1:0.5 }}
                   activeOpacity={1}
                   underlayColor="white"
                   onPress={() => {
-                    this.props.getConfirmBookingCancel();
+                    this.props.getBookingCancellation();
                   }}
                 >
                   <View
@@ -258,18 +259,18 @@ class NearbyGaraje extends Component {
 const inStyle = {
   markerView1: {
     borderWidth: 1,
-    height: 22,
-    width: 22,
+    height: 20,
+    width: 20,
     borderRadius: 15,
     borderColor: "#7960FF",
     alignItems: "center",
     justifyContent: "center"
   },
   markerView2: {
-    backgroundColor: "#7960FF",
-    height: 16,
-    width: 16,
-    borderRadius: 10
+    height: 15,
+    width: 15,
+    borderRadius: 10,
+    backgroundColor:'#7960FF',
   },
   imageVendor: {
     borderRadius: 15,
@@ -292,6 +293,25 @@ const inStyle = {
     fontSize: 14,
     fontFamily: "circular-bold",
     color: "white"
+  },
+  imageStyle:{
+    width: 53,
+    height: 53,
+    resizeMode: "contain"
+  },
+  imageBorder:{
+      borderWidth: 1,
+      height: 30,
+      width: 30,
+      borderRadius: 15,
+      borderColor: "#7960FF",
+      alignItems: "center",
+      justifyContent: "center",
+      shadowColor: "#000000",
+      shadowOffset: { width: 0, height: 3 },
+      shadowRadius: 5,
+      shadowOpacity: 1.0
+
   }
 };
 
@@ -303,7 +323,8 @@ const mapStateToProps = ({ usermaps }) => {
     bookingStatusRes,
     distanceBetweenUserMechanic,
     reasonCheckbox,
-    isBookCancelModal
+    isBookCancelModal,
+    confirmDisable
   } = usermaps;
   return {
     location,
@@ -312,7 +333,8 @@ const mapStateToProps = ({ usermaps }) => {
     bookingStatusRes,
     distanceBetweenUserMechanic,
     reasonCheckbox,
-    isBookCancelModal
+    isBookCancelModal,
+    confirmDisable
   };
 };
 

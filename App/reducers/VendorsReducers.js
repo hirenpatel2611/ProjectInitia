@@ -12,7 +12,10 @@ import {
   GET_BOOKINGLIST_APPROVE_START,
   GET_BOOKINGLIST_APPROVE_SUCCESS,
   GET_BOOKINGLIST_APPROVE_FAIL,
-  GET_BOOKING_VENDOR_STATUS
+  GET_BOOKING_VENDOR_STATUS,
+  GET_CANCLE_BOOKING_MODAL,
+  GET_REASON_CHECKBOX_VENDOR,
+  BOOKING_LIST_CANCLE
 } from "../actions/Vendors";
 
 const INITIAL_STATE = {
@@ -27,7 +30,12 @@ const INITIAL_STATE = {
   isMechanicOtp: false,
   bookingStatus: "",
   bookUserData: "",
-  bookingVendorStatus: ""
+  bookingVendorStatus: "",
+  cancleBookingId:'',
+  isConfirmModal:false,
+  reasonCheckboxVendor:'',
+  cancleReasonVendor:'',
+  confirmDisableVendor:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -37,7 +45,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingFutureBookigList: true,
-          isFutureBookingListFail: false
+
         };
       }
       break;
@@ -53,6 +61,7 @@ export default (state = INITIAL_STATE, action) => {
 
     case GET_FUTURE_BOOKING_LIST_FAIL:
       {
+
         return {
           ...state,
           loadingFutureBookigList: false,
@@ -90,7 +99,8 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loadingBookigUpdate: false,
           bookingStatus: action.payload,
-          isBooking: false
+          isBooking: false,
+          FutureBookingList:action.payload.FutureBookingList
         };
       }
       break;
@@ -146,7 +156,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          loadingBookigUpdate: false
+          loadingBookigUpdate: false,
+          FutureBookingList:action.payload.FutureBookingList
         };
       }
       break;
@@ -168,6 +179,42 @@ export default (state = INITIAL_STATE, action) => {
         };
       }
       break;
+
+      case GET_CANCLE_BOOKING_MODAL:
+        {
+          return {
+            ...state,
+            isBooking:false,
+            cancleBookingId: action.payload,
+            isConfirmModal:true,
+          };
+        }
+        break;
+
+        case GET_REASON_CHECKBOX_VENDOR:
+          {
+            newReasonCheckbox=[false,false,false]
+            newReasonCheckbox[action.payload]=true;
+            newCancleReason=['Mechanic is not responding on booking.','Mechanic is not done good deal.','I Choose better option.']
+            return{
+              ...state,
+              reasonCheckboxVendor:newReasonCheckbox,
+              cancleReasonVendor:newCancleReason[action.payload],
+              confirmDisableVendor:true
+            };
+          }
+          break;
+
+          case BOOKING_LIST_CANCLE:
+            {
+              return {
+                ...state,
+                FutureBookingList: action.payload,
+                isConfirmModal:false,
+                cancleReasonVendor:''
+              };
+            }
+            break;
 
     default:
       return state;

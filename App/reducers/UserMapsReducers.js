@@ -32,11 +32,10 @@ import {
   GET_BOOKING_UPDATE_SUCCESS,
   GET_BOOKING_UPDATE_FAIL,
    GET_REASON_CHECKBOX,
-  GET_REASON_CHECKBOX2,
-  GET_REASON_CHECKBOX3,
-  GET_CONFIRM_BOOKING_CANCEL,
   GET_CANCEL_BOOKING_MODAL
 } from "../actions/UserMaps";
+import {GET_USER_BOOKING_STATUS_ACCEPT} from "../actions/ui";
+
 
 const INITIAL_STATE = {
   loading: false,
@@ -57,16 +56,16 @@ const INITIAL_STATE = {
   isChecked3: false,
   distance: 10,
   isBookingSuccess: false,
-  vendorDistance: [],
+  vendorDistance: '',
   vendorDistanceList: [],
   bookData: "",
   bookingStatusRes: "",
   mechanicCurrentLocation: "",
   distanceBetweenUserMechanic: "",
   reasonCheckbox:[false,false,false],
-  reasonCheckbox2:false,
-  reasonCheckbox3:false,
-  isBookCancelModal:false
+  cancleReason:'',
+  isBookCancelModal:false,
+  confirmDisable:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -112,8 +111,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
+          vendorsData: action.payload,
           isBookModalVisible: true,
-          vendorsData: action.payload
         };
       }
       break;
@@ -122,7 +121,9 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          isBookModalVisible: !state.isBookModalVisible
+          isBookModalVisible: !state.isBookModalVisible,
+          vendorsData:'',
+          vendorDistance:''
         };
       }
       break;
@@ -279,8 +280,10 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingBookig: false,
-          isBookModalVisible: false,
-          isBookingSuccess: false
+          isBookingSuccess: false,
+          isBookCancelModal:false,
+          confirmDisable:false,
+          reasonCheckbox:[false,false,false]
         };
       }
       break;
@@ -298,16 +301,7 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          vendorDistance: action.payload
-        };
-      }
-      break;
-
-    case GET_DISTANCELIST:
-      {
-        return {
-          ...state,
-          vendorList: action.payload
+          vendorDistance: action.payload,
         };
       }
       break;
@@ -354,40 +348,12 @@ export default (state = INITIAL_STATE, action) => {
     {
       newReasonCheckbox=[false,false,false]
       newReasonCheckbox[action.payload]=true;
+      newCancleReason=['Mechanic is not responding on booking.','Mechanic is not done good deal.','I Choose better option.']
       return{
         ...state,
         reasonCheckbox:newReasonCheckbox,
-      };
-    }
-    break;
-
-    case GET_REASON_CHECKBOX2:
-    {
-      return{
-        ...state,
-        reasonCheckbox1:false,
-        reasonCheckbox2:!state.reasonCheckbox2,
-        reasonCheckbox3:false
-      };
-    }
-    break;
-
-    case GET_REASON_CHECKBOX3:
-    {
-      return{
-        ...state,
-        reasonCheckbox1:false,
-        reasonCheckbox2:false,
-        reasonCheckbox3:!state.reasonCheckbox3
-      };
-    }
-    break;
-
-    case GET_CONFIRM_BOOKING_CANCEL:
-    {
-      return{
-        ...state,
-        isBookCancelModal:false
+        cancleReason:newCancleReason[action.payload],
+        confirmDisable:true
       };
     }
     break;
@@ -401,6 +367,28 @@ export default (state = INITIAL_STATE, action) => {
       };
     }
     break;
+
+    case GET_BOOKING_UPDATE_SUCCESS:
+    {
+      return{
+        ...state,
+        bookingStatusRes:action.payload
+      };
+    }
+    break;
+
+    case GET_USER_BOOKING_STATUS_ACCEPT:
+      {
+        return{
+          ...state,
+          bookingStatusRes:action.payload.bookingStatusRes,
+          vendorsData:action.payload.vendorData,
+          isBookModalVisible: true,
+          isBookingSuccess:true,
+          bookData:{booking_id:action.payload.response[0].current_booking.booking_id},
+        }
+      }
+      break;
 
     default:
       return state;

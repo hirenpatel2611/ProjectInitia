@@ -68,10 +68,10 @@ class Login extends Component {
     return (
       <View style={containerStyle}>
         <View>
-          <TouchableOpacity onPress={() => Actions.SplashFront()}>
-            <View style={createButton}>
+          <TouchableOpacity onPress={() => Actions.SplashFront()} style={createButton}>
+
               <Image style={{ height: 15, width: 30 }} source={BACK_ARROW} />
-            </View>
+        
           </TouchableOpacity>
         </View>
         <KeyboardAwareScrollView
