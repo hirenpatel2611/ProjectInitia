@@ -12,7 +12,7 @@ import NearbyGaraje from "./components/user/NearbyGaraje";
 import UserProfile from "./components/user/Profile";
 import NavigationMap from "./components/user/NavigationMap";
 import Booking from "./components/user/Booking";
-import VendorHome from "./components/vendors/VendorHome";
+import customerRating from "./components/user/customerRating";
 import FutureBooking from "./components/vendors/FutureBooking";
 import VendorProfile from "./components/vendors/Profile";
 import { Actions } from "react-native-router-flux";
@@ -46,7 +46,7 @@ class RouterComponent extends Component {
         }
 
         await this.props.updateLoggedInState(true);
-         
+
          this.props.createSocketChannel();
        }
       else {
@@ -113,6 +113,13 @@ class RouterComponent extends Component {
             <Scene
               key="filter"
               component={filter}
+              hideNavBar={true}
+              navTransparent="true"
+
+            />
+            <Scene
+              key="customerRating"
+              component={customerRating}
               hideNavBar={true}
               navTransparent="true"
 

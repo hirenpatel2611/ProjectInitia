@@ -47,8 +47,8 @@ class NearbyGaraje extends Component {
       {
         latitude: this.props.location.coords.latitude,
         longitude: this.props.location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
+        latitudeDelta: 0.0461,
+        longitudeDelta: 0.02105
       },
       1
     );
@@ -67,7 +67,9 @@ class NearbyGaraje extends Component {
           <MapView
             style={{
               ...StyleSheet.absoluteFillObject,
-              height: 0.86 * ScreenHeight
+              width:ScreenWidth,
+              height: 0.86 * ScreenHeight,
+              flex:1
             }}
             provider={PROVIDER_GOOGLE}
             ref={component => (this._map = component)}

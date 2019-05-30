@@ -180,7 +180,8 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           bookingVendorStatus: action.payload.data,
           FutureBookingList:[...action.payload.FutureBookingList],
-          isBooking:false
+          isBooking:false,
+          isMechanicOtp:false
         };
       }
       break;

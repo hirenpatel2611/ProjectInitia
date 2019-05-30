@@ -195,7 +195,7 @@ class NearbyGaraje extends Component {
             style={inStyle.modalStyle}
           >
             <TouchableOpacity
-              style={{ height: ScreenHeight,paddingTop:0.70 * ScreenHeight, }}
+              style={{ height: ScreenHeight,paddingTop:0.68 * ScreenHeight, }}
               activeOpacity={1}
               onPress={() => {
                 this.props.isBookingSuccess
@@ -244,7 +244,7 @@ class NearbyGaraje extends Component {
                   <View style={inStyle.modalInnerView1}>
                     <Rating
                       imageSize={20}
-                      startingValue={this.props.vendorsData.rating}
+                      startingValue={this.props.vendorsData.rating?this.props.vendorsData.rating:0}
                     />
                   </View>
                 </View>
@@ -253,9 +253,6 @@ class NearbyGaraje extends Component {
                     ? this.props.vendorsData.address
                     : null}
                 </Text>
-
-
-
                 {this.props.isBookingSuccess ? (
                   <TouchableOpacity
                     activeOpacity={1}
@@ -413,7 +410,7 @@ const inStyle = {
   modalBookTouch: {
     alignSelf: "stretch",
     backgroundColor: "#FFFFFF",
-    height: 0.20 * ScreenHeight,
+    height: 0.23 * ScreenHeight,
     margin: 15,
     borderRadius: 10,
     padding: 10,

@@ -314,9 +314,8 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
     type: GET_MECHANIC_CURREN_LOCATION,
     payload: val
   });
-
-  const { mechanicCurrentLocation, location } = getState().usermaps;
-
+  const {location,mechanicCurrentLocation} =getState().usermaps;
+  if(location){
   var radlat1 =
     (Math.PI * mechanicCurrentLocation.message[0].coords.latitude) / 180;
   var radlat2 = (Math.PI * location.coords.latitude) / 180;
@@ -344,6 +343,7 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
     dispatch(getBookingUpdateUser(sts));
     dispatch(connectTosocketReached());
   }
+}
 };
 //
 export const getBookingUpdateUser = val => (dispatch, getState) => {
@@ -364,6 +364,9 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
           payload: bookingStatusRes
         });
         dispatch(connectTosocketReached());
+        if(val === 'completed'){
+          Actions.NearbyGaraje();
+        }
       } else {
         dispatch({
           type: GET_BOOKING_UPDATE_FAIL

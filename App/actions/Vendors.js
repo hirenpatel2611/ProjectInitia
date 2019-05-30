@@ -265,13 +265,14 @@ export const getBookingVendorStatus = data => (dispatch,getState) => {
     FutureBookingList.map(booking => {
       if (booking.booking_id === data.message.booking_id) {
         if(data.type === 'CANCEL'){
-        booking.status = "cancle";}
+
+        booking.status = "cancle";
+      }
         if(data.type === 'REACHED'){
           booking.status = "reached";
         }
       }
     });
-    console.error(FutureBookingList);
   dispatch({
     type: GET_BOOKING_VENDOR_STATUS,
     payload: {data,FutureBookingList}

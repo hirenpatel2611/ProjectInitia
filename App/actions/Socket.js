@@ -122,6 +122,10 @@ export const createSocketChannel = () => async (dispatch, getState) => {
             }
             break;
 
+            case "REACHED":
+              Actions.customerRating();
+              break;
+
           default:
             return null;
         }
