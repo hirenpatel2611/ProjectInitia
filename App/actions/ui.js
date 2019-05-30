@@ -1,4 +1,4 @@
-import { Font } from "expo";
+import { Font,SplashScreen } from "expo";
 import {AsyncStorage} from 'react-native';
 import Api from "../api/api";
 import {GET_USER_DATA} from "../config";
@@ -66,7 +66,7 @@ export const getUserData = () => async (dispatch, getState) => {
       });
       const{userCurrentBooking} = getState().user;
       const { vendors } = getState().usermaps;
-
+      SplashScreen.hide();
       switch (response[0].current_booking.status) {
         case 'pending':
           var vendorData;

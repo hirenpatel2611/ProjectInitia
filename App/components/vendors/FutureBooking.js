@@ -66,11 +66,21 @@ class FutureBooking extends Component {
             this.props.getCancleBookingModal(cancleBookingData);
           }}
           opacityApprove={vendorBookingList.status === "pending" ? 1 : 0}
-          opacityCancle={vendorBookingList.status === "cancle" ? 0 : 1}
+          opacityCancle={
+            vendorBookingList.status === "cancle" ||
+            vendorBookingList.status === "completed"
+              ? 0
+              : 1
+          }
           disabledApprove={
             vendorBookingList.status === "pending" ? false : true
           }
-          disabledCancle={vendorBookingList.status === "cancle" ? true : false}
+          disabledCancle={
+            vendorBookingList.status === "cancle" ||
+            vendorBookingList.status === "completed"
+              ? true
+              : false
+          }
         />
       ));
     } else {
@@ -284,9 +294,7 @@ class FutureBooking extends Component {
                           color: "white"
                         }}
                       >
-                        {this.props.loadingBookigUpdate
-                          ? "loading..."
-                          : "Cancel"}
+                        Cancel
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -453,39 +461,29 @@ class FutureBooking extends Component {
                   disabled={this.props.confirmDisableVendor ? false : true}
                   style={{
                     alignSelf: "center",
-                    opacity: this.props.confirmDisableVendor ? 1 : 0.5
+                    opacity: this.props.confirmDisableVendor ? 1 : 0.5,
+                    backgroundColor: "#7960FF",
+                    width: 0.4 * ScreenWidth,
+                    borderRadius: 5,
+                    alignItems: "center",
+                    margin: 10,
+                    padding: 5,
+                    alignItems: "center",
+                    justifyContent: "center"
                   }}
                   activeOpacity={1}
                   underlayColor="white"
                   onPress={() => {
-                    this.props.BookingListCancle(
-                      this.props.cancleBookingId.booking_id
-                    );
-                    this.props.connectTosocketBookingCancle(
-                      this.props.cancleBookingId.customer_id
-                    );
+                    this.props.BookingListCancle();
                   }}
                 >
-                  <View
-                    style={{
-                      backgroundColor: "#7960FF",
-                      width: 0.4 * ScreenWidth,
-                      borderRadius: 5,
-                      alignItems: "center",
-                      margin: 10,
-                      padding: 5,
-                      alignItems: "center",
-                      justifyContent: "center"
-                    }}
-                  >
-                    {this.props.loadingBookig ? (
-                      <Text style={inStyle.modalButtonCancleText}>
-                        Loading...
-                      </Text>
-                    ) : (
-                      <Text style={inStyle.modalButtonCancleText}>Confirm</Text>
-                    )}
-                  </View>
+                  {this.props.loadingBookig ? (
+                    <Text style={inStyle.modalButtonCancleText}>
+                      Loading...
+                    </Text>
+                  ) : (
+                    <Text style={inStyle.modalButtonCancleText}>Confirm</Text>
+                  )}
                 </TouchableOpacity>
               </View>
             </View>

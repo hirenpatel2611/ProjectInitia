@@ -115,6 +115,10 @@ export const createSocketChannel = () => async (dispatch, getState) => {
 
           case "REACHED":
             if (isUserVendor === "1") {
+              if (isUserVendor !== "1") {
+              } else {
+                dispatch(getBookingVendorStatus(data));
+              }
             }
             break;
 
@@ -158,41 +162,34 @@ export const connectTosocketApprov = val => async (dispatch, getState) => {
     type: "ACCEPT"
   });
   channelName = `${userId} ${val}`;
-
-  dispatch({
-    type: CONNECT_TO_SOCKET
-  });
 };
 
-export const connectTosocketBookingCancle = val => async (
-  dispatch,
-  getState
-) => {
+export const connectTosocketBookingCancle = val => async (dispatch,getState) => {
   const { bookingData, bookingStatus } = getState().vendors;
-  const { userId } = getState().user;
+  const { userId,isUserVendor } = getState().user;
+  const {bookData} = getState().usermaps;
+  var cancelData;
+  if(isUserVendor === '1'){
+    cancelData=bookingData
+  }else {
+    cancelData=bookData
+  }
+
   chatSocket.emit("booking_status", {
     room: `${val} ${userId}`,
-    message: bookingData,
+    message: cancelData,
     type: "CANCEL"
   });
   channelName = `${userId} ${val}`;
-
-  dispatch({
-    type: CONNECT_TO_SOCKET
-  });
 };
 
-export const connectTosocketReached = val => async (dispatch, getState) => {
-  const { bookingStatusRes, bookData } = getState().usermaps;
+export const connectTosocketReached = (val) => async (dispatch, getState) => {
+  const { vendorsData, bookData } = getState().usermaps;
   const { userId } = getState().usermaps;
   chatSocket.emit("booking_status", {
-    room: `${bookingStatusRes.booking.vendor.vendor_id} ${userId}`,
-    message: bookingStatusRes,
+    room: `${vendorsData.id} ${userId}`,
+    message: vendorsData,
     type: "REACHED"
   });
-  channelName = `${userId} ${bookingStatusRes.booking.vendor.vendor_id}`;
-
-  dispatch({
-    type: CONNECT_TO_SOCKET
-  });
+  channelName = `${userId} ${vendorsData.id}`;
 };

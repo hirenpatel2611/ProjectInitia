@@ -46,6 +46,7 @@ export default (state = INITIAL_STATE, action) => {
 
         case GET_USER_PROFILE_DATA:
           {
+            console.log(action.payload);
             return {
               ...state,
               userData:{

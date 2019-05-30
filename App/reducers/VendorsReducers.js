@@ -15,7 +15,8 @@ import {
   GET_BOOKING_VENDOR_STATUS,
   GET_CANCLE_BOOKING_MODAL,
   GET_REASON_CHECKBOX_VENDOR,
-  BOOKING_LIST_CANCLE
+  BOOKING_LIST_CANCLE,
+  BOOKING_CANCLE_START
 } from "../actions/Vendors";
 
 const INITIAL_STATE = {
@@ -35,7 +36,9 @@ const INITIAL_STATE = {
   isConfirmModal:false,
   reasonCheckboxVendor:'',
   cancleReasonVendor:'',
-  confirmDisableVendor:false
+  confirmDisableVendor:false,
+  cancelBookingData:null
+
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -175,7 +178,9 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          bookingVendorStatus: action.payload
+          bookingVendorStatus: action.payload.data,
+          FutureBookingList:[...action.payload.FutureBookingList],
+          isBooking:false
         };
       }
       break;
@@ -185,7 +190,7 @@ export default (state = INITIAL_STATE, action) => {
           return {
             ...state,
             isBooking:false,
-            cancleBookingId: action.payload,
+            cancelBookingData: action.payload,
             isConfirmModal:true,
           };
         }
@@ -211,10 +216,22 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 FutureBookingList: action.payload,
                 isConfirmModal:false,
-                cancleReasonVendor:''
+                cancleReasonVendor:null,
+                reasonCheckboxVendor:[false,false,false],
+                loadingBookig:false,
+
               };
             }
             break;
+
+            case BOOKING_CANCLE_START:
+              {
+                return {
+                  ...state,
+                  loadingBookig:true
+                };
+              }
+              break;
 
     default:
       return state;

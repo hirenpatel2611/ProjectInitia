@@ -135,72 +135,6 @@ class filter extends Component {
                 />
                 <Text>{this.props.rating}</Text>
               </View>
-              <View>
-                <Text
-                  style={[
-                    inStyle.textMechanic,
-                    { paddingTop: 10, flexDirection: "column" }
-                  ]}
-                >
-                  Cost
-                </Text>
-                <View style={inStyle.costView}>
-                  <View style={inStyle.costInnView}>
-                    <CheckBox
-                      isChecked={this.props.isChecked1}
-                      checkedCheckBoxColor="#7960FF"
-                      onClick={() => {
-                        this.props.getFilterCheckBox1();
-                      }}
-                    />
-                    <Text
-                      style={[
-                        inStyle.costInnText,
-                        { color: this.props.isChecked1 ? "#7960FF" : "#4A4A4A" }
-                      ]}
-                    >
-                      ₹₹
-                    </Text>
-                  </View>
-
-                  <View style={inStyle.costInnView}>
-                    <CheckBox
-                      isChecked={this.props.isChecked2}
-                      checkedCheckBoxColor="#7960FF"
-                      onClick={() => {
-                        this.props.getFilterCheckBox2();
-                      }}
-                    />
-                    <Text
-                      style={[
-                        inStyle.costInnText,
-                        { color: this.props.isChecked2 ? "#7960FF" : "#4A4A4A" }
-                      ]}
-                    >
-                      ₹₹₹
-                    </Text>
-                  </View>
-
-                  <View style={inStyle.costInnView}>
-                    <CheckBox
-                      isChecked={this.props.isChecked3}
-                      checkedCheckBoxColor="#7960FF"
-                      onClick={() => {
-                        this.props.getFilterCheckBox3();
-                      }}
-                    />
-                    <Text
-                      style={[
-                        inStyle.costInnText,
-                        { color: this.props.isChecked3 ? "#7960FF" : "#4A4A4A" }
-                      ]}
-                    >
-                      ₹₹₹₹
-                    </Text>
-                  </View>
-                </View>
-              </View>
-
               <Text style={[inStyle.textMechanic, { paddingTop: 10 }]}>
                 Distance
               </Text>
@@ -222,7 +156,7 @@ class filter extends Component {
                 <Text style={inStyle.distanceBlueText}>
                   {this.props.distance} km
                 </Text>
-                <Text style={inStyle.distanceBlackText}>anyware</Text>
+                <Text style={inStyle.distanceBlackText}>Anywhere</Text>
               </View>
             </View>
             <TouchableHighlight

@@ -17,7 +17,9 @@ import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styles from "./vendorStyle";
 import Header from "../../Common/Header";
-
+import {
+  getUserLocationSuccess,
+} from "../../actions";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -40,23 +42,22 @@ class Profile extends Component {
           justifyContent: "space-around"
         }}
       >
-
           <Text
             style={textInputProfilStyle}
-          > Name</Text>
+          > {this.props.userData?this.props.userData.userFullName:null}</Text>
 
         <Text
           style={textInputProfilStyle}
-        >Address</Text>
+        >{this.props.userData?this.props.userData.userAddress:null}</Text>
 
 
         <Text
           style={textInputProfilStyle}
-        >Email</Text>
+        >{this.props.userData?this.props.userData.userEmail:null}</Text>
 
         <Text
           style={textInputProfilStyle}
-        >Mobile</Text>
+        >{this.props.userData?this.props.userData.userMobileno:null}</Text>
 
 
         <Text
@@ -69,4 +70,18 @@ class Profile extends Component {
   }
 }
 
-export default Profile;
+const mapStateToProps = ({ user }) => {
+  const {
+  userData
+  } = user;
+  return {
+userData
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  {
+    getUserLocationSuccess
+  }
+)(Profile);

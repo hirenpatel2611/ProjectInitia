@@ -48,7 +48,8 @@ import {
   getReasonCheckbox2,
   getReasonCheckbox3,
   getConfirmBookingCancel,
-  getCancelBookingModal
+  getCancelBookingModal,
+  getUserData
 } from "../../actions";
 import { MECHANIC, USER2, FILTER } from "../../images";
 import { Rating, AirbnbRating } from "react-native-ratings";
@@ -67,9 +68,8 @@ class NearbyGaraje extends Component {
     await this.props.getVendors();
 
     if (Platform.OS === "android" && !Constants.isDevice) {
-    
     } else {
-      this._getLocationAsync();
+      await this._getLocationAsync();
     }
   }
 
@@ -104,7 +104,7 @@ class NearbyGaraje extends Component {
     });
     this.props.getUserLocationSuccess(location);
     {
-      SplashScreen.hide();
+      this.props.getUserData();
       this._map.animateToRegion(
         {
           latitude: this.props.location.coords.latitude,
@@ -195,7 +195,7 @@ class NearbyGaraje extends Component {
             style={inStyle.modalStyle}
           >
             <TouchableOpacity
-              style={{ height: ScreenHeight }}
+              style={{ height: ScreenHeight,paddingTop:0.70 * ScreenHeight, }}
               activeOpacity={1}
               onPress={() => {
                 this.props.isBookingSuccess
@@ -203,6 +203,30 @@ class NearbyGaraje extends Component {
                   : this.props.closeVendorDetailModal();
               }}
             >
+            {this.props.bookingStatusRes ? (
+            <View style={{backgroundColor: "#FFFFFF",
+
+                    width:0.3 *ScreenWidth,
+                    alignSelf:'center',
+                    alignItems:'center',
+                    justifyContent:'center',
+                    borderTopLeftRadius:40,
+                    borderTopRightRadius:40,
+                    marginBottom:-15,
+                    height:0.04*ScreenHeight,
+          }}>
+
+              <Text
+                style={{
+                  fontFamily: "circular-bold",
+                  backgroundColor: "#FFFFFF",
+                  fontSize:14
+                }}
+              >
+                {this.props.bookingStatusRes.type}
+              </Text></View>
+            ) : null}
+
               <View style={inStyle.modalBookTouch}>
                 <View style={inStyle.modalView1}>
                   <Text style={inStyle.modalTextName}>
@@ -217,12 +241,11 @@ class NearbyGaraje extends Component {
                         : "0 km"}
                     </Text>
                   </View>
-
                   <View style={inStyle.modalInnerView1}>
-                    <Rating imageSize={20}
-                    readonly={true}
-                      startingValue={this.props.vendorsData.rating === null?0:this.props.vendorsData.rating}
-                     />
+                    <Rating
+                      imageSize={20}
+                      startingValue={this.props.vendorsData.rating}
+                    />
                   </View>
                 </View>
                 <Text style={inStyle.modalTextAddress}>
@@ -232,14 +255,6 @@ class NearbyGaraje extends Component {
                 </Text>
 
 
-                  {this.props.bookingStatusRes ? (
-                    <Text
-                      style={{
-                        fontFamily: "circular-bold"
-                      }}
-                    >Status :{this.props.bookingStatusRes.type}</Text>
-                  ) : null
-                  }
 
                 {this.props.isBookingSuccess ? (
                   <TouchableOpacity
@@ -338,10 +353,18 @@ class NearbyGaraje extends Component {
                   }}
                 />
                 <TouchableOpacity
-                  disabled={this.props.confirmDisable ? false : true}
+                  disabled={!this.props.confirmDisable}
                   style={{
                     alignSelf: "center",
-                    opacity: this.props.confirmDisable ? 1 : 0.5
+                    opacity: this.props.confirmDisable ? 1 : 0.5,
+                    backgroundColor: "#7960FF",
+                    width: 0.4 * ScreenWidth,
+                    borderRadius: 5,
+                    alignItems: "center",
+                    margin: 10,
+                    padding: 5,
+                    alignItems: "center",
+                    justifyContent: "center"
                   }}
                   activeOpacity={1}
                   underlayColor="white"
@@ -349,26 +372,13 @@ class NearbyGaraje extends Component {
                     this.props.getBookingCancellation();
                   }}
                 >
-                  <View
-                    style={{
-                      backgroundColor: "#7960FF",
-                      width: 0.4 * ScreenWidth,
-                      borderRadius: 5,
-                      alignItems: "center",
-                      margin: 10,
-                      padding: 5,
-                      alignItems: "center",
-                      justifyContent: "center"
-                    }}
-                  >
-                    {this.props.loadingBookig ? (
-                      <Text style={inStyle.modalButtonCancleText}>
-                        Loading...
-                      </Text>
-                    ) : (
-                      <Text style={inStyle.modalButtonCancleText}>Confirm</Text>
-                    )}
-                  </View>
+                  {this.props.loadingBookig ? (
+                    <Text style={inStyle.modalButtonCancleText}>
+                      Loading...
+                    </Text>
+                  ) : (
+                    <Text style={inStyle.modalButtonCancleText}>Confirm</Text>
+                  )}
                 </TouchableOpacity>
               </View>
             </View>
@@ -401,10 +411,9 @@ const inStyle = {
     justifyContent: "flex-end"
   },
   modalBookTouch: {
-    marginTop: 0.7 * ScreenHeight,
     alignSelf: "stretch",
     backgroundColor: "#FFFFFF",
-    height: 0.25 * ScreenHeight,
+    height: 0.20 * ScreenHeight,
     margin: 15,
     borderRadius: 10,
     padding: 10,
@@ -436,7 +445,6 @@ const inStyle = {
     color: "white"
   },
   modalTextAddress: {
-
     padding: 10,
     fontFamily: "circular-book",
     fontSize: 14,
@@ -514,6 +522,7 @@ export default connect(
     closeVendorDetailModal,
     getReasonCheckbox,
     getConfirmBookingCancel,
-    getCancelBookingModal
+    getCancelBookingModal,
+    getUserData
   }
 )(NearbyGaraje);

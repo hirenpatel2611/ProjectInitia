@@ -135,7 +135,8 @@ export default (state = INITIAL_STATE, action) => {
           loadingBookig: false,
           isBookModalVisible: true,
           isBookingSuccess: true,
-          bookData: action.payload
+          bookData: action.payload,
+          bookingStatusRes:{type:'PENDING'}
         };
       }
       break;
@@ -320,7 +321,8 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isBookModalVisible: false,
-          bookingStatusRes: null
+          bookingStatusRes: '',
+          isBookingSuccess:false
         };
       }
       break;
@@ -385,7 +387,8 @@ export default (state = INITIAL_STATE, action) => {
           vendorsData:action.payload.vendorData,
           isBookModalVisible: true,
           isBookingSuccess:true,
-          bookData:{booking_id:action.payload.response[0].current_booking.booking_id},
+          bookData:{booking_id:action.payload.response[0].current_booking.booking_id,
+                    vendor_id:action.payload.response[0].current_booking.vendor_id},
         }
       }
       break;

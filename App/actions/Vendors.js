@@ -6,7 +6,7 @@ import {
   BOOKING_UPDATE,
   SEND_MECHANIC_OTP
 } from "../config";
-import connectTosocketApprov from "./Socket";
+import {connectTosocketApprov,connectTosocketBookingCancle} from "./Socket";
 import { Asset, SplashScreen } from "expo";
 import { Actions } from "react-native-router-flux";
 
@@ -34,6 +34,7 @@ export const GET_BOOKING_VENDOR_STATUS = "vendors/GET_BOOKING_VENDOR_STATUS";
 export const GET_CANCLE_BOOKING_MODAL = "vendors/GET_CANCLE_BOOKING_MODAL";
 export const GET_REASON_CHECKBOX_VENDOR = "vendors/GET_REASON_CHECKBOX_VENDOR";
 export const BOOKING_LIST_CANCLE = "vendors/BOOKING_LIST_CANCLE";
+export const BOOKING_CANCLE_START = "vendors/BOOKING_CANCLE_START";
 
 
 export const getFutureBookings = () => async (dispatch, getState) => {
@@ -46,7 +47,6 @@ export const getFutureBookings = () => async (dispatch, getState) => {
   test.append("vendor_id", valueUserId);
   Api.post(GET_FUTURE_BOOKINGLIST, test)
     .then(response => {
-      console.log(response);
       if (response.status === 0) {
         if (response.message === "No booking found") {
           dispatch({
@@ -186,26 +186,31 @@ export const getMechanicOtp = val => (dispatch, getState) => {
     });
 };
 
-export const BookingListCancle = val => (dispatch, getState) => {
-  const { cancleReasonVendor,FutureBookingList } = getState().vendors;
+export const BookingListCancle = () => (dispatch, getState) => {
+
+  dispatch({
+    type:BOOKING_CANCLE_START,
+
+  })
+  const { cancleReasonVendor,FutureBookingList,cancelBookingData } = getState().vendors;
+
   let test = new FormData();
-  test.append("booking_id", val);
+  test.append("booking_id", cancelBookingData.booking_id);
   test.append("status", "cancle");
   test.append("reason", cancleReasonVendor);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log(response);
       if(response.status === 1){
         FutureBookingList.map(booking => {
-          if (booking.booking_id === val) {
+          if (booking.booking_id === cancelBookingData.booking_id) {
             booking.status = "cancle";
           }
         });
-        console.log(FutureBookingList);
         dispatch({
           type:BOOKING_LIST_CANCLE,
           payload:FutureBookingList
         });
+        dispatch(connectTosocketBookingCancle(cancelBookingData.customer_id))
       }
     })
     .catch(err => {
@@ -224,7 +229,6 @@ export const BookingListApprove = val => (dispatch, getState) => {
   test.append("status", "accept");
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log(response);
       if (response.status === 1) {
         FutureBookingList.map(booking => {
           if (booking.booking_id === val) {
@@ -255,10 +259,22 @@ export const otpDone = () => (dispatch, getState) => {
   });
 };
 
-export const getBookingVendorStatus = data => dispatch => {
+export const getBookingVendorStatus = data => (dispatch,getState) => {
+  const {FutureBookingList} = getState().vendors;
+
+    FutureBookingList.map(booking => {
+      if (booking.booking_id === data.message.booking_id) {
+        if(data.type === 'CANCEL'){
+        booking.status = "cancle";}
+        if(data.type === 'REACHED'){
+          booking.status = "reached";
+        }
+      }
+    });
+    console.error(FutureBookingList);
   dispatch({
     type: GET_BOOKING_VENDOR_STATUS,
-    payload: data
+    payload: {data,FutureBookingList}
   });
 };
 

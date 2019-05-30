@@ -10,7 +10,7 @@ import {
 } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage, Alert } from "react-native";
-import { connectTosocket, connectTosocketReached } from "./Socket";
+import { connectTosocket, connectTosocketReached,connectTosocketBookingCancle } from "./Socket";
 import { Asset, SplashScreen } from "expo";
 
 export const GET_VENDORS_START = "usermaps/GET_VENDORS_START";
@@ -70,7 +70,7 @@ export const getVendors = () => (dispatch, getState) => {
           type: GET_VENDORS_SUCCESS,
           payload: response
         });
-      
+
       }
     })
     .catch(error => {});
@@ -149,6 +149,8 @@ export const getBookingCancellation = () => (dispatch, getState) => {
         dispatch({
           type: GET_BOOKING_CANCLE_SUCCESS
         });
+        dispatch(connectTosocketBookingCancle(bookData.vendor_id))
+        Actions.NearbyGaraje();
       } else {
         dispatch({
           type: GET_BOOKING_CANCLE_FAIL
@@ -284,17 +286,27 @@ export const getBookingStatus = val => async (dispatch, getState) => {
     type: GET_BOOKING_STATUS,
     payload: val
   });
+
   if (val.type === "ON-THE-WAY") {
     Actions.NavigationMap();
   }
   if (val.type === "CANCEL") {
-    dispatch({
-      type: GET_BOOKING_CANCEL_BY_VENDOR
-    });
-    alert(
-      "Your Booking request is Cancelled by Mechanic, Please Find another Mechanic."
-    );
+    Alert.alert(
+  'Booking Cancelled',
+  "Your Booking request is Cancelled by Mechanic, Please Find another Mechanic.",
+  [
+
+    {text: 'OK', onPress: () => {
+      dispatch({
+        type: GET_BOOKING_CANCEL_BY_VENDOR
+      })
+    }},
+  ],
+  {cancelable: false},
+  );
+  Actions.NearbyGaraje();
   }
+
 };
 
 export const getMechanicCurrentLocation = val => (dispatch, getState) => {
@@ -330,6 +342,7 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
     });
     var sts = "reached";
     dispatch(getBookingUpdateUser(sts));
+    dispatch(connectTosocketReached());
   }
 };
 //
@@ -373,5 +386,4 @@ export const getCancelBookingModal = () => dispatch => {
   dispatch({
     type: GET_CANCEL_BOOKING_MODAL
   });
-  Actions.NearbyGaraje();
 };

@@ -46,7 +46,7 @@ class RouterComponent extends Component {
         }
 
         await this.props.updateLoggedInState(true);
-         this.props.getUserData();
+         
          this.props.createSocketChannel();
        }
       else {

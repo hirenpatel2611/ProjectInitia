@@ -127,12 +127,7 @@ class NearbyGaraje extends Component {
                 height: 0.2 * ScreenHeight,
               }}
           >
-            <View
-              style={{
-                backgroundColor: "rgba(100,100,100, 0.5)",
-                height: ScreenHeight
-              }}
-            >
+
               <View
                 style={{
                   marginTop:0.40 * ScreenHeight,
@@ -185,7 +180,7 @@ class NearbyGaraje extends Component {
                   }}
                 />
                 <TouchableOpacity
-                  disabled={this.props.confirmDisable}
+                  disabled={!this.props.confirmDisable}
                   style={{ alignSelf: "center",opacity:this.props.confirmDisable?1:0.5 }}
                   activeOpacity={1}
                   underlayColor="white"
@@ -215,7 +210,6 @@ class NearbyGaraje extends Component {
                   </View>
                 </TouchableOpacity>
               </View>
-            </View>
           </Modal>
         </View>
         <View
