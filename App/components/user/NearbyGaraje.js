@@ -242,8 +242,7 @@ class NearbyGaraje extends Component {
                     </Text>
                   </View>
                   <View style={inStyle.modalInnerView1}>
-                    <Rating
-                      imageSize={20}
+                    <Rating imageSize={20}
                       startingValue={this.props.vendorsData.rating?this.props.vendorsData.rating:0}
                     />
                   </View>
@@ -288,6 +287,9 @@ class NearbyGaraje extends Component {
           </Modal>
           <Modal
             visible={this.props.isBookCancelModal}
+            onRequestClose={() => {
+              console.log("Modal has been closed.");
+            }}
             animationType="slide"
             transparent={true}
             opacity={0.5}

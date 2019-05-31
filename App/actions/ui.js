@@ -60,6 +60,9 @@ export const getUserData = () => async (dispatch, getState) => {
   Api.post(GET_USER_DATA, test)
     .then(response => {
       console.log(response[0]);
+      if(response.status === 0){
+        dispatch(getUserData());
+      }
       dispatch({
         type: GET_USER_PROFILE_DATA,
         payload:response[0]

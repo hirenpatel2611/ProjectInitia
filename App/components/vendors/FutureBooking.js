@@ -395,6 +395,9 @@ class FutureBooking extends Component {
           </Modal>
           <Modal
             visible={this.props.isConfirmModal}
+            onRequestClose={() => {
+              console.log("Modal has been closed.");
+            }}
             animationType="slide"
             transparent={true}
             opacity={0.5}

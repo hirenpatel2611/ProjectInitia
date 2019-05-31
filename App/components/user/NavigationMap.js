@@ -43,15 +43,6 @@ let ScreenWidth = Dimensions.get("window").width;
 
 class NearbyGaraje extends Component {
   componentDidMount() {
-    this._map.animateToRegion(
-      {
-        latitude: this.props.location.coords.latitude,
-        longitude: this.props.location.coords.longitude,
-        latitudeDelta: 0.0461,
-        longitudeDelta: 0.02105
-      },
-      1
-    );
   }
 
   render() {
@@ -81,8 +72,6 @@ class NearbyGaraje extends Component {
                     .latitude,
                   longitude: this.props.mechanicCurrentLocation.message[0]
                     .coords.longitude,
-                  latitudeDelta: 0.0922,
-                  longitudeDelta: 0.0421
                 }}
               >
                   <Image style={inStyle.imageStyle} source={MOTORCYCLE} />
@@ -110,8 +99,7 @@ class NearbyGaraje extends Component {
               coordinate={{
                 latitude: this.props.location.coords.latitude,
                 longitude: this.props.location.coords.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421
+
               }}
             >
               <View style={inStyle.markerView1}>
@@ -122,6 +110,9 @@ class NearbyGaraje extends Component {
 
           <Modal
             visible={this.props.isBookCancelModal}
+            onRequestClose={() => {
+              console.log("Modal has been closed.");
+            }}
             animationType="slide"
             transparent={true}
             opacity={0.5}
@@ -183,25 +174,23 @@ class NearbyGaraje extends Component {
                 />
                 <TouchableOpacity
                   disabled={!this.props.confirmDisable}
-                  style={{ alignSelf: "center",opacity:this.props.confirmDisable?1:0.5 }}
+                  style={{ alignSelf: "center",
+                          opacity:this.props.confirmDisable?1:0.5,
+                          backgroundColor: "#7960FF",
+                          width: 0.4 * ScreenWidth,
+                          borderRadius: 5,
+                          alignItems: "center",
+                          margin: 10,
+                          padding: 5,
+                          alignItems: "center",
+                          justifyContent: "center"
+                        }}
                   activeOpacity={1}
                   underlayColor="white"
                   onPress={() => {
                     this.props.getBookingCancellation();
                   }}
                 >
-                  <View
-                    style={{
-                      backgroundColor: "#7960FF",
-                      width: 0.4 * ScreenWidth,
-                      borderRadius: 5,
-                      alignItems: "center",
-                      margin: 10,
-                      padding: 5,
-                      alignItems: "center",
-                      justifyContent: "center"
-                    }}
-                  >
                     {this.props.loadingBookig ? (
                       <Text style={inStyle.modalButtonCancleText}>
                         Loading...
@@ -209,7 +198,6 @@ class NearbyGaraje extends Component {
                     ) : (
                       <Text style={inStyle.modalButtonCancleText}>Confirm</Text>
                     )}
-                  </View>
                 </TouchableOpacity>
               </View>
           </Modal>
@@ -237,14 +225,13 @@ class NearbyGaraje extends Component {
             onPress={() => {
               this.props.getCancelBookingModal();
             }}
+            style={inStyle.modalButtonCancle}
           >
-            <View style={inStyle.modalButtonCancle}>
               {this.props.loadingBookig ? (
                 <Text style={inStyle.modalButtonCancleText}>Loading...</Text>
               ) : (
                 <Text style={inStyle.modalButtonCancleText}>Cancel</Text>
               )}
-            </View>
           </TouchableOpacity>
         </View>
       </View>
