@@ -68,8 +68,9 @@ export const getUserData = () => async (dispatch, getState) => {
         payload:response[0]
       });
       const{userCurrentBooking} = getState().user;
-      const { vendors } = getState().usermaps;
-      SplashScreen.hide();
+      const { vendors,location } = getState().usermaps;
+      console.log(location);
+      if(location){SplashScreen.hide();}
       switch (response[0].current_booking.status) {
         case 'pending':
           var vendorData;

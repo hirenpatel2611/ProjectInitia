@@ -18,3 +18,4 @@ export const USER2=require("../images/USER2.png");
 export const FILTER=require("../images/filter_list.png");
 export const MENU=require("../images/menu.png");
 export const CALL=require("../images/phone-receiver.png");
+export const BIKE_FOR_MAP=require("../images/bikeForMap.jpg");

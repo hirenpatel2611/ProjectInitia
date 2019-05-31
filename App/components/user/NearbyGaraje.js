@@ -205,7 +205,6 @@ class NearbyGaraje extends Component {
             >
             {this.props.bookingStatusRes ? (
             <View style={{backgroundColor: "#FFFFFF",
-
                     width:0.3 *ScreenWidth,
                     alignSelf:'center',
                     alignItems:'center',
