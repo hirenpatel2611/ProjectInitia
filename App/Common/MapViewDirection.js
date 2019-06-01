@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import {Animated} from 'react-native';
 import PropTypes from 'prop-types';
+import { connect } from "react-redux";
+import {
+	setDurationAndDistance
+} from "../actions";
 
 // import MapView from 'react-native-maps';
 import { MapView } from 'expo';
@@ -107,7 +111,9 @@ class MapViewDirections extends Component {
 						}, 0) / 60,
 						coordinates: this.decode(route.overview_polyline.points)
 					});
-
+					var DandD = {distance:distance,duration:duration}
+					console.error(DandD);
+					this.props.setDurationAndDistance(DandD);
 				} else {
 					return Promise.reject();
 				}
@@ -156,4 +162,18 @@ MapViewDirections.propTypes = {
 	onError: PropTypes.func,
 };
 
-export  {MapViewDirections};
+const mapStateToProps = ({ usermaps }) => {
+  const {
+    location,
+  } = usermaps;
+  return {
+    location,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  {
+   setDurationAndDistance,
+  }
+)(MapViewDirections);

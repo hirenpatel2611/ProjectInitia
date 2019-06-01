@@ -34,24 +34,18 @@ import {
   getConfirmBookingCancel,
   getCancelBookingModal
 } from "../../actions";
-import { MapViewDirections } from "../../Common";
+import  MapViewDirections  from "../../Common/MapViewDirection";
 import CheckBox from "react-native-check-box";
 import { MOTORCYCLE,BIKE_FOR_MAP } from "../../images";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
+let ASPECT_RATIO = ScreenWidth/ScreenHeight;
+let longitude_Delta =0.0922 * ASPECT_RATIO;
 
 class NearbyGaraje extends Component {
   componentDidMount() {
-    this._map.animateToRegion(
-      {
-        latitude: this.props.location.coords.latitude,
-        longitude: this.props.location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421
-      },
-      1
-    );
+
   }
 
   render() {

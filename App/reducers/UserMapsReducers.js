@@ -32,7 +32,8 @@ import {
   GET_BOOKING_UPDATE_SUCCESS,
   GET_BOOKING_UPDATE_FAIL,
    GET_REASON_CHECKBOX,
-  GET_CANCEL_BOOKING_MODAL
+  GET_CANCEL_BOOKING_MODAL,
+  SET_DURATION_AND_DISTANCE
 } from "../actions/UserMaps";
 import {GET_USER_BOOKING_STATUS_ACCEPT} from "../actions/ui";
 
@@ -390,6 +391,16 @@ export default (state = INITIAL_STATE, action) => {
           bookData:{booking_id:action.payload.response[0].current_booking.booking_id,
                     vendor_id:action.payload.response[0].current_booking.vendor_id},
         }
+      }
+      break;
+
+      case SET_DURATION_AND_DISTANCE:
+      {
+        return{
+          ...state,
+          mechanicDestance:action.payload.distance,
+          mechanicDuration:action.payload.duration,
+        };
       }
       break;
 

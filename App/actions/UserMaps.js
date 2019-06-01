@@ -53,6 +53,7 @@ export const GET_REASON_CHECKBOX = "usermaps/GET_REASON_CHECKBOX";
 export const GET_REASON_CHECKBOX2 = "usermaps/GET_REASON_CHECKBOX2";
 export const GET_REASON_CHECKBOX3 = "usermaps/GET_REASON_CHECKBOX3";
 export const GET_CANCEL_BOOKING_MODAL = "usermaps/GET_CANCEL_BOOKING_MODAL";
+export const SET_DURATION_AND_DISTANCE = "usermaps/SET_DURATION_AND_DISTANCE";
 
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
@@ -316,25 +317,9 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
   });
   const {location,mechanicCurrentLocation} =getState().usermaps;
   if(location){
-  var radlat1 =
-    (Math.PI * mechanicCurrentLocation.message[0].coords.latitude) / 180;
-  var radlat2 = (Math.PI * location.coords.latitude) / 180;
-  var theta =
-    mechanicCurrentLocation.message[0].coords.longitude -
-    location.coords.longitude;
-  var radtheta = (Math.PI * theta) / 180;
-  var dist =
-    Math.sin(radlat1) * Math.sin(radlat2) +
-    Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-  if (dist > 1) {
-    dist = 1;
-  }
-  dist = Math.acos(dist);
-  dist = (dist * 180) / Math.PI;
-  dist = dist * 60 * 1.1515;
-  dist = dist * 1.609344;
-  console.log(dist);
-  if (dist < 0.055) {
+  var dist = mechanicCurrentLocation.distance;
+  console.log(mechanicCurrentLocation);
+  if (dist < 0.055){
     dispatch({
       type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
       payload: dist
@@ -351,26 +336,30 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
     type: GET_BOOKING_UPDATE_START
   });
   const { bookingStatusRes, bookData } = getState().usermaps;
-
+  obj=Object.assign({},bookingStatusRes);
+// console.error(  bookingStatusRes.type);
   let test = new FormData();
   test.append("booking_id", bookData.booking_id);
   test.append("status", val);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       if (response.status !== 0) {
-        bookingStatusRes.type = "REACHED";
+        obj.type = "REACHED";
+        // console.error(bookingStatusRes.type);
         dispatch({
           type: GET_BOOKING_UPDATE_SUCCESS,
-          payload: bookingStatusRes
+          payload: obj
         });
         dispatch(connectTosocketReached());
         if(val === 'completed'){
           Actions.NearbyGaraje();
         }
       } else {
+
         dispatch({
           type: GET_BOOKING_UPDATE_FAIL
         });
+        dispatch(getBookingUpdateUser());
       }
     })
     .catch(err => {
@@ -390,3 +379,10 @@ export const getCancelBookingModal = () => dispatch => {
     type: GET_CANCEL_BOOKING_MODAL
   });
 };
+
+export const setDurationAndDistance = val => dispatch =>{
+  dispatch({
+    type:SET_DURATION_AND_DISTANCE,
+    payload:val
+  });
+}

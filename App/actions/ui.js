@@ -53,7 +53,6 @@ export const getUserData = () => async (dispatch, getState) => {
     type: GET_USER_PROFILE_DATA_START,
   });
 
-
   const valueUserId = await AsyncStorage.getItem("user_id");
   let test = new FormData();
   test.append("id", valueUserId);
@@ -69,7 +68,7 @@ export const getUserData = () => async (dispatch, getState) => {
       });
       const{userCurrentBooking} = getState().user;
       const { vendors,location } = getState().usermaps;
-      console.log(location);
+
       if(location){SplashScreen.hide();}
       switch (response[0].current_booking.status) {
         case 'pending':
@@ -79,7 +78,6 @@ export const getUserData = () => async (dispatch, getState) => {
                  vendorData=vendor;
                }
            })
-
             var bookingStatusRes = {type:'PENDING'};
             var booking_id ={booking_id:response[0].current_booking.booking_id}
             dispatch({
