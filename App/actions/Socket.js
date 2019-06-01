@@ -63,6 +63,10 @@ export const createSocketChannel = () => async (dispatch, getState) => {
         if (isUserVendor === "1") {
         }
         break;
+        case "COMPLETED":
+          Actions.customerRating();
+          break;
+
 
       default:
         return null;
@@ -123,8 +127,12 @@ export const createSocketChannel = () => async (dispatch, getState) => {
             break;
 
             case "REACHED":
-              Actions.customerRating();
+
               break;
+
+              case "COMPLETED":
+                Actions.customerRating();
+                break;
 
           default:
             return null;
