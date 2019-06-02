@@ -283,6 +283,7 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
+          bookingStatusRes:'',
           loadingBookig: false,
           isBookingSuccess: false,
           isBookCancelModal:false,

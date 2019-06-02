@@ -13,6 +13,7 @@ import { Actions } from "react-native-router-flux";
 import { AsyncStorage, Alert } from "react-native";
 import { connectTosocket, connectTosocketReached,connectTosocketBookingCancle } from "./Socket";
 import { Asset, SplashScreen } from "expo";
+import {getUserData} from './ui'
 
 export const GET_VENDORS_START = "usermaps/GET_VENDORS_START";
 export const GET_VENDORS_SUCCESS = "usermaps/GET_VENDORS_SUCCESS";
@@ -154,6 +155,7 @@ export const getBookingCancellation = () => (dispatch, getState) => {
           type: GET_BOOKING_CANCLE_SUCCESS
         });
         dispatch(connectTosocketBookingCancle(bookData.vendor_id))
+        dispatch(getUserData());
         Actions.NearbyGaraje();
       } else {
         dispatch({
