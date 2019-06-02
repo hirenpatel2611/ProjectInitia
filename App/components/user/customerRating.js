@@ -17,7 +17,8 @@ import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Actions } from "react-native-router-flux";
 import {
-  getBookingUpdateUser
+  getBookingUpdateUser,
+  getVendorRating
 } from "../../actions";
 import styles from "./usermapsStyle";
 import { Rating, AirbnbRating } from "react-native-ratings";
@@ -38,15 +39,19 @@ class customerRating extends Component {
       <View style={containerStyle}>
         <KeyboardAwareScrollView>
           <StatusBar backgroundColor="#7960FF" />
+          <View style={{marginTop: 0.40 * ScreenHeight}}>
+            <Text style={{fontFamily:'circular-book',alignSelf:'center',margin:0.03 * ScreenHeight}}>
+            Rating for vendor service
+            </Text>
                 <AirbnbRating
                   type="star"
                   ratingBackgroundColor="transparent"
                   imageSize={25}
-                  defaultRating={0}
+                  defaultRating={this.props.vendorRating}
                   showRating={false}
                   onFinishRating={rating => {
                     console.log(rating);
-                    this.props.getFilterRating(rating);
+                    this.props.getVendorRating(rating);
                   }}
                 />
 
@@ -57,12 +62,13 @@ class customerRating extends Component {
               }}
               underlayColor="white"
               style={{alignSelf: "center",
-              marginTop: 0.23 * ScreenHeight}}
+              marginTop: 0.03 * ScreenHeight}}
             >
               <View style={continueButton}>
-                <Text style={buttonText}>See Mechanic</Text>
+                <Text style={buttonText}>Done</Text>
               </View>
             </TouchableHighlight>
+            </View>
         </KeyboardAwareScrollView>
       </View>
     );
@@ -73,16 +79,17 @@ class customerRating extends Component {
 
 const mapStateToProps = ({ usermaps }) => {
   const {
-  rating
+  vendorRating
   } = usermaps;
   return {
-rating
+vendorRating
   };
 };
 
 export default connect(
   mapStateToProps,
   {
+    getVendorRating,
     getBookingUpdateUser
   }
 )(customerRating);

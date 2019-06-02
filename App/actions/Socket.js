@@ -22,6 +22,7 @@ export const createSocketChannel = () => async (dispatch, getState) => {
   chatSocket.emit("self_room", { room: `${userId}` });
 
   chatSocket.on("broadcast", function(data) {
+    console.log(data);
     switch (data.type) {
       case "BOOK":
         dispatch(getBookingModal(data.message));
@@ -61,10 +62,17 @@ export const createSocketChannel = () => async (dispatch, getState) => {
 
       case "REACHED":
         if (isUserVendor === "1") {
+            dispatch(getBookingVendorStatus(data));
         }
         break;
         case "COMPLETED":
+        if (isUserVendor === "1") {
+
+            dispatch(getBookingVendorStatus(data));
+        }else {
           Actions.customerRating();
+        }
+
           break;
 
 
@@ -79,6 +87,7 @@ export const createSocketChannel = () => async (dispatch, getState) => {
   TaskManager.defineTask(
     BOOKING_STATUS_RECEIVE_TASK_NAME,
     ({ data, error }) => {
+      console.log(data);
       chatSocket.on("broadcast", function(data) {
         switch (data.type) {
           case "BOOK":
@@ -127,11 +136,17 @@ export const createSocketChannel = () => async (dispatch, getState) => {
             break;
 
             case "REACHED":
-
+            if (isUserVendor === "1") {
+                dispatch(getBookingVendorStatus(data));
+            }
               break;
 
               case "COMPLETED":
+              if (isUserVendor === "1") {
+                  dispatch(getBookingVendorStatus(data));
+              }else {
                 Actions.customerRating();
+              }
                 break;
 
           default:
@@ -200,7 +215,7 @@ export const connectTosocketReached = (val) => async (dispatch, getState) => {
   const { userId } = getState().usermaps;
   chatSocket.emit("booking_status", {
     room: `${vendorsData.id} ${userId}`,
-    message: vendorsData,
+    message: bookData,
     type: "REACHED"
   });
   channelName = `${userId} ${vendorsData.id}`;

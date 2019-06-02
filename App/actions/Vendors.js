@@ -265,11 +265,19 @@ export const getBookingVendorStatus = data => (dispatch,getState) => {
     FutureBookingList.map(booking => {
       if (booking.booking_id === data.message.booking_id) {
         if(data.type === 'CANCEL'){
-
         booking.status = "cancle";
-      }
+       }
         if(data.type === 'REACHED'){
           booking.status = "reached";
+        }
+        if(data.type === 'ON-THE-WAY'){
+          booking.status = "on-the-way";
+        }
+      } else
+      if(booking.booking_id === data.message.booking.booking_id)
+      {
+        if(data.type === 'COMPLETED'){
+          booking.status = "completed";
         }
       }
     });

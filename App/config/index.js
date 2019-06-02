@@ -13,8 +13,9 @@ export const GET_FUTURE_BOOKINGLIST ='/bookings/get_vendor_booking';
 export const BOOKING_UPDATE='/bookings/booking_update';
 export const GET_USER_DATA='/customers/get_user'
 export const UPDATE_PROFILE='/customers/update_profile';
-export const URL_TIMESHEET_SUBMIT='/app/api/submit';
-export const URL_CREATE_TIMESHEETS='/app/api/create_timesheet';
+export const RATING_BY_CUSTOMER='/customers/rating';
+export const SEND_FORGOT_PASSWORD_OTP='/customers/send_forgot_password_otp';
+export const SEND_FORGOT_PASSWORD='/customers/forgot_password';
 export const WEBCALL_SUCCESSFUL_FLAG=100;
 export const URL_USER_LOGOUT="/app/api/logout";
 
@@ -30,5 +31,5 @@ export const statusToPhrase = () =>{
     default:
 
   }
-  
+
 }

@@ -67,13 +67,19 @@ class Login extends Component {
     errorse = this.props.loginFailed ? validate(this.props.login) : {};
     return (
       <View style={containerStyle}>
-        <View>
+          <View style={{flexDirection:'row',justifyContent:'space-between'}}>
           <TouchableOpacity onPress={() => Actions.SplashFront()} style={createButton}>
 
               <Image style={{ height: 15, width: 30 }} source={BACK_ARROW} />
-        
+
           </TouchableOpacity>
-        </View>
+          <TouchableOpacity onPress={()=>{Actions.ForgotMobile()}} style={{marginTop:40,marginRight:25}}>
+          <Text style={{alignSelf:'flex-end',fontFamily:'circular-bold',color:'#7960FF',}}>
+          forgot password
+          </Text>
+          </TouchableOpacity>
+          </View>
+
         <KeyboardAwareScrollView
           enableOnAndroid
           enableAutomaticScroll

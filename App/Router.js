@@ -15,6 +15,9 @@ import Booking from "./components/user/Booking";
 import customerRating from "./components/user/customerRating";
 import FutureBooking from "./components/vendors/FutureBooking";
 import VendorProfile from "./components/vendors/Profile";
+import ForgotMobile from "./components/forgotPassword/ForgotMobile";
+import ForgotOTP from "./components/forgotPassword/ForgotOTP";
+import ForgotResetPassword from "./components/forgotPassword/ForgotResetPassword";
 import { Actions } from "react-native-router-flux";
 import { loadFont, updateLoggedInState, updateIsVendor,createSocketChannel,getUserData } from "./actions";
 import SideMenu from "./components/drawer/SideMenu";
@@ -122,9 +125,25 @@ class RouterComponent extends Component {
               component={customerRating}
               hideNavBar={true}
               navTransparent="true"
-
             />
-
+            <Scene
+              key="ForgotMobile"
+              component={ForgotMobile}
+              hideNavBar={true}
+              navTransparent="true"
+            />
+            <Scene
+              key="ForgotOTP"
+              component={ForgotOTP}
+              hideNavBar={true}
+              navTransparent="true"
+            />
+            <Scene
+              key="ForgotResetPassword"
+              component={ForgotResetPassword}
+              hideNavBar={true}
+              navTransparent="true"
+            />
       {
 
         !this.props.isVendorLoggedIn?

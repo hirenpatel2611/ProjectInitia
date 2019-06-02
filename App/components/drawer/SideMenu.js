@@ -63,15 +63,15 @@ _deleteUser = async () => {
           onPress={()=>{Actions.Booking()}}
         >Bookings</Button>
         </CardSection>
-        {
-        // <CardSection  style={{ flexDirection:'column',borderBottomWidth:0,borderTopWidth:0 }}>
-        // <Button
-        //   containerStyle={container}
-        //   style={textStyle}
-        //   onPress={()=>{Actions.NavigationMap()}}
-        // >Navigation Map</Button>
-        // </CardSection>
-        }
+
+        <CardSection  style={{ flexDirection:'column',borderBottomWidth:0,borderTopWidth:0 }}>
+        <Button
+          containerStyle={container}
+          style={textStyle}
+          onPress={()=>{Actions.customerRating()}}
+        >Rating</Button>
+        </CardSection>
+
         <CardSection  style={{ flexDirection:'column',borderBottomWidth:0,borderTopWidth:0 }}>
         <Button
           containerStyle={container}

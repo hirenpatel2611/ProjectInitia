@@ -6,7 +6,8 @@ import {
   GET_BOOKING,
   GET_BOOKINGLIST,
   GET_VENDOR_BOOKINGLIST,
-  BOOKING_UPDATE
+  BOOKING_UPDATE,
+  RATING_BY_CUSTOMER
 } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage, Alert } from "react-native";
@@ -54,6 +55,8 @@ export const GET_REASON_CHECKBOX2 = "usermaps/GET_REASON_CHECKBOX2";
 export const GET_REASON_CHECKBOX3 = "usermaps/GET_REASON_CHECKBOX3";
 export const GET_CANCEL_BOOKING_MODAL = "usermaps/GET_CANCEL_BOOKING_MODAL";
 export const SET_DURATION_AND_DISTANCE = "usermaps/SET_DURATION_AND_DISTANCE";
+export const GET_BOOKING_COMPLETE = "usermaps/GET_BOOKING_COMPLETE";
+export const GET_VENDOR_RATING = "usermaps/GET_VENDOR_RATING";
 
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
@@ -352,7 +355,10 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
         });
         dispatch(connectTosocketReached());
         if(val === 'completed'){
-          Actions.NearbyGaraje();
+          dispatch(getRating());
+          dispatch({
+            type: GET_BOOKING_COMPLETE,
+          });
         }
       } else {
 
@@ -384,5 +390,26 @@ export const setDurationAndDistance = val => dispatch =>{
   dispatch({
     type:SET_DURATION_AND_DISTANCE,
     payload:val
+  });
+}
+
+export const getRating = () => (dispatch,getState) =>{
+
+const{vendorRating,bookData} =getState().usermaps;
+console.log(bookData);
+  let test = new FormData();
+  test.append("vendor_id", bookData.vendor_id);
+  test.append("rating", vendorRating);
+  Api.post(RATING_BY_CUSTOMER, test)
+    .then(response => {
+      console.log(response);
+        Actions.NearbyGaraje();
+    })
+}
+
+export const getVendorRating = rating => dispatch => {
+  dispatch({
+    type:GET_VENDOR_RATING,
+    payload:rating
   });
 }

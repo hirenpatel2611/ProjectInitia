@@ -33,7 +33,9 @@ import {
   GET_BOOKING_UPDATE_FAIL,
    GET_REASON_CHECKBOX,
   GET_CANCEL_BOOKING_MODAL,
-  SET_DURATION_AND_DISTANCE
+  SET_DURATION_AND_DISTANCE,
+  GET_BOOKING_COMPLETE,
+  GET_VENDOR_RATING
 } from "../actions/UserMaps";
 import {GET_USER_BOOKING_STATUS_ACCEPT} from "../actions/ui";
 
@@ -400,6 +402,27 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           mechanicDestance:action.payload.distance,
           mechanicDuration:action.payload.duration,
+        };
+      }
+      break;
+
+      case GET_VENDOR_RATING:
+      {
+        return{
+          ...state,
+          vendorRating:action.payload,
+        };
+      }
+      break;
+
+      case GET_BOOKING_COMPLETE:
+      {
+        return{
+          ...state,
+          mechanicDestance:'',
+          mechanicDuration:'',
+          bookingStatusRes:'',
+          isBookModalVisible:''
         };
       }
       break;
