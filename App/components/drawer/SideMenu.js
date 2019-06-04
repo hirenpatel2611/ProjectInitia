@@ -23,6 +23,8 @@ _deleteUser = async () => {
     await AsyncStorage.removeItem("token");
     await AsyncStorage.removeItem("is_vendor");
     await AsyncStorage.removeItem("user_id");
+
+    this.props.socketLeave();
   } catch (error) {
     // Error retrieving data
     console.log(error.message);
@@ -81,7 +83,6 @@ _deleteUser = async () => {
           style={textStyle}
           onPress={()=>{
             this._deleteUser();
-            this.props.socketLeave();
             Actions.SplashFront()
           }}
         >Log Out</Button>
@@ -91,4 +92,18 @@ _deleteUser = async () => {
   }
 }
 
-export default  SideMenu;
+const mapStateToProps = ({ forgot }) => {
+  const {
+    forgotOTP,
+  } = forgot;
+  return {
+forgotOTP,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  {
+    socketLeave
+  }
+)(SideMenu);

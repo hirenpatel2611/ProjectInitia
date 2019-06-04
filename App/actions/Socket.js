@@ -212,7 +212,7 @@ export const connectTosocketBookingCancle = val => async (dispatch,getState) => 
 
 export const connectTosocketReached = (val) => async (dispatch, getState) => {
   const { vendorsData, bookData } = getState().usermaps;
-  const { userId } = getState().usermaps;
+  const { userId } = getState().user;
   chatSocket.emit("booking_status", {
     room: `${vendorsData.id} ${userId}`,
     message: bookData,
@@ -221,9 +221,8 @@ export const connectTosocketReached = (val) => async (dispatch, getState) => {
   channelName = `${userId} ${vendorsData.id}`;
 };
 
-export const socketLeave = (val) => async (dispatch, getState) => {
-  const { vendorsData, bookData } = getState().usermaps;
-  const { userId } = getState().usermaps;
+export const socketLeave = () => async (dispatch, getState) => {
+  const { userId } = getState().user;
   chatSocket.emit("leave_self_room", {
     room: `${userId}`,
     type: "LEAVE"
