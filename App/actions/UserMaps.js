@@ -11,7 +11,7 @@ import {
 } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage, Alert } from "react-native";
-import { connectTosocket, connectTosocketReached,connectTosocketBookingCancle } from "./Socket";
+import { connectTosocket, connectTosocketReached,connectTosocketBookingCancle,socketLeave } from "./Socket";
 import { Asset, SplashScreen } from "expo";
 import {getUserData} from './ui'
 
@@ -358,6 +358,7 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
         dispatch(connectTosocketReached());
         if(val === 'completed'){
           dispatch(getRating());
+          dispatch(socketLeave());
           dispatch({
             type: GET_BOOKING_COMPLETE,
           });
