@@ -12,6 +12,9 @@ import {
   CAR_ENGINE,
   TIMING_BELT
 } from "../../images";
+import {
+socketLeave,
+} from "../../actions";
 
  class SideMenu extends Component {
 
@@ -78,6 +81,7 @@ _deleteUser = async () => {
           style={textStyle}
           onPress={()=>{
             this._deleteUser();
+            this.props.socketLeave();
             Actions.SplashFront()
           }}
         >Log Out</Button>

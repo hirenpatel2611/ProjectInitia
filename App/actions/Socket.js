@@ -220,3 +220,13 @@ export const connectTosocketReached = (val) => async (dispatch, getState) => {
   });
   channelName = `${userId} ${vendorsData.id}`;
 };
+
+export const socketLeave = (val) => async (dispatch, getState) => {
+  const { vendorsData, bookData } = getState().usermaps;
+  const { userId } = getState().usermaps;
+  chatSocket.emit("leave_self_room", {
+    room: `${userId}`,
+    type: "LEAVE"
+  });
+  channelName = `${userId}`;
+};
