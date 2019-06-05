@@ -46,15 +46,14 @@ export const loginUser = () => (dispatch, getState) => {
           await AsyncStorage.setItem("token", response.token);
           await AsyncStorage.setItem("is_vendor", response.data.is_vendor);
           await AsyncStorage.setItem("user_id",response.data.id.toString());
-
+          dispatch(getUserData());
           if (response.data.is_vendor == 1) {
             dispatch(updateIsVendor(true));
-            dispatch(createSocketChannel());
             Actions.FutureBooking();
           } else {
             Actions.NearbyGaraje();
           }
-          dispatch(getUserData());
+
         dispatch({
           type: LOGIN_SUCCESSFUL,
           payload: response

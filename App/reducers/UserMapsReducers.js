@@ -423,7 +423,9 @@ export default (state = INITIAL_STATE, action) => {
           mechanicDestance:'',
           mechanicDuration:'',
           bookingStatusRes:'',
-          isBookModalVisible:''
+          isBookModalVisible:'',
+          isBookingSuccess:false,
+          isBookModalVisible:false
         };
       }
       break;

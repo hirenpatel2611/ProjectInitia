@@ -15,7 +15,7 @@ import {
   GET_BOOKING_VENDOR_STATUS,
   GET_CANCLE_BOOKING_MODAL,
   GET_REASON_CHECKBOX_VENDOR,
-  BOOKING_LIST_CANCLE,
+  BOOKING_LIST_CANCLE_SUCCESS,
   BOOKING_CANCLE_START
 } from "../actions/Vendors";
 
@@ -37,7 +37,9 @@ const INITIAL_STATE = {
   reasonCheckboxVendor:'',
   cancleReasonVendor:'',
   confirmDisableVendor:false,
-  cancelBookingData:null
+  cancelBookingData:null,
+  loadingConfirm:false
+
 
 };
 
@@ -211,7 +213,7 @@ export default (state = INITIAL_STATE, action) => {
           }
           break;
 
-          case BOOKING_LIST_CANCLE:
+          case BOOKING_LIST_CANCLE_SUCCESS:
             {
               return {
                 ...state,
@@ -219,7 +221,7 @@ export default (state = INITIAL_STATE, action) => {
                 isConfirmModal:false,
                 cancleReasonVendor:null,
                 reasonCheckboxVendor:[false,false,false],
-                loadingBookig:false,
+                loadingConfirm:false,
 
               };
             }
@@ -229,7 +231,7 @@ export default (state = INITIAL_STATE, action) => {
               {
                 return {
                   ...state,
-                  loadingBookig:true
+                  loadingConfirm:true
                 };
               }
               break;

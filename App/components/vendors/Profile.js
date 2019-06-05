@@ -27,7 +27,6 @@ let ScreenWidth = Dimensions.get("window").width;
 class Profile extends Component {
 
   render() {
-
     const { containerStyle,
       subContainerProfile,
       textInputProfilStyle

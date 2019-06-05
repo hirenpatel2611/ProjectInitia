@@ -242,6 +242,8 @@ export const signupUser = () => (dispatch, getState) => {
           type: SIGNUP_SUCCESSFUL,
           payload: response
         });
+        if(is_vendor === 1){
+        dispatch(toggleModalProfile());}
       } else {
         dispatch({
           type: SIGNUP_FAIL,

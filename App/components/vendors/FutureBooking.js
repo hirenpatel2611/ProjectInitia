@@ -480,7 +480,7 @@ class FutureBooking extends Component {
                     this.props.BookingListCancle();
                   }}
                 >
-                  {this.props.loadingBookig ? (
+                  {this.props.loadingConfirm ? (
                     <Text style={inStyle.modalButtonCancleText}>
                       Loading...
                     </Text>
@@ -550,7 +550,8 @@ const mapStateToProps = ({ vendors }) => {
     reasonCheckboxVendor,
     cancleReasonVendor,
     isConfirmModal,
-    confirmDisableVendor
+    confirmDisableVendor,
+    loadingConfirm
   } = vendors;
   return {
     loadingFutureBookigList,
@@ -567,7 +568,8 @@ const mapStateToProps = ({ vendors }) => {
     isConfirmModal,
     reasonCheckboxVendor,
     cancleReasonVendor,
-    confirmDisableVendor
+    confirmDisableVendor,
+    loadingConfirm
   };
 };
 

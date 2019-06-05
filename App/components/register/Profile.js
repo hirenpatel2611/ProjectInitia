@@ -65,7 +65,7 @@ class Profile extends Component {
 
   componentWillMount() {
     if (Platform.OS === "android" && !Constants.isDevice) {
-      
+
     } else {
       this._getLocationAsync();
     }
@@ -296,7 +296,7 @@ class Profile extends Component {
                     onPress={() => {
                       this.props.setLocation();
                       this.props.signupUser();
-                      this.props.toggleModalProfile();
+                      
                     }}
                     disabled={this.props.location ? false : true}
                     style={{ opacity: this.props.location ? 1 : 0.8, top: 10 }}

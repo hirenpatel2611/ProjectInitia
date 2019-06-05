@@ -3,6 +3,7 @@ import {AsyncStorage} from 'react-native';
 import Api from "../api/api";
 import {GET_USER_DATA} from "../config";
 import { Actions } from "react-native-router-flux";
+import {createSocketChannel} from './Socket';
 
 export const LOAD_FONT_SUCCESS = "ui/LOAD_FONT_SUCCESS";
 export const UPDATE_LOGGED_IN_STATE = "ui/UPDATE_LOGGED_IN_STATE";
@@ -48,24 +49,30 @@ export const updateIsVendor = bool => (dispatch, getState) => {
   });
 };
 
+var i = 0;
 export const getUserData = () => async (dispatch, getState) => {
   dispatch({
     type: GET_USER_PROFILE_DATA_START,
   });
 
   const valueUserId = await AsyncStorage.getItem("user_id");
+
   let test = new FormData();
   test.append("id", valueUserId);
   Api.post(GET_USER_DATA, test)
     .then(response => {
-      console.log(response[0]);
       if(response.status === 0){
-        dispatch(getUserData());
+        if ( i < 10) {
+            dispatch(getUserData());
+            i++;
+        }
+
       }
       dispatch({
         type: GET_USER_PROFILE_DATA,
         payload:response[0]
       });
+      dispatch(createSocketChannel());
       const{userCurrentBooking} = getState().user;
       const { vendors,location } = getState().usermaps;
 

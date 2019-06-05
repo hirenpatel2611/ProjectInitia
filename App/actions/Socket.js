@@ -16,13 +16,19 @@ export const createSocketChannel = () => async (dispatch, getState) => {
     reconnection: true,
     reconnectionDelay: 500,
     reconnectionAttempts: Infinity,
-    transports: ["websocket"]
+    transports: ["websocket"],
+
   });
-  const { isUserVendor, userId } = getState().user;
-  chatSocket.emit("self_room", { room: `${userId}` });
+  const { isUserVendor, userData } = getState().user;
+  chatSocket.emit("self_room", { room: `${userData.userId}` });
+
+  chatSocket.on('ping',function(data){
+    console.log(data);
+  chatSocket.emit('pong')
+  }
+)
 
   chatSocket.on("broadcast", function(data) {
-    console.log(data);
     switch (data.type) {
       case "BOOK":
         dispatch(getBookingModal(data.message));
@@ -87,7 +93,7 @@ export const createSocketChannel = () => async (dispatch, getState) => {
   TaskManager.defineTask(
     BOOKING_STATUS_RECEIVE_TASK_NAME,
     ({ data, error }) => {
-      console.log(data);
+      // console.log(data);
       chatSocket.on("broadcast", function(data) {
         switch (data.type) {
           case "BOOK":
@@ -203,7 +209,7 @@ export const connectTosocketBookingCancle = val => async (dispatch,getState) => 
   }
 
   chatSocket.emit("booking_status", {
-    room: `${val} ${userId}`,
+    room: `${val}`,
     message: cancelData,
     type: "CANCEL"
   });
@@ -222,10 +228,10 @@ export const connectTosocketReached = (val) => async (dispatch, getState) => {
 };
 
 export const socketLeave = () => async (dispatch, getState) => {
-  const { userId } = getState().user;
+  const { userData } = getState().user;
   chatSocket.emit("leave_self_room", {
-    room: `${userId}`,
+    room: `${userData.userId}`,
     type: "LEAVE"
   });
-  channelName = `${userId}`;
+  channelName = `${userData.userId}`;
 };

@@ -24,7 +24,7 @@ _deleteUser = async () => {
     await AsyncStorage.removeItem("is_vendor");
     await AsyncStorage.removeItem("user_id");
 
-    this.props.socketLeave();
+
   } catch (error) {
     // Error retrieving data
     console.log(error.message);
@@ -74,7 +74,8 @@ _deleteUser = async () => {
           style={textStyle}
           onPress={()=>{
             this._deleteUser();
-            Actions.SplashFront()
+            Actions.SplashFront();
+              this.props.socketLeave();
           }}
         >Log Out</Button>
         </CardSection>

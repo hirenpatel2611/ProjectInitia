@@ -33,7 +33,7 @@ export const GET_BOOKINGLIST_APPROVE_FAIL =
 export const GET_BOOKING_VENDOR_STATUS = "vendors/GET_BOOKING_VENDOR_STATUS";
 export const GET_CANCLE_BOOKING_MODAL = "vendors/GET_CANCLE_BOOKING_MODAL";
 export const GET_REASON_CHECKBOX_VENDOR = "vendors/GET_REASON_CHECKBOX_VENDOR";
-export const BOOKING_LIST_CANCLE = "vendors/BOOKING_LIST_CANCLE";
+export const BOOKING_LIST_CANCLE_SUCCESS = "vendors/BOOKING_LIST_CANCLE_SUCCESS";
 export const BOOKING_CANCLE_START = "vendors/BOOKING_CANCLE_START";
 
 
@@ -200,6 +200,7 @@ export const BookingListCancle = () => (dispatch, getState) => {
   test.append("reason", cancleReasonVendor);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
+      console.log();
       if(response.status === 1){
         FutureBookingList.map(booking => {
           if (booking.booking_id === cancelBookingData.booking_id) {
@@ -207,7 +208,7 @@ export const BookingListCancle = () => (dispatch, getState) => {
           }
         });
         dispatch({
-          type:BOOKING_LIST_CANCLE,
+          type:BOOKING_LIST_CANCLE_SUCCESS,
           payload:FutureBookingList
         });
         dispatch(connectTosocketBookingCancle(cancelBookingData.customer_id))
@@ -273,10 +274,10 @@ export const getBookingVendorStatus = data => (dispatch,getState) => {
         if(data.type === 'ON-THE-WAY'){
           booking.status = "on-the-way";
         }
-      } else
+      }
+      if(data.type === 'COMPLETED'){
       if(booking.booking_id === data.message.booking.booking_id)
       {
-        if(data.type === 'COMPLETED'){
           booking.status = "completed";
         }
       }
