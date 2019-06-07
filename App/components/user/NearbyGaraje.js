@@ -49,7 +49,8 @@ import {
   getReasonCheckbox3,
   getConfirmBookingCancel,
   getCancelBookingModal,
-  getUserData
+  getUserData,
+  getCancelBookingModalClose
 } from "../../actions";
 import { MECHANIC, USER2, FILTER } from "../../images";
 import { Rating, AirbnbRating } from "react-native-ratings";
@@ -243,7 +244,7 @@ class NearbyGaraje extends Component {
                   </View>
                   <View style={inStyle.modalInnerView1}>
                     <Rating imageSize={20}
-                      startingValue={this.props.vendorsData.rating?this.props.vendorsData.rating:0}
+                      startingValue={this.props.vendorsData?this.props.vendorsData.rating:0}
                     />
                   </View>
                 </View>
@@ -312,6 +313,24 @@ class NearbyGaraje extends Component {
                   justifyContent: "space-around"
                 }}
               >
+              <TouchableOpacity style={{
+                width:0.1 * ScreenWidth,
+                alignSelf: "flex-end",
+              }}
+              onPress={()=>{this.props.getCancelBookingModalClose()}}
+              >
+              <Text
+                style={{
+                  fontSize: 22,
+                  fontFamily: "circular-bold",
+                  alignSelf: "flex-end",
+                  color:'#7960FF',
+                  width:0.1 * ScreenWidth,
+                }}
+              >
+                x
+              </Text>
+              </TouchableOpacity>
                 <Text
                   style={{
                     fontSize: 18,
@@ -522,6 +541,7 @@ export default connect(
     getReasonCheckbox,
     getConfirmBookingCancel,
     getCancelBookingModal,
-    getUserData
+    getUserData,
+    getCancelBookingModalClose
   }
 )(NearbyGaraje);

@@ -65,7 +65,7 @@ class customerRating extends Component {
               marginTop: 0.03 * ScreenHeight}}
             >
               <View style={continueButton}>
-                <Text style={buttonText}>Done</Text>
+                <Text style={buttonText}>{this.props.loadingRatingDone?'loading...':'Done'}</Text>
               </View>
             </TouchableHighlight>
             </View>
@@ -79,10 +79,12 @@ class customerRating extends Component {
 
 const mapStateToProps = ({ usermaps }) => {
   const {
-  vendorRating
+  vendorRating,
+  loadingRatingDone
   } = usermaps;
   return {
-vendorRating
+vendorRating,
+loadingRatingDone
   };
 };
 

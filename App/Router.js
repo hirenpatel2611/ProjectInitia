@@ -125,24 +125,28 @@ class RouterComponent extends Component {
               component={customerRating}
               hideNavBar={true}
               navTransparent="true"
+              type={ActionConst.RESET}
             />
             <Scene
               key="ForgotMobile"
               component={ForgotMobile}
               hideNavBar={true}
               navTransparent="true"
+              type={ActionConst.RESET}
             />
             <Scene
               key="ForgotOTP"
               component={ForgotOTP}
               hideNavBar={true}
               navTransparent="true"
+              type={ActionConst.RESET}
             />
             <Scene
               key="ForgotResetPassword"
               component={ForgotResetPassword}
               hideNavBar={true}
               navTransparent="true"
+              type={ActionConst.RESET}
             />
       {
 

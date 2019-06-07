@@ -32,7 +32,8 @@ import {
   getBookingUpdateUser,
   getReasonCheckbox,
   getConfirmBookingCancel,
-  getCancelBookingModal
+  getCancelBookingModal,
+  getCancelBookingModalClose
 } from "../../actions";
 import  MapViewDirections  from "../../Common/MapViewDirection";
 import CheckBox from "react-native-check-box";
@@ -136,21 +137,40 @@ class NearbyGaraje extends Component {
                   justifyContent: "space-around"
                 }}
               >
+              <View style={{
+                flexDirection:'row',
+                justifyContent:'space-between'
+              }}>
                 <Text
                   style={{
                     fontSize: 18,
                     fontFamily: "circular-bold",
-                    alignSelf: "center"
+                    alignSelf: "flex-start"
                   }}
                 >
                   Reason of Cancel
                 </Text>
+                <TouchableOpacity style={{
+                  width:0.1 * ScreenWidth,
+                  alignSelf: "flex-end",
+                }}
+                onPress={()=>{this.props.getCancelBookingModalClose()}}
+                >
+                <Text
+                  style={{
+                    fontSize: 22,
+                    fontFamily: "circular-bold",
+                    color:'#7960FF',
+                  }}
+                >
+                  x
+                </Text>
+                </TouchableOpacity>
+                </View>
                 <CheckBox
                   isChecked={this.props.reasonCheckbox[0]}
                   checkedCheckBoxColor="#7960FF"
                   rightText="Mechanic is responding on booking."
-                  checkedIcon="dot-circle-o"
-                  uncheckedIcon="circle-o"
                   onClick={() => {
                     this.props.getReasonCheckbox(0);
                   }}
@@ -159,8 +179,6 @@ class NearbyGaraje extends Component {
                   isChecked={this.props.reasonCheckbox[1]}
                   checkedCheckBoxColor="#7960FF"
                   rightText="Mechanic is not good deal."
-                  checkedIcon="dot-circle-o"
-                  uncheckedIcon="circle-o"
                   onClick={() => {
                     this.props.getReasonCheckbox(1);
                   }}
@@ -169,8 +187,6 @@ class NearbyGaraje extends Component {
                   isChecked={this.props.reasonCheckbox[2]}
                   checkedCheckBoxColor="#7960FF"
                   rightText="I Choose better option."
-                  checkedIcon="dot-circle-o"
-                  uncheckedIcon="circle-o"
                   onClick={() => {
                     this.props.getReasonCheckbox(2);
                   }}
@@ -222,6 +238,7 @@ class NearbyGaraje extends Component {
               ? this.props.bookingStatusRes.type
               : null}
           </Text>
+          {this.props.mechanicCurrentLocation?<Text>Dist({this.props.mechanicCurrentLocation.distance} km)</Text>:null}
           <TouchableOpacity
             activeOpacity={1}
             underlayColor="white"
@@ -230,11 +247,7 @@ class NearbyGaraje extends Component {
             }}
             style={inStyle.modalButtonCancle}
           >
-              {this.props.loadingBookig ? (
-                <Text style={inStyle.modalButtonCancleText}>Loading...</Text>
-              ) : (
                 <Text style={inStyle.modalButtonCancleText}>Cancel</Text>
-              )}
           </TouchableOpacity>
         </View>
       </View>
@@ -310,7 +323,8 @@ const mapStateToProps = ({ usermaps }) => {
     distanceBetweenUserMechanic,
     reasonCheckbox,
     isBookCancelModal,
-    confirmDisable
+    confirmDisable,
+    loadingBookig
   } = usermaps;
   return {
     location,
@@ -320,7 +334,8 @@ const mapStateToProps = ({ usermaps }) => {
     distanceBetweenUserMechanic,
     reasonCheckbox,
     isBookCancelModal,
-    confirmDisable
+    confirmDisable,
+    loadingBookig
   };
 };
 
@@ -332,6 +347,7 @@ export default connect(
     getBookingUpdateUser,
     getReasonCheckbox,
     getConfirmBookingCancel,
-    getCancelBookingModal
+    getCancelBookingModal,
+    getCancelBookingModalClose
   }
 )(NearbyGaraje);

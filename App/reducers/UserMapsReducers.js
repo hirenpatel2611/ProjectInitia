@@ -35,7 +35,11 @@ import {
   GET_CANCEL_BOOKING_MODAL,
   SET_DURATION_AND_DISTANCE,
   GET_BOOKING_COMPLETE,
-  GET_VENDOR_RATING
+  GET_VENDOR_RATING,
+  GET_CANCEL_BOOKING_MODAL_CLOSE,
+  GET_RATING_SUCCESS,
+  GET_RATING_START,
+  NO_BOOKING_FOUND_CUSTOMER
 } from "../actions/UserMaps";
 import {GET_USER_BOOKING_STATUS_ACCEPT} from "../actions/ui";
 
@@ -68,7 +72,9 @@ const INITIAL_STATE = {
   reasonCheckbox:[false,false,false],
   cancleReason:'',
   isBookCancelModal:false,
-  confirmDisable:false
+  confirmDisable:false,
+  loadingRatingDone:false,
+  bookingListFound:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -169,7 +175,8 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingBookigList: true,
-          isBookingListFail: false
+          isBookingListFail: false,
+          bookingListFound:false,
         };
       }
       break;
@@ -374,6 +381,16 @@ export default (state = INITIAL_STATE, action) => {
     }
     break;
 
+    case GET_CANCEL_BOOKING_MODAL_CLOSE:
+    {
+      return{
+        ...state,
+        isBookModalVisible:true,
+        isBookCancelModal:false,
+      };
+    }
+    break;
+
     case GET_BOOKING_UPDATE_SUCCESS:
     {
       return{
@@ -416,6 +433,41 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
+      case GET_BOOKING_UPDATE_START:
+      {
+        return{
+          ...state,
+        };
+      }
+      break;
+
+      case GET_RATING_START:
+      {
+        return{
+          ...state,
+          loadingRatingDone:true,
+        };
+      }
+      break;
+
+      case GET_BOOKING_UPDATE_FAIL:
+      {
+        return{
+          ...state,
+          loadingRatingDone:false,
+        };
+      }
+      break;
+
+      case GET_RATING_SUCCESS:
+      {
+        return{
+          ...state,
+          loadingRatingDone:false,
+        };
+      }
+      break;
+
       case GET_BOOKING_COMPLETE:
       {
         return{
@@ -429,6 +481,16 @@ export default (state = INITIAL_STATE, action) => {
         };
       }
       break;
+
+    case NO_BOOKING_FOUND_CUSTOMER:
+    {
+        return{
+          ...state,
+          bookingListFound:true,
+          loadingBookigList:false
+        }
+    }
+    break;
 
     default:
       return state;

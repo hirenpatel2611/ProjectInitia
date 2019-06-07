@@ -35,6 +35,8 @@ export const GET_CANCLE_BOOKING_MODAL = "vendors/GET_CANCLE_BOOKING_MODAL";
 export const GET_REASON_CHECKBOX_VENDOR = "vendors/GET_REASON_CHECKBOX_VENDOR";
 export const BOOKING_LIST_CANCLE_SUCCESS = "vendors/BOOKING_LIST_CANCLE_SUCCESS";
 export const BOOKING_CANCLE_START = "vendors/BOOKING_CANCLE_START";
+export const GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR = "vendors/GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR";
+export const GET_FUTURE_BOOKING_LIST_NO_FOUND = "vendors/GET_FUTURE_BOOKING_LIST_NO_FOUND";
 
 
 export const getFutureBookings = () => async (dispatch, getState) => {
@@ -50,11 +52,14 @@ export const getFutureBookings = () => async (dispatch, getState) => {
       if (response.status === 0) {
         if (response.message === "No booking found") {
           dispatch({
-            type: GET_FUTURE_BOOKING_LIST_FAIL,
-            payload: response.message
+            type: GET_FUTURE_BOOKING_LIST_NO_FOUND,
           });
           SplashScreen.hide();
         } else {
+          dispatch({
+            type: GET_FUTURE_BOOKING_LIST_FAIL,
+            payload: response.message
+          });
           dispatch(getFutureBookings());
         }
       } else {
@@ -254,9 +259,16 @@ export const BookingListApprove = val => (dispatch, getState) => {
     });
 };
 
-export const otpDone = () => (dispatch, getState) => {
+export const otpDone = val => (dispatch, getState) => {
+  const { FutureBookingList,bookingData } = getState().vendors;
+  FutureBookingList.map(booking => {
+    if(booking.booking_id === bookingData.booking_id){
+      booking.customer.OTP = val
+    }
+  });
   dispatch({
-    type: OTP_DONE
+    type: OTP_DONE,
+    payload:FutureBookingList
   });
 };
 
@@ -299,5 +311,11 @@ export const getReasonCheckboxVendor = index => dispatch => {
   dispatch({
     type: GET_REASON_CHECKBOX_VENDOR,
     payload: index
+  });
+};
+
+export const getCancelBookingModalCloseVendor = () => dispatch => {
+  dispatch({
+    type: GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR
   });
 };

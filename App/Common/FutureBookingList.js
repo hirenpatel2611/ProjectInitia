@@ -44,6 +44,16 @@ const FutureBookingList = ({customer,
          {customer.first_name}
         </Text>
         <Text
+            style={{
+              fontFamily: "circular-bold",
+              fontSize: 20,
+              color: "#4A4A4A",
+              fontFamily:'circular-bold'
+            }}
+          >
+
+          </Text>
+        <Text
           style={{
             fontFamily: "circular-bold",
             fontSize: 16,
@@ -71,6 +81,17 @@ const FutureBookingList = ({customer,
         >
           {customer.mobile}
         </Text>
+        <Text
+          style={{
+            fontFamily: "circular-bold",
+            fontSize: 16,
+            color: "#4A4A4A",
+            fontFamily:'circular-book'
+          }}
+        >
+          {customer.OTP}
+        </Text>
+
         <Text
           style={{
             fontFamily: "circular-bold",

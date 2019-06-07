@@ -12,14 +12,15 @@ import {
   Platform,
   Animated,
   AsyncStorage,
-  ScrollView
+  ScrollView,
+  FlatList
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styles from "./usermapsStyle";
 import Header from "../../Common/Header";
 import { getBookings, getDistanceList} from "../../actions";
-import {BookingList,FutureBookingList} from "../../Common";
+import {Spinner} from "../../Common";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -27,30 +28,101 @@ let isVandor;
 
 class Booking extends Component {
   async componentWillMount() {
-    const valueIsvendor = await AsyncStorage.getItem("is_vendor");
-    isVandor=await AsyncStorage.getItem("is_vendor");
+
       this.props.getBookings();
 
   }
- renderBookingList() {
-      if (this.props.vendorList.length) {
-          return this.props.vendorList.map(vendorsList => (
-            <BookingList key={vendorsList.booking_id} vendor={vendorsList.vendor} status={vendorsList.status} />
-          ));
-      }
-    }
-
 
   render() {
     const { containerStyle } = styles;
     return (
       <View>
         <Header headerText="Booking" />
-        <ScrollView
-          style={inStyle.ScrollViewStyle}
-        >
-        {this.renderBookingList()}
-        </ScrollView>
+        <ScrollView style={inStyle.ScrollViewStyle}>
+        {this.props.bookingListFound?
+          <Text style={{ fontFamily: "circular-bold", alignSelf: "center" }}>
+            No booking found
+          </Text>
+          :null}
+        {this.props.loadingBookigList?<Spinner />:
+        <FlatList
+         data={this.props.vendorList}
+         keyExtractor={(item, index) => index.toString()}
+         renderItem={({item}) => (
+           <View
+             style={{
+               margin: 5,
+               backgroundColor: "white",
+               padding: 10,
+               borderRadius: 5,
+               justifyContent: "space-around"
+             }}
+           >
+             <View
+               style={{
+                 flexDirection: "row",
+                 justifyContent: "space-between"
+               }}
+             >
+               <Text
+                 style={{
+                   fontFamily: "circular-bold",
+                   fontSize: 18,
+                   color: "#4A4A4A",
+                   fontFamily: "circular-bold"
+                 }}
+               >
+                 {item.vendor.first_name}
+               </Text>
+               <Text style={{
+                 fontFamily: "circular-bold",
+                 fontSize: 18,
+                 color: "#4A4A4A",
+                 fontFamily: "circular-bold"
+               }}>
+               {item.status}
+               </Text>
+             </View>
+             <View
+               style={{
+                 flexDirection: "row",
+                 justifyContent: "space-between",
+                 marginTop: 10
+               }}
+             >
+               <Text
+                 style={{
+                   fontFamily: "circular-bold",
+                   fontSize: 14,
+                   color: "#4A4A4A",
+                   fontFamily: "circular-book"
+                 }}
+               >
+                 {item.vendor.mobile}
+               </Text>
+             </View>
+             <View
+               style={{
+                 flexDirection: "row",
+                 justifyContent: "space-between"
+               }}
+             >
+               <Text
+                 style={{
+                   fontFamily: "circular-bold",
+                   fontSize: 14,
+                   color: "#7960FF",
+                   fontFamily: "circular-book"
+                 }}
+               >
+                 {item.vendor.email}
+               </Text>
+             </View>
+           </View>
+         )}
+         onEndReachedThreshold={10}
+         />}
+         </ScrollView>
       </View>
     );
   }
@@ -58,9 +130,10 @@ class Booking extends Component {
 const inStyle ={
   ScrollViewStyle:{
     height: 0.88 * ScreenHeight,
-    paddingTop: 7,
+    marginTop:5,
+    paddingTop: 2,
     paddingBottom: 10,
-    marginBottom: 35
+    marginBottom: Platform.OS === 'android' ?0.1 * ScreenHeight:0,
   },
   textLoading:{
     alignSelf: "center",
@@ -72,12 +145,20 @@ const inStyle ={
   }
 };
 const mapStateToProps = ({ usermaps }) => {
-  const { loadingBookigList, vendorList, isBookingListFail,vendorDistanceList } = usermaps;
+  const {
+    loadingBookigList,
+    vendorList,
+    isBookingListFail,
+    vendorDistanceList,
+    bookingListFound
+  } = usermaps
+
   return {
     loadingBookigList,
     vendorList,
     isBookingListFail,
-    vendorDistanceList
+    vendorDistanceList,
+    bookingListFound
   };
 };
 

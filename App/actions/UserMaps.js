@@ -55,9 +55,13 @@ export const GET_REASON_CHECKBOX = "usermaps/GET_REASON_CHECKBOX";
 export const GET_REASON_CHECKBOX2 = "usermaps/GET_REASON_CHECKBOX2";
 export const GET_REASON_CHECKBOX3 = "usermaps/GET_REASON_CHECKBOX3";
 export const GET_CANCEL_BOOKING_MODAL = "usermaps/GET_CANCEL_BOOKING_MODAL";
+export const GET_CANCEL_BOOKING_MODAL_CLOSE = "usermaps/GET_CANCEL_BOOKING_MODAL_CLOSE";
 export const SET_DURATION_AND_DISTANCE = "usermaps/SET_DURATION_AND_DISTANCE";
 export const GET_BOOKING_COMPLETE = "usermaps/GET_BOOKING_COMPLETE";
 export const GET_VENDOR_RATING = "usermaps/GET_VENDOR_RATING";
+export const GET_RATING_SUCCESS = "usermaps/GET_RATING_SUCCESS";
+export const GET_RATING_START = "usermaps/GET_RATING_START";
+export const NO_BOOKING_FOUND_CUSTOMER = "usermaps/NO_BOOKING_FOUND_CUSTOMER";
 
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
@@ -179,6 +183,11 @@ export const getBookings = () => async (dispatch, getState) => {
   Api.post(GET_BOOKINGLIST, test)
     .then(response => {
       if (response.status === 0) {
+          if (response.message === "No booking found") {
+            dispatch({
+              type:NO_BOOKING_FOUND_CUSTOMER,
+            });
+          }
         dispatch({
           type: GET_BOOKING_LIST_FAIL,
           payload: response
@@ -323,7 +332,7 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
   const {location,mechanicCurrentLocation} =getState().usermaps;
   if(location){
   var dist = mechanicCurrentLocation.distance;
-  console.log(mechanicCurrentLocation);
+  console.log(mechanicCurrentLocation.distance);
   if (dist < 0.055){
     dispatch({
       type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
@@ -358,10 +367,11 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
         dispatch(connectTosocketReached());
         if(val === 'completed'){
           dispatch(getRating());
-          dispatch(socketLeave());
+
           dispatch({
             type: GET_BOOKING_COMPLETE,
           });
+          dispatch(socketLeave());
         }
       } else {
 
@@ -389,6 +399,12 @@ export const getCancelBookingModal = () => dispatch => {
   });
 };
 
+export const getCancelBookingModalClose = () => dispatch => {
+  dispatch({
+    type: GET_CANCEL_BOOKING_MODAL_CLOSE
+  });
+};
+
 export const setDurationAndDistance = val => dispatch =>{
   dispatch({
     type:SET_DURATION_AND_DISTANCE,
@@ -397,6 +413,10 @@ export const setDurationAndDistance = val => dispatch =>{
 }
 
 export const getRating = () => (dispatch,getState) =>{
+
+  dispatch({
+    type:GET_RATING_START
+  });
 
 const{vendorRating,bookData} =getState().usermaps;
 console.log(bookData);
@@ -407,6 +427,9 @@ console.log(bookData);
     .then(response => {
       console.log(response);
         Actions.NearbyGaraje();
+        dispatch({
+          type:GET_RATING_SUCCESS
+        });
     })
 }
 
