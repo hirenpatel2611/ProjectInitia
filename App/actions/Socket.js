@@ -24,6 +24,7 @@ export const createSocketChannel = () => async (dispatch, getState) => {
 
   chatSocket.on('ping',function(data){
     console.log(data);
+    console.log(isUserVendor);
   chatSocket.emit('pong')
   }
 )
@@ -90,7 +91,7 @@ export const createSocketChannel = () => async (dispatch, getState) => {
     accuracy: Location.Accuracy.BestForNavigation
   });
 
-  TaskManager.defineTask(
+  TaskManager.isTaskDefined(
     BOOKING_STATUS_RECEIVE_TASK_NAME,
     ({ data, error }) => {
       // console.log(data);

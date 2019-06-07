@@ -76,7 +76,7 @@ export const getUserData = () => async (dispatch, getState) => {
       const{userCurrentBooking} = getState().user;
       const { vendors,location } = getState().usermaps;
 
-      if(location){SplashScreen.hide();}
+      if(location){SplashScreen.hide();
       switch (response[0].current_booking.status) {
         case 'pending':
           var vendorData;
@@ -145,6 +145,6 @@ export const getUserData = () => async (dispatch, getState) => {
 
         default:
 
-      }
+      }}
     })
 };
