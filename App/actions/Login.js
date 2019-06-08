@@ -4,8 +4,8 @@ import Api from "../api/api";
 import { URL_USER_LOGIN } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage } from "react-native";
-import {updateIsVendor,getUserData} from './ui';
-import {createSocketChannel} from './Socket';
+import { updateIsVendor, getUserData } from "./ui";
+import { createSocketChannel } from "./Socket";
 
 export const UPDATE_PASSWORD = "login/UPDATE_PASSWORD";
 export const UPDATE_MOBILE_NUMBER = "login/UPDATE_MOBILE_NUMBER";
@@ -42,17 +42,18 @@ export const loginUser = () => (dispatch, getState) => {
   Api.post(URL_USER_LOGIN, test)
     .then(async response => {
       if (response.status === 1) {
+        await AsyncStorage.setItem("token", response.token);
+        await AsyncStorage.setItem("is_vendor", response.data.is_vendor);
+        await AsyncStorage.setItem("user_id", response.data.id.toString());
+        dispatch(getUserData());
+        dispatch(createSocketChannel(response.data.id));
+        if (response.data.is_vendor == 1) {
+          dispatch(updateIsVendor(true));
 
-          await AsyncStorage.setItem("token", response.token);
-          await AsyncStorage.setItem("is_vendor", response.data.is_vendor);
-          await AsyncStorage.setItem("user_id",response.data.id.toString());
-          dispatch(getUserData());
-          if (response.data.is_vendor == 1) {
-            dispatch(updateIsVendor(true));
-            Actions.FutureBooking();
-          } else {
-            Actions.NearbyGaraje();
-          }
+          Actions.FutureBooking();
+        } else {
+          Actions.NearbyGaraje();
+        }
 
         dispatch({
           type: LOGIN_SUCCESSFUL,

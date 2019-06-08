@@ -187,7 +187,7 @@ class NearbyGaraje extends Component {
           </MapView>
 
           <Modal
-            visible={this.props.isBookModalVisible ? true : false}
+            visible={this.props.isBookModalVisible}
             onRequestClose={() => {
               console.log("Modal has been closed.");
             }}
@@ -197,7 +197,7 @@ class NearbyGaraje extends Component {
             style={inStyle.modalStyle}
           >
             <TouchableOpacity
-              style={{ height: ScreenHeight,paddingTop:0.68 * ScreenHeight, }}
+              style={{ height: ScreenHeight, paddingTop: 0.68 * ScreenHeight }}
               activeOpacity={1}
               onPress={() => {
                 this.props.isBookingSuccess
@@ -205,28 +205,31 @@ class NearbyGaraje extends Component {
                   : this.props.closeVendorDetailModal();
               }}
             >
-            {this.props.bookingStatusRes ? (
-            <View style={{backgroundColor: "#FFFFFF",
-                    width:0.3 *ScreenWidth,
-                    alignSelf:'center',
-                    alignItems:'center',
-                    justifyContent:'center',
-                    borderTopLeftRadius:40,
-                    borderTopRightRadius:40,
-                    marginBottom:-15,
-                    height:0.04*ScreenHeight,
-          }}>
-
-              <Text
-                style={{
-                  fontFamily: "circular-bold",
-                  backgroundColor: "#FFFFFF",
-                  fontSize:14
-                }}
-              >
-                {this.props.bookingStatusRes.type}
-              </Text></View>
-            ) : null}
+              {this.props.bookingStatusRes ? (
+                <View
+                  style={{
+                    backgroundColor: "#FFFFFF",
+                    width: 0.3 * ScreenWidth,
+                    alignSelf: "center",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderTopLeftRadius: 40,
+                    borderTopRightRadius: 40,
+                    marginBottom: -15,
+                    height: 0.04 * ScreenHeight
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "circular-bold",
+                      backgroundColor: "#FFFFFF",
+                      fontSize: 14
+                    }}
+                  >
+                    {this.props.bookingStatusRes.type}
+                  </Text>
+                </View>
+              ) : null}
 
               <View style={inStyle.modalBookTouch}>
                 <View style={inStyle.modalView1}>
@@ -243,8 +246,13 @@ class NearbyGaraje extends Component {
                     </Text>
                   </View>
                   <View style={inStyle.modalInnerView1}>
-                    <Rating imageSize={20}
-                      startingValue={this.props.vendorsData?this.props.vendorsData.rating:0}
+                    <Rating
+                      imageSize={20}
+                      startingValue={
+                        this.props.vendorsData
+                          ? this.props.vendorsData.rating
+                          : 0
+                      }
                     />
                   </View>
                 </View>
@@ -313,24 +321,27 @@ class NearbyGaraje extends Component {
                   justifyContent: "space-around"
                 }}
               >
-              <TouchableOpacity style={{
-                width:0.1 * ScreenWidth,
-                alignSelf: "flex-end",
-              }}
-              onPress={()=>{this.props.getCancelBookingModalClose()}}
-              >
-              <Text
-                style={{
-                  fontSize: 22,
-                  fontFamily: "circular-bold",
-                  alignSelf: "flex-end",
-                  color:'#7960FF',
-                  width:0.1 * ScreenWidth,
-                }}
-              >
-                x
-              </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: 0.1 * ScreenWidth,
+                    alignSelf: "flex-end"
+                  }}
+                  onPress={() => {
+                    this.props.getCancelBookingModalClose();
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 22,
+                      fontFamily: "circular-bold",
+                      alignSelf: "flex-end",
+                      color: "#7960FF",
+                      width: 0.1 * ScreenWidth
+                    }}
+                  >
+                    x
+                  </Text>
+                </TouchableOpacity>
                 <Text
                   style={{
                     fontSize: 18,

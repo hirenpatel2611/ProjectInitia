@@ -41,7 +41,7 @@ const INITIAL_STATE = {
   confirmDisableVendor: false,
   cancelBookingData: null,
   loadingConfirm: false,
-  isFutureBookingNoFound:false
+  isFutureBookingNoFound: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -60,7 +60,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loadingFutureBookigList: false,
           vendorBookingList: action.payload,
-          isFutureBookingNoFound:false
+          isFutureBookingNoFound: false
         };
       }
       break;
@@ -71,7 +71,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loadingFutureBookigList: false,
           isFutureBookingListFail: true,
-          isFutureBookingNoFound:false
+          isFutureBookingNoFound: false
         };
       }
       break;
@@ -145,7 +145,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isMechanicOtp: false,
-          FutureBookingList:[...action.payload],
+          FutureBookingList: [...action.payload]
         };
       }
       break;
@@ -164,7 +164,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingBookigUpdate: false,
-          FutureBookingList: action.payload.FutureBookingList
+          FutureBookingList: [...action.payload.FutureBookingList]
         };
       }
       break;
@@ -223,7 +223,7 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          FutureBookingList: action.payload,
+          FutureBookingList: [...action.payload],
           isConfirmModal: false,
           cancleReasonVendor: null,
           reasonCheckboxVendor: [false, false, false],
@@ -241,24 +241,24 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-      case GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR:
-        {
-          return {
-            ...state,
-            isConfirmModal: false
-          };
-        }
-        break;
+    case GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR:
+      {
+        return {
+          ...state,
+          isConfirmModal: false
+        };
+      }
+      break;
 
-        case GET_FUTURE_BOOKING_LIST_NO_FOUND:
-          {
-            return {
-              ...state,
-              isFutureBookingNoFound: true,
-              loadingFutureBookigList:false
-            };
-          }
-          break;
+    case GET_FUTURE_BOOKING_LIST_NO_FOUND:
+      {
+        return {
+          ...state,
+          isFutureBookingNoFound: true,
+          loadingFutureBookigList: false
+        };
+      }
+      break;
 
     default:
       return state;

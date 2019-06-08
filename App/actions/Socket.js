@@ -8,26 +8,23 @@ import { Actions } from "react-native-router-flux";
 
 export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
-const BOOKING_STATUS_RECEIVE_TASK_NAME =
-  "background-booking-scoket-receive-task";
+const LOCATION_TASK_NAME = "background-location-task";
 var peer = null;
-export const createSocketChannel = () => async (dispatch, getState) => {
+export const createSocketChannel = val => async (dispatch, getState) => {
   chatSocket = io("http://103.50.153.25:3000", {
     reconnection: true,
     reconnectionDelay: 500,
     reconnectionAttempts: Infinity,
-    transports: ["websocket"],
-
+    transports: ["websocket"]
   });
   const { isUserVendor, userData } = getState().user;
-  chatSocket.emit("self_room", { room: `${userData.userId}` });
+  chatSocket.emit("self_room", { room: `${val}` });
 
-  chatSocket.on('ping',function(data){
+  chatSocket.on("ping", function(data) {
     console.log(data);
     console.log(isUserVendor);
-  chatSocket.emit('pong')
-  }
-)
+    chatSocket.emit("pong");
+  });
 
   chatSocket.on("broadcast", function(data) {
     switch (data.type) {
@@ -69,99 +66,94 @@ export const createSocketChannel = () => async (dispatch, getState) => {
 
       case "REACHED":
         if (isUserVendor === "1") {
-            dispatch(getBookingVendorStatus(data));
+          dispatch(getBookingVendorStatus(data));
         }
         break;
-        case "COMPLETED":
+      case "COMPLETED":
         if (isUserVendor === "1") {
-
-            dispatch(getBookingVendorStatus(data));
-        }else {
+          dispatch(getBookingVendorStatus(data));
+        } else {
           Actions.customerRating();
         }
 
-          break;
-
+        break;
 
       default:
         return null;
     }
   });
-  await Location.startLocationUpdatesAsync(BOOKING_STATUS_RECEIVE_TASK_NAME, {
+  await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
     accuracy: Location.Accuracy.BestForNavigation
   });
 
-  TaskManager.isTaskDefined(
-    BOOKING_STATUS_RECEIVE_TASK_NAME,
-    ({ data, error }) => {
-      // console.log(data);
-      chatSocket.on("broadcast", function(data) {
-        switch (data.type) {
-          case "BOOK":
-            dispatch(getBookingModal(data.message));
-            break;
+  TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
+    // console.log(data);
+    chatSocket.on("broadcast", function(data) {
+      switch (data.type) {
+        case "BOOK":
+          dispatch(getBookingModal(data.message));
+          break;
 
-          case "ACCEPT":
+        case "ACCEPT":
+          if (isUserVendor !== "1") {
+            dispatch(getBookingStatus(data));
+          } else {
+            dispatch(getBookingVendorStatus(data));
+          }
+
+          break;
+
+        case "ON-THE-WAY":
+          if (isUserVendor !== "1") {
+            dispatch(getBookingStatus(data));
+          } else {
+            dispatch(getBookingVendorStatus(data));
+          }
+
+          break;
+
+        case "CANCEL":
+          if (isUserVendor !== "1") {
+            dispatch(getBookingStatus(data));
+          } else {
+            dispatch(getBookingVendorStatus(data));
+          }
+          break;
+
+        case "MECHANIC_CURRENT_LOCATION":
+          if (isUserVendor !== "1") {
+            dispatch(getMechanicCurrentLocation(data));
+          }
+          break;
+
+        case "REACHED":
+          if (isUserVendor === "1") {
             if (isUserVendor !== "1") {
-              dispatch(getBookingStatus(data));
             } else {
               dispatch(getBookingVendorStatus(data));
             }
+          }
+          break;
 
-            break;
+        case "REACHED":
+          if (isUserVendor === "1") {
+            dispatch(getBookingVendorStatus(data));
+          }
+          break;
 
-          case "ON-THE-WAY":
-            if (isUserVendor !== "1") {
-              dispatch(getBookingStatus(data));
-            } else {
-              dispatch(getBookingVendorStatus(data));
-            }
+        case "COMPLETED":
+          if (isUserVendor === "1") {
+            dispatch(getBookingVendorStatus(data));
+          } else {
+            Actions.customerRating();
+          }
+          break;
 
-            break;
-
-          case "CANCEL":
-            if (isUserVendor !== "1") {
-              dispatch(getBookingStatus(data));
-            } else {
-              dispatch(getBookingVendorStatus(data));
-            }
-            break;
-
-          case "MECHANIC_CURRENT_LOCATION":
-            if (isUserVendor !== "1") {
-              dispatch(getMechanicCurrentLocation(data));
-            }
-            break;
-
-          case "REACHED":
-            if (isUserVendor === "1") {
-              if (isUserVendor !== "1") {
-              } else {
-                dispatch(getBookingVendorStatus(data));
-              }
-            }
-            break;
-
-            case "REACHED":
-            if (isUserVendor === "1") {
-                dispatch(getBookingVendorStatus(data));
-            }
-              break;
-
-              case "COMPLETED":
-              if (isUserVendor === "1") {
-                  dispatch(getBookingVendorStatus(data));
-              }else {
-                Actions.customerRating();
-              }
-                break;
-
-          default:
-            return null;
-        }
-      });
-    }
-  );
+        default:
+          return null;
+      }
+    });
+  });
 };
 
 export const connectTosocket = () => async (dispatch, getState) => {
@@ -198,15 +190,18 @@ export const connectTosocketApprov = val => async (dispatch, getState) => {
   channelName = `${userId} ${val}`;
 };
 
-export const connectTosocketBookingCancle = val => async (dispatch,getState) => {
+export const connectTosocketBookingCancle = val => async (
+  dispatch,
+  getState
+) => {
   const { bookingData, bookingStatus } = getState().vendors;
-  const { userId,isUserVendor } = getState().user;
-  const {bookData} = getState().usermaps;
+  const { userId, isUserVendor } = getState().user;
+  const { bookData } = getState().usermaps;
   var cancelData;
-  if(isUserVendor === '1'){
-    cancelData=bookingData
-  }else {
-    cancelData=bookData
+  if (isUserVendor === "1") {
+    cancelData = bookingData;
+  } else {
+    cancelData = bookData;
   }
 
   chatSocket.emit("booking_status", {
@@ -217,7 +212,7 @@ export const connectTosocketBookingCancle = val => async (dispatch,getState) => 
   channelName = `${userId} ${val}`;
 };
 
-export const connectTosocketReached = (val) => async (dispatch, getState) => {
+export const connectTosocketReached = val => async (dispatch, getState) => {
   const { vendorsData, bookData } = getState().usermaps;
   const { userId } = getState().user;
   chatSocket.emit("booking_status", {

@@ -53,204 +53,214 @@ class FutureBooking extends Component {
       <View>
         <Header headerText="Booking" />
         <ScrollView style={inStyle.ScrollViewStyle}>
-
-          {this.props.loadingFutureBookigList?
+          {this.props.loadingFutureBookigList ? (
             <Spinner />
-            :<FlatList
-           data={this.props.FutureBookingList}
-           keyExtractor={(item, index) => index.toString()}
-           renderItem={({item}) => (
-             <View
-               style={{
-                 margin: 5,
-                 backgroundColor: "white",
-                 padding: 15,
-                 borderRadius: 4,
-                 justifyContent:'space-around',
-                 shadowColor: "#000000",
-                 shadowOffset: { width: 0, height: 3 },
-                 shadowRadius: 5,
-                 shadowOpacity: 0.5
-               }}
-             >
-               <View
-                 style={{
-                   flexDirection: "row",
-                   justifyContent: "space-between"
-                 }}
-               >
-               <Text
-                   style={{
-                     fontFamily: "circular-bold",
-                     fontSize: 20,
-                     color: "#4A4A4A",
-                     fontFamily:'circular-bold'
-                   }}
-                 >
-                  {item.customer.first_name}
-                 </Text>
-                 <Text
-                     style={{
-                       fontFamily: "circular-bold",
-                       fontSize: 20,
-                       color: "#4A4A4A",
-                       fontFamily:'circular-bold'
-                     }}
-                   >
+          ) : (
+            <FlatList
+              data={this.props.FutureBookingList}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View
+                  style={{
+                    margin: 5,
+                    backgroundColor: "white",
+                    padding: 15,
+                    borderRadius: 4,
+                    justifyContent: "space-around",
+                    shadowColor: "#000000",
+                    shadowOffset: { width: 0, height: 3 },
+                    shadowRadius: 5,
+                    shadowOpacity: 0.5
+                  }}
+                >
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between"
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "circular-bold",
+                        fontSize: 20,
+                        color: "#4A4A4A",
+                        fontFamily: "circular-bold"
+                      }}
+                    >
+                      {item.customer.first_name}
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "circular-bold",
+                        fontSize: 20,
+                        color: "#4A4A4A",
+                        fontFamily: "circular-bold"
+                      }}
+                    />
+                    <Text
+                      style={{
+                        fontFamily: "circular-bold",
+                        fontSize: 16,
+                        color: "#4A4A4A",
+                        fontFamily: "circular-book"
+                      }}
+                    >
+                      Distance
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginTop: 10
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "circular-bold",
+                        fontSize: 16,
+                        color: "#4A4A4A",
+                        fontFamily: "circular-book"
+                      }}
+                    >
+                      {item.customer.mobile}
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "circular-bold",
+                        fontSize: 16,
+                        color: "#4A4A4A",
+                        fontFamily: "circular-book"
+                      }}
+                    >
+                      {item.customer.OTP}
+                    </Text>
 
-                   </Text>
-                 <Text
-                   style={{
-                     fontFamily: "circular-bold",
-                     fontSize: 16,
-                     color: "#4A4A4A",
-                     fontFamily:'circular-book'
-                   }}
-                 >
-                   Distance
-                 </Text>
-               </View>
-               <View
-                 style={{
-                   flexDirection: "row",
-                   justifyContent: "space-between",
-                   marginTop:10
-                 }}
-               >
-                 <Text
-                   style={{
-                     fontFamily: "circular-bold",
-                     fontSize: 16,
-                     color: "#4A4A4A",
-                     fontFamily:'circular-book'
-                   }}
-                 >
-                   {item.customer.mobile}
-                 </Text>
-                 <Text
-                   style={{
-                     fontFamily: "circular-bold",
-                     fontSize: 16,
-                     color: "#4A4A4A",
-                     fontFamily:'circular-book'
-                   }}
-                 >
-                   {item.customer.OTP}
-                 </Text>
+                    <Text
+                      style={{
+                        fontFamily: "circular-bold",
+                        fontSize: 16,
+                        color: "#7960FF",
+                        fontFamily: "circular-book"
+                      }}
+                    >
+                      {item.customer.distance}
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "circular-bold",
+                        fontSize: 14,
+                        color: "#7960FF"
+                      }}
+                    >
+                      Status :{item.status}
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      marginTop: 10
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontSize: 14,
+                        color: "#7960FF",
+                        fontFamily: "circular-book"
+                      }}
+                    >
+                      {item.customer.email}
+                    </Text>
 
-                 <Text
-                   style={{
-                     fontFamily: "circular-bold",
-                     fontSize: 16,
-                     color: "#7960FF",
-                     fontFamily:'circular-book'
-                   }}
-                 >
-                   {item.customer.distance}
-                 </Text>
-                 <Text
-                   style={{
-                     fontFamily: "circular-bold",
-                     fontSize: 14,
-                     color:'#7960FF',
-                   }}
-                 >
-                   Status :{item.status}
-                 </Text>
-               </View>
-               <View style={{
-                 flexDirection:'row',
-                 justifyContent: "space-between",
-                 marginTop:10
-               }}
-               >
-               <Text
-                 style={{
-                   fontSize: 14,
-                   color:'#7960FF',
-                   fontFamily:'circular-book'
-                 }}
-               >
-                 {item.customer.email}
-               </Text>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        width: 0.45 * ScreenWidth
+                      }}
+                    >
+                      <TouchableOpacity
+                        style={{
+                          alignSelf: "flex-end",
+                          opacity: item.status === "pending" ? 1 : 0
+                        }}
+                        disabled={item.status === "pending" ? false : true}
+                        onPress={() => {
+                          this.props.BookingListApprove(item.booking_id);
+                          this.props.connectTosocketApprov(
+                            item.customer.customer_id
+                          );
+                        }}
+                      >
+                        <View
+                          style={{
+                            width: 80,
+                            height: 28,
+                            backgroundColor: "#4EA352",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: 3
+                          }}
+                        >
+                          <Text
+                            style={{
+                              color: "white"
+                            }}
+                          >
+                            Approve
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
 
-               <View
-               style={{
-                 flexDirection: "row",
-                 justifyContent: "space-between",
-                   width:0.45*ScreenWidth,
-               }}
-               >
-               <TouchableOpacity
-               style={{alignSelf:'flex-end',opacity:item.status === "pending" ? 1 : 0}}
-               disabled={item.status === "pending" ? false : true}
-               onPress={() => {
-                 this.props.BookingListApprove(item.booking_id);
-                 this.props.connectTosocketApprov(
-                   item.customer.customer_id
-                 );
-               }}
-               >
-                 <View
-                 style={{
-                   width:80,
-                   height:28,
-                   backgroundColor:'#4EA352',
-                   alignItems:'center',
-                   justifyContent:'center',
-                   borderRadius:3
-                 }}
-
-                 >
-                   <Text style={{
-                     color:'white'
-                   }}>
-                   Approve
-                   </Text>
-                 </View>
-               </TouchableOpacity>
-
-               <TouchableOpacity
-               style={{alignSelf:'flex-end',
-               opacity:item.status === "cancle" ||
-                                                   item.status === "completed"
-                                                     ? 0
-                                                     : 1}}
-               disabled={item.status === "cancle" ||
-               item.status === "completed"
-                 ? true
-                 : false}
-               onPress={() => {
-                 var cancleBookingData = {
-                   booking_id: item.booking_id,
-                   customer_id: item.customer.customer_id
-                 };
-                 this.props.getCancleBookingModal(cancleBookingData);
-               }}
-               >
-                 <View
-                 style={{
-                   width:80,
-                   height:28,
-                   backgroundColor:'#D35400',
-                   alignItems:'center',
-                   justifyContent:'center',
-                   borderRadius:3
-                 }}
-
-                 >
-                   <Text style={{
-                     color:'white'
-                   }}>
-                   Cancel
-                   </Text>
-                 </View>
-               </TouchableOpacity>
-               </View>
-               </View>
-             </View>
-           )}
-           />}
+                      <TouchableOpacity
+                        style={{
+                          alignSelf: "flex-end",
+                          opacity:
+                            item.status === "cancle" ||
+                            item.status === "completed"
+                              ? 0
+                              : 1
+                        }}
+                        disabled={
+                          item.status === "cancle" ||
+                          item.status === "completed"
+                            ? true
+                            : false
+                        }
+                        onPress={() => {
+                          var cancleBookingData = {
+                            booking_id: item.booking_id,
+                            customer_id: item.customer.customer_id
+                          };
+                          this.props.getCancleBookingModal(cancleBookingData);
+                        }}
+                      >
+                        <View
+                          style={{
+                            width: 80,
+                            height: 28,
+                            backgroundColor: "#D35400",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: 3
+                          }}
+                        >
+                          <Text
+                            style={{
+                              color: "white"
+                            }}
+                          >
+                            Cancel
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                </View>
+              )}
+            />
+          )}
           <Modal
             visible={this.props.isBooking}
             onRequestClose={() => {
@@ -511,9 +521,7 @@ class FutureBooking extends Component {
                     marginBottom: 10
                   }}
                 >
-                  {this.props.mechanicOTP ? (
-                    this.props.mechanicOTP
-                  ) : null}
+                  {this.props.mechanicOTP ? this.props.mechanicOTP : null}
                 </Text>
                 <TouchableOpacity
                   style={{ alignSelf: "flex-end" }}
@@ -571,24 +579,27 @@ class FutureBooking extends Component {
                   justifyContent: "space-around"
                 }}
               >
-              <TouchableOpacity style={{
-                width:0.1 * ScreenWidth,
-                alignSelf: "flex-end",
-              }}
-              onPress={()=>{this.props.getCancelBookingModalCloseVendor()}}
-              >
-              <Text
-                style={{
-                  fontSize: 22,
-                  fontFamily: "circular-bold",
-                  alignSelf: "flex-end",
-                  color:'#7960FF',
-                  width:0.1 * ScreenWidth,
-                }}
-              >
-                x
-              </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                    width: 0.1 * ScreenWidth,
+                    alignSelf: "flex-end"
+                  }}
+                  onPress={() => {
+                    this.props.getCancelBookingModalCloseVendor();
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 22,
+                      fontFamily: "circular-bold",
+                      alignSelf: "flex-end",
+                      color: "#7960FF",
+                      width: 0.1 * ScreenWidth
+                    }}
+                  >
+                    x
+                  </Text>
+                </TouchableOpacity>
                 <Text
                   style={{
                     fontSize: 18,

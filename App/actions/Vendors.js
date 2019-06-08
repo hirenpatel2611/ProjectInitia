@@ -6,7 +6,7 @@ import {
   BOOKING_UPDATE,
   SEND_MECHANIC_OTP
 } from "../config";
-import {connectTosocketApprov,connectTosocketBookingCancle} from "./Socket";
+import { connectTosocketApprov, connectTosocketBookingCancle } from "./Socket";
 import { Asset, SplashScreen } from "expo";
 import { Actions } from "react-native-router-flux";
 
@@ -33,11 +33,13 @@ export const GET_BOOKINGLIST_APPROVE_FAIL =
 export const GET_BOOKING_VENDOR_STATUS = "vendors/GET_BOOKING_VENDOR_STATUS";
 export const GET_CANCLE_BOOKING_MODAL = "vendors/GET_CANCLE_BOOKING_MODAL";
 export const GET_REASON_CHECKBOX_VENDOR = "vendors/GET_REASON_CHECKBOX_VENDOR";
-export const BOOKING_LIST_CANCLE_SUCCESS = "vendors/BOOKING_LIST_CANCLE_SUCCESS";
+export const BOOKING_LIST_CANCLE_SUCCESS =
+  "vendors/BOOKING_LIST_CANCLE_SUCCESS";
 export const BOOKING_CANCLE_START = "vendors/BOOKING_CANCLE_START";
-export const GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR = "vendors/GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR";
-export const GET_FUTURE_BOOKING_LIST_NO_FOUND = "vendors/GET_FUTURE_BOOKING_LIST_NO_FOUND";
-
+export const GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR =
+  "vendors/GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR";
+export const GET_FUTURE_BOOKING_LIST_NO_FOUND =
+  "vendors/GET_FUTURE_BOOKING_LIST_NO_FOUND";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -52,7 +54,7 @@ export const getFutureBookings = () => async (dispatch, getState) => {
       if (response.status === 0) {
         if (response.message === "No booking found") {
           dispatch({
-            type: GET_FUTURE_BOOKING_LIST_NO_FOUND,
+            type: GET_FUTURE_BOOKING_LIST_NO_FOUND
           });
           SplashScreen.hide();
         } else {
@@ -142,7 +144,7 @@ export const getBookingUpdate = val => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_UAPDATE_START
   });
-  const { bookingData,FutureBookingList } = getState().vendors;
+  const { bookingData, FutureBookingList } = getState().vendors;
   let test = new FormData();
   test.append("booking_id", bookingData.booking_id);
   test.append("status", val);
@@ -156,10 +158,9 @@ export const getBookingUpdate = val => (dispatch, getState) => {
         });
         dispatch({
           type: GET_BOOKING_UAPDATE_SUCCESS,
-          payload: {val,FutureBookingList}
+          payload: { val, FutureBookingList }
         });
         if (val === "accept") {
-
           dispatch(getMechanicOtp(bookingData.booking_id));
         }
       } else {
@@ -192,12 +193,14 @@ export const getMechanicOtp = val => (dispatch, getState) => {
 };
 
 export const BookingListCancle = () => (dispatch, getState) => {
-
   dispatch({
-    type:BOOKING_CANCLE_START,
-
-  })
-  const { cancleReasonVendor,FutureBookingList,cancelBookingData } = getState().vendors;
+    type: BOOKING_CANCLE_START
+  });
+  const {
+    cancleReasonVendor,
+    FutureBookingList,
+    cancelBookingData
+  } = getState().vendors;
 
   let test = new FormData();
   test.append("booking_id", cancelBookingData.booking_id);
@@ -206,17 +209,17 @@ export const BookingListCancle = () => (dispatch, getState) => {
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       console.log();
-      if(response.status === 1){
+      if (response.status === 1) {
         FutureBookingList.map(booking => {
           if (booking.booking_id === cancelBookingData.booking_id) {
             booking.status = "cancle";
           }
         });
         dispatch({
-          type:BOOKING_LIST_CANCLE_SUCCESS,
-          payload:FutureBookingList
+          type: BOOKING_LIST_CANCLE_SUCCESS,
+          payload: FutureBookingList
         });
-        dispatch(connectTosocketBookingCancle(cancelBookingData.customer_id))
+        dispatch(connectTosocketBookingCancle(cancelBookingData.customer_id));
       }
     })
     .catch(err => {
@@ -243,10 +246,9 @@ export const BookingListApprove = val => (dispatch, getState) => {
         });
         dispatch({
           type: GET_BOOKINGLIST_APPROVE_SUCCESS,
-          payload: {val,FutureBookingList}
+          payload: { val, FutureBookingList }
         });
         dispatch(getMechanicOtp(val));
-
       } else {
         dispatch({
           type: GET_BOOKINGLIST_APPROVE_FAIL
@@ -260,43 +262,42 @@ export const BookingListApprove = val => (dispatch, getState) => {
 };
 
 export const otpDone = val => (dispatch, getState) => {
-  const { FutureBookingList,bookingData } = getState().vendors;
+  const { FutureBookingList, bookingData } = getState().vendors;
   FutureBookingList.map(booking => {
-    if(booking.booking_id === bookingData.booking_id){
-      booking.customer.OTP = val
+    if (booking.booking_id === bookingData.booking_id) {
+      booking.customer.OTP = val;
     }
   });
   dispatch({
     type: OTP_DONE,
-    payload:FutureBookingList
+    payload: FutureBookingList
   });
 };
 
-export const getBookingVendorStatus = data => (dispatch,getState) => {
-  const {FutureBookingList} = getState().vendors;
+export const getBookingVendorStatus = data => (dispatch, getState) => {
+  const { FutureBookingList } = getState().vendors;
 
-    FutureBookingList.map(booking => {
-      if (booking.booking_id === data.message.booking_id) {
-        if(data.type === 'CANCEL'){
+  FutureBookingList.map(booking => {
+    if (booking.booking_id === data.message.booking_id) {
+      if (data.type === "CANCEL") {
         booking.status = "cancle";
-       }
-        if(data.type === 'REACHED'){
-          booking.status = "reached";
-        }
-        if(data.type === 'ON-THE-WAY'){
-          booking.status = "on-the-way";
-        }
       }
-      if(data.type === 'COMPLETED'){
-      if(booking.booking_id === data.message.booking.booking_id)
-      {
-          booking.status = "completed";
-        }
+      if (data.type === "REACHED") {
+        booking.status = "reached";
       }
-    });
+      if (data.type === "ON-THE-WAY") {
+        booking.status = "on-the-way";
+      }
+    }
+    if (data.type === "COMPLETED") {
+      if (booking.booking_id === data.message.booking.booking_id) {
+        booking.status = "completed";
+      }
+    }
+  });
   dispatch({
     type: GET_BOOKING_VENDOR_STATUS,
-    payload: {data,FutureBookingList}
+    payload: { data, FutureBookingList }
   });
 };
 

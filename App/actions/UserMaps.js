@@ -11,9 +11,14 @@ import {
 } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage, Alert } from "react-native";
-import { connectTosocket, connectTosocketReached,connectTosocketBookingCancle,socketLeave } from "./Socket";
+import {
+  connectTosocket,
+  connectTosocketReached,
+  connectTosocketBookingCancle,
+  socketLeave
+} from "./Socket";
 import { Asset, SplashScreen } from "expo";
-import {getUserData} from './ui'
+import { getUserData } from "./ui";
 
 export const GET_VENDORS_START = "usermaps/GET_VENDORS_START";
 export const GET_VENDORS_SUCCESS = "usermaps/GET_VENDORS_SUCCESS";
@@ -55,7 +60,8 @@ export const GET_REASON_CHECKBOX = "usermaps/GET_REASON_CHECKBOX";
 export const GET_REASON_CHECKBOX2 = "usermaps/GET_REASON_CHECKBOX2";
 export const GET_REASON_CHECKBOX3 = "usermaps/GET_REASON_CHECKBOX3";
 export const GET_CANCEL_BOOKING_MODAL = "usermaps/GET_CANCEL_BOOKING_MODAL";
-export const GET_CANCEL_BOOKING_MODAL_CLOSE = "usermaps/GET_CANCEL_BOOKING_MODAL_CLOSE";
+export const GET_CANCEL_BOOKING_MODAL_CLOSE =
+  "usermaps/GET_CANCEL_BOOKING_MODAL_CLOSE";
 export const SET_DURATION_AND_DISTANCE = "usermaps/SET_DURATION_AND_DISTANCE";
 export const GET_BOOKING_COMPLETE = "usermaps/GET_BOOKING_COMPLETE";
 export const GET_VENDOR_RATING = "usermaps/GET_VENDOR_RATING";
@@ -63,11 +69,13 @@ export const GET_RATING_SUCCESS = "usermaps/GET_RATING_SUCCESS";
 export const GET_RATING_START = "usermaps/GET_RATING_START";
 export const NO_BOOKING_FOUND_CUSTOMER = "usermaps/NO_BOOKING_FOUND_CUSTOMER";
 
+var cancelAlertCounter = 0;
+
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
     type: GET_VENDORS_START
   });
-  const {userCurrentBooking} =getState().user;
+  const { userCurrentBooking } = getState().user;
   let test = new FormData();
   test.append("service_type", "both");
   Api.post(GET_VENDOR, test)
@@ -79,7 +87,6 @@ export const getVendors = () => (dispatch, getState) => {
           type: GET_VENDORS_SUCCESS,
           payload: response
         });
-
       }
     })
     .catch(error => {});
@@ -158,7 +165,7 @@ export const getBookingCancellation = () => (dispatch, getState) => {
         dispatch({
           type: GET_BOOKING_CANCLE_SUCCESS
         });
-        dispatch(connectTosocketBookingCancle(bookData.vendor_id))
+        dispatch(connectTosocketBookingCancle(bookData.vendor_id));
         dispatch(getUserData());
         Actions.NearbyGaraje();
       } else {
@@ -183,11 +190,11 @@ export const getBookings = () => async (dispatch, getState) => {
   Api.post(GET_BOOKINGLIST, test)
     .then(response => {
       if (response.status === 0) {
-          if (response.message === "No booking found") {
-            dispatch({
-              type:NO_BOOKING_FOUND_CUSTOMER,
-            });
-          }
+        if (response.message === "No booking found") {
+          dispatch({
+            type: NO_BOOKING_FOUND_CUSTOMER
+          });
+        }
         dispatch({
           type: GET_BOOKING_LIST_FAIL,
           payload: response
@@ -306,22 +313,26 @@ export const getBookingStatus = val => async (dispatch, getState) => {
     Actions.NavigationMap();
   }
   if (val.type === "CANCEL") {
-    Alert.alert(
-  'Booking Cancelled',
-  "Your Booking request is Cancelled by Mechanic, Please Find another Mechanic.",
-  [
-
-    {text: 'OK', onPress: () => {
-      dispatch({
-        type: GET_BOOKING_CANCEL_BY_VENDOR
-      })
-    }},
-  ],
-  {cancelable: false},
-  );
-  Actions.NearbyGaraje();
+    if (cancelAlertCounter === 0) {
+      Alert.alert(
+        "Booking Cancelled",
+        "Your Booking request is Cancelled by Mechanic, Please Find another Mechanic.",
+        [
+          {
+            text: "OK",
+            onPress: () => {
+              dispatch({
+                type: GET_BOOKING_CANCEL_BY_VENDOR
+              });
+              Actions.NearbyGaraje();
+            }
+          }
+        ],
+        { cancelable: false }
+      );
+      cancelAlertCounter = cancelAlertCounter + 1;
+    }
   }
-
 };
 
 export const getMechanicCurrentLocation = val => (dispatch, getState) => {
@@ -329,20 +340,20 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
     type: GET_MECHANIC_CURREN_LOCATION,
     payload: val
   });
-  const {location,mechanicCurrentLocation} =getState().usermaps;
-  if(location){
-  var dist = mechanicCurrentLocation.distance;
-  console.log(mechanicCurrentLocation.distance);
-  if (dist < 0.055){
-    dispatch({
-      type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
-      payload: dist
-    });
-    var sts = "reached";
-    dispatch(getBookingUpdateUser(sts));
-    dispatch(connectTosocketReached());
+  const { location, mechanicCurrentLocation } = getState().usermaps;
+  if (location) {
+    var dist = mechanicCurrentLocation.distance;
+    console.log(mechanicCurrentLocation.distance);
+    if (dist < 0.055) {
+      dispatch({
+        type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
+        payload: dist
+      });
+      var sts = "reached";
+      dispatch(getBookingUpdateUser(sts));
+      dispatch(connectTosocketReached());
+    }
   }
-}
 };
 //
 export const getBookingUpdateUser = val => (dispatch, getState) => {
@@ -350,8 +361,8 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
     type: GET_BOOKING_UPDATE_START
   });
   const { bookingStatusRes, bookData } = getState().usermaps;
-  obj=Object.assign({},bookingStatusRes);
-// console.error(  bookingStatusRes.type);
+  obj = Object.assign({}, bookingStatusRes);
+  // console.error(  bookingStatusRes.type);
   let test = new FormData();
   test.append("booking_id", bookData.booking_id);
   test.append("status", val);
@@ -365,16 +376,15 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
           payload: obj
         });
         dispatch(connectTosocketReached());
-        if(val === 'completed'){
+        if (val === "completed") {
           dispatch(getRating());
 
           dispatch({
-            type: GET_BOOKING_COMPLETE,
+            type: GET_BOOKING_COMPLETE
           });
           dispatch(socketLeave());
         }
       } else {
-
         dispatch({
           type: GET_BOOKING_UPDATE_FAIL
         });
@@ -405,37 +415,35 @@ export const getCancelBookingModalClose = () => dispatch => {
   });
 };
 
-export const setDurationAndDistance = val => dispatch =>{
+export const setDurationAndDistance = val => dispatch => {
   dispatch({
-    type:SET_DURATION_AND_DISTANCE,
-    payload:val
+    type: SET_DURATION_AND_DISTANCE,
+    payload: val
   });
-}
+};
 
-export const getRating = () => (dispatch,getState) =>{
-
+export const getRating = () => (dispatch, getState) => {
   dispatch({
-    type:GET_RATING_START
+    type: GET_RATING_START
   });
 
-const{vendorRating,bookData} =getState().usermaps;
-console.log(bookData);
+  const { vendorRating, bookData } = getState().usermaps;
+  console.log(bookData);
   let test = new FormData();
   test.append("vendor_id", bookData.vendor_id);
   test.append("rating", vendorRating);
-  Api.post(RATING_BY_CUSTOMER, test)
-    .then(response => {
-      console.log(response);
-        Actions.NearbyGaraje();
-        dispatch({
-          type:GET_RATING_SUCCESS
-        });
-    })
-}
+  Api.post(RATING_BY_CUSTOMER, test).then(response => {
+    console.log(response);
+    Actions.NearbyGaraje();
+    dispatch({
+      type: GET_RATING_SUCCESS
+    });
+  });
+};
 
 export const getVendorRating = rating => dispatch => {
   dispatch({
-    type:GET_VENDOR_RATING,
-    payload:rating
+    type: GET_VENDOR_RATING,
+    payload: rating
   });
-}
+};

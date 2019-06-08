@@ -31,7 +31,7 @@ import {
   GET_BOOKING_UPDATE_START,
   GET_BOOKING_UPDATE_SUCCESS,
   GET_BOOKING_UPDATE_FAIL,
-   GET_REASON_CHECKBOX,
+  GET_REASON_CHECKBOX,
   GET_CANCEL_BOOKING_MODAL,
   SET_DURATION_AND_DISTANCE,
   GET_BOOKING_COMPLETE,
@@ -41,8 +41,7 @@ import {
   GET_RATING_START,
   NO_BOOKING_FOUND_CUSTOMER
 } from "../actions/UserMaps";
-import {GET_USER_BOOKING_STATUS_ACCEPT} from "../actions/ui";
-
+import { GET_USER_BOOKING_STATUS_ACCEPT } from "../actions/ui";
 
 const INITIAL_STATE = {
   loading: false,
@@ -63,18 +62,18 @@ const INITIAL_STATE = {
   isChecked3: false,
   distance: 10,
   isBookingSuccess: false,
-  vendorDistance: '',
+  vendorDistance: "",
   vendorDistanceList: [],
   bookData: "",
   bookingStatusRes: "",
   mechanicCurrentLocation: "",
   distanceBetweenUserMechanic: "",
-  reasonCheckbox:[false,false,false],
-  cancleReason:'',
-  isBookCancelModal:false,
-  confirmDisable:false,
-  loadingRatingDone:false,
-  bookingListFound:false
+  reasonCheckbox: [false, false, false],
+  cancleReason: "",
+  isBookCancelModal: false,
+  confirmDisable: false,
+  loadingRatingDone: false,
+  bookingListFound: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -121,7 +120,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           vendorsData: action.payload,
-          isBookModalVisible: true,
+          isBookModalVisible: true
         };
       }
       break;
@@ -131,8 +130,8 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isBookModalVisible: !state.isBookModalVisible,
-          vendorsData:'',
-          vendorDistance:''
+          vendorsData: "",
+          vendorDistance: ""
         };
       }
       break;
@@ -145,7 +144,7 @@ export default (state = INITIAL_STATE, action) => {
           isBookModalVisible: true,
           isBookingSuccess: true,
           bookData: action.payload,
-          bookingStatusRes:{type:'PENDING'}
+          bookingStatusRes: { type: "PENDING" }
         };
       }
       break;
@@ -176,7 +175,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loadingBookigList: true,
           isBookingListFail: false,
-          bookingListFound:false,
+          bookingListFound: false
         };
       }
       break;
@@ -290,12 +289,12 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          bookingStatusRes:'',
+          bookingStatusRes: "",
           loadingBookig: false,
           isBookingSuccess: false,
-          isBookCancelModal:false,
-          confirmDisable:false,
-          reasonCheckbox:[false,false,false]
+          isBookCancelModal: false,
+          confirmDisable: false,
+          reasonCheckbox: [false, false, false]
         };
       }
       break;
@@ -313,7 +312,7 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          vendorDistance: action.payload,
+          vendorDistance: action.payload
         };
       }
       break;
@@ -332,8 +331,8 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isBookModalVisible: false,
-          bookingStatusRes: '',
-          isBookingSuccess:false
+          isBookingSuccess: false,
+          bookingStatusRes: null
         };
       }
       break;
@@ -356,141 +355,146 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-
     case GET_REASON_CHECKBOX:
-    {
-      newReasonCheckbox=[false,false,false]
-      newReasonCheckbox[action.payload]=true;
-      newCancleReason=['Mechanic is not responding on booking.','Mechanic is not done good deal.','I Choose better option.']
-      return{
-        ...state,
-        reasonCheckbox:newReasonCheckbox,
-        cancleReason:newCancleReason[action.payload],
-        confirmDisable:true
-      };
-    }
-    break;
+      {
+        newReasonCheckbox = [false, false, false];
+        newReasonCheckbox[action.payload] = true;
+        newCancleReason = [
+          "Mechanic is not responding on booking.",
+          "Mechanic is not done good deal.",
+          "I Choose better option."
+        ];
+        return {
+          ...state,
+          reasonCheckbox: newReasonCheckbox,
+          cancleReason: newCancleReason[action.payload],
+          confirmDisable: true
+        };
+      }
+      break;
 
     case GET_CANCEL_BOOKING_MODAL:
-    {
-      return{
-        ...state,
-        isBookModalVisible:false,
-        isBookCancelModal:true,
-      };
-    }
-    break;
+      {
+        return {
+          ...state,
+          isBookModalVisible: false,
+          isBookCancelModal: true
+        };
+      }
+      break;
 
     case GET_CANCEL_BOOKING_MODAL_CLOSE:
-    {
-      return{
-        ...state,
-        isBookModalVisible:true,
-        isBookCancelModal:false,
-      };
-    }
-    break;
+      {
+        return {
+          ...state,
+          isBookModalVisible: true,
+          isBookCancelModal: false
+        };
+      }
+      break;
 
     case GET_BOOKING_UPDATE_SUCCESS:
-    {
-      return{
-        ...state,
-        bookingStatusRes:action.payload
-      };
-    }
-    break;
+      {
+        return {
+          ...state,
+          bookingStatusRes: action.payload
+        };
+      }
+      break;
 
     case GET_USER_BOOKING_STATUS_ACCEPT:
       {
-        return{
+        return {
           ...state,
-          bookingStatusRes:action.payload.bookingStatusRes,
-          vendorsData:action.payload.vendorData,
+          bookingStatusRes: action.payload.bookingStatusRes,
+          vendorsData: action.payload.vendorData,
           isBookModalVisible: true,
-          isBookingSuccess:true,
-          bookData:{booking_id:action.payload.response[0].current_booking.booking_id,
-                    vendor_id:action.payload.response[0].current_booking.vendor_id},
-        }
-      }
-      break;
-
-      case SET_DURATION_AND_DISTANCE:
-      {
-        return{
-          ...state,
-          mechanicDestance:action.payload.distance,
-          mechanicDuration:action.payload.duration,
+          isBookingSuccess: true,
+          bookData: {
+            booking_id: action.payload.response[0].current_booking.booking_id,
+            vendor_id: action.payload.response[0].current_booking.vendor_id
+          }
         };
       }
       break;
 
-      case GET_VENDOR_RATING:
+    case SET_DURATION_AND_DISTANCE:
       {
-        return{
+        return {
           ...state,
-          vendorRating:action.payload,
+          mechanicDestance: action.payload.distance,
+          mechanicDuration: action.payload.duration
         };
       }
       break;
 
-      case GET_BOOKING_UPDATE_START:
+    case GET_VENDOR_RATING:
       {
-        return{
+        return {
           ...state,
+          vendorRating: action.payload
         };
       }
       break;
 
-      case GET_RATING_START:
+    case GET_BOOKING_UPDATE_START:
       {
-        return{
-          ...state,
-          loadingRatingDone:true,
+        return {
+          ...state
         };
       }
       break;
 
-      case GET_BOOKING_UPDATE_FAIL:
+    case GET_RATING_START:
       {
-        return{
+        return {
           ...state,
-          loadingRatingDone:false,
+          loadingRatingDone: true
         };
       }
       break;
 
-      case GET_RATING_SUCCESS:
+    case GET_BOOKING_UPDATE_FAIL:
       {
-        return{
+        return {
           ...state,
-          loadingRatingDone:false,
+          loadingRatingDone: false
         };
       }
       break;
 
-      case GET_BOOKING_COMPLETE:
+    case GET_RATING_SUCCESS:
       {
-        return{
+        return {
           ...state,
-          mechanicDestance:'',
-          mechanicDuration:'',
-          bookingStatusRes:'',
-          isBookModalVisible:'',
-          isBookingSuccess:false,
-          isBookModalVisible:false
+          loadingRatingDone: false
+        };
+      }
+      break;
+
+    case GET_BOOKING_COMPLETE:
+      {
+        return {
+          ...state,
+          mechanicDestance: "",
+          mechanicDuration: "",
+          bookingStatusRes: "",
+          isBookModalVisible: "",
+          isBookingSuccess: false,
+          isBookModalVisible: false
         };
       }
       break;
 
     case NO_BOOKING_FOUND_CUSTOMER:
-    {
-        return{
+      {
+        return {
           ...state,
-          bookingListFound:true,
-          loadingBookigList:false
-        }
-    }
-    break;
+          bookingListFound: true,
+          loadingBookigList: false
+        };
+      }
+      break;
 
     default:
       return state;
