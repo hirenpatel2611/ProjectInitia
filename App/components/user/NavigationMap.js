@@ -25,7 +25,7 @@ import styles from "./usermapsStyle";
 import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { Constants, Location, Permissions, IntentLauncherAndroid } from "expo";
+import { Constants, Location, Permissions, IntentLauncher } from "expo";
 import {
   getUserLocationSuccess,
   getBookingCancellation,

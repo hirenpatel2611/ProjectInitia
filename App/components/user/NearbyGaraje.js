@@ -29,7 +29,7 @@ import {
   Constants,
   Location,
   Permissions,
-  IntentLauncherAndroid,
+  IntentLauncher,
   Asset,
   SplashScreen
 } from "expo";
@@ -80,12 +80,11 @@ class NearbyGaraje extends Component {
     if (status !== "granted") {
       this.props.getUserLocationFail();
     }
-
     await Location.hasServicesEnabledAsync()
       .then(async res => {
         if (!res) {
-          perm = await IntentLauncherAndroid.startActivityAsync(
-            IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+          perm = await IntentLauncher.startActivityAsync(
+            IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
           );
         }
         await Location.hasServicesEnabledAsync()
