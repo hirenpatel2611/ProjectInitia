@@ -1,13 +1,17 @@
 import Peer from "peerjs";
 import { AsyncStorage } from "react-native";
 import io from "socket.io-client";
-import { BackgroundFetch, TaskManager, Location } from "expo";
+import { BackgroundFetch } from "expo";
+import * as Location from 'expo-location';
+import * as TaskManager from 'expo-task-manager';
+import * as Permissions from 'expo-permissions';
 import { getBookingModal, getBookingVendorStatus } from "./Vendors";
 import { getBookingStatus, getMechanicCurrentLocation } from "./UserMaps";
 import { Actions } from "react-native-router-flux";
 
 export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
+
 const LOCATION_TASK_NAME = "background-location-task";
 var peer = null;
 export const createSocketChannel = val => async (dispatch, getState) => {

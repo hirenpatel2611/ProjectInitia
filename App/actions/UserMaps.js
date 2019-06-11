@@ -7,7 +7,8 @@ import {
   GET_BOOKINGLIST,
   GET_VENDOR_BOOKINGLIST,
   BOOKING_UPDATE,
-  RATING_BY_CUSTOMER
+  RATING_BY_CUSTOMER,
+  UPDATE_PROFILE
 } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage, Alert } from "react-native";
@@ -19,6 +20,7 @@ import {
 } from "./Socket";
 import { Asset, SplashScreen } from "expo";
 import { getUserData } from "./ui";
+import ImagePicker from 'react-native-image-picker';
 
 export const GET_VENDORS_START = "usermaps/GET_VENDORS_START";
 export const GET_VENDORS_SUCCESS = "usermaps/GET_VENDORS_SUCCESS";
@@ -68,6 +70,12 @@ export const GET_VENDOR_RATING = "usermaps/GET_VENDOR_RATING";
 export const GET_RATING_SUCCESS = "usermaps/GET_RATING_SUCCESS";
 export const GET_RATING_START = "usermaps/GET_RATING_START";
 export const NO_BOOKING_FOUND_CUSTOMER = "usermaps/NO_BOOKING_FOUND_CUSTOMER";
+export const LOAD_CUSTOMER_PROFILE = "usermaps/LOAD_CUSTOMER_PROFILE";
+export const UPDATE_CUSTOMER_FULL_NAME = "usermaps/UPDATE_CUSTOMER_FULL_NAME";
+export const UPDATE_CUSTOMER_ADDRESS = "usermaps/UPDATE_CUSTOMER_ADDRESS";
+export const UPDATE_CUSTOMER_EMAIL = "usermaps/UPDATE_CUSTOMER_EMAIL";
+export const UPDATE_CUSTOMER_PROFILE_START = "usermaps/UPDATE_CUSTOMER_PROFILE_START";
+export const UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD = "usermaps/UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD";
 
 var cancelAlertCounter = 0;
 
@@ -428,7 +436,7 @@ export const getRating = () => (dispatch, getState) => {
   });
 
   const { vendorRating, bookData } = getState().usermaps;
-  console.log(bookData);
+
   let test = new FormData();
   test.append("vendor_id", bookData.vendor_id);
   test.append("rating", vendorRating);
@@ -447,3 +455,67 @@ export const getVendorRating = rating => dispatch => {
     payload: rating
   });
 };
+
+export const loadCustomerProfile = () => (dispatch,getState) => {
+  const { userData } = getState().user;
+  dispatch({
+    type:LOAD_CUSTOMER_PROFILE,
+    payload:userData
+  });
+}
+
+export const updateCustomerFullName = val => (dispatch) => {
+  dispatch({
+    type:UPDATE_CUSTOMER_FULL_NAME,
+    payload:val
+  });
+}
+export const updateCustomerAddress = val => (dispatch) =>{
+  dispatch({
+    type:UPDATE_CUSTOMER_ADDRESS,
+    payload:val
+  });
+}
+export const updateCustomerEmail = val => (dispatch) => {
+  dispatch({
+    type:UPDATE_CUSTOMER_EMAIL,
+    payload:val
+  });
+}
+
+export const updateCustomerProfile = val => (dispatch,getState) => {
+  dispatch({
+    type:UPDATE_CUSTOMER_PROFILE_START,
+  });
+  const {fullNameCustomer,addressCustomer,emailCustomer} = getState().usermaps;
+  const {userData} = getState().user
+  let test = new FormData();
+  test.append("id", userData.userId);
+  test.append("first_name", fullNameCustomer);
+  test.append("address", addressCustomer);
+  Api.post(UPDATE_PROFILE, test).then(response => {
+    if(response.status === 1){
+      alert(response.message);
+    }
+  })
+}
+
+export const upadteCustomerProfileImage = val => (dispatch) => {
+  ImagePicker.showImagePicker(options, (response) => {
+  console.log('Response = ', response);
+
+  if (response.didCancel) {
+    console.log('User cancelled image picker');
+  } else if (response.error) {
+    console.log('ImagePicker Error: ', response.error);
+  } else if (response.customButton) {
+    console.log('User tapped custom button: ', response.customButton);
+  } else {
+    const source = { uri: response.uri };
+    dispatch ({
+      type: UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD,
+      payload:source
+    });
+  }
+});
+}

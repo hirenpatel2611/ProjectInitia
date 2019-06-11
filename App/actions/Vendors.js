@@ -4,11 +4,13 @@ import { AsyncStorage, Alert } from "react-native";
 import {
   GET_FUTURE_BOOKINGLIST,
   BOOKING_UPDATE,
-  SEND_MECHANIC_OTP
+  SEND_MECHANIC_OTP,
+  UPDATE_PROFILE
 } from "../config";
 import { connectTosocketApprov, connectTosocketBookingCancle } from "./Socket";
 import { Asset, SplashScreen } from "expo";
 import { Actions } from "react-native-router-flux";
+import * as ImagePicker from 'expo-image-picker';
 
 export const GET_FUTURE_BOOKING_LIST_START =
   "vendors/GET_FUTURE_BOOKING_LIST_START";
@@ -40,6 +42,12 @@ export const GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR =
   "vendors/GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR";
 export const GET_FUTURE_BOOKING_LIST_NO_FOUND =
   "vendors/GET_FUTURE_BOOKING_LIST_NO_FOUND";
+export const UPDATE_VENDOR_FULL_NAME = "vendors/UPDATE_VENDOR_FULL_NAME";
+export const UPDATE_VENDOR_ADDRESS = "vendors/UPDATE_VENDOR_ADDRESS";
+export const UPDATE_VENDOR_EMAIL = "vendors/UPDATE_VENDOR_EMAIL";
+export const UPDATE_VENDOR_PROFILE_START = "vendors/UPDATE_VENDOR_PROFILE_START";
+export const LOAD_VENDOR_PROFILE = "vendors/LOAD_VENDOR_PROFILE";
+export const UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD = "vendors/UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -320,3 +328,70 @@ export const getCancelBookingModalCloseVendor = () => dispatch => {
     type: GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR
   });
 };
+
+export const updateVendorFullName = val => (dispatch) => {
+  dispatch({
+    type:UPDATE_VENDOR_FULL_NAME,
+    payload:val
+  });
+}
+export const updateVendorAddress = val => (dispatch) =>{
+  dispatch({
+    type:UPDATE_VENDOR_ADDRESS,
+    payload:val
+  });
+}
+export const updateVendorEmail = val => (dispatch) => {
+  dispatch({
+    type:UPDATE_VENDOR_EMAIL,
+    payload:val
+  });
+}
+
+export const updateVendorProfile = val => (dispatch,getState) => {
+  dispatch({
+    type:UPDATE_VENDOR_PROFILE_START,
+  });
+  const {fullNameVendor,addressVendor,emailVendor,imageBase64Vendor} = getState().vendors;
+  const {userData} = getState().user
+  let test = new FormData();
+  test.append("id", userData.userId);
+  test.append("first_name", fullNameVendor);
+  test.append("address", addressVendor);
+  test.append("image", imageBase64Vendor);
+  Api.post(UPDATE_PROFILE, test).then(response => {
+    console.log(response);
+    if(response.status === 1){
+      alert(response.message);
+    }
+  })
+}
+
+export const loadVendorProfile = () => (dispatch,getState) => {
+  const { userData } = getState().user;
+  dispatch({
+    type:LOAD_VENDOR_PROFILE,
+    payload:userData
+  });
+}
+
+export const upadteVendorProfileImage = val => async (dispatch) => {
+
+  let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        base64: true,
+        allowsEditing: true,
+        aspect: [4, 4],
+      });
+
+      console.log(result);
+
+      if (!result.cancelled) {
+        dispatch({
+          type:UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD,
+          payload:result
+        });
+
+      }
+
+}

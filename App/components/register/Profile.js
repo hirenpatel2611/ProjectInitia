@@ -52,7 +52,9 @@ import TimerMixin from "react-timer-mixin";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { Constants, Location, Permissions, IntentLauncher } from "expo";
+import { Constants, IntentLauncher } from "expo";
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;

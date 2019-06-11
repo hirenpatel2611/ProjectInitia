@@ -18,7 +18,13 @@ import {
   BOOKING_LIST_CANCLE_SUCCESS,
   BOOKING_CANCLE_START,
   GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR,
-  GET_FUTURE_BOOKING_LIST_NO_FOUND
+  GET_FUTURE_BOOKING_LIST_NO_FOUND,
+  UPDATE_VENDOR_FULL_NAME,
+  UPDATE_VENDOR_ADDRESS,
+  UPDATE_VENDOR_EMAIL,
+  UPDATE_VENDOR_PROFILE_START,
+  LOAD_VENDOR_PROFILE,
+  UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD
 } from "../actions/Vendors";
 
 const INITIAL_STATE = {
@@ -41,7 +47,13 @@ const INITIAL_STATE = {
   confirmDisableVendor: false,
   cancelBookingData: null,
   loadingConfirm: false,
-  isFutureBookingNoFound: false
+  isFutureBookingNoFound: false,
+  onSubmeetProfileVendorForm: false,
+  fullNameVendor: "",
+  addressVendor: "",
+  emailVendor: "",
+  imageVendorUri:'',
+  imageBase64Vendor:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -259,6 +271,66 @@ export default (state = INITIAL_STATE, action) => {
         };
       }
       break;
+
+    case UPDATE_VENDOR_FULL_NAME:
+      {
+        return {
+          ...state,
+          fullNameVendor: action.payload,
+          onSubmeetProfileVendorForm: false
+        };
+      }
+      break;
+
+    case UPDATE_VENDOR_ADDRESS:
+      {
+        return {
+          ...state,
+          addressVendor: action.payload,
+          onSubmeetProfileVendorForm: false
+        };
+      }
+      break;
+
+    case UPDATE_VENDOR_EMAIL:
+      {
+        return {
+          ...state,
+          emailVendor: action.payload,
+          onSubmeetProfileVendorForm: false
+        };
+      }
+      break;
+
+    case UPDATE_VENDOR_PROFILE_START:
+      {
+        return {
+          ...state,
+          onSubmeetProfileVendorForm: true
+        };
+      }
+      break;
+
+    case LOAD_VENDOR_PROFILE:
+      {
+        return {
+          ...state,
+          fullNameVendor: action.payload.userFullName,
+          addressVendor: action.payload.userAddress,
+          emailVendor: action.payload.userEmail,
+          imageVendorUri:{uri:action.payload.uri},
+        };
+      }
+      break;
+
+  case UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD:
+  {
+    return{
+      ...state,
+      imageVendorUri:{uri:action.payload.uri},
+      imageBase64Vendor:action.payload.base64
+    }
+  }
 
     default:
       return state;

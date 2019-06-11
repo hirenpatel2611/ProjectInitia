@@ -58,7 +58,6 @@ class RouterComponent extends Component {
         if (valueIsvendor === "1") {
           this.props.updateIsVendor(true);
         }
-
         await this.props.updateLoggedInState(true);
         await this.props.getUserData();
         this.props.createSocketChannel(myId);

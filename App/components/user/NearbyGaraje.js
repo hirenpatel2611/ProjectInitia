@@ -27,12 +27,12 @@ import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import {
   Constants,
-  Location,
-  Permissions,
   IntentLauncher,
   Asset,
   SplashScreen
 } from "expo";
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
 import {
   getVendors,
   getUserLocationFail,

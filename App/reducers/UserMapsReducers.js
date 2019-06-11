@@ -39,7 +39,13 @@ import {
   GET_CANCEL_BOOKING_MODAL_CLOSE,
   GET_RATING_SUCCESS,
   GET_RATING_START,
-  NO_BOOKING_FOUND_CUSTOMER
+  NO_BOOKING_FOUND_CUSTOMER,
+  LOAD_CUSTOMER_PROFILE,
+  UPDATE_CUSTOMER_FULL_NAME,
+  UPDATE_CUSTOMER_ADDRESS,
+  UPDATE_CUSTOMER_EMAIL,
+  UPDATE_CUSTOMER_PROFILE_START,
+  UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD
 } from "../actions/UserMaps";
 import { GET_USER_BOOKING_STATUS_ACCEPT } from "../actions/ui";
 
@@ -73,7 +79,11 @@ const INITIAL_STATE = {
   isBookCancelModal: false,
   confirmDisable: false,
   loadingRatingDone: false,
-  bookingListFound: false
+  bookingListFound: false,
+  onSubmeetProfileForm: false,
+  fullNameCustomer: "",
+  addressCustomer: "",
+  emailCustomer: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -496,6 +506,55 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
+    case LOAD_CUSTOMER_PROFILE:
+      {
+        return {
+          ...state,
+          fullNameCustomer: action.payload.userFullName,
+          addressCustomer: action.payload.userAddress,
+          emailCustomer: action.payload.userEmail
+        };
+      }
+      break;
+
+    case UPDATE_CUSTOMER_FULL_NAME:
+      {
+        return {
+          ...state,
+          fullNameCustomer: action.payload,
+          onSubmeetProfileForm: false
+        };
+      }
+      break;
+
+    case UPDATE_CUSTOMER_ADDRESS:
+      {
+        return {
+          ...state,
+          addressCustomer: action.payload,
+          onSubmeetProfileForm: false
+        };
+      }
+      break;
+
+    case UPDATE_CUSTOMER_EMAIL:
+      {
+        return {
+          ...state,
+          emailCustomer: action.payload,
+          onSubmeetProfileForm: false
+        };
+      }
+      break;
+
+    case UPDATE_CUSTOMER_PROFILE_START:
+      {
+        return {
+          ...state,
+          onSubmeetProfileForm: true
+        };
+      }
+      break;
     default:
       return state;
       break;

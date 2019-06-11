@@ -60,6 +60,19 @@ var styles = StyleSheet.create({
     borderColor: "grey",
     minHeight: 0.05 * ScreenHeight
   },
+  whiteText: {
+    color: "white"
+  },
+  createButton: {
+    backgroundColor: "#7960FF",
+    height: 44,
+    width: 0.78 * ScreenWidth,
+    borderRadius: 25,
+    alignItems: "center",
+    marginBottom: 10,
+    // color: 'white',
+    justifyContent: "center"
+  },
 
 });
 export default styles;

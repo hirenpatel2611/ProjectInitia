@@ -32,7 +32,7 @@
           }
         },
         "android": {
-          "package": "com.ilife.app",
+          "package": "com.ilife.app"
 
         }
   }
