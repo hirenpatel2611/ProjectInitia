@@ -56,13 +56,15 @@ class Profile extends Component {
       <View>
       <Header headerText="Profile"/>
       <KeyboardAwareScrollView enableOnAndroid>
-      <View style={{borderRadius: 15,
+      <View style={{borderRadius: 0.30 * ScreenHeight,
                     borderColor: "#7960FF",
                     width: 0.15 * ScreenHeight,
                     height:0.15 * ScreenHeight,
                     alignSelf:'center',
                     marginTop:0.003 * ScreenHeight,
-                    justifyContent: "center"
+                    justifyContent: "center",
+                    borderWidth:1,
+                    borderColor:'black'
                 }}>
       <Image style={{borderRadius: 0.30 * ScreenHeight,
                     width: 0.14 * ScreenHeight,
@@ -70,7 +72,7 @@ class Profile extends Component {
                     resizeMode: "contain",
                     alignSelf:'center',
                     position: 'absolute',
-                    zIndex: 0
+                    zIndex: 0,
                 }} source={this.props.imageVendorUri?this.props.imageVendorUri:USER2} />
 
                 <TouchableOpacity style={{
