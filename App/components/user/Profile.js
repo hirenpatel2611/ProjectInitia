@@ -23,9 +23,14 @@ import {
   updateCustomerFullName,
   updateCustomerAddress,
   updateCustomerEmail,
-  updateCustomerProfile
+  updateCustomerProfile,
+  upadteCustomerProfileImage
 } from "../../actions";
 import withValidation from "simple-hoc-validator";
+import { USER2,PENCIL } from "../../images";
+import { Asset } from "expo";
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants'
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -33,6 +38,15 @@ let ScreenWidth = Dimensions.get("window").width;
 class Profile extends Component {
 componentWillMount() {
   this.props.loadCustomerProfile();
+  this.getPermissionAsync();
+}
+getPermissionAsync = async () => {
+ if (Constants.platform.ios) {
+   const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+   if (status !== 'granted') {
+     alert('Sorry, we need camera roll permissions to make this work!');
+   }
+ }
 }
   render() {
 
@@ -47,10 +61,47 @@ componentWillMount() {
     return (
       <View>
       <Header headerText="Profile"/>
+      <KeyboardAwareScrollView enableOnAndroid>
+      <View style={{borderRadius: 15,
+                    borderColor: "#7960FF",
+                    width: 0.15 * ScreenHeight,
+                    height:0.15 * ScreenHeight,
+                    alignSelf:'center',
+                    marginTop:0.003 * ScreenHeight,
+                    justifyContent: "center"
+                }}>
+      <Image style={{borderRadius: 0.30 * ScreenHeight,
+                    width: 0.14 * ScreenHeight,
+                    height:0.14 * ScreenHeight,
+                    resizeMode: "contain",
+                    alignSelf:'center',
+                    position: 'absolute',
+                    zIndex: 0
+                }} source={this.props.imageCustomerUri?this.props.imageCustomerUri:USER2} />
+
+                <TouchableOpacity style={{
+                  borderRadius:15,
+                  width: 22,
+                  height:22,
+                  alignSelf:'flex-end',
+                  backgroundColor: '#F5FCFF',
+                }}
+                onPress={()=>{
+                  this.props.upadteCustomerProfileImage();
+                }}
+                >
+                <Image style={{
+                              width: 15,
+                              height:15,
+                              resizeMode: "contain",
+
+                          }} source={PENCIL} />
+                          </TouchableOpacity>
+      </View>
       <View
         style={{
-          marginTop:13,
-          height: 0.51 * ScreenHeight,
+            marginTop:0.003 * ScreenHeight,
+          height: 0.42 * ScreenHeight,
           justifyContent: "space-around"
         }}
       >
@@ -92,10 +143,6 @@ componentWillMount() {
         placeholder="Name"
         value={this.props.userData?this.props.userData.userMobileno:null}
       />
-        <Text
-          style={textInputProfilStyle}>
-        </Text>
-
       </View>
       <TouchableHighlight
         onPress={() => {
@@ -116,8 +163,9 @@ componentWillMount() {
           <Text style={{padding: 10,
           fontSize: 18,
           fontFamily: "circular-book",
-        color: "white"}}>Continue</Text>
+        color: "white"}}>{this.props.loadingCustomerProfile?'Loading...':'Continue'}</Text>
       </TouchableHighlight>
+      </KeyboardAwareScrollView>
       </View>
     );
   }
@@ -130,6 +178,8 @@ const mapStateToProps = ({ user ,usermaps}) => {
   fullNameCustomer,
   addressCustomer,
   emailCustomer,
+  imageCustomerUri,
+  loadingCustomerProfile
   } = usermaps;
   const {
   userData
@@ -140,6 +190,8 @@ onSubmeetProfileForm,
 fullNameCustomer,
 addressCustomer,
 emailCustomer,
+imageCustomerUri,
+loadingCustomerProfile
   };
 };
 
@@ -151,6 +203,7 @@ export default connect(
     updateCustomerFullName,
     updateCustomerAddress,
     updateCustomerEmail,
-    updateCustomerProfile
+    updateCustomerProfile,
+    upadteCustomerProfileImage
   }
 )(Profile);

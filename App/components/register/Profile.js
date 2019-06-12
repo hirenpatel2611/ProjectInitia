@@ -16,7 +16,7 @@ import {
   Platform
 } from "react-native";
 import { connect } from "react-redux";
-import { BITMAP1, BITMAP2, CAR, MOTORCYCLE, ICON_REFRESH } from "../../images";
+import { BITMAP1, BITMAP2, CAR, MOTORCYCLE, ICON_REFRESH,PENCIL,USER2 } from "../../images";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Slider } from "react-native-elements";
 import CheckBox from "react-native-check-box";
@@ -44,7 +44,8 @@ import {
   getLocationFail,
   getLocationSuccess,
   setLocationVisibility,
-  setLocation
+  setLocation,
+  upadteRegisterProfileImage
 } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
@@ -52,9 +53,10 @@ import TimerMixin from "react-timer-mixin";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { Constants, IntentLauncher } from "expo";
+import { IntentLauncher } from "expo";
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants'
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -71,7 +73,17 @@ class Profile extends Component {
     } else {
       this._getLocationAsync();
     }
+    this.getPermissionAsync();
   }
+
+  getPermissionAsync = async () => {
+   if (Constants.platform.ios) {
+     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+     if (status !== 'granted') {
+       alert('Sorry, we need camera roll permissions to make this work!');
+     }
+   }
+ }
 
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -152,9 +164,45 @@ class Profile extends Component {
           <View style={headerViewProfile}>
             <Text style={headerTextStyle}>Personal Details</Text>
             <View style={{ height: 0.78 * ScreenHeight, top: 20 }}>
+            <View style={{borderRadius: 15,
+                          borderColor: "#7960FF",
+                          width: 0.15 * ScreenHeight,
+                          height:0.15 * ScreenHeight,
+                          alignSelf:'center',
+                          marginTop:0.003 * ScreenHeight,
+                          justifyContent: "center"
+                      }}>
+            <Image style={{borderRadius: 0.30 * ScreenHeight,
+                          width: 0.14 * ScreenHeight,
+                          height:0.14 * ScreenHeight,
+                          resizeMode: "contain",
+                          alignSelf:'center',
+                          position: 'absolute',
+                          zIndex: 0
+                      }} source={this.props.imageRegisterUri?this.props.imageRegisterUri:USER2} />
+
+                      <TouchableOpacity style={{
+                        borderRadius:15,
+                        width: 22,
+                        height:22,
+                        alignSelf:'flex-end',
+                        backgroundColor: '#F5FCFF',
+                      }}
+                      onPress={()=>{
+                        this.props.upadteRegisterProfileImage();
+                      }}
+                      >
+                      <Image style={{
+                                    width: 15,
+                                    height:15,
+                                    resizeMode: "contain",
+
+                                }} source={PENCIL} />
+                                </TouchableOpacity>
+            </View>
               <View
                 style={{
-                  height: 0.51 * ScreenHeight,
+                  height: 0.42 * ScreenHeight,
                   justifyContent: "space-around"
                 }}
               >
@@ -451,7 +499,8 @@ const mapStateToProps = ({ register }) => {
     isVendor,
     errorMessage,
     location,
-    setLocationVisible
+    setLocationVisible,
+    imageRegisterUri
   } = register;
   return {
     visibleModalProfile,
@@ -469,7 +518,8 @@ const mapStateToProps = ({ register }) => {
     errorMessage,
     location,
     setLocationVisible,
-    register
+    register,
+    imageRegisterUri
   };
 };
 
@@ -490,6 +540,7 @@ export default connect(
     getLocationFail,
     getLocationSuccess,
     setLocationVisibility,
-    setLocation
+    setLocation,
+    upadteRegisterProfileImage
   }
 )(withValidation(rules, Profile));

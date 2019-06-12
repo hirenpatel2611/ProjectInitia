@@ -20,7 +20,7 @@ import {
 } from "./Socket";
 import { Asset, SplashScreen } from "expo";
 import { getUserData } from "./ui";
-import ImagePicker from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 export const GET_VENDORS_START = "usermaps/GET_VENDORS_START";
 export const GET_VENDORS_SUCCESS = "usermaps/GET_VENDORS_SUCCESS";
@@ -76,6 +76,8 @@ export const UPDATE_CUSTOMER_ADDRESS = "usermaps/UPDATE_CUSTOMER_ADDRESS";
 export const UPDATE_CUSTOMER_EMAIL = "usermaps/UPDATE_CUSTOMER_EMAIL";
 export const UPDATE_CUSTOMER_PROFILE_START = "usermaps/UPDATE_CUSTOMER_PROFILE_START";
 export const UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD = "usermaps/UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD";
+export const UPDATE_CUSTOMER_PROFILE_SUCCESS = "usermaps/UPDATE_CUSTOMER_PROFILE_SUCCESS";
+export const UPDATE_CUSTOMER_PROFILE_FAIL = "usermaps/UPDATE_CUSTOMER_PROFILE_FAIL";
 
 var cancelAlertCounter = 0;
 
@@ -487,35 +489,44 @@ export const updateCustomerProfile = val => (dispatch,getState) => {
   dispatch({
     type:UPDATE_CUSTOMER_PROFILE_START,
   });
-  const {fullNameCustomer,addressCustomer,emailCustomer} = getState().usermaps;
+  const {fullNameCustomer,addressCustomer,emailCustomer,imageBase64Customer} = getState().usermaps;
   const {userData} = getState().user
   let test = new FormData();
   test.append("id", userData.userId);
   test.append("first_name", fullNameCustomer);
   test.append("address", addressCustomer);
+  test.append("image", imageBase64Customer);
   Api.post(UPDATE_PROFILE, test).then(response => {
+    console.log(test);
+    console.log(response);
     if(response.status === 1){
+      dispatch({
+        type:UPDATE_CUSTOMER_PROFILE_SUCCESS,
+      });
       alert(response.message);
+    } else {
+      dispatch({
+        type:UPDATE_CUSTOMER_PROFILE_FAIL,
+      });
     }
   })
 }
 
-export const upadteCustomerProfileImage = val => (dispatch) => {
-  ImagePicker.showImagePicker(options, (response) => {
-  console.log('Response = ', response);
+export const upadteCustomerProfileImage = val => async (dispatch) => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        base64: true,
+        allowsEditing: true,
+        aspect: [4, 4],
+      });
 
-  if (response.didCancel) {
-    console.log('User cancelled image picker');
-  } else if (response.error) {
-    console.log('ImagePicker Error: ', response.error);
-  } else if (response.customButton) {
-    console.log('User tapped custom button: ', response.customButton);
-  } else {
-    const source = { uri: response.uri };
-    dispatch ({
-      type: UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD,
-      payload:source
-    });
-  }
-});
+      console.log(result);
+
+      if (!result.cancelled) {
+        dispatch({
+          type:UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD,
+          payload:result
+        });
+
+      }
 }

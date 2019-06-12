@@ -27,8 +27,9 @@ import {
   upadteVendorProfileImage
 } from "../../actions";
 import { USER2,PENCIL } from "../../images";
-import { Asset,Constants } from "expo";
+import { Asset } from "expo";
 import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants'
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -57,32 +58,35 @@ class Profile extends Component {
       <KeyboardAwareScrollView enableOnAndroid>
       <View style={{borderRadius: 15,
                     borderColor: "#7960FF",
-                    width: 90,
-                    height:90,
+                    width: 0.15 * ScreenHeight,
+                    height:0.15 * ScreenHeight,
                     alignSelf:'center',
-                    marginTop:0.01 * ScreenHeight,
+                    marginTop:0.003 * ScreenHeight,
                     justifyContent: "center"
                 }}>
-      <Image style={{borderRadius: 200,
-                    width: 70,
-                    height:70,
+      <Image style={{borderRadius: 0.30 * ScreenHeight,
+                    width: 0.14 * ScreenHeight,
+                    height:0.14 * ScreenHeight,
                     resizeMode: "contain",
                     alignSelf:'center',
+                    position: 'absolute',
+                    zIndex: 0
                 }} source={this.props.imageVendorUri?this.props.imageVendorUri:USER2} />
 
                 <TouchableOpacity style={{
-                  width: 20,
-                  height:20,
+                  borderRadius:15,
+                  width: 22,
+                  height:22,
                   alignSelf:'flex-end',
-                  resizeMode: "contain",
+                  backgroundColor: '#F5FCFF',
                 }}
                 onPress={()=>{
                   this.props.upadteVendorProfileImage();
                 }}
                 >
-                <Image style={{borderRadius: 15,
-                              width: 20,
-                              height:20,
+                <Image style={{
+                              width: 15,
+                              height:15,
                               resizeMode: "contain",
 
                           }} source={PENCIL} />
@@ -91,8 +95,8 @@ class Profile extends Component {
 
       <View
         style={{
-          marginTop:0.01 * ScreenHeight,
-          height: 0.48 * ScreenHeight,
+          marginTop:0.003 * ScreenHeight,
+          height: 0.42 * ScreenHeight,
           justifyContent: "space-around"
         }}
       >
@@ -113,7 +117,7 @@ class Profile extends Component {
         style={textInputProfilStyle}
         underlineColorAndroid="transparent"
         placeholderTextColor="#9D9D9D"
-        placeholder="Name"
+        placeholder="Address"
         value={this.props.addressVendor}
         multiline={true}
         onChangeText={text => {
@@ -124,7 +128,7 @@ class Profile extends Component {
         style={textInputProfilStyle}
         underlineColorAndroid="transparent"
         placeholderTextColor="#9D9D9D"
-        placeholder="Name"
+        placeholder="Email"
         value={this.props.emailVendor}
         onChangeText={text => {
           this.props.updateVendorEmail(text);
@@ -134,12 +138,9 @@ class Profile extends Component {
         style={textInputProfilStyle}
         underlineColorAndroid="transparent"
         placeholderTextColor="#9D9D9D"
-        placeholder="Name"
+        placeholder="Mobile"
         value={this.props.userData?this.props.userData.userMobileno:null}
       />
-        <Text
-          style={textInputProfilStyle}>
-        </Text>
 
       </View>
       <TouchableHighlight
@@ -147,7 +148,7 @@ class Profile extends Component {
           this.props.updateVendorProfile();
         }}
         underlayColor="white"
-        style={{ marginTop: 0.2 * ScreenHeight,
+        style={{ marginTop: 0.21 * ScreenHeight,
                 alignSelf:'center',
                 backgroundColor: "#7960FF",
                 height: 44,
@@ -161,7 +162,7 @@ class Profile extends Component {
           <Text style={{padding: 10,
           fontSize: 18,
           fontFamily: "circular-book",
-        color: "white"}}>Continue</Text>
+        color: "white"}}>{this.props.loadingProfileUpdate?'Loading...':'Continue'}</Text>
       </TouchableHighlight>
       </KeyboardAwareScrollView>
       </View>
@@ -176,7 +177,8 @@ const mapStateToProps = ({ user ,vendors}) => {
   fullNameVendor,
   addressVendor,
   emailVendor,
-  imageVendorUri
+  imageVendorUri,
+  loadingProfileUpdate
 } = vendors;
   const {
   userData
@@ -187,7 +189,8 @@ onSubmeetProfileVendorForm,
 fullNameVendor,
 addressVendor,
 emailVendor,
-imageVendorUri
+imageVendorUri,
+loadingProfileUpdate
   };
 };
 

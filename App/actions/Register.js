@@ -3,7 +3,7 @@ import Api from "../api/api";
 import { URL_USER_SIGNUP, URL_USER_OTP } from "../config";
 import { Actions } from "react-native-router-flux";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { Constants, Location, Permissions } from "expo";
+import * as ImagePicker from 'expo-image-picker';
 
 export const UPDATE_VEHICLE_BOOL = "register/UPDATE_VEHICLE_BOOL";
 export const UPDATE_CAR_BOOL = "register/UPDATE_CAR_BOOL";
@@ -34,6 +34,7 @@ export const GET_LOCATION_FAIL = "register/GET_LOCATION_FAIL";
 export const GET_LOCATION_SUCCESS = "register/GET_LOCATION_SUCCESS";
 export const SET_LOCATION_VISIBILITY = "register/SET_LOCATION_VISIBILITY";
 export const SET_LOCATION = "register/SET_LOCATION";
+export const UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD = "register/UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD";
 
 export const updateVehicleBool = () => dispatch => {
   dispatch({
@@ -72,6 +73,7 @@ export const requestOtp = () => (dispatch, getState) => {
   Api.post(URL_USER_OTP, test)
     .then(response => {
       if (response.loggedIn === 1) {
+        console.log(response);
         dispatch({
           type: REQUEST_OTP_SUCCESS,
           payload: response.OTP
@@ -200,7 +202,8 @@ export const signupUser = () => (dispatch, getState) => {
     isTwoWheeler,
     isFourWheeler,
     loadingSignupB,
-    location
+    location,
+    imageBase64Register
   } = getState().register;
   let vehicle_type = "";
   if (isTwoWheeler === true && isFourWheeler === false) {
@@ -231,12 +234,15 @@ export const signupUser = () => (dispatch, getState) => {
   test.append("address", address);
   test.append("service_vehicle_type", vehicle_type);
   test.append("is_vendor", is_vendor);
+  test.append('image', imageBase64Register);
   if (isVendor === true) {
     test.append("latitude", location.coords.latitude);
     test.append("longitude", location.coords.longitude);
   }
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
+      console.log(test);
+      console.log(response);
       if (response.status === 1) {
         dispatch({
           type: SIGNUP_SUCCESSFUL,
@@ -287,3 +293,22 @@ export const setLocation = () => (dispatch, getState) => {
     type: SET_LOCATION
   });
 };
+
+export const upadteRegisterProfileImage = () => async(dispatch) => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        base64: true,
+        allowsEditing: true,
+        aspect: [4, 4],
+      });
+
+      console.log(result);
+
+      if (!result.cancelled) {
+        dispatch({
+          type:UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD,
+          payload:result
+        });
+
+      }
+}

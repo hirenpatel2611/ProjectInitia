@@ -28,7 +28,8 @@ import {
   GET_LOCATION_FAIL,
   GET_LOCATION_SUCCESS,
   SET_LOCATION_VISIBILITY,
-  SET_LOCATION
+  SET_LOCATION,
+  UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD
 } from "../actions/Register";
 
 const INITIAL_STATE = {
@@ -65,7 +66,9 @@ const INITIAL_STATE = {
   latitudeDelta: 0,
   longitudeDelta: 0,
   setLocationVisible: false,
-  signupFail: ""
+  signupFail: "",
+  imageBase64Register:'',
+  imageRegisterUri:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -352,6 +355,16 @@ export default (state = INITIAL_STATE, action) => {
         };
       }
       break;
+
+      case UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD:
+        {
+          return {
+            ...state,
+            imageRegisterUri:{uri:action.payload.uri},
+            imageBase64Register:action.payload.base64
+          };
+        }
+        break;
 
     default:
       return state;

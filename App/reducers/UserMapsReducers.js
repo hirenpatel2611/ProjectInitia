@@ -45,7 +45,9 @@ import {
   UPDATE_CUSTOMER_ADDRESS,
   UPDATE_CUSTOMER_EMAIL,
   UPDATE_CUSTOMER_PROFILE_START,
-  UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD
+  UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD,
+  UPDATE_CUSTOMER_PROFILE_SUCCESS,
+  UPDATE_CUSTOMER_PROFILE_FAIL
 } from "../actions/UserMaps";
 import { GET_USER_BOOKING_STATUS_ACCEPT } from "../actions/ui";
 
@@ -83,7 +85,9 @@ const INITIAL_STATE = {
   onSubmeetProfileForm: false,
   fullNameCustomer: "",
   addressCustomer: "",
-  emailCustomer: ""
+  emailCustomer: "",
+  imageBase64Customer:'',
+  loadingCustomerProfile:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -512,7 +516,8 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           fullNameCustomer: action.payload.userFullName,
           addressCustomer: action.payload.userAddress,
-          emailCustomer: action.payload.userEmail
+          emailCustomer: action.payload.userEmail,
+          imageCustomerUri:{uri:action.payload.uri},
         };
       }
       break;
@@ -551,10 +556,40 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          onSubmeetProfileForm: true
+          onSubmeetProfileForm: true,
+          loadingCustomerProfile:true
         };
       }
       break;
+
+      case UPDATE_CUSTOMER_PROFILE_SUCCESS:
+        {
+          return {
+            ...state,
+            loadingCustomerProfile:false
+          };
+        }
+        break;
+
+        case UPDATE_CUSTOMER_PROFILE_FAIL:
+          {
+            return {
+              ...state,
+              loadingCustomerProfile:false
+            };
+          }
+          break;
+
+      case UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD:
+        {
+          return {
+            ...state,
+            imageCustomerUri:{uri:action.payload.uri},
+            imageBase64Customer:action.payload.base64
+          };
+        }
+        break;
+
     default:
       return state;
       break;

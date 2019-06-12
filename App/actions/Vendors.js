@@ -48,6 +48,8 @@ export const UPDATE_VENDOR_EMAIL = "vendors/UPDATE_VENDOR_EMAIL";
 export const UPDATE_VENDOR_PROFILE_START = "vendors/UPDATE_VENDOR_PROFILE_START";
 export const LOAD_VENDOR_PROFILE = "vendors/LOAD_VENDOR_PROFILE";
 export const UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD = "vendors/UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD";
+export const UPDATE_VENDOR_PROFILE_SUCCESS = "vendors/UPDATE_VENDOR_PROFILE_SUCCESS";
+export const UPDATE_VENDOR_PROFILE_FAIL = "vendors/UPDATE_VENDOR_PROFILE_FAIL";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -360,10 +362,19 @@ export const updateVendorProfile = val => (dispatch,getState) => {
   test.append("address", addressVendor);
   test.append("image", imageBase64Vendor);
   Api.post(UPDATE_PROFILE, test).then(response => {
+    console.log(test);
     console.log(response);
     if(response.status === 1){
+      dispatch({
+        type:UPDATE_VENDOR_PROFILE_SUCCESS,
+      })
       alert(response.message);
+    } else {
+      dispatch({
+        type:UPDATE_VENDOR_PROFILE_FAIL,
+      })
     }
+
   })
 }
 
@@ -375,7 +386,7 @@ export const loadVendorProfile = () => (dispatch,getState) => {
   });
 }
 
-export const upadteVendorProfileImage = val => async (dispatch) => {
+export const upadteVendorProfileImage = () => async (dispatch) => {
 
   let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.All,

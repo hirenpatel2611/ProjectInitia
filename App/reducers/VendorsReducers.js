@@ -24,7 +24,9 @@ import {
   UPDATE_VENDOR_EMAIL,
   UPDATE_VENDOR_PROFILE_START,
   LOAD_VENDOR_PROFILE,
-  UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD
+  UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD,
+  UPDATE_VENDOR_PROFILE_SUCCESS,
+  UPDATE_VENDOR_PROFILE_FAIL
 } from "../actions/Vendors";
 
 const INITIAL_STATE = {
@@ -53,7 +55,8 @@ const INITIAL_STATE = {
   addressVendor: "",
   emailVendor: "",
   imageVendorUri:'',
-  imageBase64Vendor:''
+  imageBase64Vendor:'',
+  loadingProfileUpdate:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -306,10 +309,29 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          onSubmeetProfileVendorForm: true
+          onSubmeetProfileVendorForm: true,
+          loadingProfileUpdate:true
         };
       }
       break;
+
+      case UPDATE_VENDOR_PROFILE_SUCCESS:
+        {
+          return {
+            ...state,
+          loadingProfileUpdate:false
+          };
+        }
+        break;
+
+        case UPDATE_VENDOR_PROFILE_FAIL:
+          {
+            return {
+              ...state,
+            loadingProfileUpdate:false
+            };
+          }
+          break;
 
     case LOAD_VENDOR_PROFILE:
       {
