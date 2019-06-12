@@ -53,12 +53,13 @@ var styles = StyleSheet.create({
   },
   textInputProfilStyle: {
     fontSize: 16,
-    fontWeight: "bold",
-    fontFamily: "circular-book",
+    fontFamily: "circular-bold",
     paddingLeft: 16,
     borderBottomWidth: 1,
     borderColor: "grey",
-    minHeight: 0.05 * ScreenHeight
+    minHeight: 0.05 * ScreenHeight,
+    marginLeft:10,
+    marginRight:10
   },
 
 });
