@@ -25,6 +25,7 @@ export const createSocketChannel = val => async (dispatch, getState) => {
   chatSocket.emit("self_room", { room: `${val}` });
 
   chatSocket.on("ping", function(data) {
+    console.log(data);
     chatSocket.emit("pong");
   });
 
@@ -88,7 +89,7 @@ export const createSocketChannel = val => async (dispatch, getState) => {
     accuracy: Location.Accuracy.BestForNavigation
   });
 
-  TaskManager.isTaskDefine(LOCATION_TASK_NAME, ({ data, error }) => {
+  TaskManager.isTaskDefined(LOCATION_TASK_NAME, ({ data, error }) => {
     chatSocket.on("broadcast", function(data) {
       switch (data.type) {
         case "BOOK":
