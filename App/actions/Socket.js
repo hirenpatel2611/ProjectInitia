@@ -88,8 +88,9 @@ export const createSocketChannel = val => async (dispatch, getState) => {
   await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
     accuracy: Location.Accuracy.BestForNavigation
   });
-
-  TaskManager.isTaskDefined(LOCATION_TASK_NAME, ({ data, error }) => {
+  
+  TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
+    console.error(data);
     chatSocket.on("broadcast", function(data) {
       switch (data.type) {
         case "BOOK":

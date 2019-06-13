@@ -26,11 +26,11 @@ import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import {
-  Constants,
   IntentLauncher,
   Asset,
   SplashScreen
 } from "expo";
+import Constants from 'expo-constants'
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import {
