@@ -26,7 +26,8 @@ import {
   getFilterCheckBox2,
   getFilterCheckBox3,
   getFilterDistance,
-  resetFilter
+  resetFilter,
+  getFilterSubmeet
 } from "../../actions";
 import _ from "lodash";
 import TimerMixin from "react-timer-mixin";
@@ -160,7 +161,9 @@ class filter extends Component {
               </View>
             </View>
             <TouchableHighlight
-              onPress={() => Actions.NearbyGaraje()}
+              onPress={() =>{
+                this.props.getFilterSubmeet();
+              }}
               underlayColor="white"
               style={inStyle.mainButtonStyle}
             >
@@ -323,6 +326,7 @@ export default connect(
     getFilterCheckBox2,
     getFilterCheckBox3,
     getFilterDistance,
-    resetFilter
+    resetFilter,
+    getFilterSubmeet
   }
 )(filter);

@@ -218,7 +218,6 @@ export const BookingListCancle = () => (dispatch, getState) => {
   test.append("reason", cancleReasonVendor);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log();
       if (response.status === 1) {
         FutureBookingList.map(booking => {
           if (booking.booking_id === cancelBookingData.booking_id) {
@@ -362,8 +361,6 @@ export const updateVendorProfile = val => (dispatch,getState) => {
   test.append("address", addressVendor);
   test.append("image", imageBase64Vendor);
   Api.post(UPDATE_PROFILE, test).then(response => {
-    console.log(test);
-    console.log(response);
     if(response.status === 1){
       dispatch({
         type:UPDATE_VENDOR_PROFILE_SUCCESS,

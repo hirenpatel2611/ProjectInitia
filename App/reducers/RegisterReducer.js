@@ -114,7 +114,6 @@ export default (state = INITIAL_STATE, action) => {
 
     case UPDATE_OTP_TIMEOUT:
       {
-        //console.log(state.otpTimeOut);
         return {
           ...state,
           otpTimeOut: state.otpTimeOut - 1,

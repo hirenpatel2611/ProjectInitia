@@ -73,7 +73,6 @@ export const requestOtp = () => (dispatch, getState) => {
   Api.post(URL_USER_OTP, test)
     .then(response => {
       if (response.loggedIn === 1) {
-        console.log(response);
         dispatch({
           type: REQUEST_OTP_SUCCESS,
           payload: response.OTP
@@ -241,8 +240,6 @@ export const signupUser = () => (dispatch, getState) => {
   }
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
-      console.log(test);
-      console.log(response);
       if (response.status === 1) {
         dispatch({
           type: SIGNUP_SUCCESSFUL,

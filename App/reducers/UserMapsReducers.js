@@ -47,13 +47,16 @@ import {
   UPDATE_CUSTOMER_PROFILE_START,
   UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD,
   UPDATE_CUSTOMER_PROFILE_SUCCESS,
-  UPDATE_CUSTOMER_PROFILE_FAIL
+  UPDATE_CUSTOMER_PROFILE_FAIL,
+  GET_FILTER_SUBMEET
 } from "../actions/UserMaps";
 import { GET_USER_BOOKING_STATUS_ACCEPT } from "../actions/ui";
 
 const INITIAL_STATE = {
   loading: false,
   vendors: [],
+  vendorServiceType:'both',
+  vendorRating:5,
   location: "",
   errorMessage: "",
   isBookModalVisible: false,
@@ -235,33 +238,6 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           rating: action.payload
-        };
-      }
-      break;
-
-    case UPDATE_FILTER_CHECKED1:
-      {
-        return {
-          ...state,
-          isChecked1: !state.isChecked1
-        };
-      }
-      break;
-
-    case UPDATE_FILTER_CHECKED2:
-      {
-        return {
-          ...state,
-          isChecked2: !state.isChecked2
-        };
-      }
-      break;
-
-    case UPDATE_FILTER_CHECKED3:
-      {
-        return {
-          ...state,
-          isChecked3: !state.isChecked3
         };
       }
       break;
@@ -589,6 +565,16 @@ export default (state = INITIAL_STATE, action) => {
           };
         }
         break;
+
+        case GET_FILTER_SUBMEET:
+          {
+            return {
+              ...state,
+              vendorServiceType:action.payload.vehicle_type,
+              vendorRating:action.payload.rating
+            };
+          }
+          break;
 
     default:
       return state;

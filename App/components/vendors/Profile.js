@@ -77,10 +77,12 @@ class Profile extends Component {
 
                 <TouchableOpacity style={{
                   borderRadius:15,
-                  width: 22,
-                  height:22,
+                  width: 23,
+                  height:23,
                   alignSelf:'flex-end',
                   backgroundColor: '#F5FCFF',
+                  alignItems:'center',
+                  justifyContent:'center'
                 }}
                 onPress={()=>{
                   this.props.upadteVendorProfileImage();

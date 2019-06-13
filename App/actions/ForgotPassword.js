@@ -32,8 +32,6 @@ export const onForgotOtpRequest = () => (dispatch,getState) =>{
   test.append("mobile", forgotMobileNo);
   Api.post(SEND_FORGOT_PASSWORD_OTP, test)
     .then(response => {
-      console.log(response);
-
           if(response.message === 'Your OTP is created.'){
         dispatch({
           type: ON_FORGOT_OTP_REQUEST_SUCCESS,
@@ -86,7 +84,6 @@ export const onSubmeetResetPassword = () => (dispatch,getState) => {
   test.append("id", userId);
   Api.post(SEND_FORGOT_PASSWORD, test)
     .then(response => {
-      console.log(response);
       if(response.status === 1){
         Actions.login();
         alert(response.message);

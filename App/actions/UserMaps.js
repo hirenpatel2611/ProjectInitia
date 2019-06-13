@@ -78,6 +78,7 @@ export const UPDATE_CUSTOMER_PROFILE_START = "usermaps/UPDATE_CUSTOMER_PROFILE_S
 export const UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD = "usermaps/UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD";
 export const UPDATE_CUSTOMER_PROFILE_SUCCESS = "usermaps/UPDATE_CUSTOMER_PROFILE_SUCCESS";
 export const UPDATE_CUSTOMER_PROFILE_FAIL = "usermaps/UPDATE_CUSTOMER_PROFILE_FAIL";
+export const GET_FILTER_SUBMEET = "usermaps/GET_FILTER_SUBMEET";
 
 var cancelAlertCounter = 0;
 
@@ -85,9 +86,11 @@ export const getVendors = () => (dispatch, getState) => {
   dispatch({
     type: GET_VENDORS_START
   });
-  const { userCurrentBooking } = getState().user;
+  const {vendorServiceType,vendorRating} =getState().usermaps;
+
   let test = new FormData();
-  test.append("service_type", "both");
+  test.append("service_type", vendorServiceType);
+  test.append("rating", vendorRating);
   Api.post(GET_VENDOR, test)
     .then(response => {
       if (response.status === 0) {
@@ -443,7 +446,6 @@ export const getRating = () => (dispatch, getState) => {
   test.append("vendor_id", bookData.vendor_id);
   test.append("rating", vendorRating);
   Api.post(RATING_BY_CUSTOMER, test).then(response => {
-    console.log(response);
     Actions.NearbyGaraje();
     dispatch({
       type: GET_RATING_SUCCESS
@@ -497,8 +499,6 @@ export const updateCustomerProfile = val => (dispatch,getState) => {
   test.append("address", addressCustomer);
   test.append("image", imageBase64Customer);
   Api.post(UPDATE_PROFILE, test).then(response => {
-    console.log(test);
-    console.log(response);
     if(response.status === 1){
       dispatch({
         type:UPDATE_CUSTOMER_PROFILE_SUCCESS,
@@ -529,4 +529,28 @@ export const upadteCustomerProfileImage = val => async (dispatch) => {
         });
 
       }
+}
+
+export const getFilterSubmeet = () => (dispatch,getState) => {
+  const {isVehicle,isCar,rating}=getState().usermaps;
+  let vehicle_type = "";
+  if (isVehicle === true && isCar === false) {
+    vehicle_type = "bike";
+  } else if (isVehicle === false && isCar === true) {
+    vehicle_type = "car";
+  } else if (isVehicle === true && isCar === true) {
+    vehicle_type = "both";
+  }else if (isVehicle === false && isCar === false) {
+    vehicle_type = "both";
+  }
+
+  var vendorPerameter ={vehicle_type:vehicle_type,
+                        rating:rating};
+  console.log(vendorPerameter);
+  dispatch({
+    type:GET_FILTER_SUBMEET,
+    payload:vendorPerameter
+  });
+  Actions.NearbyGaraje();
+  dispatch(getVendors());
 }

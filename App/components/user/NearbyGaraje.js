@@ -142,7 +142,7 @@ class NearbyGaraje extends Component {
               //this.props.getDistance();
             }}
           >
-            <Image style={inStyle.imageVendor} source={USER2} />
+            <Image style={inStyle.imageVendor} source={vendor.image?{uri:vendor.image}:USER2} />
           </MapView.Marker.Animated>
         );
       });
@@ -494,10 +494,10 @@ const inStyle = {
     color: "#7960FF"
   },
   imageVendor: {
-    borderRadius: 15,
+    borderRadius: 200,
     borderColor: "#7960FF",
-    width: 32,
-    height: 32,
+    width: 35,
+    height: 35,
     resizeMode: "contain"
   }
 };

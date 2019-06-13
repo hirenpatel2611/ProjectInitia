@@ -44,7 +44,6 @@ export default (state = INITIAL_STATE, action) => {
 
         case ON_FORGOT_OTP_REQUEST_SUCCESS:
           {
-            console.log(action.payload.OTP);
             return {
               ...state,
               loadingForgotMobile:false,
@@ -65,7 +64,6 @@ export default (state = INITIAL_STATE, action) => {
 
             case ON_FORGOT_OTP_CHANGE:
               {
-                console.log(action.payload);
                 return {
                   ...state,
                   forgotOTP:action.payload,
@@ -85,7 +83,6 @@ export default (state = INITIAL_STATE, action) => {
 
                 case UPDATE_SUBMEET_FORGOT_ENTER_PASSWORD:
                   {
-                    console.log(action.payload);
                     return {
                       ...state,
                       forgotEnetrPassword:action.payload
@@ -95,7 +92,6 @@ export default (state = INITIAL_STATE, action) => {
 
                   case UPDATE_SUBMEET_FORGOT_REENTER_PASSWORD:
                     {
-                      console.log(action.payload);
                       return {
                         ...state,
                         forgotReEnetrPassword:action.payload
