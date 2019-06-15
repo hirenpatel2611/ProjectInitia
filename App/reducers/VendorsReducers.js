@@ -335,12 +335,13 @@ export default (state = INITIAL_STATE, action) => {
 
     case LOAD_VENDOR_PROFILE:
       {
+        console.log(action.payload);
         return {
           ...state,
           fullNameVendor: action.payload.userFullName,
           addressVendor: action.payload.userAddress,
           emailVendor: action.payload.userEmail,
-          imageVendorUri:{uri:action.payload.uri},
+          imageVendorUri:action.payload.uri,
         };
       }
       break;
@@ -349,7 +350,7 @@ export default (state = INITIAL_STATE, action) => {
   {
     return{
       ...state,
-      imageVendorUri:{uri:action.payload.uri},
+      imageVendorUri:action.payload.uri,
       imageBase64Vendor:action.payload.base64
     }
   }

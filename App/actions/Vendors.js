@@ -361,6 +361,7 @@ export const updateVendorProfile = val => (dispatch,getState) => {
   test.append("address", addressVendor);
   test.append("image", imageBase64Vendor);
   Api.post(UPDATE_PROFILE, test).then(response => {
+    console.log(test);
     if(response.status === 1){
       dispatch({
         type:UPDATE_VENDOR_PROFILE_SUCCESS,

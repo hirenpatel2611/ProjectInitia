@@ -499,6 +499,7 @@ export const updateCustomerProfile = val => (dispatch,getState) => {
   test.append("address", addressCustomer);
   test.append("image", imageBase64Customer);
   Api.post(UPDATE_PROFILE, test).then(response => {
+    console.log(test);
     if(response.status === 1){
       dispatch({
         type:UPDATE_CUSTOMER_PROFILE_SUCCESS,

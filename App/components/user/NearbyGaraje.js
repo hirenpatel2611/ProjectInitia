@@ -102,6 +102,7 @@ class NearbyGaraje extends Component {
     let location = await Location.getCurrentPositionAsync({
       accuracy: Location.Accuracy.BestForNavigation
     });
+    console.error(location);
     console.log(location);
     this.props.getUserLocationSuccess(location);
     {
@@ -494,7 +495,7 @@ const inStyle = {
     color: "#7960FF"
   },
   imageVendor: {
-    borderRadius: 200,
+    borderRadius:35,
     borderColor: "#7960FF",
     width: 35,
     height: 35,
