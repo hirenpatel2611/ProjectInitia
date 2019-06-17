@@ -359,7 +359,7 @@ export const updateVendorProfile = val => (dispatch,getState) => {
   test.append("id", userData.userId);
   test.append("first_name", fullNameVendor);
   test.append("address", addressVendor);
-  test.append("image", imageBase64Vendor);
+  test.append("profile_image", imageBase64Vendor);
   Api.post(UPDATE_PROFILE, test).then(response => {
     console.log(test);
     if(response.status === 1){

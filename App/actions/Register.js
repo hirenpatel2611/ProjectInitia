@@ -72,6 +72,7 @@ export const requestOtp = () => (dispatch, getState) => {
   test.append("mobile", mobileno);
   Api.post(URL_USER_OTP, test)
     .then(response => {
+      console.log(response);
       if (response.loggedIn === 1) {
         dispatch({
           type: REQUEST_OTP_SUCCESS,
@@ -114,10 +115,10 @@ export const onOTPChange = code => (dispatch, getState) => {
   });
 };
 
-export const toggleModalProfile = () => (dispatch, getState) => {
+export const toggleModalProfile = val => (dispatch, getState) => {
   dispatch({
     type: TOGGLE_MODAL_PROFILE,
-    payload: true
+    payload: val
   });
 };
 
@@ -233,20 +234,20 @@ export const signupUser = () => (dispatch, getState) => {
   test.append("address", address);
   test.append("service_vehicle_type", vehicle_type);
   test.append("is_vendor", is_vendor);
-  test.append('image', imageBase64Register);
+  test.append('profile_image', imageBase64Register);
   if (isVendor === true) {
     test.append("latitude", location.coords.latitude);
     test.append("longitude", location.coords.longitude);
   }
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
+      console.log(test);
+      console.log(response);
       if (response.status === 1) {
         dispatch({
           type: SIGNUP_SUCCESSFUL,
           payload: response
         });
-        if(is_vendor === 1){
-        dispatch(toggleModalProfile());}
       } else {
         dispatch({
           type: SIGNUP_FAIL,

@@ -139,7 +139,8 @@ class Profile extends Component {
       profileModal1View,
       profileModalText1,
       profileModalText2,
-      profileButtonView
+      profileButtonView,
+      textError2
     } = styles;
     const { validate } = this.props;
     errors = this.props.onSubmeetSignupForm
@@ -172,14 +173,14 @@ class Profile extends Component {
                           marginTop:0.003 * ScreenHeight,
                           justifyContent: "center"
                       }}>
-            <Image style={{borderRadius: 0.30 * ScreenHeight,
+            <Image style={{borderRadius: 0.065 * ScreenHeight,
                           width: 0.14 * ScreenHeight,
                           height:0.14 * ScreenHeight,
                           resizeMode: "contain",
                           alignSelf:'center',
                           position: 'absolute',
                           zIndex: 0
-                      }} source={this.props.imageRegisterUri?this.props.imageRegisterUri:USER2} />
+                      }} source={this.props.imageRegisterUri?{uri:this.props.imageRegisterUri}:USER2} />
 
                       <TouchableOpacity style={{
                         borderRadius:15,
@@ -187,6 +188,8 @@ class Profile extends Component {
                         height:22,
                         alignSelf:'flex-end',
                         backgroundColor: '#F5FCFF',
+                        justifyContent:'center',
+                        alignItems:'center'
                       }}
                       onPress={()=>{
                         this.props.upadteRegisterProfileImage();
@@ -218,7 +221,7 @@ class Profile extends Component {
                     }}
                   />
                   {errors.name ? (
-                    <Text style={styles.textError}>{errors.name[0]}</Text>
+                    <Text style={styles.textError2}>{errors.name[0]}</Text>
                   ) : null}
                 </View>
                 <View style={subContainerProfile}>
@@ -234,7 +237,7 @@ class Profile extends Component {
                     }}
                   />
                   {errors.address ? (
-                    <Text style={styles.textError}>{errors.address[0]}</Text>
+                    <Text style={styles.textError2}>{errors.address[0]}</Text>
                   ) : null}
                 </View>
 
@@ -251,7 +254,7 @@ class Profile extends Component {
                     }}
                   />
                   {errors.email ? (
-                    <Text style={styles.textError}>{errors.email[0]}</Text>
+                    <Text style={styles.textError2}>{errors.email[0]}</Text>
                   ) : null}
                 </View>
 
@@ -269,7 +272,7 @@ class Profile extends Component {
                     }}
                   />
                   {errors.password ? (
-                    <Text style={styles.textError}>{errors.password[0]}</Text>
+                    <Text style={styles.textError2}>{errors.password[0]}</Text>
                   ) : null}
                 </View>
                 <View style={subContainerProfile}>
@@ -286,7 +289,7 @@ class Profile extends Component {
                     }}
                   />
                   {errors.confirmPassword ? (
-                    <Text style={styles.textError}>
+                    <Text style={styles.textError2}>
                       {errors.confirmPassword[0]}
                     </Text>
                   ) : null}
@@ -344,7 +347,6 @@ class Profile extends Component {
                   <TouchableHighlight
                     underlayColor="white"
                     onPress={() => {
-                      this.props.setLocation();
                       this.props.signupUser();
 
                     }}
@@ -360,13 +362,14 @@ class Profile extends Component {
                         alignItems: "center"
                       }}
                     >
-                      <Text style={[buttonText, whiteText]}>Set Location</Text>
+                      <Text style={[buttonText, whiteText]}>{this.props.loadingSignupB?'Loading...':'Set Location'}</Text>
                     </View>
                   </TouchableHighlight>
                 </View>
               </Modal>
             </View>
             <View style={profileButtonView}>
+            <Text style={styles.textError2}>{this.props.signupFail?this.props.signupFail:null}</Text>
               <TouchableHighlight
                 onPress={() => {
                   this.props.updateOnSubmeetSignup();
@@ -381,17 +384,14 @@ class Profile extends Component {
                 underlayColor="white"
               >
                 <View style={createButton}>
-                  {this.props.loadingSignupB ? (
-                    <Text style={[buttonText, whiteText]}>Loading...</Text>
-                  ) : (
-                    <Text style={[buttonText, whiteText]}>Continue</Text>
-                  )}
+                    <Text style={[buttonText, whiteText]}>{this.props.loadingSignupB ?'Loading...':'Continue'}</Text>
+
                 </View>
               </TouchableHighlight>
             </View>
             <View />
             <Modal
-              visible={this.props.visibleModalProfile ? true : false}
+              visible={this.props.visibleModalProfile}
               animationType="slide"
               onRequestClose={() => {
                 console.log("Modal has been closed.");
@@ -500,7 +500,8 @@ const mapStateToProps = ({ register }) => {
     errorMessage,
     location,
     setLocationVisible,
-    imageRegisterUri
+    imageRegisterUri,
+    signupFail
   } = register;
   return {
     visibleModalProfile,
@@ -519,7 +520,8 @@ const mapStateToProps = ({ register }) => {
     location,
     setLocationVisible,
     register,
-    imageRegisterUri
+    imageRegisterUri,
+    signupFail
   };
 };
 

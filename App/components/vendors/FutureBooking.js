@@ -53,8 +53,8 @@ class FutureBooking extends Component {
       <View>
         <Header headerText="Booking" />
         <ScrollView style={inStyle.ScrollViewStyle}>
-          {this.props.loadingFutureBookigList ? (
-            <Spinner />
+          {this.props.isFutureBookingNoFound?<Text style={{ fontFamily: "circular-bold", alignSelf: "center",marginTop:0.40*ScreenHeight}}>  No booking found</Text>:this.props.loadingFutureBookigList ? (
+            <View style={{height:0.80*ScreenHeight,justifyContent:'center',alignSelf:'center'}}><Spinner /></View>
           ) : (
             <FlatList
               data={this.props.FutureBookingList}
@@ -730,7 +730,8 @@ const mapStateToProps = ({ vendors }) => {
     cancleReasonVendor,
     isConfirmModal,
     confirmDisableVendor,
-    loadingConfirm
+    loadingConfirm,
+    isFutureBookingNoFound
   } = vendors;
   return {
     loadingFutureBookigList,
@@ -748,7 +749,8 @@ const mapStateToProps = ({ vendors }) => {
     reasonCheckboxVendor,
     cancleReasonVendor,
     confirmDisableVendor,
-    loadingConfirm
+    loadingConfirm,
+    isFutureBookingNoFound
   };
 };
 

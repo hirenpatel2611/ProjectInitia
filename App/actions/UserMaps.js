@@ -81,20 +81,24 @@ export const UPDATE_CUSTOMER_PROFILE_FAIL = "usermaps/UPDATE_CUSTOMER_PROFILE_FA
 export const GET_FILTER_SUBMEET = "usermaps/GET_FILTER_SUBMEET";
 
 var cancelAlertCounter = 0;
+var getVendorsCounter =0;
 
 export const getVendors = () => (dispatch, getState) => {
   dispatch({
     type: GET_VENDORS_START
   });
   const {vendorServiceType,vendorRating} =getState().usermaps;
-
+  console.log(vendorRating);
   let test = new FormData();
   test.append("service_type", vendorServiceType);
   test.append("rating", vendorRating);
   Api.post(GET_VENDOR, test)
     .then(response => {
+      console.log(response);
       if (response.status === 0) {
+        if(getVendorsCounter<5){
         dispatch(getVendors());
+      }
       } else {
         dispatch({
           type: GET_VENDORS_SUCCESS,
@@ -288,6 +292,7 @@ export const getDistance = () => async (dispatch, getState) => {
   },${origin.longitude}&destinations=${destination.latitude},${
     destination.longitude
   }&key=${APIKEY}`;
+
   fetch(url)
     .then(response => response.json())
     .then(responseJson => {

@@ -209,6 +209,12 @@ var styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "circular-book"
   },
+  textError2: {
+    marginBottom: 5,
+    color: "red",
+    fontSize: 12,
+    fontFamily: "circular-book"
+  },
   textError1: {
     color: "red",
     marginTop: -15,

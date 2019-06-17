@@ -145,7 +145,7 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          visibleModalProfile: !state.visibleModalProfile
+          visibleModalProfile: action.payload
         };
       }
       break;
@@ -253,9 +253,22 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
+          setLocationVisible:false,
           loadingSignupB: false,
           visibleModalProfile: true,
-          signupFail: ""
+          signupFail: "",
+          mobileno:'',
+          otp:'',
+          recievedOTP:'',
+          name: "",
+          address: "",
+          mobilenoProfile: "",
+          email: "",
+          password: "",
+          confirmPassword: "",
+          isTwoWheeler: false,
+          isFourWheeler: false,
+          onSubmeetSignupForm:false
         };
       }
       break;
@@ -264,8 +277,10 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
+          setLocationVisible:false,
           loadingSignupB: false,
-          signupFail: action.payload
+          signupFail: action.payload,
+
         };
       }
       break;
@@ -359,7 +374,7 @@ export default (state = INITIAL_STATE, action) => {
         {
           return {
             ...state,
-            imageRegisterUri:{uri:action.payload.uri},
+            imageRegisterUri:action.payload.uri,
             imageBase64Register:action.payload.base64
           };
         }

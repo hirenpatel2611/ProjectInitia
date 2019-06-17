@@ -148,6 +148,7 @@ class Login extends Component {
                   ? this.props.loginUser()
                   : null;
               }}
+              disabled={this.props.loading}
               underlayColor="white"
             >
               <View style={loginButton}>

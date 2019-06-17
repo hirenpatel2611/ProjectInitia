@@ -62,45 +62,9 @@ getPermissionAsync = async () => {
       <View>
       <Header headerText="Profile"/>
       <KeyboardAwareScrollView enableOnAndroid>
-      <View style={{borderRadius: 15,
-                    borderColor: "#7960FF",
-                    width: 0.15 * ScreenHeight,
-                    height:0.15 * ScreenHeight,
-                    alignSelf:'center',
-                    marginTop:0.003 * ScreenHeight,
-                    justifyContent: "center"
-                }}>
-      <Image style={{borderRadius: 0.30 * ScreenHeight,
-                    width: 0.14 * ScreenHeight,
-                    height:0.14 * ScreenHeight,
-                    resizeMode: "contain",
-                    alignSelf:'center',
-                    position: 'absolute',
-                    zIndex: 0
-                }} source={this.props.imageCustomerUri?this.props.imageCustomerUri:USER2} />
-
-                <TouchableOpacity style={{
-                  borderRadius:15,
-                  width: 22,
-                  height:22,
-                  alignSelf:'flex-end',
-                  backgroundColor: '#F5FCFF',
-                }}
-                onPress={()=>{
-                  this.props.upadteCustomerProfileImage();
-                }}
-                >
-                <Image style={{
-                              width: 15,
-                              height:15,
-                              resizeMode: "contain",
-
-                          }} source={PENCIL} />
-                          </TouchableOpacity>
-      </View>
       <View
         style={{
-            marginTop:0.003 * ScreenHeight,
+            marginTop:0.009 * ScreenHeight,
           height: 0.42 * ScreenHeight,
           justifyContent: "space-around"
         }}
@@ -149,7 +113,7 @@ getPermissionAsync = async () => {
           this.props.updateCustomerProfile();
         }}
         underlayColor="white"
-        style={{ marginTop: 0.2 * ScreenHeight,
+        style={{ marginTop: 0.35 * ScreenHeight,
                 alignSelf:'center',
                 backgroundColor: "#7960FF",
                 height: 44,
