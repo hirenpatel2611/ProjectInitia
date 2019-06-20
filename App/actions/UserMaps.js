@@ -92,8 +92,8 @@ export const getVendors = () => (dispatch, getState) => {
   console.log(rating);
   let test = new FormData();
   test.append("service_type", vendorServiceType);
-  test.append("rating", vendorRating);
-  Api.post(GET_VENDOR, rating)
+  test.append("rating", rating);
+  Api.post(GET_VENDOR, test)
     .then(response => {
       console.log(response);
       if (response.status === 0) {
@@ -499,7 +499,7 @@ export const updateCustomerProfile = val => (dispatch,getState) => {
   dispatch({
     type:UPDATE_CUSTOMER_PROFILE_START,
   });
-  const {fullNameCustomer,addressCustomer,emailCustomer,imageBase64Customer} = getState().usermaps;
+  const {fullNameCustomer,addressCustomer,emailCustomer} = getState().usermaps;
   const {userData} = getState().user
   let test = new FormData();
   test.append("id", userData.userId);
