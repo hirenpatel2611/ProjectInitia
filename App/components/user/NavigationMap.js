@@ -158,12 +158,14 @@ class NearbyGaraje extends Component {
                 this.props.getBookingUpdateUser(sts)
               }}
               underlayColor="white"
-              style={{alignSelf: "center",
-              marginTop: 0.03 * ScreenHeight}}
+              style={{height:0.05 * ScreenHeight,
+              width: 0.78 * ScreenWidth,
+              backgroundColor: "#7960FF",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 25}}
             >
-              <View style={continueButton}>
                 <Text style={buttonText}>{this.props.loadingRatingDone?'loading...':'Done'}</Text>
-              </View>
             </TouchableHighlight>
             </View>
             </Modal>

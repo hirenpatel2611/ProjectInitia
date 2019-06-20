@@ -88,12 +88,12 @@ export const getVendors = () => (dispatch, getState) => {
   dispatch({
     type: GET_VENDORS_START
   });
-  const {vendorServiceType,vendorRating} =getState().usermaps;
-  console.log(vendorRating);
+  const {vendorServiceType,rating} =getState().usermaps;
+  console.log(rating);
   let test = new FormData();
   test.append("service_type", vendorServiceType);
   test.append("rating", vendorRating);
-  Api.post(GET_VENDOR, test)
+  Api.post(GET_VENDOR, rating)
     .then(response => {
       console.log(response);
       if (response.status === 0) {
@@ -360,10 +360,10 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
     type: GET_MECHANIC_CURREN_LOCATION,
     payload: val
   });
-  const { location, mechanicCurrentLocation } = getState().usermaps;
+  const { location } = getState().usermaps;
   if (location) {
-    var dist = mechanicCurrentLocation.distance;
-    console.log(mechanicCurrentLocation);
+    var dist = val.distance;
+    console.log(val);
     if (dist < 0.055) {
       dispatch({
         type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
@@ -389,6 +389,7 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       if (response.status !== 0) {
+
         obj.type = "REACHED";
 
         dispatch({
@@ -407,7 +408,7 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
         dispatch({
           type: GET_BOOKING_UPDATE_FAIL
         });
-        dispatch(getBookingUpdateUser());
+        dispatch(getBookingUpdateUser(val));
       }
     })
     .catch(err => {
@@ -452,6 +453,7 @@ export const getRating = () => (dispatch, getState) => {
   test.append("vendor_id", bookData.vendor_id);
   test.append("rating", vendorRating);
   Api.post(RATING_BY_CUSTOMER, test).then(response => {
+    console.log(response);
     Actions.NearbyGaraje();
     dispatch({
       type: GET_RATING_SUCCESS
