@@ -35,6 +35,8 @@ export const GET_LOCATION_SUCCESS = "register/GET_LOCATION_SUCCESS";
 export const SET_LOCATION_VISIBILITY = "register/SET_LOCATION_VISIBILITY";
 export const SET_LOCATION = "register/SET_LOCATION";
 export const UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD = "register/UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD";
+export const UPDATE_REGISTER_DOCUMENT_UPLOAD = "register/UPDATE_REGISTER_DOCUMENT_UPLOAD";
+export const DELETE_REGISTER_DOCUMENT = "register/DELETE_REGISTER_DOCUMENT";
 
 export const updateVehicleBool = () => dispatch => {
   dispatch({
@@ -194,7 +196,6 @@ export const signupUser = () => (dispatch, getState) => {
     name,
     address,
     email,
-    dateOfBirth,
     password,
     language,
     mobileno,
@@ -203,7 +204,8 @@ export const signupUser = () => (dispatch, getState) => {
     isFourWheeler,
     loadingSignupB,
     location,
-    imageBase64Register
+    imageBase64Register,
+    documentBase64Register
   } = getState().register;
   let vehicle_type = "";
   if (isTwoWheeler === true && isFourWheeler === false) {
@@ -235,13 +237,13 @@ export const signupUser = () => (dispatch, getState) => {
   test.append("service_vehicle_type", vehicle_type);
   test.append("is_vendor", is_vendor);
   test.append('profile_image', imageBase64Register);
+  test.append('other_image', documentBase64Register[0]);
   if (isVendor === true) {
     test.append("latitude", location.coords.latitude);
     test.append("longitude", location.coords.longitude);
   }
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
-      console.log(test);
       console.log(response);
       if (response.status === 1) {
         dispatch({
@@ -294,13 +296,13 @@ export const setLocation = () => (dispatch, getState) => {
 
 export const upadteRegisterProfileImage = () => async(dispatch) => {
   let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         base64: true,
         allowsEditing: true,
         aspect: [4, 4],
       });
-
-      console.log(result);
+      //
+      // console.log(result);
 
       if (!result.cancelled) {
         dispatch({
@@ -309,4 +311,33 @@ export const upadteRegisterProfileImage = () => async(dispatch) => {
         });
 
       }
+}
+
+export const addDocument = () => async(dispatch) => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        base64: true,
+        allowsEditing: true,
+        aspect: [4, 4],
+      });
+
+      // console.log(result);
+
+      if (!result.cancelled) {
+        dispatch({
+          type:UPDATE_REGISTER_DOCUMENT_UPLOAD,
+          payload:result
+        });
+      }
+}
+
+export const deleteRegisterDocument = documnet => (dispatch,getState) => {
+const {documentRegisterUri} = getState().register;
+var index = documentRegisterUri.indexOf(documnet);
+documentRegisterUri.splice(index,1);
+console.log(documentRegisterUri);
+dispatch({
+  type:DELETE_REGISTER_DOCUMENT,
+  payload:documentRegisterUri
+})
 }

@@ -11,7 +11,8 @@ import {
   StyleSheet,
   Platform,
   TextInput,
-  AsyncStorage
+  AsyncStorage,
+  ScrollView
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -54,7 +55,7 @@ class Profile extends Component {
       textInputProfilStyle
     } = styles;
     return (
-      <View>
+      <ScrollView>
         <Header headerText="Profile" />
         <KeyboardAwareScrollView enableOnAndroid>
           <View
@@ -189,7 +190,7 @@ class Profile extends Component {
             </Text>
           </TouchableHighlight>
         </KeyboardAwareScrollView>
-      </View>
+      </ScrollView>
     );
   }
 }

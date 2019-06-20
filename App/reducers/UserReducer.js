@@ -49,7 +49,7 @@ export default (state = INITIAL_STATE, action) => {
             return {
               ...state,
               userData:{
-              uri:action.payload.image,
+              uri:action.payload.profile_image,
               userId:action.payload.id,
               userEmail:action.payload.email,
               userMobileno: action.payload.mobile,

@@ -6,7 +6,7 @@ import * as Location from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
 import * as Permissions from 'expo-permissions';
 import { getBookingModal, getBookingVendorStatus } from "./Vendors";
-import { getBookingStatus, getMechanicCurrentLocation } from "./UserMaps";
+import { getBookingStatus, getMechanicCurrentLocation,getVendorRatingModal } from "./UserMaps";
 import { Actions } from "react-native-router-flux";
 
 export const CONNECT_TO_SOCKET = "socket/connectTosocket";
@@ -76,7 +76,7 @@ export const createSocketChannel = val => async (dispatch, getState) => {
         if (isUserVendor === "1") {
           dispatch(getBookingVendorStatus(data));
         } else {
-          Actions.customerRating();
+          dispatch(getVendorRatingModal())
         }
 
         break;
@@ -89,75 +89,77 @@ export const createSocketChannel = val => async (dispatch, getState) => {
     accuracy: Location.Accuracy.BestForNavigation
   });
 
-  TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
-    console.error(data);
-    chatSocket.on("broadcast", function(data) {
-      switch (data.type) {
-        case "BOOK":
-          dispatch(getBookingModal(data.message));
-          break;
 
-        case "ACCEPT":
-          if (isUserVendor !== "1") {
-            dispatch(getBookingStatus(data));
-          } else {
-            dispatch(getBookingVendorStatus(data));
-          }
-
-          break;
-
-        case "ON-THE-WAY":
-          if (isUserVendor !== "1") {
-            dispatch(getBookingStatus(data));
-          } else {
-            dispatch(getBookingVendorStatus(data));
-          }
-
-          break;
-
-        case "CANCEL":
-          if (isUserVendor !== "1") {
-            dispatch(getBookingStatus(data));
-          } else {
-            dispatch(getBookingVendorStatus(data));
-          }
-          break;
-
-        case "MECHANIC_CURRENT_LOCATION":
-          if (isUserVendor !== "1") {
-            dispatch(getMechanicCurrentLocation(data));
-          }
-          break;
-
-        case "REACHED":
-          if (isUserVendor === "1") {
-            if (isUserVendor !== "1") {
-            } else {
-              dispatch(getBookingVendorStatus(data));
-            }
-          }
-          break;
-
-        case "REACHED":
-          if (isUserVendor === "1") {
-            dispatch(getBookingVendorStatus(data));
-          }
-          break;
-
-        case "COMPLETED":
-          if (isUserVendor === "1") {
-            dispatch(getBookingVendorStatus(data));
-          } else {
-            Actions.customerRating();
-          }
-          break;
-
-        default:
-          return null;
-      }
-    });
-  });
 };
+
+TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
+  chatSocket.on("broadcast", function(data) {
+    switch (data.type) {
+      case "BOOK":
+        dispatch(getBookingModal(data.message));
+        break;
+
+      case "ACCEPT":
+        if (isUserVendor !== "1") {
+          dispatch(getBookingStatus(data));
+        } else {
+          dispatch(getBookingVendorStatus(data));
+        }
+
+        break;
+
+      case "ON-THE-WAY":
+        if (isUserVendor !== "1") {
+          dispatch(getBookingStatus(data));
+        } else {
+          dispatch(getBookingVendorStatus(data));
+        }
+
+        break;
+
+      case "CANCEL":
+        if (isUserVendor !== "1") {
+          dispatch(getBookingStatus(data));
+        } else {
+          dispatch(getBookingVendorStatus(data));
+        }
+        break;
+
+      case "MECHANIC_CURRENT_LOCATION":
+        if (isUserVendor !== "1") {
+
+          dispatch(getMechanicCurrentLocation(data));
+        }
+        break;
+
+      case "REACHED":
+        if (isUserVendor === "1") {
+          if (isUserVendor !== "1") {
+          } else {
+            dispatch(getBookingVendorStatus(data));
+          }
+        }
+        break;
+
+      case "REACHED":
+        if (isUserVendor === "1") {
+          dispatch(getBookingVendorStatus(data));
+        }
+        break;
+
+      case "COMPLETED":
+        if (isUserVendor === "1") {
+          dispatch(getBookingVendorStatus(data));
+        } else {
+          Actions.customerRating();
+        }
+        break;
+
+      default:
+        return null;
+    }
+  });
+});
 
 export const connectTosocket = () => async (dispatch, getState) => {
   const {

@@ -21,6 +21,7 @@ import {
 } from "../../images";
 import { socketLeave } from "../../actions";
 
+
 class SideMenu extends Component {
   _deleteUser = async () => {
     try {

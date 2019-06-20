@@ -45,7 +45,9 @@ import {
   getLocationSuccess,
   setLocationVisibility,
   setLocation,
-  upadteRegisterProfileImage
+  upadteRegisterProfileImage,
+  addDocument,
+  deleteRegisterDocument
 } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
@@ -62,6 +64,7 @@ let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
 class Profile extends Component {
+
   constructor(props) {
     super(props);
     this.locationIsEnabled = false;
@@ -74,6 +77,7 @@ class Profile extends Component {
       this._getLocationAsync();
     }
     this.getPermissionAsync();
+
   }
 
   getPermissionAsync = async () => {
@@ -115,6 +119,37 @@ class Profile extends Component {
     });
     this.props.getLocationSuccess(location);
   };
+
+  renderDocument(){
+    arr=  this.props.documentRegisterUri.map((documentUri)=>{
+      return <View style={{width: 0.10 * ScreenHeight,margin:0.009 *ScreenHeight}}><Image style={{
+      width: 0.10 * ScreenHeight,
+      height:0.10 * ScreenHeight,
+      resizeMode: "contain",
+      borderRadius:5,
+      position: 'absolute',
+    }}
+      source={{uri:documentUri}}
+  />
+    <TouchableOpacity
+    style={{
+      height:17,
+      width:17,
+      borderRadius:10,
+      backgroundColor:'#FFFFFFFF',
+      alignSelf:'center',
+      alignItems:'center',
+      justifyContent:'center',
+      margin: 0.04 * ScreenHeight
+    }}
+    onPress={()=>{this.props.deleteRegisterDocument(documentUri)}}
+    >
+    <Text style={{color:'#7960FF',fontFamily:'circular-bold'}}>X</Text>
+    </TouchableOpacity>
+    </View>
+    })
+    return arr ;
+  }
 
   render() {
     const {
@@ -165,7 +200,7 @@ class Profile extends Component {
           <View style={headerViewProfile}>
             <Text style={headerTextStyle}>Personal Details</Text>
             <View style={{ height: 0.78 * ScreenHeight, top: 20 }}>
-            <View style={{borderRadius: 15,
+            {this.props.isVendor?<View style={{borderRadius: 15,
                           borderColor: "#7960FF",
                           width: 0.15 * ScreenHeight,
                           height:0.15 * ScreenHeight,
@@ -202,10 +237,10 @@ class Profile extends Component {
 
                                 }} source={PENCIL} />
                                 </TouchableOpacity>
-            </View>
+            </View>:null}
               <View
                 style={{
-                  height: 0.42 * ScreenHeight,
+                  height: 0.38 * ScreenHeight,
                   justifyContent: "space-around"
                 }}
               >
@@ -295,6 +330,60 @@ class Profile extends Component {
                   ) : null}
                 </View>
               </View>
+              {this.props.isVendor?
+                <View style={{
+                  height:0.22 *ScreenHeight,
+                  justifyContent:'space-between'
+                }}>
+                <View style={{flexDirection:'row'}}>
+                {this.renderDocument()}
+                </View>
+                <TouchableOpacity
+                underlayColor="white"
+                style={{
+                backgroundColor: "transparent",
+                height: 25,
+                width: 0.35 * ScreenWidth,
+                borderRadius: 25,
+                borderColor: "#7960FF",
+                borderWidth: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                alignSelf:'center',
+                opacity:this.props.documentRegisterUri.length===3?0.5:1
+                }}
+                disabled={this.props.documentRegisterUri.length===3?true:false}
+                onPress={()=>{
+                  this.props.addDocument()
+                }}
+              >
+                  <Text style={{fontFamily:'circular-book',
+                                fontSize:14,
+                                color:'#7960FF'
+                                }}>
+                    +Add Documents
+                  </Text>
+              </TouchableOpacity>
+              </View>
+              :null}
+
+              <Text style={styles.textError2}>{this.props.signupFail?this.props.signupFail:null}</Text>
+              <TouchableHighlight
+                onPress={() => {
+                  this.props.updateOnSubmeetSignup();
+                  if (this.props.isValid(this.props.register)) {
+                    if (this.props.isVendor) {
+                      this.props.setLocation();
+                    } else {
+                      this.props.signupUser();
+                    }
+                  }
+                }}
+                underlayColor="white"
+                style={([createButton,{marginTop:this.props.isVendor?-5:0.35 * ScreenHeight}])}
+              >
+                    <Text style={[buttonText, whiteText]}>{this.props.loadingSignupB ?'Loading...':'Continue'}</Text>
+              </TouchableHighlight>
               <Modal
                 visible={this.props.setLocationVisible}
                 animationType="slide"
@@ -367,27 +456,6 @@ class Profile extends Component {
                   </TouchableHighlight>
                 </View>
               </Modal>
-            </View>
-            <View style={profileButtonView}>
-            <Text style={styles.textError2}>{this.props.signupFail?this.props.signupFail:null}</Text>
-              <TouchableHighlight
-                onPress={() => {
-                  this.props.updateOnSubmeetSignup();
-                  if (this.props.isValid(this.props.register)) {
-                    if (this.props.isVendor) {
-                      this.props.setLocation();
-                    } else {
-                      this.props.signupUser();
-                    }
-                  }
-                }}
-                underlayColor="white"
-              >
-                <View style={createButton}>
-                    <Text style={[buttonText, whiteText]}>{this.props.loadingSignupB ?'Loading...':'Continue'}</Text>
-
-                </View>
-              </TouchableHighlight>
             </View>
             <View />
             <Modal
@@ -501,7 +569,8 @@ const mapStateToProps = ({ register }) => {
     location,
     setLocationVisible,
     imageRegisterUri,
-    signupFail
+    signupFail,
+    documentRegisterUri
   } = register;
   return {
     visibleModalProfile,
@@ -521,7 +590,8 @@ const mapStateToProps = ({ register }) => {
     setLocationVisible,
     register,
     imageRegisterUri,
-    signupFail
+    signupFail,
+    documentRegisterUri
   };
 };
 
@@ -543,6 +613,8 @@ export default connect(
     getLocationSuccess,
     setLocationVisibility,
     setLocation,
-    upadteRegisterProfileImage
+    upadteRegisterProfileImage,
+    addDocument,
+    deleteRegisterDocument
   }
 )(withValidation(rules, Profile));

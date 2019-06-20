@@ -72,8 +72,8 @@ var styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: "center",
     marginBottom: 10,
-    // color: 'white',
-    justifyContent: "center"
+    justifyContent: "center",
+    alignSelf:'center'
   },
   loginButton: {
     backgroundColor: "transparent",
@@ -147,8 +147,7 @@ var styles = StyleSheet.create({
     borderWidth: 1
   },
   textInputProfilStyle: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
     fontFamily: "circular-book"
   },
   subContainerProfile: {
@@ -213,7 +212,7 @@ var styles = StyleSheet.create({
     marginBottom: 5,
     color: "red",
     fontSize: 12,
-    fontFamily: "circular-book"
+    fontFamily: "circular-book",
   },
   textError1: {
     color: "red",

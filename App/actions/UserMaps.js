@@ -79,6 +79,7 @@ export const UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD = "usermaps/UPDATE_CUSTOMER_PR
 export const UPDATE_CUSTOMER_PROFILE_SUCCESS = "usermaps/UPDATE_CUSTOMER_PROFILE_SUCCESS";
 export const UPDATE_CUSTOMER_PROFILE_FAIL = "usermaps/UPDATE_CUSTOMER_PROFILE_FAIL";
 export const GET_FILTER_SUBMEET = "usermaps/GET_FILTER_SUBMEET";
+export const GET_VENDOR_RATING_MODAL = "usermaps/GET_VENDOR_RATING_MODAL";
 
 var cancelAlertCounter = 0;
 var getVendorsCounter =0;
@@ -297,6 +298,7 @@ export const getDistance = () => async (dispatch, getState) => {
     .then(response => response.json())
     .then(responseJson => {
       var disMile = responseJson.rows[0].elements[0].distance.text;
+      console.log();
       disMile = disMile.split(" ", 2);
       var disUnit = disMile[1];
       var dis = disMile[0];
@@ -361,7 +363,7 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
   const { location, mechanicCurrentLocation } = getState().usermaps;
   if (location) {
     var dist = mechanicCurrentLocation.distance;
-    console.log(mechanicCurrentLocation.distance);
+    console.log(mechanicCurrentLocation);
     if (dist < 0.055) {
       dispatch({
         type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
@@ -380,7 +382,7 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
   });
   const { bookingStatusRes, bookData } = getState().usermaps;
   obj = Object.assign({}, bookingStatusRes);
-  // console.error(  bookingStatusRes.type);
+
   let test = new FormData();
   test.append("booking_id", bookData.booking_id);
   test.append("status", val);
@@ -388,7 +390,7 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
     .then(response => {
       if (response.status !== 0) {
         obj.type = "REACHED";
-        // console.error(bookingStatusRes.type);
+
         dispatch({
           type: GET_BOOKING_UPDATE_SUCCESS,
           payload: obj
@@ -400,7 +402,6 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
           dispatch({
             type: GET_BOOKING_COMPLETE
           });
-          dispatch(socketLeave());
         }
       } else {
         dispatch({
@@ -502,7 +503,6 @@ export const updateCustomerProfile = val => (dispatch,getState) => {
   test.append("id", userData.userId);
   test.append("first_name", fullNameCustomer);
   test.append("address", addressCustomer);
-  test.append("image", imageBase64Customer);
   Api.post(UPDATE_PROFILE, test).then(response => {
     console.log(test);
     if(response.status === 1){
@@ -559,4 +559,10 @@ export const getFilterSubmeet = () => (dispatch,getState) => {
   });
   Actions.NearbyGaraje();
   dispatch(getVendors());
+}
+
+export const getVendorRatingModal = () => (dispatch) => {
+  dispatch({
+    type:GET_VENDOR_RATING_MODAL,
+  });
 }

@@ -247,6 +247,7 @@ class NearbyGaraje extends Component {
                   <View style={inStyle.modalInnerView1}>
                     <Rating
                       imageSize={20}
+                      readonly={true}
                       startingValue={
                         this.props.vendorsData
                           ? this.props.vendorsData.rating

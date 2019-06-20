@@ -35,11 +35,13 @@ import {
   getReasonCheckbox,
   getConfirmBookingCancel,
   getCancelBookingModal,
-  getCancelBookingModalClose
+  getCancelBookingModalClose,
+  getVendorRating,
 } from "../../actions";
 import  MapViewDirections  from "../../Common/MapViewDirection";
 import CheckBox from "react-native-check-box";
-import { MOTORCYCLE,BIKE_FOR_MAP } from "../../images";
+import { MECHANIC_MAP_ICON,BIKE_FOR_MAP } from "../../images";
+import { Rating, AirbnbRating } from "react-native-ratings";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -52,7 +54,7 @@ class NearbyGaraje extends Component {
   }
 
   render() {
-    const { containerStyle } = styles;
+    const { containerStyle, continueButton, buttonText, createButton } = styles;
     return (
       <View style={containerStyle}>
         <StatusBar backgroundColor="#7960FF" />
@@ -79,9 +81,11 @@ class NearbyGaraje extends Component {
                   longitude: this.props.mechanicCurrentLocation.message[0]
                     .coords.longitude,
                 }}
+                  flat={true}
+                  rotation={this.props.mechanicCurrentLocation.message[0]
+                    .coords.heading}
               >
-                  <Image style={inStyle.imageStyle} source={BIKE_FOR_MAP} />
-
+                <Image source={MECHANIC_MAP_ICON} style={{height:45,width:45,resizeMode:'contain'}}/>
               </MapView.Marker.Animated>
             ) : null}
             {this.props.mechanicCurrentLocation ? (
@@ -96,7 +100,7 @@ class NearbyGaraje extends Component {
                   latitude: this.props.location.coords.latitude,
                   longitude: this.props.location.coords.longitude
                 }}
-                apikey={"AIzaSyCYvMpmVhFc0ydILEuXGJNYNGFnBoKPCL8"}
+                apikey={"AIzaSyAm_cQCYcozNa9WUVmASmSABGuuS6OSsIw"}
                 strokeWidth={5}
                 strokeColor="#7960FF"
               />
@@ -107,6 +111,7 @@ class NearbyGaraje extends Component {
                 longitude: this.props.location.coords.longitude,
 
               }}
+
             >
               <View style={inStyle.markerView1}>
                 <View style={inStyle.markerView2} />
@@ -114,6 +119,54 @@ class NearbyGaraje extends Component {
             </MapView.Marker.Animated>
           </MapView>
 
+          <Modal
+            visible={this.props.isVendorRatingModal}
+            onRequestClose={() => {
+              console.log("Modal has been closed.");
+            }}
+            animationType="slide"
+            transparent={true}
+            opacity={0.5}
+            style={{
+                height: 0.2 * ScreenHeight,
+              }}
+          >
+          <View style={{marginTop: 0.40 * ScreenHeight,
+                        height:0.20 * ScreenHeight,
+                        margin:10,
+                        backgroundColor:'white',
+                        borderRadius:5
+                        }}>
+            <Text style={{fontFamily:'circular-book',alignSelf:'center',margin:0.01 * ScreenHeight}}>
+            Rating for vendor service
+            </Text>
+                <AirbnbRating
+                  type="star"
+                  ratingBackgroundColor="transparent"
+                  imageSize={25}
+                  defaultRating={this.props.vendorRating}
+                  showRating={false}
+                  onFinishRating={rating => {
+                    console.log(rating);
+                    this.props.getVendorRating(rating);
+                  }}
+                />
+
+            <TouchableHighlight
+              onPress={() => {
+                var sts = 'completed'
+                this.props.getBookingUpdateUser(sts)
+              }}
+              underlayColor="white"
+              style={{alignSelf: "center",
+              marginTop: 0.03 * ScreenHeight}}
+            >
+              <View style={continueButton}>
+                <Text style={buttonText}>{this.props.loadingRatingDone?'loading...':'Done'}</Text>
+              </View>
+            </TouchableHighlight>
+            </View>
+            </Modal>
           <Modal
             visible={this.props.isBookCancelModal}
             onRequestClose={() => {
@@ -326,7 +379,9 @@ const mapStateToProps = ({ usermaps }) => {
     reasonCheckbox,
     isBookCancelModal,
     confirmDisable,
-    loadingBookig
+    loadingBookig,
+    vendorRating,
+    isVendorRatingModal
   } = usermaps;
   return {
     location,
@@ -337,7 +392,9 @@ const mapStateToProps = ({ usermaps }) => {
     reasonCheckbox,
     isBookCancelModal,
     confirmDisable,
-    loadingBookig
+    loadingBookig,
+    vendorRating,
+    isVendorRatingModal
   };
 };
 
@@ -350,6 +407,8 @@ export default connect(
     getReasonCheckbox,
     getConfirmBookingCancel,
     getCancelBookingModal,
-    getCancelBookingModalClose
+    getCancelBookingModalClose,
+    getVendorRating,
+
   }
 )(NearbyGaraje);

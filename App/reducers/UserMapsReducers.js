@@ -48,7 +48,8 @@ import {
   UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD,
   UPDATE_CUSTOMER_PROFILE_SUCCESS,
   UPDATE_CUSTOMER_PROFILE_FAIL,
-  GET_FILTER_SUBMEET
+  GET_FILTER_SUBMEET,
+  GET_VENDOR_RATING_MODAL
 } from "../actions/UserMaps";
 import { GET_USER_BOOKING_STATUS_ACCEPT } from "../actions/ui";
 
@@ -90,7 +91,8 @@ const INITIAL_STATE = {
   addressCustomer: "",
   emailCustomer: "",
   imageBase64Customer:'',
-  loadingCustomerProfile:false
+  loadingCustomerProfile:false,
+  isVendorRatingModal:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -575,6 +577,14 @@ export default (state = INITIAL_STATE, action) => {
             };
           }
           break;
+
+          case GET_VENDOR_RATING_MODAL:
+          {
+            return{
+              ...state,
+              isVendorRatingModal:true
+            }
+          }
 
     default:
       return state;

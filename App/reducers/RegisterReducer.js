@@ -29,7 +29,9 @@ import {
   GET_LOCATION_SUCCESS,
   SET_LOCATION_VISIBILITY,
   SET_LOCATION,
-  UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD
+  UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD,
+  UPDATE_REGISTER_DOCUMENT_UPLOAD,
+  DELETE_REGISTER_DOCUMENT
 } from "../actions/Register";
 
 const INITIAL_STATE = {
@@ -68,7 +70,9 @@ const INITIAL_STATE = {
   setLocationVisible: false,
   signupFail: "",
   imageBase64Register:'',
-  imageRegisterUri:''
+  imageRegisterUri:'',
+  documentRegisterUri:[],
+  documentBase64Register:[]
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -380,6 +384,25 @@ export default (state = INITIAL_STATE, action) => {
         }
         break;
 
+    case UPDATE_REGISTER_DOCUMENT_UPLOAD:
+    {
+      return{
+        ...state,
+        documentRegisterUri:[...state.documentRegisterUri,action.payload.uri],
+        documentBase64Register:[...state.documentBase64Register,action.payload.base64]
+      }
+    }
+
+      break;
+
+      case DELETE_REGISTER_DOCUMENT:
+      {
+        return{
+          ...state,
+          documentRegisterUri:[...action.payload],
+        }
+      }
+        break;
     default:
       return state;
       break;
