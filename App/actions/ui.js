@@ -14,6 +14,8 @@ export const GET_USER_PROFILE_DATA_START = "ui/GET_USER_PROFILE_DATA_START";
 export const GET_USER_PROFILE_DATA = "ui/GET_USER_PROFILE_DATA";
 export const GET_USER_BOOKING_STATUS_ACCEPT =
   "ui/GET_USER_BOOKING_STATUS_ACCEPT";
+  export const SET_ALL_STATE_TO_INITIAL =
+    "ui/SET_ALL_STATE_TO_INITIAL";
 
 export const loadFont = () => async dispatch => {
   await Font.loadAsync({
@@ -156,3 +158,9 @@ export const getUserData = () => async (dispatch, getState) => {
     }
   });
 };
+
+export const setAllStateToInitial = () =>  (dispatch) => {
+  dispatch({
+    type:SET_ALL_STATE_TO_INITIAL,
+  })
+}

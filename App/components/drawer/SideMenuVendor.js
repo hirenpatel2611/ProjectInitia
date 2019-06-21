@@ -12,6 +12,7 @@ import {
   CAR_ENGINE,
   TIMING_BELT
 } from "../../images";
+import { socketLeave,setAllStateToInitial } from "../../actions";
 
  class SideMenuVendor extends Component {
 
@@ -62,7 +63,9 @@ _deleteUser = async () => {
           style={textStyle}
           onPress={()=>{
             this._deleteUser();
-            Actions.SplashFront()
+            this.props.socketLeave();
+            this.props.setAllStateToInitial();
+            Actions.SplashFront();
           }}
         >Log Out</Button>
         </CardSection>
@@ -71,4 +74,17 @@ _deleteUser = async () => {
   }
 }
 
-export default  SideMenuVendor;
+const mapStateToProps = ({ forgot }) => {
+  const { forgotOTP } = forgot;
+  return {
+    forgotOTP
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  {
+    socketLeave,
+    setAllStateToInitial
+  }
+)(SideMenuVendor);

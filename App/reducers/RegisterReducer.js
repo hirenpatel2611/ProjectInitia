@@ -33,6 +33,7 @@ import {
   UPDATE_REGISTER_DOCUMENT_UPLOAD,
   DELETE_REGISTER_DOCUMENT
 } from "../actions/Register";
+import {SET_ALL_STATE_TO_INITIAL} from '../actions/ui';
 
 const INITIAL_STATE = {
   isTwoWheeler: false,
@@ -403,6 +404,16 @@ export default (state = INITIAL_STATE, action) => {
         }
       }
         break;
+
+        case SET_ALL_STATE_TO_INITIAL:
+        {
+          return{
+            ...state,
+            ...INITIAL_STATE
+          }
+        }
+        break;
+
     default:
       return state;
       break;

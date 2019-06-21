@@ -25,7 +25,8 @@ import styles from "./usermapsStyle";
 import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { Constants, IntentLauncher } from "expo";
+import Constants from 'expo-constants';
+import * as IntentLauncher from 'expo-intent-launcher';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import {
@@ -158,10 +159,13 @@ class NearbyGaraje extends Component {
                 this.props.getBookingUpdateUser(sts)
               }}
               underlayColor="white"
-              style={{height:0.05 * ScreenHeight,
+              style={{
+                marginTop:0.02 * ScreenHeight,
+                height:0.05 * ScreenHeight,
               width: 0.78 * ScreenWidth,
               backgroundColor: "#7960FF",
               justifyContent: "center",
+              alignSelf:'center',
               alignItems: "center",
               borderRadius: 25}}
             >

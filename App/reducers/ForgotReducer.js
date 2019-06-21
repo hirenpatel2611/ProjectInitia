@@ -9,6 +9,7 @@ UPDATE_SUBMEET_FORGOT_ENTER_PASSWORD,
 UPDATE_SUBMEET_FORGOT_REENTER_PASSWORD,
 ON_SUBMEET_RESET_PASSWORD_START
 } from "../actions/ForgotPassword";
+import {SET_ALL_STATE_TO_INITIAL} from '../actions/ui';
 
 const INITIAL_STATE = {
 forgotMobileNo:'',
@@ -105,6 +106,15 @@ export default (state = INITIAL_STATE, action) => {
                           ...state,
                           forgotPasswordLoading:true
                         };
+                      }
+                      break;
+
+                      case SET_ALL_STATE_TO_INITIAL:
+                      {
+                        return{
+                          ...state,
+                          ...INITIAL_STATE
+                        }
                       }
                       break;
     default:

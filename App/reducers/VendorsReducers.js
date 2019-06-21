@@ -28,6 +28,7 @@ import {
   UPDATE_VENDOR_PROFILE_SUCCESS,
   UPDATE_VENDOR_PROFILE_FAIL
 } from "../actions/Vendors";
+import {SET_ALL_STATE_TO_INITIAL} from '../actions/ui';
 
 const INITIAL_STATE = {
   loadingFutureBookigList: false,
@@ -354,6 +355,16 @@ export default (state = INITIAL_STATE, action) => {
       imageBase64Vendor:action.payload.base64
     }
   }
+  break;
+
+  case SET_ALL_STATE_TO_INITIAL:
+  {
+    return{
+      ...state,
+      ...INITIAL_STATE
+    }
+  }
+  break;
 
     default:
       return state;

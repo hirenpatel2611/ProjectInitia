@@ -51,7 +51,7 @@ import {
   GET_FILTER_SUBMEET,
   GET_VENDOR_RATING_MODAL
 } from "../actions/UserMaps";
-import { GET_USER_BOOKING_STATUS_ACCEPT } from "../actions/ui";
+import { GET_USER_BOOKING_STATUS_ACCEPT,SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
 const INITIAL_STATE = {
   loading: false,
@@ -585,6 +585,15 @@ export default (state = INITIAL_STATE, action) => {
               isVendorRatingModal:true
             }
           }
+
+          case SET_ALL_STATE_TO_INITIAL:
+          {
+            return{
+              ...state,
+              ...INITIAL_STATE
+            }
+          }
+          break;
 
     default:
       return state;

@@ -26,11 +26,11 @@ import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import {
-  IntentLauncher,
   Asset,
   SplashScreen
 } from "expo";
-import Constants from 'expo-constants'
+import * as IntentLauncher from 'expo-intent-launcher';
+import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import {
@@ -495,7 +495,7 @@ const inStyle = {
     color: "#7960FF"
   },
   imageVendor: {
-    borderRadius:15,
+    borderRadius:35,
     borderColor: "#7960FF",
     width: 35,
     height: 35,

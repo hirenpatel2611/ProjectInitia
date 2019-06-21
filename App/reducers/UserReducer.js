@@ -5,6 +5,7 @@ import {SET_USER_INFO,
         GET_USER_PROFILE_DATA,
         GET_USER_PROFILE_DATA_START,
         UPDATE_IS_VENDOR,
+        SET_ALL_STATE_TO_INITIAL
         } from '../actions/ui';
 
 
@@ -65,6 +66,15 @@ export default (state = INITIAL_STATE, action) => {
 
           case UPDATE_IS_VENDOR:
             return { ...state, isVendorLoggedIn: action.payload };
+            break;
+
+            case SET_ALL_STATE_TO_INITIAL:
+            {
+              return{
+                ...state,
+                ...INITIAL_STATE
+              }
+            }
             break;
 
 

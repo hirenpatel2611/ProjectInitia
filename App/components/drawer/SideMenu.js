@@ -19,7 +19,7 @@ import {
   CAR_ENGINE,
   TIMING_BELT
 } from "../../images";
-import { socketLeave } from "../../actions";
+import { socketLeave,setAllStateToInitial } from "../../actions";
 
 
 class SideMenu extends Component {
@@ -131,8 +131,9 @@ class SideMenu extends Component {
             style={textStyle}
             onPress={() => {
               this._deleteUser();
-              Actions.SplashFront();
               this.props.socketLeave();
+              Actions.SplashFront();
+              this.props.setAllStateToInitial();
             }}
           >
             Log Out
@@ -153,6 +154,7 @@ const mapStateToProps = ({ forgot }) => {
 export default connect(
   mapStateToProps,
   {
-    socketLeave
+    socketLeave,
+    setAllStateToInitial
   }
 )(SideMenu);

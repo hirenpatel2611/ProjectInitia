@@ -4,7 +4,8 @@ import {
   TouchableOpacity,
   Text,
   AsyncStorage,
-  Dimensions
+  Dimensions,
+  AppState
 } from "react-native";
 import { Scene, Router, ActionConst } from "react-native-router-flux";
 import CardStackStyleInterpolator from "react-navigation/src/views/CardStack/CardStackStyleInterpolator";
@@ -30,7 +31,8 @@ import {
   updateLoggedInState,
   updateIsVendor,
   createSocketChannel,
-  getUserData
+  getUserData,
+  getFutureBookings
 } from "./actions";
 import SideMenu from "./components/drawer/SideMenu";
 import SideMenuVendor from "./components/drawer/SideMenuVendor";
@@ -47,6 +49,19 @@ class RouterComponent extends Component {
     this._retrieveData();
     SplashScreen.preventAutoHide();
   }
+
+  componentDidMount(){
+    AppState.addEventListener('change', this._handleAppStateChange);
+  }
+  componentWillUnmount() {
+    AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+  _handleAppStateChange = async(nextAppState) => {
+    const myId = await AsyncStorage.getItem("user_id");
+     this.props.createSocketChannel(myId)
+     this.props.getFutureBookings()
+    // this.setState({appState: nextAppState});
+  };
 
   _retrieveData = async () => {
     try {
@@ -246,6 +261,8 @@ export default connect(
     updateLoggedInState,
     updateIsVendor,
     createSocketChannel,
-    getUserData
+    getUserData,
+    getFutureBookings
+
   }
 )(RouterComponent);

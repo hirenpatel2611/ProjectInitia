@@ -6,6 +6,7 @@ import {
   LOGIN_FAILED,
   ON_SUBMEET_LOGIN_FORM
 } from "../actions/Login";
+import {SET_ALL_STATE_TO_INITIAL} from '../actions/ui';
 
 const INITIAL_STATE = {
   password: "",
@@ -66,6 +67,15 @@ export default (state = INITIAL_STATE, action) => {
     case ON_SUBMEET_LOGIN_FORM:
       {
         return { ...state, onSubmeetLoginForm: true };
+      }
+      break;
+
+      case SET_ALL_STATE_TO_INITIAL:
+      {
+        return{
+          ...state,
+          ...INITIAL_STATE
+        }
       }
       break;
 
