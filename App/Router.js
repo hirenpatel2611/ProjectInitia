@@ -53,9 +53,9 @@ class RouterComponent extends Component {
   componentDidMount() {
     AppState.addEventListener("change", this._handleAppStateChange);
   }
-  componentWillUnmount() {
-    AppState.removeEventListener("change", this._handleAppStateChange);
-  }
+  // componentWillUnmount() {
+  //   AppState.removeEventListener("change", this._handleAppStateChange);
+  // }
   _handleAppStateChange = async nextAppState => {
     if (this.props.isLoggedIn) {
       const myId = await AsyncStorage.getItem("user_id");

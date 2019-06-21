@@ -142,7 +142,7 @@ class NearbyGaraje extends Component {
               //this.props.getDistance();
             }}
           >
-            <Image style={inStyle.imageVendor} source={vendor.profile_image?{uri:vendor.profile_image}:USER2} />
+            <Image style={inStyle.imageVendor} resizeMode={"cover"} source={vendor.profile_image?{uri:vendor.profile_image}:USER2} />
           </MapView.Marker.Animated>
         );
       });

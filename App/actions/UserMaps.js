@@ -345,6 +345,7 @@ export const getBookingStatus = val => async (dispatch, getState) => {
                 type: GET_BOOKING_CANCEL_BY_VENDOR
               });
               Actions.NearbyGaraje();
+
             }
           }
         ],

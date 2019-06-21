@@ -163,15 +163,21 @@ class FutureBooking extends Component {
                       marginTop: 10
                     }}
                   >
-                    <Text
+                  <View style={{width:140}}>
+                  <Text
                       style={{
-                        fontSize: 14,
+                        fontSize: 10,
                         color: "#7960FF",
-                        fontFamily: "circular-book"
+                        fontFamily: "circular-book",
+                        top:4
+
                       }}
+                      numberOfLines= {1}
+                      ellipsizeMode="tail"
                     >
                       {item.customer.email}
                     </Text>
+                    </View>
 
                     <View
                       style={{

@@ -11,6 +11,8 @@ import { Actions } from "react-native-router-flux";
 
 export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
+var isVen = null;
+var disp = null;
 
 const LOCATION_TASK_NAME = "background-location-task";
 var peer = null;
@@ -22,6 +24,8 @@ export const createSocketChannel = val => async (dispatch, getState) => {
     transports: ["websocket"]
   });
   const { isUserVendor, userData } = getState().user;
+  isVen=isUserVendor;
+  disp=dispatch;
   chatSocket.emit("self_room", { room: `${val}` });
 
   chatSocket.on("ping", function(data) {
@@ -96,60 +100,60 @@ TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
   chatSocket.on("broadcast", function(data) {
     switch (data.type) {
       case "BOOK":
-        dispatch(getBookingModal(data.message));
+        disp(getBookingModal(data.message));
         break;
 
       case "ACCEPT":
-        if (isUserVendor !== "1") {
-          dispatch(getBookingStatus(data));
+        if (isVen !== "1") {
+          disp(getBookingStatus(data));
         } else {
-          dispatch(getBookingVendorStatus(data));
+          disp(getBookingVendorStatus(data));
         }
 
         break;
 
       case "ON-THE-WAY":
-        if (isUserVendor !== "1") {
-          dispatch(getBookingStatus(data));
+        if (isVen !== "1") {
+          disp(getBookingStatus(data));
         } else {
-          dispatch(getBookingVendorStatus(data));
+          disp(getBookingVendorStatus(data));
         }
 
         break;
 
       case "CANCEL":
-        if (isUserVendor !== "1") {
-          dispatch(getBookingStatus(data));
+        if (isVen !== "1") {
+          disp(getBookingStatus(data));
         } else {
-          dispatch(getBookingVendorStatus(data));
+          disp(getBookingVendorStatus(data));
         }
         break;
 
       case "MECHANIC_CURRENT_LOCATION":
-        if (isUserVendor !== "1") {
+        if (isVen !== "1") {
 
-          dispatch(getMechanicCurrentLocation(data));
+          disp(getMechanicCurrentLocation(data));
         }
         break;
 
       case "REACHED":
-        if (isUserVendor === "1") {
+        if (isVen === "1") {
           if (isUserVendor !== "1") {
           } else {
-            dispatch(getBookingVendorStatus(data));
+            disp(getBookingVendorStatus(data));
           }
         }
         break;
 
       case "REACHED":
-        if (isUserVendor === "1") {
-          dispatch(getBookingVendorStatus(data));
+        if (isVen === "1") {
+          disp(getBookingVendorStatus(data));
         }
         break;
 
       case "COMPLETED":
-        if (isUserVendor === "1") {
-          dispatch(getBookingVendorStatus(data));
+        if (isVen === "1") {
+          disp(getBookingVendorStatus(data));
         } else {
           Actions.customerRating();
         }
