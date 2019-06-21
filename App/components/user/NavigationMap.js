@@ -86,7 +86,7 @@ class NearbyGaraje extends Component {
                   rotation={this.props.mechanicCurrentLocation.message[0]
                     .coords.heading}
               >
-                <Image source={MECHANIC_MAP_ICON} style={{height:45,width:45,resizeMode:'contain'}}/>
+                <Image source={BIKE_FOR_MAP} style={{height:45,width:45,resizeMode:'contain'}}/>
               </MapView.Marker.Animated>
             ) : null}
             {this.props.mechanicCurrentLocation ? (

@@ -495,7 +495,7 @@ const inStyle = {
     color: "#7960FF"
   },
   imageVendor: {
-    borderRadius:35,
+    borderRadius:17.5,
     borderColor: "#7960FF",
     width: 35,
     height: 35,

@@ -50,17 +50,24 @@ class RouterComponent extends Component {
     SplashScreen.preventAutoHide();
   }
 
-  componentDidMount(){
-    AppState.addEventListener('change', this._handleAppStateChange);
+  componentDidMount() {
+    AppState.addEventListener("change", this._handleAppStateChange);
   }
   componentWillUnmount() {
-    AppState.removeEventListener('change', this._handleAppStateChange);
+    AppState.removeEventListener("change", this._handleAppStateChange);
   }
-  _handleAppStateChange = async(nextAppState) => {
-    const myId = await AsyncStorage.getItem("user_id");
-     this.props.createSocketChannel(myId)
-     this.props.getFutureBookings()
-    // this.setState({appState: nextAppState});
+  _handleAppStateChange = async nextAppState => {
+    if (this.props.isLoggedIn) {
+      const myId = await AsyncStorage.getItem("user_id");
+      const valueIsvendor = await AsyncStorage.getItem("is_vendor");
+      this.props.createSocketChannel(myId);
+      console.log(valueIsvendor);
+      if (valueIsvendor === '1') {
+        this.props.getFutureBookings();
+      } else {
+        this.props.getUserData();
+      }
+    } // this.setState({appState: nextAppState});
   };
 
   _retrieveData = async () => {
@@ -263,6 +270,5 @@ export default connect(
     createSocketChannel,
     getUserData,
     getFutureBookings
-
   }
 )(RouterComponent);
