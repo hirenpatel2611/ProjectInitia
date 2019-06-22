@@ -218,6 +218,7 @@ export const BookingListCancle = () => (dispatch, getState) => {
   test.append("reason", cancleReasonVendor);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
+      console.log(response);
       if (response.status === 1) {
         FutureBookingList.map(booking => {
           if (booking.booking_id === cancelBookingData.booking_id) {
@@ -229,6 +230,10 @@ export const BookingListCancle = () => (dispatch, getState) => {
           payload: FutureBookingList
         });
         dispatch(connectTosocketBookingCancle(cancelBookingData.customer_id));
+      } else {
+        if(response.message === 'something went wrong'){
+          BookingListCancle();
+        }
       }
     })
     .catch(err => {
@@ -400,7 +405,5 @@ export const upadteVendorProfileImage = () => async (dispatch) => {
           type:UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD,
           payload:result
         });
-
       }
-
 }

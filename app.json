@@ -31,9 +31,11 @@
             "NSPhotoLibraryAddUsageDescription": "We need access to you photo library in order to select photos for avatar and created games. Do allow this app to access you gallery?"
           }
         },
-        "android": {
-          "package": "com.ilife.app"
 
-        }
+
+        "android": {
+          "package": "com.ilife.app",
+
   }
+}
 }

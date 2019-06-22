@@ -345,7 +345,7 @@ export const getBookingStatus = val => async (dispatch, getState) => {
                 type: GET_BOOKING_CANCEL_BY_VENDOR
               });
               Actions.NearbyGaraje();
-
+              cancelAlertCounter=0;
             }
           }
         ],
@@ -398,7 +398,7 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
           payload: obj
         });
         dispatch(connectTosocketReached());
-        if (val === "completed") {
+        if (val === "completed") {ß
           dispatch(getRating());
 
           dispatch({
@@ -565,6 +565,7 @@ export const getFilterSubmeet = () => (dispatch,getState) => {
 }
 
 export const getVendorRatingModal = () => (dispatch) => {
+  console.error();
   dispatch({
     type:GET_VENDOR_RATING_MODAL,
   });

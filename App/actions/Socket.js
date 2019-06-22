@@ -155,7 +155,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
         if (isVen === "1") {
           disp(getBookingVendorStatus(data));
         } else {
-          Actions.customerRating();
+          dispatch(getVendorRatingModal())
         }
         break;
 
@@ -212,7 +212,7 @@ export const connectTosocketBookingCancle = val => async (
   } else {
     cancelData = bookData;
   }
-
+  console.log(cancelData);
   chatSocket.emit("booking_status", {
     room: `${val}`,
     message: cancelData,
