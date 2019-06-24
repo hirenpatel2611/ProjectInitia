@@ -8,9 +8,8 @@ import {
   UPDATE_PROFILE
 } from "../config";
 import { connectTosocketApprov, connectTosocketBookingCancle } from "./Socket";
-import { Asset, SplashScreen } from "expo";
+import { Asset, SplashScreen,ImagePicker,Permissions,Constants } from "expo";
 import { Actions } from "react-native-router-flux";
-import * as ImagePicker from 'expo-image-picker';
 
 export const GET_FUTURE_BOOKING_LIST_START =
   "vendors/GET_FUTURE_BOOKING_LIST_START";

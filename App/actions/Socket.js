@@ -1,10 +1,7 @@
 import Peer from "peerjs";
 import { AsyncStorage } from "react-native";
 import io from "socket.io-client";
-import { BackgroundFetch } from "expo";
-import * as Location from 'expo-location';
-import * as TaskManager from 'expo-task-manager';
-import * as Permissions from 'expo-permissions';
+import { BackgroundFetch,Location,TaskManager,Permissions } from "expo";
 import { getBookingModal, getBookingVendorStatus } from "./Vendors";
 import { getBookingStatus, getMechanicCurrentLocation,getVendorRatingModal } from "./UserMaps";
 import { Actions } from "react-native-router-flux";

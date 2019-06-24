@@ -55,10 +55,8 @@ import TimerMixin from "react-timer-mixin";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { IntentLauncher } from "expo";
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
-import Constants from 'expo-constants'
+import { IntentLauncherAndroid,Location,Permissions,Constants } from "expo";
+
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -99,8 +97,8 @@ class Profile extends Component {
     await Location.hasServicesEnabledAsync()
       .then(async res => {
         if (!res) {
-          perm = await IntentLauncher.startActivityAsync(
-            IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
+          perm = await IntentLauncherAndroid.startActivityAsync(
+            IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
           );
         }
         await Location.hasServicesEnabledAsync()

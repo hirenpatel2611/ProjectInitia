@@ -27,12 +27,12 @@ import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import {
   Asset,
-  SplashScreen
+  SplashScreen,
+  Constants,
+  Location,
+  Permissions,
+  IntentLauncherAndroid
 } from "expo";
-import * as IntentLauncher from 'expo-intent-launcher';
-import Constants from 'expo-constants';
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
 import {
   getVendors,
   getUserLocationFail,
@@ -83,8 +83,8 @@ class NearbyGaraje extends Component {
     await Location.hasServicesEnabledAsync()
       .then(async res => {
         if (!res) {
-          perm = await IntentLauncher.startActivityAsync(
-            IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
+          perm = await IntentLauncherAndroid.startActivityAsync(
+            IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
           );
         }
         await Location.hasServicesEnabledAsync()

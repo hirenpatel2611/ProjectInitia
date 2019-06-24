@@ -18,9 +18,8 @@ import {
   connectTosocketBookingCancle,
   socketLeave
 } from "./Socket";
-import { Asset, SplashScreen } from "expo";
+import { Asset, SplashScreen,ImagePicker, Permissions,Constants } from "expo";
 import { getUserData } from "./ui";
-import * as ImagePicker from 'expo-image-picker';
 
 export const GET_VENDORS_START = "usermaps/GET_VENDORS_START";
 export const GET_VENDORS_SUCCESS = "usermaps/GET_VENDORS_SUCCESS";
@@ -522,22 +521,22 @@ export const updateCustomerProfile = val => (dispatch,getState) => {
 }
 
 export const upadteCustomerProfileImage = val => async (dispatch) => {
-  let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        base64: true,
-        allowsEditing: true,
-        aspect: [4, 4],
-      });
-
-      console.log(result);
-
-      if (!result.cancelled) {
-        dispatch({
-          type:UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD,
-          payload:result
-        });
-
-      }
+  // let result = await ImagePicker.launchImageLibraryAsync({
+  //       mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //       base64: true,
+  //       allowsEditing: true,
+  //       aspect: [4, 4],
+  //     });
+  //
+  //     console.log(result);
+  //
+  //     if (!result.cancelled) {
+  //       dispatch({
+  //         type:UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD,
+  //         payload:result
+  //       });
+  //
+  //     }
 }
 
 export const getFilterSubmeet = () => (dispatch,getState) => {

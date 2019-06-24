@@ -3,7 +3,8 @@ import Api from "../api/api";
 import { URL_USER_SIGNUP, URL_USER_OTP } from "../config";
 import { Actions } from "react-native-router-flux";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import * as ImagePicker from 'expo-image-picker';
+import {ImagePicker, Permissions, Constants} from 'expo';
+
 
 export const UPDATE_VEHICLE_BOOL = "register/UPDATE_VEHICLE_BOOL";
 export const UPDATE_CAR_BOOL = "register/UPDATE_CAR_BOOL";
