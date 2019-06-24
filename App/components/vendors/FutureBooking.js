@@ -92,20 +92,12 @@ class FutureBooking extends Component {
                     <Text
                       style={{
                         fontFamily: "circular-bold",
-                        fontSize: 20,
-                        color: "#4A4A4A",
-                        fontFamily: "circular-bold"
-                      }}
-                    />
-                    <Text
-                      style={{
-                        fontFamily: "circular-bold",
                         fontSize: 16,
-                        color: "#4A4A4A",
+                        color: "#7960FF",
                         fontFamily: "circular-book"
                       }}
                     >
-                      Distance
+                      Dist.({item.customer.distance?item.customer.distance:0})
                     </Text>
                   </View>
                   <View
@@ -136,16 +128,7 @@ class FutureBooking extends Component {
                       {item.customer.OTP}
                     </Text>
 
-                    <Text
-                      style={{
-                        fontFamily: "circular-bold",
-                        fontSize: 16,
-                        color: "#7960FF",
-                        fontFamily: "circular-book"
-                      }}
-                    >
-                      {item.customer.distance}
-                    </Text>
+
                     <Text
                       style={{
                         fontFamily: "circular-bold",

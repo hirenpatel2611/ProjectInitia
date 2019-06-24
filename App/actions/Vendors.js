@@ -86,14 +86,12 @@ export const getFutureBookings = () => async (dispatch, getState) => {
 
 export const getCustomerDistanceList = val => async (dispatch, getState) => {
   const { vendorBookingList } = getState().vendors;
-  const { vendors } = getState().usermaps;
-  const vendorLatitude = await AsyncStorage.getItem("user_latitude");
-  const vendorLongitude = await AsyncStorage.getItem("user_longitude");
-
+  const {userData} = await getState().user;
+console.log(userData);
   var FutureBookingList = [];
   var url = "";
   const APIKEY = "AIzaSyAm_cQCYcozNa9WUVmASmSABGuuS6OSsIw";
-  var url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${vendorLatitude},${vendorLongitude}&destinations=${
+  var url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${userData.userLatitude},${userData.userLongitude}&destinations=${
     vendorBookingList[0].booking_latitude
   },${vendorBookingList[0].booking_longitude}`;
   vendorBookingList.map(customer => {
@@ -103,9 +101,11 @@ export const getCustomerDistanceList = val => async (dispatch, getState) => {
 
   url = url + `&key=${APIKEY}`;
 
+  console.log(url);
   await fetch(url)
     .then(response => response.json())
     .then(responseJson => {
+      console.log(responseJson);
       for (i = 0; i < vendorBookingList.length; i++) {
         var disMile = responseJson.rows[0].elements[i].distance
           ? responseJson.rows[0].elements[i].distance.text
