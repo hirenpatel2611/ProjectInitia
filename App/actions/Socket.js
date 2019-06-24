@@ -26,7 +26,7 @@ export const createSocketChannel = val => async (dispatch, getState) => {
   chatSocket.emit("self_room", { room: `${val}` });
 
   chatSocket.on("ping", function(data) {
-    
+
     chatSocket.emit("pong");
   });
 
@@ -151,7 +151,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
         if (isVen === "1") {
           disp(getBookingVendorStatus(data));
         } else {
-          dispatch(getVendorRatingModal())
+          disp(getVendorRatingModal())
         }
         break;
 
