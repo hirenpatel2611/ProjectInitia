@@ -81,7 +81,7 @@ class NearbyGaraje extends Component {
                 }}
                   flat={true}
                   rotation={this.props.mechanicCurrentLocation.message[0]
-                    .coords.heading+90}
+                    .coords.heading-90}
               >
                 <Image source={BIKE_FOR_MAP} style={{height:45,width:45,resizeMode:'contain'}}/>
               </MapView.Marker.Animated>
