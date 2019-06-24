@@ -26,7 +26,7 @@ export const createSocketChannel = val => async (dispatch, getState) => {
   chatSocket.emit("self_room", { room: `${val}` });
 
   chatSocket.on("ping", function(data) {
-    console.log(data);
+    
     chatSocket.emit("pong");
   });
 
@@ -134,12 +134,11 @@ TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
         break;
 
       case "REACHED":
-        if (isVen === "1") {
-          if (isUserVendor !== "1") {
+
+          if (isVen !== "1") {
           } else {
             disp(getBookingVendorStatus(data));
           }
-        }
         break;
 
       case "REACHED":

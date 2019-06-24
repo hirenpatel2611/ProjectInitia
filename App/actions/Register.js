@@ -75,7 +75,6 @@ export const requestOtp = () => (dispatch, getState) => {
   test.append("mobile", mobileno);
   Api.post(URL_USER_OTP, test)
     .then(response => {
-      console.log(response);
       if (response.loggedIn === 1) {
         dispatch({
           type: REQUEST_OTP_SUCCESS,
@@ -245,7 +244,6 @@ export const signupUser = () => (dispatch, getState) => {
   }
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
-      console.log(response);
       if (response.status === 1) {
         dispatch({
           type: SIGNUP_SUCCESSFUL,
@@ -336,7 +334,6 @@ export const deleteRegisterDocument = documnet => (dispatch,getState) => {
 const {documentRegisterUri} = getState().register;
 var index = documentRegisterUri.indexOf(documnet);
 documentRegisterUri.splice(index,1);
-console.log(documentRegisterUri);
 dispatch({
   type:DELETE_REGISTER_DOCUMENT,
   payload:documentRegisterUri

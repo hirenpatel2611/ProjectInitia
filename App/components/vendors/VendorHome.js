@@ -13,7 +13,7 @@ import {
   Slider,
   StyleSheet,
   Platform,
-  
+
   Animated,
   AsyncStorage
 } from "react-native";
@@ -113,7 +113,6 @@ class VendorHome extends Component {
           </MapView.Marker.Animated>
         );
       });
-      console.log(markers);
     }
     const { containerStyle } = styles;
     let text = "Waiting..";

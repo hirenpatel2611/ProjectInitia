@@ -384,7 +384,8 @@ const mapStateToProps = ({ usermaps }) => {
     confirmDisable,
     loadingBookig,
     vendorRating,
-    isVendorRatingModal
+    isVendorRatingModal,
+    loadingRatingDone
   } = usermaps;
   return {
     location,
@@ -397,7 +398,8 @@ const mapStateToProps = ({ usermaps }) => {
     confirmDisable,
     loadingBookig,
     vendorRating,
-    isVendorRatingModal
+    isVendorRatingModal,
+    loadingRatingDone
   };
 };
 

@@ -88,13 +88,11 @@ export const getVendors = () => (dispatch, getState) => {
     type: GET_VENDORS_START
   });
   const {vendorServiceType,rating} =getState().usermaps;
-  console.log(rating);
   let test = new FormData();
   test.append("service_type", vendorServiceType);
   test.append("rating", rating);
   Api.post(GET_VENDOR, test)
     .then(response => {
-      console.log(response);
       if (response.status === 0) {
         if(getVendorsCounter<5){
         dispatch(getVendors());
@@ -363,7 +361,7 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
   const { location } = getState().usermaps;
   if (location) {
     var dist = val.distance;
-    console.log(val);
+    console.log(val.distance);
     if (dist < 0.055) {
       dispatch({
         type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
@@ -397,7 +395,7 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
           payload: obj
         });
         dispatch(connectTosocketReached());
-        if (val === "completed") {ß
+        if (val === "completed") {
           dispatch(getRating());
 
           dispatch({
@@ -506,7 +504,6 @@ export const updateCustomerProfile = val => (dispatch,getState) => {
   test.append("first_name", fullNameCustomer);
   test.append("address", addressCustomer);
   Api.post(UPDATE_PROFILE, test).then(response => {
-    console.log(test);
     if(response.status === 1){
       dispatch({
         type:UPDATE_CUSTOMER_PROFILE_SUCCESS,
@@ -554,7 +551,7 @@ export const getFilterSubmeet = () => (dispatch,getState) => {
 
   var vendorPerameter ={vehicle_type:vehicle_type,
                         rating:rating};
-  console.log(vendorPerameter);
+
   dispatch({
     type:GET_FILTER_SUBMEET,
     payload:vendorPerameter
@@ -564,7 +561,6 @@ export const getFilterSubmeet = () => (dispatch,getState) => {
 }
 
 export const getVendorRatingModal = () => (dispatch) => {
-  console.error();
   dispatch({
     type:GET_VENDOR_RATING_MODAL,
   });

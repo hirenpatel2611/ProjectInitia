@@ -112,7 +112,6 @@ class MapViewDirections extends Component {
 						coordinates: this.decode(route.overview_polyline.points)
 					});
 					var DandD = {distance:distance,duration:duration}
-					console.error(DandD);
 					this.props.setDurationAndDistance(DandD);
 				} else {
 					return Promise.reject();

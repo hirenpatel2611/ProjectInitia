@@ -217,8 +217,8 @@ export const BookingListCancle = () => (dispatch, getState) => {
   test.append("reason", cancleReasonVendor);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log(response);
       if (response.status === 1) {
+        dispatch(connectTosocketBookingCancle(cancelBookingData.customer_id));
         FutureBookingList.map(booking => {
           if (booking.booking_id === cancelBookingData.booking_id) {
             booking.status = "cancle";
@@ -228,7 +228,6 @@ export const BookingListCancle = () => (dispatch, getState) => {
           type: BOOKING_LIST_CANCLE_SUCCESS,
           payload: FutureBookingList
         });
-        dispatch(connectTosocketBookingCancle(cancelBookingData.customer_id));
       } else {
         if(response.message === 'something went wrong'){
           BookingListCancle();
@@ -252,6 +251,7 @@ export const BookingListApprove = val => (dispatch, getState) => {
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       if (response.status === 1) {
+        dispatch(getMechanicOtp(val));
         FutureBookingList.map(booking => {
           if (booking.booking_id === val) {
             booking.status = "accept";
@@ -261,7 +261,6 @@ export const BookingListApprove = val => (dispatch, getState) => {
           type: GET_BOOKINGLIST_APPROVE_SUCCESS,
           payload: { val, FutureBookingList }
         });
-        dispatch(getMechanicOtp(val));
       } else {
         dispatch({
           type: GET_BOOKINGLIST_APPROVE_FAIL
@@ -365,7 +364,7 @@ export const updateVendorProfile = val => (dispatch,getState) => {
   test.append("address", addressVendor);
   test.append("profile_image", imageBase64Vendor);
   Api.post(UPDATE_PROFILE, test).then(response => {
-    console.log(test);
+
     if(response.status === 1){
       dispatch({
         type:UPDATE_VENDOR_PROFILE_SUCCESS,
@@ -397,7 +396,6 @@ export const upadteVendorProfileImage = () => async (dispatch) => {
         aspect: [4, 4],
       });
 
-      console.log(result);
 
       if (!result.cancelled) {
         dispatch({
