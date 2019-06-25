@@ -101,11 +101,9 @@ export const getCustomerDistanceList = val => async (dispatch, getState) => {
 
   url = url + `&key=${APIKEY}`;
 
-  console.log(url);
   await fetch(url)
     .then(response => response.json())
     .then(responseJson => {
-      console.log(responseJson);
       for (i = 0; i < vendorBookingList.length; i++) {
         var disMile = responseJson.rows[0].elements[i].distance
           ? responseJson.rows[0].elements[i].distance.text
