@@ -208,7 +208,7 @@ export const connectTosocketBookingCancle = val => async (
   } else {
     cancelData = bookData;
   }
-  console.log(cancelData);
+  
   chatSocket.emit("booking_status", {
     room: `${val}`,
     message: cancelData,

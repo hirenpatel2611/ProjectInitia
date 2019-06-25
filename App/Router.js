@@ -59,7 +59,8 @@ class RouterComponent extends Component {
   _handleAppStateChange = async nextAppState => {
     if (this.props.isLoggedIn) {
       const myId = await AsyncStorage.getItem("user_id");
-      const valueIsvendor = await AsyncStorage.getItem("user_id");
+      const valueIsvendor = await AsyncStorage.getItem("is_vendor");
+      this.props.createSocketChannel(myId);
       if (valueIsvendor === '1') {
         this.props.getFutureBookings();
       } else {

@@ -295,7 +295,6 @@ export const getDistance = () => async (dispatch, getState) => {
     .then(response => response.json())
     .then(responseJson => {
       var disMile = responseJson.rows[0].elements[0].distance.text;
-      console.log();
       disMile = disMile.split(" ", 2);
       var disUnit = disMile[1];
       var dis = disMile[0];
@@ -451,7 +450,6 @@ export const getRating = () => (dispatch, getState) => {
   test.append("vendor_id", bookData.vendor_id);
   test.append("rating", vendorRating);
   Api.post(RATING_BY_CUSTOMER, test).then(response => {
-    console.log(response);
     Actions.NearbyGaraje();
     dispatch({
       type: GET_RATING_SUCCESS

@@ -87,7 +87,7 @@ export const getFutureBookings = () => async (dispatch, getState) => {
 export const getCustomerDistanceList = val => async (dispatch, getState) => {
   const { vendorBookingList } = getState().vendors;
   const {userData} = await getState().user;
-console.log(userData);
+
   var FutureBookingList = [];
   var url = "";
   const APIKEY = "AIzaSyAm_cQCYcozNa9WUVmASmSABGuuS6OSsIw";
