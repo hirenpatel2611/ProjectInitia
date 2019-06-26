@@ -57,7 +57,8 @@ const INITIAL_STATE = {
   emailVendor: "",
   imageVendorUri:'',
   imageBase64Vendor:'',
-  loadingProfileUpdate:false
+  loadingProfileUpdate:false,
+  customerDistance:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -108,9 +109,9 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isBooking: true,
-
           bookingData: action.payload.bookData,
-          bookUserData: action.payload.userData
+          bookUserData: action.payload.userData,
+          customerDistance:action.payload.vendorDistance,
         };
       }
       break;

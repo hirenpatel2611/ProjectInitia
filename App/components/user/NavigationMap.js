@@ -296,6 +296,9 @@ class NearbyGaraje extends Component {
               ? this.props.bookingStatusRes.type
               : null}
           </Text>
+          {
+            this.props.mechanicCurrentLocation?<Text style={{fontFamily:'circular-book'}}>Mechanic Mobile No : {this.props.mechanicCurrentLocation.mobile_no}</Text>:null
+          }
           {this.props.mechanicCurrentLocation?<Text>Dist({this.props.mechanicCurrentLocation.distance} km)</Text>:null}
           <TouchableOpacity
             activeOpacity={1}

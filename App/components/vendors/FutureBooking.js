@@ -46,6 +46,15 @@ class FutureBooking extends Component {
   componentDidMount() {
     this.props.getFutureBookings();
   }
+calltocutomer()
+  {
+          const args = {
+        number: this.props.bookUserData?this.props.bookUserData.userMobileno: null,
+        prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call
+      }
+
+      call(args).catch(console.error)
+  }
 
   render() {
     const { containerStyle } = styles;
@@ -374,7 +383,9 @@ class FutureBooking extends Component {
                         color: "#7960FF"
                       }}
                     >
-                      10 km
+                      {
+                        this.props.customerDistance?this.props.customerDistance:0
+                      }
                     </Text>
                   </View>
                 </View>
@@ -720,7 +731,8 @@ const mapStateToProps = ({ vendors }) => {
     isConfirmModal,
     confirmDisableVendor,
     loadingConfirm,
-    isFutureBookingNoFound
+    isFutureBookingNoFound,
+    customerDistance
   } = vendors;
   return {
     loadingFutureBookigList,
@@ -739,7 +751,8 @@ const mapStateToProps = ({ vendors }) => {
     cancleReasonVendor,
     confirmDisableVendor,
     loadingConfirm,
-    isFutureBookingNoFound
+    isFutureBookingNoFound,
+    customerDistance
   };
 };
 
