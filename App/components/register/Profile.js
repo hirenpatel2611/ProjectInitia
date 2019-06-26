@@ -175,7 +175,7 @@ class Profile extends Component {
       profileButtonView,
       textError2
     } = styles;
-    const { validate } = this.props;
+    const { validate,documentRegisterUri,isVendor } = this.props;
     errors = this.props.onSubmeetSignupForm
       ? validate(this.props.register)
       : {};
@@ -335,6 +335,7 @@ class Profile extends Component {
                 }}>
                 <View style={{flexDirection:'row'}}>
                 {this.renderDocument()}
+
                 </View>
                 <TouchableOpacity
                 underlayColor="white"
@@ -364,7 +365,11 @@ class Profile extends Component {
               </TouchableOpacity>
               </View>
               :null}
-
+              {errors.documentRegisterUri ? (
+                <Text style={styles.textError2}>
+                  {errors.documentRegisterUri[0]}
+                </Text>
+              ) : null}
               <Text style={styles.textError2}>{this.props.signupFail?this.props.signupFail:null}</Text>
               <TouchableHighlight
                 onPress={() => {
@@ -541,6 +546,19 @@ const rules = [
     field: "confirmPassword",
     condition: (confirmPassword, state) => confirmPassword === state.password,
     error: "Password is not match."
+  },
+  {
+    field: "documentRegisterUri",
+    condition: (documentRegisterUri,{isVendor})=>{
+      if(isVendor)
+      {
+        return documentRegisterUri.length >= 1?true:false
+      }
+
+      return true;
+
+    },
+    error: "Please Add Document"
   }
   // {
   //   field: 'avatar',

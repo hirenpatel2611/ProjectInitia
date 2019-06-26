@@ -105,7 +105,15 @@ class NearbyGaraje extends Component {
     this.props.getUserLocationSuccess(location);
     {
       this.props.getUserData();
-
+      this._map.animateToRegion(
+        {
+          latitude: this.props.location.coords.latitude,
+          longitude: this.props.location.coords.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421
+        },
+        1
+      );
     }
     await Location.watchPositionAsync(
       {
@@ -161,7 +169,10 @@ class NearbyGaraje extends Component {
         >
           <MapView
             style={{
-              ...StyleSheet.absoluteFillObject
+              ...StyleSheet.absoluteFillObject,
+              width:ScreenWidth,
+              height:ScreenHeight,
+              flex:1
             }}
             provider={PROVIDER_GOOGLE}
             ref={component => (this._map = component)}

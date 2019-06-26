@@ -98,6 +98,7 @@ export default (state = INITIAL_STATE, action) => {
 
     case UPDATE_USER_TYPE:
       {
+        
         return {
           ...state,
           isVendor: action.payload
