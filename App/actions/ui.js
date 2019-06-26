@@ -63,7 +63,7 @@ export const getUserData = () => async (dispatch, getState) => {
   let test = new FormData();
   test.append("id", valueUserId);
   Api.post(GET_USER_DATA, test).then(response => {
-
+    console.log(response);
     if (response.status === 0) {
       if (i < 10) {
         dispatch(getUserData());

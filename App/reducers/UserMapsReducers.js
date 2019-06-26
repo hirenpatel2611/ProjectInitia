@@ -68,7 +68,7 @@ const INITIAL_STATE = {
   vendorList: [],
   isVehicle: false,
   isCar: false,
-  rating: 5,
+  rating: 0,
   isChecked1: false,
   isChecked2: false,
   isChecked3: false,

@@ -34,7 +34,15 @@
 
 
         "android": {
-          "package": "com.ilife.app"
+          "package": "com.ilife.app",
+          "splash":{
+           "resizeMode":"cover",
+           "mdpi":"./assets/android-splash/drawable-mdpi/background.png",
+           "hdpi":"./assets/android-splash/drawable-hdpi/background.png",
+           "xhdpi":"./assets/android-splash/drawable-xhdpi/background.png",
+           "xxhdpi":"./assets/android-splash/drawable-xxhdpi/background.png",
+           "xxxhdpi":"./assets/android-splash/drawable-xxxhdpi/background.png"
+        }
 
   }
 }

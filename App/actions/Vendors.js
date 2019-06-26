@@ -393,7 +393,7 @@ export const upadteVendorProfileImage = () => async (dispatch) => {
         allowsEditing: true,
         aspect: [4, 4],
       });
-
+console.log(result);
 
       if (!result.cancelled) {
         dispatch({

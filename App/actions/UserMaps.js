@@ -93,6 +93,7 @@ export const getVendors = () => (dispatch, getState) => {
   test.append("rating", rating);
   Api.post(GET_VENDOR, test)
     .then(response => {
+      console.log(response);
       if (response.status === 0) {
         if(getVendorsCounter<5){
         dispatch(getVendors());
@@ -204,6 +205,7 @@ export const getBookings = () => async (dispatch, getState) => {
   test.append("customer_id", userId);
   Api.post(GET_BOOKINGLIST, test)
     .then(response => {
+      console.log(response);
       if (response.status === 0) {
         if (response.message === "No booking found") {
           dispatch({
