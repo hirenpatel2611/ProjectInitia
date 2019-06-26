@@ -342,7 +342,7 @@ export default (state = INITIAL_STATE, action) => {
           fullNameVendor: action.payload.userFullName,
           addressVendor: action.payload.userAddress,
           emailVendor: action.payload.userEmail,
-          imageVendorUri:action.payload.uri,
+          imageVendorUri:action.payload.uri.profile_image,
         };
       }
       break;

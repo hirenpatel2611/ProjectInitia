@@ -50,7 +50,7 @@ export default (state = INITIAL_STATE, action) => {
             return {
               ...state,
               userData:{
-              uri:action.payload.profile_image,
+              uri:action.payload,
               userId:action.payload.id,
               userEmail:action.payload.email,
               userMobileno: action.payload.mobile,
