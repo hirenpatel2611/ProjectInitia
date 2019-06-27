@@ -49,7 +49,7 @@ class FutureBooking extends Component {
 calltocutomer()
   {
           const args = {
-        number: this.props.bookUserData?this.props.bookUserData.userMobileno: null,
+        number: this.props.bookUserData?this.props.bookUserData.userMobileno: 0,
         prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call
       }
 
@@ -612,7 +612,7 @@ calltocutomer()
                 <CheckBox
                   isChecked={this.props.reasonCheckboxVendor[0]}
                   checkedCheckBoxColor="#7960FF"
-                  rightText="Mechanic is not responding on booking."
+                  rightText="I am on another call."
                   checkedIcon="dot-circle-o"
                   uncheckedIcon="circle-o"
                   onClick={() => {
@@ -622,7 +622,7 @@ calltocutomer()
                 <CheckBox
                   isChecked={this.props.reasonCheckboxVendor[1]}
                   checkedCheckBoxColor="#7960FF"
-                  rightText="Mechanic is not done good deal."
+                  rightText="Customer is not done good deal."
                   checkedIcon="dot-circle-o"
                   uncheckedIcon="circle-o"
                   onClick={() => {
@@ -632,7 +632,7 @@ calltocutomer()
                 <CheckBox
                   isChecked={this.props.reasonCheckboxVendor[2]}
                   checkedCheckBoxColor="#7960FF"
-                  rightText="I Choose better option."
+                  rightText="Today I m not Present."
                   checkedIcon="dot-circle-o"
                   uncheckedIcon="circle-o"
                   onClick={() => {

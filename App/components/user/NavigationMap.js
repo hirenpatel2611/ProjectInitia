@@ -38,8 +38,9 @@ import {
 } from "../../actions";
 import  MapViewDirections  from "../../Common/MapViewDirection";
 import CheckBox from "react-native-check-box";
-import { MECHANIC_MAP_ICON,BIKE_FOR_MAP } from "../../images";
+import { MECHANIC_MAP_ICON,BIKE_FOR_MAP,CALL } from "../../images";
 import { Rating, AirbnbRating } from "react-native-ratings";
+import call from "react-native-phone-call";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -50,6 +51,16 @@ class NearbyGaraje extends Component {
   componentDidMount() {
 
   }
+  callToMechanic()
+    {
+            const args = {
+          number: this.props.mechanicCurrentLocation?this.props.mechanicCurrentLocation.mobile_no:0,
+          prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call
+        }
+
+        call(args).catch(console.error)
+    }
+
 
   render() {
     const { containerStyle, continueButton, buttonText, createButton } = styles;
@@ -296,10 +307,41 @@ class NearbyGaraje extends Component {
               ? this.props.bookingStatusRes.type
               : null}
           </Text>
-          {
-            this.props.mechanicCurrentLocation?<Text style={{fontFamily:'circular-book'}}>Mechanic Mobile No : {this.props.mechanicCurrentLocation.mobile_no}</Text>:null
-          }
-          {this.props.mechanicCurrentLocation?<Text>Dist({this.props.mechanicCurrentLocation.distance} km)</Text>:null}
+          <View style={{
+            justifyContent:'space-between',
+            flexDirection:'row'
+          }}>
+          {this.props.mechanicCurrentLocation?<TouchableOpacity
+            style={{
+              justifyContent: "space-between",
+              flexDirection: "row"
+            }}
+            onPress={() => {
+              this.callToMechanic();
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "circular-book",
+                fontSize: 16,
+                color: "#4A4A4A",
+                marginTop: 3
+              }}
+            >
+            Contact :{this.props.mechanicCurrentLocation.mobile_no}
+            </Text>
+            <Image
+              style={{ height: 20, width: 20, borderRadius: 10 }}
+              source={CALL}
+            />
+          </TouchableOpacity>:null}
+            {this.props.mechanicCurrentLocation?<Text style={{
+              fontFamily: "circular-book",
+              fontSize: 16,
+              color: "#4A4A4A",
+              marginTop: 3
+            }}>Dist({this.props.mechanicCurrentLocation.distance} km)</Text>:null}
+          </View>
           <TouchableOpacity
             activeOpacity={1}
             underlayColor="white"

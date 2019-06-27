@@ -223,9 +223,9 @@ export default (state = INITIAL_STATE, action) => {
         newReasonCheckbox = [false, false, false];
         newReasonCheckbox[action.payload] = true;
         newCancleReason = [
-          "Mechanic is not responding on booking.",
-          "Mechanic is not done good deal.",
-          "I Choose better option."
+          "I am on another call.",
+          "Customer is not done good deal.",
+          "Today I m not Present."
         ];
         return {
           ...state,
