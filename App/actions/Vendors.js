@@ -281,7 +281,7 @@ export const otpDone = val => (dispatch, getState) => {
   const { FutureBookingList, bookingData } = getState().vendors;
   FutureBookingList.map(booking => {
     if (booking.booking_id === bookingData.booking_id) {
-      booking.customer.OTP = val;
+      booking.booking_otp = val;
     }
   });
   dispatch({
@@ -415,7 +415,7 @@ export const startMapVendor = startMapData => (dispatch,getState) =>{
   const { FutureBookingList,mechanicOTP } = getState().vendors;
   console.log(startMapData);
   let test1 = new FormData();
-  test1.append("otp", mechanicOTP);
+  test1.append("otp", startMapData.otp);
   Api.post(VERIFY_MECHANIC_OTP, test1).then(async response => {
     console.log(response);
     if (response.status === 1) {

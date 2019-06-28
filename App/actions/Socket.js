@@ -243,10 +243,11 @@ export const socketLeave = () => async (dispatch, getState) => {
 };
 
 export const socketBookingOnTheWay = socketData => async (dispatch, getState) => {
-  const { bookingData } = getState().vendors;
+  const { bookingData,mechanicBookedData } = getState().vendors;
+
   chatSocket.emit("booking_status", {
     room: `${socketData.customer_id} ${
-      socketData.vendor_id
+      mechanicBookedData.booking.vendor.vendor_id
     }`,
     message: bookingData,
     type: "ON-THE-WAY"

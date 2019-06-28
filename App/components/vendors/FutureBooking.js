@@ -135,7 +135,7 @@ calltocutomer()
                         fontFamily: "circular-book"
                       }}
                     >
-                      {item.customer.OTP}
+                      {item.booking_otp}
                     </Text>
 
 
@@ -172,89 +172,129 @@ calltocutomer()
                     </Text>
                     </View>
 
-                    <View
+                  </View>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      justifyContent: "space-between",
+                      width: 0.85 * ScreenWidth,
+                      marginTop:5
+                    }}
+                  >
+                  <TouchableOpacity
+                    style={{
+                      width: 80,
+                      height: 28,
+                      backgroundColor: "#7960FF",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: 3,
+                      opacity: item.status === "cancle" ||
+                      item.status === "completed"
+                        ? 0
+                        : 1
+                    }}
+                    disabled={item.status === "cancle" ||
+                    item.status === "completed"
+                      ? true
+                      : false}
+                    onPress={() => {
+                      var startMapData = {
+                        booking_id: item.booking_id,
+                        customer_id:item.customer.customer_id,
+                        otp:item.booking_otp
+                      }
+                     this.props.startMapVendor(startMapData);
+                    }}
+
+                  >
+
+                      <Text
+                        style={{
+                          color: "white",
+                          fontFamily:'circular-book',
+                          fontSize:14
+                        }}
+                      >
+                        Start Map
+                      </Text>
+                  </TouchableOpacity>
+
+                    <TouchableOpacity
                       style={{
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        width: 0.45 * ScreenWidth
+                        alignSelf: "flex-end",
+                        opacity: item.status === "pending" ? 1 : 0
+                      }}
+                      disabled={item.status === "pending" ? false : true}
+                      onPress={() => {
+                        this.props.BookingListApprove(item.booking_id);
+                        this.props.connectTosocketApprov(
+                          item.customer.customer_id
+                        );
                       }}
                     >
-                      <TouchableOpacity
+                      <View
                         style={{
-                          alignSelf: "flex-end",
-                          opacity: item.status === "pending" ? 1 : 0
-                        }}
-                        disabled={item.status === "pending" ? false : true}
-                        onPress={() => {
-                          this.props.BookingListApprove(item.booking_id);
-                          this.props.connectTosocketApprov(
-                            item.customer.customer_id
-                          );
+                          width: 80,
+                          height: 28,
+                          backgroundColor: "#4EA352",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: 3
                         }}
                       >
-                        <View
+                        <Text
                           style={{
-                            width: 80,
-                            height: 28,
-                            backgroundColor: "#4EA352",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            borderRadius: 3
+                            color: "white"
                           }}
                         >
-                          <Text
-                            style={{
-                              color: "white"
-                            }}
-                          >
-                            Approve
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
+                          Approve
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
 
-                      <TouchableOpacity
-                        style={{
-                          alignSelf: "flex-end",
-                          opacity:
-                            item.status === "cancle" ||
-                            item.status === "completed"
-                              ? 0
-                              : 1
-                        }}
-                        disabled={
+                    <TouchableOpacity
+                      style={{
+                        alignSelf: "flex-end",
+                        opacity:
                           item.status === "cancle" ||
                           item.status === "completed"
-                            ? true
-                            : false
-                        }
-                        onPress={() => {
-                          var cancleBookingData = {
-                            booking_id: item.booking_id,
-                            customer_id: item.customer.customer_id
-                          };
-                          this.props.getCancleBookingModal(cancleBookingData);
+                            ? 0
+                            : 1
+                      }}
+                      disabled={
+                        item.status === "cancle" ||
+                        item.status === "completed"
+                          ? true
+                          : false
+                      }
+                      onPress={() => {
+                        var cancleBookingData = {
+                          booking_id: item.booking_id,
+                          customer_id: item.customer.customer_id
+                        };
+                        this.props.getCancleBookingModal(cancleBookingData);
+                      }}
+                    >
+                      <View
+                        style={{
+                          width: 80,
+                          height: 28,
+                          backgroundColor: "#D35400",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: 3
                         }}
                       >
-                        <View
+                        <Text
                           style={{
-                            width: 80,
-                            height: 28,
-                            backgroundColor: "#D35400",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            borderRadius: 3
+                            color: "white"
                           }}
                         >
-                          <Text
-                            style={{
-                              color: "white"
-                            }}
-                          >
-                            Cancel
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
+                          Cancel
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
                 </View>
               )}
@@ -541,7 +581,8 @@ calltocutomer()
                     var startMapData = {
                       booking_id: this.props.bookingData.booking_id,
                       customer_id:this.props.bookingData.customer_id,
-                      vendor_id:this.props.bookingData.vendor_id
+                      vendor_id:this.props.bookingData.vendor_id,
+                      otp:this.props.mechanicOTP
                     }
                    this.props.startMapVendor(startMapData);
                   }}
