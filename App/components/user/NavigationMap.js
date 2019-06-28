@@ -15,7 +15,8 @@ import {
   Platform,
   Animated,
   AsyncStorage,
-  Modal
+  Modal,
+  Linking
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -53,12 +54,30 @@ class NearbyGaraje extends Component {
   }
   callToMechanic()
     {
-            const args = {
-          number: this.props.mechanicCurrentLocation?this.props.mechanicCurrentLocation.mobile_no:0,
-          prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call
-        }
-
-        call(args).catch(console.error)
+        //     const args = {
+        //   number: this.props.mechanicCurrentLocation?this.props.mechanicCurrentLocation.mobile_no:0,
+        //   prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call
+        // }
+        //
+        // call(args).catch(console.error)
+        var phone = this.props.mechanicCurrentLocation?this.props.mechanicCurrentLocation.mobile_no:0;
+        let phoneNumber = phone;
+        if (Platform.OS !== 'android') {
+          phoneNumber = `telprompt:${phone}`;
+          }
+          else  {
+          phoneNumber = `tel:${phone}`;
+          }
+          console.log(phoneNumber);
+          Linking.canOpenURL(phoneNumber)
+          .then(supported => {
+          if (!supported) {
+              alert('Phone number is not available');
+            } else {
+              return Linking.openURL(phoneNumber);
+          }
+          })
+          .catch(err => console.log(err));
     }
 
 

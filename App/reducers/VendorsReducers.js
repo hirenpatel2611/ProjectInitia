@@ -26,7 +26,10 @@ import {
   LOAD_VENDOR_PROFILE,
   UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD,
   UPDATE_VENDOR_PROFILE_SUCCESS,
-  UPDATE_VENDOR_PROFILE_FAIL
+  UPDATE_VENDOR_PROFILE_FAIL,
+  START_MAP_VENDOR_START,
+  START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
+  MECHANIC_OTP_SUBMEET_SUCCESS
 } from "../actions/Vendors";
 import {SET_ALL_STATE_TO_INITIAL} from '../actions/ui';
 
@@ -58,7 +61,10 @@ const INITIAL_STATE = {
   imageVendorUri:'',
   imageBase64Vendor:'',
   loadingProfileUpdate:false,
-  customerDistance:''
+  customerDistance:'',
+  loadingStartMap:false,
+  customerLocation:'',
+  mechanicBookedData:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -112,6 +118,7 @@ export default (state = INITIAL_STATE, action) => {
           bookingData: action.payload.bookData,
           bookUserData: action.payload.userData,
           customerDistance:action.payload.vendorDistance,
+          customerLocation:action.payload.location,
         };
       }
       break;
@@ -354,6 +361,35 @@ export default (state = INITIAL_STATE, action) => {
       ...state,
       imageVendorUri:action.payload.uri,
       imageBase64Vendor:action.payload.base64
+    }
+  }
+  break;
+
+  case START_MAP_VENDOR_START:
+  {
+    return{
+      ...state,
+      loadingStartMap:true,
+
+    }
+  }
+  break;
+
+  case START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS:
+  {
+    return{
+      ...state,
+      loadingStartMap:false,
+
+    }
+  }
+  break;
+
+  case MECHANIC_OTP_SUBMEET_SUCCESS:
+  {
+    return{
+      ...state,
+      mechanicBookedData:action.payload,
     }
   }
   break;

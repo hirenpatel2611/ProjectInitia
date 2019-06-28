@@ -16,6 +16,7 @@ export const UPDATE_PROFILE='/customers/update_profile';
 export const RATING_BY_CUSTOMER='/customers/rating';
 export const SEND_FORGOT_PASSWORD_OTP='/customers/send_forgot_password_otp';
 export const SEND_FORGOT_PASSWORD='/customers/forgot_password';
+export const VERIFY_MECHANIC_OTP="/customers/verify_mechanic_otp";
 export const WEBCALL_SUCCESSFUL_FLAG=100;
 export const URL_USER_LOGOUT="/app/api/logout";
 

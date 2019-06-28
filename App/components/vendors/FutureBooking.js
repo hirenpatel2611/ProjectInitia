@@ -31,7 +31,8 @@ import {
   BookingListCancle,
   getCancleBookingModal,
   getReasonCheckboxVendor,
-  getCancelBookingModalCloseVendor
+  getCancelBookingModalCloseVendor,
+  startMapVendor
 } from "../../actions";
 import { FutureBookingList, Spinner } from "../../Common";
 import { CALL, BITMAP2 } from "../../images";
@@ -463,7 +464,7 @@ calltocutomer()
             </View>
           </Modal>
           <Modal
-            visible={this.props.isMechanicOtp}
+            visible={this.props.isMechanicOtp?true:false}
             onRequestClose={() => {
               console.log("Modal has been closed.");
             }}
@@ -523,31 +524,58 @@ calltocutomer()
                 >
                   {this.props.mechanicOTP ? this.props.mechanicOTP : null}
                 </Text>
+                <View style={{
+                  flexDirection:'row',
+                  justifyContent:'space-around'
+                }}>
                 <TouchableOpacity
-                  style={{ alignSelf: "flex-end" }}
+                  style={{
+                  width: 0.3 * ScreenWidth,
+                  height: 28,
+                  backgroundColor: "#7960FF",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 3
+                 }}
                   onPress={() => {
-                    this.props.otpDone(this.props.mechanicOTP);
+                    var startMapData = {
+                      booking_id: this.props.bookingData.booking_id,
+                      customer_id:this.props.bookingData.customer_id,
+                      vendor_id:this.props.bookingData.vendor_id
+                    }
+                   this.props.startMapVendor(startMapData);
                   }}
                 >
-                  <View
-                    style={{
-                      width: 0.78 * ScreenWidth,
-                      height: 28,
-                      backgroundColor: "#7960FF",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: 3
-                    }}
-                  >
                     <Text
                       style={{
                         color: "white"
                       }}
                     >
-                      continue
+                      Start Map
                     </Text>
-                  </View>
                 </TouchableOpacity>
+                <TouchableOpacity
+                  style={{
+                  width: 0.3 * ScreenWidth,
+                  height: 28,
+                  backgroundColor: "#7960FF",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 3
+                 }}
+                  onPress={() => {
+                    this.props.otpDone(this.props.mechanicOTP);
+                  }}
+                >
+                    <Text
+                      style={{
+                        color: "white"
+                      }}
+                    >
+                      Share
+                    </Text>
+                </TouchableOpacity>
+                </View>
               </View>
             </View>
           </Modal>
@@ -770,6 +798,7 @@ export default connect(
     BookingListCancle,
     getCancleBookingModal,
     getReasonCheckboxVendor,
-    getCancelBookingModalCloseVendor
+    getCancelBookingModalCloseVendor,
+    startMapVendor
   }
 )(FutureBooking);

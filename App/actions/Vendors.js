@@ -5,11 +5,13 @@ import {
   GET_FUTURE_BOOKINGLIST,
   BOOKING_UPDATE,
   SEND_MECHANIC_OTP,
-  UPDATE_PROFILE
+  UPDATE_PROFILE,
+  VERIFY_MECHANIC_OTP
 } from "../config";
-import { connectTosocketApprov, connectTosocketBookingCancle } from "./Socket";
-import { Asset, SplashScreen,ImagePicker,Permissions,Constants } from "expo";
+import { connectTosocketApprov, connectTosocketBookingCancle,socketBookingOnTheWay,socketVendorCurrentLocation } from "./Socket";
+import { Asset, SplashScreen,ImagePicker,Permissions,Constants,TaskManager,Location } from "expo";
 import { Actions } from "react-native-router-flux";
+import openMap from "react-native-open-maps";
 
 export const GET_FUTURE_BOOKING_LIST_START =
   "vendors/GET_FUTURE_BOOKING_LIST_START";
@@ -49,6 +51,10 @@ export const LOAD_VENDOR_PROFILE = "vendors/LOAD_VENDOR_PROFILE";
 export const UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD = "vendors/UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD";
 export const UPDATE_VENDOR_PROFILE_SUCCESS = "vendors/UPDATE_VENDOR_PROFILE_SUCCESS";
 export const UPDATE_VENDOR_PROFILE_FAIL = "vendors/UPDATE_VENDOR_PROFILE_FAIL";
+export const START_MAP_VENDOR_START = "vendors/START_MAP_VENDOR_START";
+export const START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS = "vendors/START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS";
+export const MECHANIC_OTP_SUBMEET_SUCCESS = "vendors/MECHANIC_OTP_SUBMEET_SUCCESS";
+
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -152,24 +158,24 @@ export const getBookingUpdate = val => (dispatch, getState) => {
     type: GET_BOOKING_UAPDATE_START
   });
   const { bookingData, FutureBookingList } = getState().vendors;
+
   let test = new FormData();
   test.append("booking_id", bookingData.booking_id);
   test.append("status", val);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       if (response.status === 1) {
+        if (val === "accept") {
         FutureBookingList.map(booking => {
           if (booking.booking_id === bookingData.booking_id) {
-            booking.status = "accept";
-          }
-        });
+            booking.status = "accept";}});
+          dispatch(getMechanicOtp(bookingData.booking_id));
+        }
+
         dispatch({
           type: GET_BOOKING_UAPDATE_SUCCESS,
           payload: { val, FutureBookingList }
         });
-        if (val === "accept") {
-          dispatch(getMechanicOtp(bookingData.booking_id));
-        }
       } else {
         dispatch({
           type: GET_BOOKING_UAPDATE_FAIL
@@ -393,7 +399,6 @@ export const upadteVendorProfileImage = () => async (dispatch) => {
         allowsEditing: true,
         aspect: [4, 4],
       });
-console.log(result);
 
       if (!result.cancelled) {
         dispatch({
@@ -402,3 +407,57 @@ console.log(result);
         });
       }
 }
+
+export const startMapVendor = startMapData => (dispatch,getState) =>{
+  dispatch({
+    type:START_MAP_VENDOR_START,
+  })
+  const { FutureBookingList,mechanicOTP } = getState().vendors;
+  console.log(startMapData);
+  let test1 = new FormData();
+  test1.append("otp", mechanicOTP);
+  Api.post(VERIFY_MECHANIC_OTP, test1).then(async response => {
+    console.log(response);
+    if (response.status === 1) {
+      dispatch({
+        type: MECHANIC_OTP_SUBMEET_SUCCESS,
+        payload: response
+      });
+      let test = new FormData();
+      test.append("booking_id", startMapData.booking_id);
+      test.append("status", "on-the-way");
+      Api.post(BOOKING_UPDATE, test)
+      .then(response => {
+        console.log(response);
+        if(response.status === 1){
+          FutureBookingList.map(booking => {
+            if (booking.booking_id === startMapData.booking_id) {
+              booking.status = "on-the-way";}});
+              dispatch(socketBookingOnTheWay(startMapData));
+              dispatch(socketVendorCurrentLocation());
+              dispatch({
+                type:START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
+                payload:FutureBookingList
+              })
+            }
+          })
+    }
+  })
+
+
+}
+
+export const goToMap = () => async (dispatch, getState) => {
+  let location = await Location.getCurrentPositionAsync({
+    accuracy: Location.Accuracy.BestForNavigation
+  });
+  const { mechanicBookedData } = getState().vendors;
+  let startLat = location.coords.latitude + "," + location.coords.longitude;
+  let endLat =
+    mechanicBookedData.booking.booking_latitude +
+    "," +
+    mechanicBookedData.booking.booking_longitude;
+
+  openMap({ start: [startLat.toString()], end: [endLat.toString()] });
+
+};

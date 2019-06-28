@@ -1,8 +1,8 @@
 import Peer from "peerjs";
 import { AsyncStorage } from "react-native";
 import io from "socket.io-client";
-import { BackgroundFetch,Location,TaskManager,Permissions } from "expo";
-import { getBookingModal, getBookingVendorStatus } from "./Vendors";
+import { BackgroundFetch,Location,TaskManager,Permissions,IntentLauncherAndroid,Constants } from "expo";
+import { getBookingModal, getBookingVendorStatus,goToMap } from "./Vendors";
 import { getBookingStatus, getMechanicCurrentLocation,getVendorRatingModal } from "./UserMaps";
 import { Actions } from "react-native-router-flux";
 
@@ -10,8 +10,11 @@ export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
 var isVen = null;
 var disp = null;
+var bookingDetails = null;
+var vendorMobileno = null;
 
 const LOCATION_TASK_NAME = "background-location-task";
+const LOCATION_TASK_NAME1 = "background-location-task-current";
 var peer = null;
 export const createSocketChannel = val => async (dispatch, getState) => {
   chatSocket = io("http://103.50.153.25:3000", {
@@ -89,11 +92,12 @@ export const createSocketChannel = val => async (dispatch, getState) => {
   await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
     accuracy: Location.Accuracy.BestForNavigation
   });
-
-
 };
 
-TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
+TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
+if(error){
+console.error();
+}
   chatSocket.on("broadcast", function(data) {
     switch (data.type) {
       case "BOOK":
@@ -159,6 +163,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, ({ data, error }) => {
         return null;
     }
   });
+
 });
 
 export const connectTosocket = () => async (dispatch, getState) => {
@@ -174,7 +179,7 @@ export const connectTosocket = () => async (dispatch, getState) => {
 
   chatSocket.emit("booking", {
     room: `${userId} ${vendorsData.id}`,
-    message: { bookData, userData, vendorDistance },
+    message: { bookData, userData, vendorDistance,location },
     type: "BOOK"
   });
   channelName = `${vendorsData.id} ${userId}`;
@@ -208,7 +213,7 @@ export const connectTosocketBookingCancle = val => async (
   } else {
     cancelData = bookData;
   }
-  
+
   chatSocket.emit("booking_status", {
     room: `${val}`,
     message: cancelData,
@@ -236,3 +241,101 @@ export const socketLeave = () => async (dispatch, getState) => {
   });
   channelName = `${userData.userId}`;
 };
+
+export const socketBookingOnTheWay = socketData => async (dispatch, getState) => {
+  const { bookingData } = getState().vendors;
+  chatSocket.emit("booking_status", {
+    room: `${socketData.customer_id} ${
+      socketData.vendor_id
+    }`,
+    message: bookingData,
+    type: "ON-THE-WAY"
+  });
+  channelName = `${socketData.booking_id} ${
+    socketData.customer_id
+  }`;
+};
+
+export const socketVendorCurrentLocation = val => async (dispatch, getState) => {
+  const { mechanicBookedData } = getState().vendors;
+  const {userData} = getState().user;
+  vendorMobileno = userData.userMobileno;
+  bookingDetails=mechanicBookedData;
+  disp =dispatch;
+  let { status } = await Permissions.askAsync(Permissions.LOCATION);
+  if (status !== "granted") {
+    // this.props.getUserLocationFail();
+  }
+
+  await Location.hasServicesEnabledAsync()
+    .then(async res => {
+      if (!res) {
+        perm = await IntentLauncherAndroid.startActivityAsync(
+          IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+        );
+      }
+      await Location.hasServicesEnabledAsync()
+      .then(async res => {
+        this.locationIsEnabled = res;
+      })
+      .catch(err => {
+        console.error(err);
+      });
+      console.log(res);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+// console.error(Location.getHeadingAsync());
+
+dispatch(goToMap());
+await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME1, {
+  accuracy: Location.Accuracy.BestForNavigation
+});
+
+};
+
+
+TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
+
+if(error)
+{
+  return;
+}
+
+if(bookingDetails){
+  const { locations } = data;
+  console.log(locations);
+  var radlat1 =(Math.PI * bookingDetails.booking.booking_latitude) / 180;
+
+  var radlat2 =   (Math.PI * locations[0].coords.latitude) / 180;
+  var theta =bookingDetails.booking.booking_longitude-locations[0].coords.longitude;
+
+  var radtheta = (Math.PI * theta) / 180;
+  var dist =
+    Math.sin(radlat1) * Math.sin(radlat2) +
+    Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+  if (dist > 1) {
+    dist = 1;
+  }
+  dist = Math.acos(dist);
+  dist = (dist * 180) / Math.PI;
+  dist = dist * 60 * 1.1515;
+  dist = dist * 1.609344;
+  console.log(dist);
+  dist =parseFloat(dist.toFixed(3));
+  chatSocket.emit("booking_status", {
+    room: `${bookingDetails.booking.customer.customer_id} ${
+      bookingDetails.booking.vendor.vendor_id
+    }`,
+    message: locations,
+    distance:dist,
+    mobile_no:vendorMobileno,
+    type: "MECHANIC_CURRENT_LOCATION"
+  });
+  channelName = `${bookingDetails.booking.vendor.vendor_id} ${
+    bookingDetails.booking.customer.customer_id
+  }`;
+}
+
+})
