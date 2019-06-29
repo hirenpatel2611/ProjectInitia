@@ -54,6 +54,7 @@ export const UPDATE_VENDOR_PROFILE_FAIL = "vendors/UPDATE_VENDOR_PROFILE_FAIL";
 export const START_MAP_VENDOR_START = "vendors/START_MAP_VENDOR_START";
 export const START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS = "vendors/START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS";
 export const MECHANIC_OTP_SUBMEET_SUCCESS = "vendors/MECHANIC_OTP_SUBMEET_SUCCESS";
+export const MECHANIC_OTP_SUBMEET_FAIL = "vendors/MECHANIC_OTP_SUBMEET_FAIL";
 
 
 export const getFutureBookings = () => async (dispatch, getState) => {
@@ -248,16 +249,18 @@ export const BookingListApprove = val => (dispatch, getState) => {
     type: GET_BOOKINGLIST_APPROVE_START
   });
   const { FutureBookingList } = getState().vendors;
-
+  console.log(val);
   let test = new FormData();
-  test.append("booking_id", val);
+  test.append("booking_id", val.booking_id);
   test.append("status", "accept");
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
+      console.log(response);
       if (response.status === 1) {
-        dispatch(getMechanicOtp(val));
+        dispatch(getMechanicOtp(val.booking_id));
+        dispatch(connectTosocketApprov(val.customer_id))
         FutureBookingList.map(booking => {
-          if (booking.booking_id === val) {
+          if (booking.booking_id === val.booking_id) {
             booking.status = "accept";
           }
         });
@@ -265,6 +268,7 @@ export const BookingListApprove = val => (dispatch, getState) => {
           type: GET_BOOKINGLIST_APPROVE_SUCCESS,
           payload: { val, FutureBookingList }
         });
+
       } else {
         dispatch({
           type: GET_BOOKINGLIST_APPROVE_FAIL
@@ -412,6 +416,7 @@ export const startMapVendor = startMapData => (dispatch,getState) =>{
   dispatch({
     type:START_MAP_VENDOR_START,
   })
+
   const { FutureBookingList,mechanicOTP } = getState().vendors;
   console.log(startMapData);
   let test1 = new FormData();
@@ -423,6 +428,11 @@ export const startMapVendor = startMapData => (dispatch,getState) =>{
         type: MECHANIC_OTP_SUBMEET_SUCCESS,
         payload: response
       });
+       startMapData = {
+        booking_id: response.booking.booking_id,
+        customer_id:response.booking.customer.customer_id,
+      }
+      console.log(startMapData);
       let test = new FormData();
       test.append("booking_id", startMapData.booking_id);
       test.append("status", "on-the-way");
@@ -430,17 +440,21 @@ export const startMapVendor = startMapData => (dispatch,getState) =>{
       .then(response => {
         console.log(response);
         if(response.status === 1){
+          dispatch(socketBookingOnTheWay(startMapData));
+          dispatch(socketVendorCurrentLocation());
           FutureBookingList.map(booking => {
             if (booking.booking_id === startMapData.booking_id) {
               booking.status = "on-the-way";}});
-              dispatch(socketBookingOnTheWay(startMapData));
-              dispatch(socketVendorCurrentLocation());
               dispatch({
                 type:START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
                 payload:FutureBookingList
               })
             }
           })
+    } else {
+      dispatch({
+        type: MECHANIC_OTP_SUBMEET_FAIL,
+      });
     }
   })
 

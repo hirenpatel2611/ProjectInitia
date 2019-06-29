@@ -32,20 +32,23 @@ import {
   getCancleBookingModal,
   getReasonCheckboxVendor,
   getCancelBookingModalCloseVendor,
-  startMapVendor
+  startMapVendor,
+  socketBookingCompleted
 } from "../../actions";
 import { FutureBookingList, Spinner } from "../../Common";
 import { CALL, BITMAP2 } from "../../images";
 import call from "react-native-phone-call";
 import CheckBox from "react-native-check-box";
+import {TaskManager} from 'expo';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 let isVandor;
-
+const LOCATION_TASK_NAME1 = "background-location-task-current";
 class FutureBooking extends Component {
   componentDidMount() {
     this.props.getFutureBookings();
+
   }
 calltocutomer()
   {
@@ -56,7 +59,6 @@ calltocutomer()
 
       call(args).catch(console.error)
   }
-
   render() {
     const { containerStyle } = styles;
     return (
@@ -66,6 +68,7 @@ calltocutomer()
           {this.props.isFutureBookingNoFound?<Text style={{ fontFamily: "circular-bold", alignSelf: "center",marginTop:0.40*ScreenHeight}}>  No booking found</Text>:this.props.loadingFutureBookigList ? (
             <View style={{height:0.80*ScreenHeight,justifyContent:'center',alignSelf:'center'}}><Spinner /></View>
           ) : (
+
             <FlatList
               data={this.props.FutureBookingList}
               keyExtractor={(item, index) => index.toString()}
@@ -147,6 +150,7 @@ calltocutomer()
                       }}
                     >
                       Status :{item.status}
+
                     </Text>
                   </View>
                   <View
@@ -189,22 +193,22 @@ calltocutomer()
                       alignItems: "center",
                       justifyContent: "center",
                       borderRadius: 3,
-                      opacity: item.status === "cancle" ||
-                      item.status === "completed"
-                        ? 0
-                        : 1
+                      opacity: item.booking_otp
+                        ? 1
+                        : 0
                     }}
-                    disabled={item.status === "cancle" ||
-                    item.status === "completed"
-                      ? true
-                      : false}
+                    disabled={item.booking_otp? false
+                      : true}
                     onPress={() => {
                       var startMapData = {
                         booking_id: item.booking_id,
                         customer_id:item.customer.customer_id,
                         otp:item.booking_otp
                       }
-                     this.props.startMapVendor(startMapData);
+                      item.status === "reached"?
+                      this.props.socketBookingCompleted(item):
+                     this.props.startMapVendor(startMapData)
+
                     }}
 
                   >
@@ -216,7 +220,7 @@ calltocutomer()
                           fontSize:14
                         }}
                       >
-                        Start Map
+                        {item.status === "reached"?'complete': this.props.loadingStartMap?'Loading...':'Start Map'}
                       </Text>
                   </TouchableOpacity>
 
@@ -227,10 +231,12 @@ calltocutomer()
                       }}
                       disabled={item.status === "pending" ? false : true}
                       onPress={() => {
-                        this.props.BookingListApprove(item.booking_id);
-                        this.props.connectTosocketApprov(
-                          item.customer.customer_id
-                        );
+                        var data ={
+                          booking_id:item.booking_id,
+                          customer_id:item.customer.customer_id
+                        }
+                        this.props.BookingListApprove(data);
+
                       }}
                     >
                       <View
@@ -248,7 +254,7 @@ calltocutomer()
                             color: "white"
                           }}
                         >
-                          Approve
+                          {this.props.loadingBookigUpdate?'Loading...':'Approve'}
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -372,6 +378,7 @@ calltocutomer()
                         color: "#4A4A4A"
                       }}
                     >
+                    {console.log(this.props.FutureBookingList)}
                       {this.props.bookUserData
                         ? this.props.bookUserData.userFullName
                         : null}
@@ -592,7 +599,7 @@ calltocutomer()
                         color: "white"
                       }}
                     >
-                      Start Map
+                      {this.props.loadingStartMap?'Loading...':'Start Map'}
                     </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -801,7 +808,8 @@ const mapStateToProps = ({ vendors }) => {
     confirmDisableVendor,
     loadingConfirm,
     isFutureBookingNoFound,
-    customerDistance
+    customerDistance,
+    loadingStartMap
   } = vendors;
   return {
     loadingFutureBookigList,
@@ -821,7 +829,8 @@ const mapStateToProps = ({ vendors }) => {
     confirmDisableVendor,
     loadingConfirm,
     isFutureBookingNoFound,
-    customerDistance
+    customerDistance,
+    loadingStartMap
   };
 };
 
@@ -840,6 +849,7 @@ export default connect(
     getCancleBookingModal,
     getReasonCheckboxVendor,
     getCancelBookingModalCloseVendor,
-    startMapVendor
+    startMapVendor,
+    socketBookingCompleted
   }
 )(FutureBooking);

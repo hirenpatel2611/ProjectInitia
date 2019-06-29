@@ -8,6 +8,7 @@ import { Actions } from "react-native-router-flux";
 
 export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
+export const COMPELETE_BOOKING_BY_VENDOR = 'vendors/COMPELETE_BOOKING_BY_VENDOR';
 var isVen = null;
 var disp = null;
 var bookingDetails = null;
@@ -282,7 +283,6 @@ export const socketVendorCurrentLocation = val => async (dispatch, getState) => 
       .catch(err => {
         console.error(err);
       });
-      console.log(res);
     })
     .catch(err => {
       console.error(err);
@@ -306,7 +306,6 @@ if(error)
 
 if(bookingDetails){
   const { locations } = data;
-  console.log(locations);
   var radlat1 =(Math.PI * bookingDetails.booking.booking_latitude) / 180;
 
   var radlat2 =   (Math.PI * locations[0].coords.latitude) / 180;
@@ -325,6 +324,7 @@ if(bookingDetails){
   dist = dist * 1.609344;
   console.log(dist);
   dist =parseFloat(dist.toFixed(3));
+  if(dist < 0.050){
   chatSocket.emit("booking_status", {
     room: `${bookingDetails.booking.customer.customer_id} ${
       bookingDetails.booking.vendor.vendor_id
@@ -337,6 +337,34 @@ if(bookingDetails){
   channelName = `${bookingDetails.booking.vendor.vendor_id} ${
     bookingDetails.booking.customer.customer_id
   }`;
+  }
 }
 
 })
+
+export const socketBookingCompleted = val => (dispatch,getState) =>{
+  const { userData } = getState().user;
+const { FutureBookingList } = getState().vendors;
+var booking = {booking:val};
+  chatSocket.emit("booking_status", {
+    room: `${val.customer.customer_id} ${
+      userData.userId
+    }`,
+    message: booking,
+    type: "COMPLETED"
+  });
+  channelName = `${userData.userId} ${
+    val.customer.customer_id
+  }`;
+
+  FutureBookingList.map(booking => {
+    if (booking.booking_id === val.booking_id) {
+      booking.status = "completed",
+      booking.booking_otp=null
+    }});
+      dispatch({
+        type:COMPELETE_BOOKING_BY_VENDOR,
+        payload:FutureBookingList
+      })
+
+}

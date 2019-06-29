@@ -450,10 +450,10 @@ export const getRating = () => (dispatch, getState) => {
   test.append("vendor_id", bookData.vendor_id);
   test.append("rating", vendorRating);
   Api.post(RATING_BY_CUSTOMER, test).then(response => {
-    Actions.NearbyGaraje();
     dispatch({
       type: GET_RATING_SUCCESS
     });
+    Actions.NearbyGaraje();
   });
 };
 

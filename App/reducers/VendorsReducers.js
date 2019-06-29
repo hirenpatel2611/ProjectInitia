@@ -29,7 +29,9 @@ import {
   UPDATE_VENDOR_PROFILE_FAIL,
   START_MAP_VENDOR_START,
   START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
-  MECHANIC_OTP_SUBMEET_SUCCESS
+  MECHANIC_OTP_SUBMEET_SUCCESS,
+  COMPELETE_BOOKING_BY_VENDOR,
+  MECHANIC_OTP_SUBMEET_FAIL
 } from "../actions/Vendors";
 import {SET_ALL_STATE_TO_INITIAL} from '../actions/ui';
 
@@ -130,7 +132,7 @@ export default (state = INITIAL_STATE, action) => {
           loadingBookigUpdate: false,
           bookingStatus: action.payload,
           isBooking: false,
-          FutureBookingList: action.payload.FutureBookingList
+          FutureBookingList: [...action.payload.FutureBookingList]
         };
       }
       break;
@@ -385,6 +387,16 @@ export default (state = INITIAL_STATE, action) => {
   }
   break;
 
+  case MECHANIC_OTP_SUBMEET_FAIL:
+  {
+    return{
+      ...state,
+      loadingStartMap:false,
+
+    }
+  }
+  break;
+
   case MECHANIC_OTP_SUBMEET_SUCCESS:
   {
     return{
@@ -393,6 +405,16 @@ export default (state = INITIAL_STATE, action) => {
     }
   }
   break;
+
+
+    case COMPELETE_BOOKING_BY_VENDOR:
+    {
+      return{
+        ...state,
+        FutureBookingList: [...action.payload]
+      }
+    }
+    break;
 
   case SET_ALL_STATE_TO_INITIAL:
   {
