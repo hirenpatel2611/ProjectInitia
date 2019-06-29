@@ -1,6 +1,6 @@
 import TimerMixin from "react-timer-mixin";
 import Api from "../api/api";
-import { AsyncStorage, Alert } from "react-native";
+import { AsyncStorage, Alert,Share } from "react-native";
 import {
   GET_FUTURE_BOOKINGLIST,
   BOOKING_UPDATE,
@@ -282,7 +282,13 @@ export const BookingListApprove = val => (dispatch, getState) => {
 };
 
 export const otpDone = val => (dispatch, getState) => {
-  const { FutureBookingList, bookingData } = getState().vendors;
+
+  const { FutureBookingList, bookingData,mechanicOTP } = getState().vendors;
+  Share.share({
+    message:'Your OTP is '+`${val}`,
+  }).then(response=>{
+    console.log(response);
+  });
   FutureBookingList.map(booking => {
     if (booking.booking_id === bookingData.booking_id) {
       booking.booking_otp = val;

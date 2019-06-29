@@ -177,7 +177,8 @@ calltocutomer()
                     </View>
 
                   </View>
-                  <View
+                  {item.status === 'cancle' || item.status === 'completed'?null
+                  :<View
                     style={{
                       flexDirection: "row",
                       justifyContent: "space-between",
@@ -187,7 +188,7 @@ calltocutomer()
                   >
                   <TouchableOpacity
                     style={{
-                      width: 80,
+                      width: 75,
                       height: 28,
                       backgroundColor: "#7960FF",
                       alignItems: "center",
@@ -223,7 +224,34 @@ calltocutomer()
                         {item.status === "reached"?'complete': this.props.loadingStartMap?'Loading...':'Start Map'}
                       </Text>
                   </TouchableOpacity>
-
+                  <TouchableOpacity
+                    style={{
+                      width: 70,
+                      height: 28,
+                      backgroundColor: "#7960FF",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: 3,
+                      opacity: item.booking_otp
+                        ? 1
+                        : 0
+                    }}
+                    disabled={item.booking_otp? false
+                      : true}
+                    onPress={() => {
+                      this.props.otpDone(item.booking_otp);
+                    }}
+                  >
+                      <Text
+                        style={{
+                          color: "white",
+                          fontFamily:'circular-book',
+                          fontSize:14
+                        }}
+                      >
+                        Share
+                      </Text>
+                  </TouchableOpacity>
                     <TouchableOpacity
                       style={{
                         alignSelf: "flex-end",
@@ -241,7 +269,7 @@ calltocutomer()
                     >
                       <View
                         style={{
-                          width: 80,
+                          width: 70,
                           height: 28,
                           backgroundColor: "#4EA352",
                           alignItems: "center",
@@ -284,7 +312,7 @@ calltocutomer()
                     >
                       <View
                         style={{
-                          width: 80,
+                          width: 70,
                           height: 28,
                           backgroundColor: "#D35400",
                           alignItems: "center",
@@ -301,7 +329,7 @@ calltocutomer()
                         </Text>
                       </View>
                     </TouchableOpacity>
-                  </View>
+                  </View>}
                 </View>
               )}
             />
@@ -378,7 +406,6 @@ calltocutomer()
                         color: "#4A4A4A"
                       }}
                     >
-                    {console.log(this.props.FutureBookingList)}
                       {this.props.bookUserData
                         ? this.props.bookUserData.userFullName
                         : null}
@@ -511,7 +538,7 @@ calltocutomer()
             </View>
           </Modal>
           <Modal
-            visible={this.props.isMechanicOtp?true:false}
+            visible={this.props.isMechanicOtp}
             onRequestClose={() => {
               console.log("Modal has been closed.");
             }}
@@ -575,7 +602,7 @@ calltocutomer()
                   flexDirection:'row',
                   justifyContent:'space-around'
                 }}>
-                <TouchableOpacity
+                {this.props.mechanicBookedData?null:<TouchableOpacity
                   style={{
                   width: 0.3 * ScreenWidth,
                   height: 28,
@@ -601,7 +628,7 @@ calltocutomer()
                     >
                       {this.props.loadingStartMap?'Loading...':'Start Map'}
                     </Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
                 <TouchableOpacity
                   style={{
                   width: 0.3 * ScreenWidth,

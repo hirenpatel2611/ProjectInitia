@@ -382,7 +382,7 @@ export default (state = INITIAL_STATE, action) => {
     return{
       ...state,
       loadingStartMap:false,
-
+      isMechanicOtp:false
     }
   }
   break;
@@ -411,7 +411,10 @@ export default (state = INITIAL_STATE, action) => {
     {
       return{
         ...state,
-        FutureBookingList: [...action.payload]
+        FutureBookingList: [...action.payload],
+        mechanicOTP:'',
+        mechanicBookedData:''
+
       }
     }
     break;

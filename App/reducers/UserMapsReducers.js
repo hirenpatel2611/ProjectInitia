@@ -458,7 +458,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          loadingRatingDone: false
+          loadingRatingDone: false,
+          mechanicCurrentLocation:''
         };
       }
       break;
