@@ -94,10 +94,13 @@ class MapViewDirections extends Component {
 			.then(response => response.json())
 			.then(json => {
 				if (json.status !== 'OK') {
+
 					const errorMessage = json.error_message || 'Unknown error';
 					return Promise.reject(errorMessage);
 				}
-
+				console.log(json.routes[0].legs[0].duration.text);
+				var DandD = {distance:json.routes[0].legs[0].distance.text,duration:json.routes[0].legs[0].duration.text}
+				this.props.setDurationAndDistance(DandD);
 				if (json.routes.length) {
 
 					const route = json.routes[0];
@@ -110,9 +113,9 @@ class MapViewDirections extends Component {
 							return carry + curr.duration.value;
 						}, 0) / 60,
 						coordinates: this.decode(route.overview_polyline.points)
+
 					});
-					var DandD = {distance:distance,duration:duration}
-					this.props.setDurationAndDistance(DandD);
+
 				} else {
 					return Promise.reject();
 				}

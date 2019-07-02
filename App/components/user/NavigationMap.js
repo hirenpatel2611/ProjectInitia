@@ -49,9 +49,61 @@ let ASPECT_RATIO = ScreenWidth/ScreenHeight;
 let longitude_Delta =0.0922 * ASPECT_RATIO;
 
 class NearbyGaraje extends Component {
-  componentDidMount() {
-
+  async componentWillMount() {
+    if (Platform.OS === "android" && !Constants.isDevice) {
+    } else {
+      await this._getLocationAsync();
+    }
   }
+  _getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+
+    if (status !== "granted") {
+      this.props.getUserLocationFail();
+    }
+    await Location.hasServicesEnabledAsync()
+      .then(async res => {
+        if (!res) {
+          perm = await IntentLauncherAndroid.startActivityAsync(
+            IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+          );
+        }
+        await Location.hasServicesEnabledAsync()
+          .then(async res => {
+            this.locationIsEnabled = res;
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      })
+      .catch(err => {
+        console.error(err);
+      });
+
+    let location = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.BestForNavigation
+    });
+    this.props.getUserLocationSuccess(location);
+    {
+      this._map.animateToRegion(
+        {
+          latitude: this.props.location.coords.latitude,
+          longitude: this.props.location.coords.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421
+        },
+        1
+      );
+    }
+    await Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.BestForNavigation
+      },
+      location => {
+        this.props.getUserLocationSuccess(location);
+      }
+    );
+  };
   callToMechanic()
     {
         //     const args = {
@@ -359,7 +411,7 @@ class NearbyGaraje extends Component {
               fontSize: 16,
               color: "#4A4A4A",
               marginTop: 3
-            }}>Dist({this.props.mechanicCurrentLocation.distance} km)</Text>:null}
+            }}>Dist({this.props.mechanicDestance})({this.props.mechanicDuration})</Text>:null}
           </View>
           <TouchableOpacity
             activeOpacity={1}
@@ -449,7 +501,9 @@ const mapStateToProps = ({ usermaps }) => {
     loadingBookig,
     vendorRating,
     isVendorRatingModal,
-    loadingRatingDone
+    loadingRatingDone,
+    mechanicDestance,
+    mechanicDuration
   } = usermaps;
   return {
     location,
@@ -463,7 +517,9 @@ const mapStateToProps = ({ usermaps }) => {
     loadingBookig,
     vendorRating,
     isVendorRatingModal,
-    loadingRatingDone
+    loadingRatingDone,
+    mechanicDestance,
+    mechanicDuration
   };
 };
 

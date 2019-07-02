@@ -57,6 +57,7 @@ export const MECHANIC_OTP_SUBMEET_SUCCESS = "vendors/MECHANIC_OTP_SUBMEET_SUCCES
 export const MECHANIC_OTP_SUBMEET_FAIL = "vendors/MECHANIC_OTP_SUBMEET_FAIL";
 
 
+
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
     type: GET_FUTURE_BOOKING_LIST_START
@@ -189,7 +190,7 @@ export const getBookingUpdate = val => (dispatch, getState) => {
 };
 
 export const getMechanicOtp = val => (dispatch, getState) => {
-  const { bookingData } = getState().vendors;
+  const { bookingData,FutureBookingList } = getState().vendors;
   let testOtp = new FormData();
   testOtp.append("booking_id", val);
   Api.post(SEND_MECHANIC_OTP, testOtp)
@@ -198,6 +199,15 @@ export const getMechanicOtp = val => (dispatch, getState) => {
         dispatch({
           type: GET_MECHANIC_OTP,
           payload: response.OTP
+        });
+        FutureBookingList.map(booking => {
+          if (booking.booking_id === val) {
+            booking.booking_otp = response.OTP;
+          }
+        });
+        dispatch({
+          type: OTP_DONE,
+          payload: FutureBookingList
         });
       }
     })
@@ -289,15 +299,7 @@ export const otpDone = val => (dispatch, getState) => {
   }).then(response=>{
     console.log(response);
   });
-  FutureBookingList.map(booking => {
-    if (booking.booking_id === bookingData.booking_id) {
-      booking.booking_otp = val;
-    }
-  });
-  dispatch({
-    type: OTP_DONE,
-    payload: FutureBookingList
-  });
+
 };
 
 export const getBookingVendorStatus = data => (dispatch, getState) => {

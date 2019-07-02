@@ -324,7 +324,7 @@ if(bookingDetails){
   dist = dist * 1.609344;
   console.log(dist);
   dist =parseFloat(dist.toFixed(3));
-  if(dist < 0.050){
+  if(dist > 0.050){
   chatSocket.emit("booking_status", {
     room: `${bookingDetails.booking.customer.customer_id} ${
       bookingDetails.booking.vendor.vendor_id
@@ -337,7 +337,22 @@ if(bookingDetails){
   channelName = `${bookingDetails.booking.vendor.vendor_id} ${
     bookingDetails.booking.customer.customer_id
   }`;
-  }
+}else {
+  chatSocket.emit("booking_status", {
+    room: `${bookingDetails.booking.customer.customer_id} ${
+      bookingDetails.booking.vendor.vendor_id
+    }`,
+    message: locations,
+    distance:dist,
+    mobile_no:vendorMobileno,
+    type: "MECHANIC_CURRENT_LOCATION"
+  });
+  channelName = `${bookingDetails.booking.vendor.vendor_id} ${
+    bookingDetails.booking.customer.customer_id
+  }`;
+  TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
+}
+
 }
 
 })
