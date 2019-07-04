@@ -33,13 +33,17 @@ import {
   getReasonCheckboxVendor,
   getCancelBookingModalCloseVendor,
   startMapVendor,
-  socketBookingCompleted
+  socketBookingCompleted,
+  getCustomerRating,
+  getCustomerRatingModal,
+  getRatingToCustomer
 } from "../../actions";
 import { FutureBookingList, Spinner } from "../../Common";
 import { CALL, BITMAP2 } from "../../images";
 import call from "react-native-phone-call";
 import CheckBox from "react-native-check-box";
 import {TaskManager} from 'expo';
+import { Rating, AirbnbRating } from "react-native-ratings";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -207,7 +211,7 @@ calltocutomer()
                         otp:item.booking_otp
                       }
                       item.status === "reached"?
-                      this.props.socketBookingCompleted(item):
+                      this.props.getCustomerRatingModal(item):
                      this.props.startMapVendor(startMapData)
 
                     }}
@@ -773,6 +777,67 @@ calltocutomer()
               </View>
             </View>
           </Modal>
+          <Modal
+            visible={this.props.modalCustomerRating}
+            onRequestClose={() => {
+              console.log("Modal has been closed.");
+            }}
+            animationType="slide"
+            transparent={true}
+            opacity={0.5}
+            style={inStyle.modalStyle}
+          >
+          <View style={{
+            marginTop: 0.4 * ScreenHeight,
+            alignSelf: "center",
+            backgroundColor: "#FFFFFF",
+            height: 0.25 * ScreenHeight,
+            margin: 15,
+            borderRadius: 10,
+            padding: 10,
+            justifyContent: "space-around"
+          }}>
+          <Text style={{fontFamily:'circular-book',alignSelf:'center',margin:0.01 * ScreenHeight}}>
+          Rating for Customer
+          </Text>
+              <AirbnbRating
+                type="star"
+                ratingBackgroundColor="transparent"
+                imageSize={25}
+                defaultRating={this.props.customerRating}
+                showRating={false}
+                onFinishRating={rating => {
+                  this.props.getCustomerRating(rating);
+                }}
+              />
+              <TouchableOpacity
+                style={{
+                  alignSelf: "center",
+                  backgroundColor: "#7960FF",
+                  width: 0.4 * ScreenWidth,
+                  borderRadius: 5,
+                  alignItems: "center",
+                  margin: 10,
+                  padding: 5,
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+                activeOpacity={1}
+                underlayColor="white"
+                onPress={() => {
+                  this.props.getRatingToCustomer();
+                }}
+              >
+                {this.props.loadingRating ? (
+                  <Text style={inStyle.modalButtonCancleText}>
+                    Loading...
+                  </Text>
+                ) : (
+                  <Text style={inStyle.modalButtonCancleText}>Confirm</Text>
+                )}
+              </TouchableOpacity>
+          </View>
+          </Modal>
         </ScrollView>
       </View>
     );
@@ -836,7 +901,9 @@ const mapStateToProps = ({ vendors }) => {
     loadingConfirm,
     isFutureBookingNoFound,
     customerDistance,
-    loadingStartMap
+    loadingStartMap,
+    modalCustomerRating,
+    customerRating
   } = vendors;
   return {
     loadingFutureBookigList,
@@ -857,7 +924,9 @@ const mapStateToProps = ({ vendors }) => {
     loadingConfirm,
     isFutureBookingNoFound,
     customerDistance,
-    loadingStartMap
+    loadingStartMap,
+    modalCustomerRating,
+    customerRating
   };
 };
 
@@ -877,6 +946,9 @@ export default connect(
     getReasonCheckboxVendor,
     getCancelBookingModalCloseVendor,
     startMapVendor,
-    socketBookingCompleted
+    socketBookingCompleted,
+    getCustomerRating,
+    getCustomerRatingModal,
+    getRatingToCustomer
   }
 )(FutureBooking);

@@ -8,7 +8,7 @@ import { Actions } from "react-native-router-flux";
 
 export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
-export const COMPELETE_BOOKING_BY_VENDOR = 'vendors/COMPELETE_BOOKING_BY_VENDOR';
+
 var isVen = null;
 var disp = null;
 var bookingDetails = null;
@@ -352,9 +352,7 @@ if(bookingDetails){
   }`;
   TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
 }
-
 }
-
 })
 
 export const socketBookingCompleted = val => (dispatch,getState) =>{
@@ -372,14 +370,6 @@ var booking = {booking:val};
     val.customer.customer_id
   }`;
 
-  FutureBookingList.map(booking => {
-    if (booking.booking_id === val.booking_id) {
-      booking.status = "completed",
-      booking.booking_otp=null
-    }});
-      dispatch({
-        type:COMPELETE_BOOKING_BY_VENDOR,
-        payload:FutureBookingList
-      })
+
 
 }

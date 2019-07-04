@@ -31,7 +31,11 @@ import {
   START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
   MECHANIC_OTP_SUBMEET_SUCCESS,
   COMPELETE_BOOKING_BY_VENDOR,
-  MECHANIC_OTP_SUBMEET_FAIL
+  MECHANIC_OTP_SUBMEET_FAIL,
+  GET_CUSTOMER_RATING,
+  GET_CUSTOMER_RATING_MODAL,
+  GET_RATING_TO_CUSTOMER_START,
+  GET_RATING_TO_CUSTOMER_SUCCESS
 } from "../actions/Vendors";
 import {SET_ALL_STATE_TO_INITIAL} from '../actions/ui';
 
@@ -66,7 +70,11 @@ const INITIAL_STATE = {
   customerDistance:'',
   loadingStartMap:false,
   customerLocation:'',
-  mechanicBookedData:''
+  mechanicBookedData:'',
+  modalCustomerRating:false,
+  customerRating:'',
+  ratingId:'',
+  loadingRating:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -170,7 +178,7 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          isMechanicOtp: false,
+
           FutureBookingList: [...action.payload]
         };
       }
@@ -411,10 +419,48 @@ export default (state = INITIAL_STATE, action) => {
     {
       return{
         ...state,
-        FutureBookingList: [...action.payload],
+        FutureBookingList: [...action.payload.FutureBookingList],
         mechanicOTP:'',
-        mechanicBookedData:''
+        mechanicBookedData:'',
+        ratingId:action.payload.val
+      }
+    }
+    break;
 
+    case GET_CUSTOMER_RATING_MODAL:
+    {
+      return{
+        ...state,
+        modalCustomerRating:true,
+      }
+    }
+    break;
+
+    case GET_CUSTOMER_RATING:
+    {
+      return{
+        ...state,
+        customerRating:action.payload
+      }
+    }
+    break;
+
+    case GET_RATING_TO_CUSTOMER_START:
+    {
+      return{
+        ...state,
+        loadingRating:true
+      }
+    }
+    break;
+
+    case GET_RATING_TO_CUSTOMER_SUCCESS:
+    {
+      return{
+        ...state,
+        modalCustomerRating:false,
+        loadingRating:false,
+        customerRating:0
       }
     }
     break;

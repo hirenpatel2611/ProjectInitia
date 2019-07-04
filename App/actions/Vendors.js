@@ -6,9 +6,15 @@ import {
   BOOKING_UPDATE,
   SEND_MECHANIC_OTP,
   UPDATE_PROFILE,
-  VERIFY_MECHANIC_OTP
+  VERIFY_MECHANIC_OTP,
+  RATING_BY_CUSTOMER
 } from "../config";
-import { connectTosocketApprov, connectTosocketBookingCancle,socketBookingOnTheWay,socketVendorCurrentLocation } from "./Socket";
+import {
+  connectTosocketApprov,
+  connectTosocketBookingCancle,
+  socketBookingOnTheWay,
+  socketVendorCurrentLocation,
+  socketBookingCompleted } from "./Socket";
 import { Asset, SplashScreen,ImagePicker,Permissions,Constants,TaskManager,Location } from "expo";
 import { Actions } from "react-native-router-flux";
 import openMap from "react-native-open-maps";
@@ -55,7 +61,11 @@ export const START_MAP_VENDOR_START = "vendors/START_MAP_VENDOR_START";
 export const START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS = "vendors/START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS";
 export const MECHANIC_OTP_SUBMEET_SUCCESS = "vendors/MECHANIC_OTP_SUBMEET_SUCCESS";
 export const MECHANIC_OTP_SUBMEET_FAIL = "vendors/MECHANIC_OTP_SUBMEET_FAIL";
-
+export const GET_CUSTOMER_RATING = "vendors/GET_CUSTOMER_RATING";
+export const GET_CUSTOMER_RATING_MODAL = "vendors/GET_CUSTOMER_RATING_MODAL";
+export const COMPELETE_BOOKING_BY_VENDOR = "vendors/COMPELETE_BOOKING_BY_VENDOR";
+export const GET_RATING_TO_CUSTOMER_START = "vendors/GET_RATING_TO_CUSTOMER_START";
+export const GET_RATING_TO_CUSTOMER_SUCCESS = "vendors/GET_RATING_TO_CUSTOMER_SUCCESS";
 
 
 export const getFutureBookings = () => async (dispatch, getState) => {
@@ -483,3 +493,44 @@ export const goToMap = () => async (dispatch, getState) => {
   openMap({ start: [startLat.toString()], end: [endLat.toString()] });
 
 };
+
+export const getCustomerRating = rating => (dispatch) => {
+  dispatch({
+    type:GET_CUSTOMER_RATING,
+    payload:rating
+  });
+}
+
+export const getCustomerRatingModal = val => (dispatch,getState) => {
+  const { FutureBookingList } = getState().vendors;
+  dispatch({
+    type:GET_CUSTOMER_RATING_MODAL,
+  });
+  dispatch(socketBookingCompleted(val));
+  FutureBookingList.map(booking => {
+    if (booking.booking_id === val.booking_id) {
+      booking.status = "completed",
+      booking.booking_otp=null
+    }});
+      dispatch({
+        type:COMPELETE_BOOKING_BY_VENDOR,
+        payload:{FutureBookingList:FutureBookingList,val:val.customer.customer_id}
+      })
+}
+
+export const getRatingToCustomer = val => (dispatch,getState) => {
+  dispatch({
+    type:GET_RATING_TO_CUSTOMER_START,
+  })
+const { customerRating,ratingId } = getState().vendors;
+  let test = new FormData();
+  test.append("vendor_id", ratingId);
+  test.append("rating", customerRating);
+  Api.post(RATING_BY_CUSTOMER, test).then(response => {
+    if(response.status === 1){
+      dispatch({
+        type:GET_RATING_TO_CUSTOMER_SUCCESS,
+      })
+    }
+  });
+}

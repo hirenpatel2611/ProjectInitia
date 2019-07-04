@@ -83,14 +83,24 @@ export const GET_VENDOR_RATING_MODAL = "usermaps/GET_VENDOR_RATING_MODAL";
 var cancelAlertCounter = 0;
 var getVendorsCounter =0;
 
-export const getVendors = () => (dispatch, getState) => {
+export const getVendors = () => async (dispatch, getState) => {
   dispatch({
     type: GET_VENDORS_START
   });
-  const {vendorServiceType,rating} =getState().usermaps;
+   const {vendorServiceType,rating,location,distance} = await getState().usermaps;
+  if(!location){
+    var DistLatitude = 23.007
+    var DistLongitude= 72.505
+  } else {
+    DistLatitude = location.coords.latitude
+    DistLongitude= location.coords.longitude
+  }
   let test = new FormData();
   test.append("service_type", vendorServiceType);
   test.append("rating", rating);
+  test.append("latitude", DistLatitude);
+  test.append("longitude", DistLongitude);
+  test.append("radius", distance);
   Api.post(GET_VENDOR, test)
     .then(response => {
       if (response.status === 0) {
@@ -450,6 +460,7 @@ export const getRating = () => (dispatch, getState) => {
   test.append("vendor_id", bookData.vendor_id);
   test.append("rating", vendorRating);
   Api.post(RATING_BY_CUSTOMER, test).then(response => {
+    console.log(response);
     dispatch({
       type: GET_RATING_SUCCESS
     });

@@ -134,7 +134,7 @@ class NearbyGaraje extends Component {
 
 
   render() {
-    const { containerStyle, continueButton, buttonText, createButton } = styles;
+    const { containerStyle, continueButton, buttonText, createButton,textInputProfilStyle } = styles;
     return (
       <View style={containerStyle}>
         <StatusBar backgroundColor="#7960FF" />
@@ -212,7 +212,7 @@ class NearbyGaraje extends Component {
               }}
           >
           <View style={{marginTop: 0.40 * ScreenHeight,
-                        height:0.20 * ScreenHeight,
+                        height:0.25 * ScreenHeight,
                         margin:10,
                         backgroundColor:'white',
                         borderRadius:5
@@ -231,8 +231,18 @@ class NearbyGaraje extends Component {
                     this.props.getVendorRating(rating);
                   }}
                 />
-
+                <TextInput
+                  style={textInputProfilStyle}
+                  underlineColorAndroid="transparent"
+                  placeholderTextColor="#9D9D9D"
+                  placeholder="Comment..."
+                  multiline={true}
+                  onChangeText={text => {
+                    console.log(text);
+                  }}
+                />
             <TouchableHighlight
+            disabled={this.props.vendorRating >= 1?false:true}
               onPress={() => {
                 var sts = 'completed'
                 this.props.getBookingUpdateUser(sts)
@@ -246,7 +256,9 @@ class NearbyGaraje extends Component {
               justifyContent: "center",
               alignSelf:'center',
               alignItems: "center",
-              borderRadius: 25}}
+              borderRadius: 25,
+              opacity:this.props.vendorRating >= 1?1:0.5
+            }}
             >
                 <Text style={buttonText}>{this.props.loadingRatingDone?'loading...':'Done'}</Text>
             </TouchableHighlight>
