@@ -31,7 +31,7 @@ import {
 } from "../../actions";
 import _ from "lodash";
 import TimerMixin from "react-timer-mixin";
-import styles from "./usermapsStyle";
+import styles from "./customersStyle";
 import Header from "../../Common/Header";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import CheckBox from "react-native-check-box";

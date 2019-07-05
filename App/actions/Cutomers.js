@@ -397,13 +397,15 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       if (response.status !== 0) {
+        if (val === "reached") {
         obj.type = "REACHED";
-
+        dispatch(connectTosocketReached());
+        }
         dispatch({
           type: GET_BOOKING_UPDATE_SUCCESS,
           payload: obj
         });
-        dispatch(connectTosocketReached());
+
         if (val === "completed") {
           dispatch(getRating());
 

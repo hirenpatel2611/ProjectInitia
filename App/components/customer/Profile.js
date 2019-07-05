@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import styles from "./usermapsStyle";
+import styles from "./customersStyle";
 import Header from "../../Common/Header";
 import {
   getUserLocationSuccess,
@@ -53,7 +53,10 @@ getPermissionAsync = async () => {
       textInputProfilStyle,
       createButton,
       buttonText,
-      whiteText
+      whiteText,
+      profileMainView,
+      profileButton,
+      profileButtonText
     } = styles;
 
     return (
@@ -61,11 +64,7 @@ getPermissionAsync = async () => {
       <Header headerText="Profile"/>
       <KeyboardAwareScrollView enableOnAndroid>
       <View
-        style={{
-            marginTop:0.009 * ScreenHeight,
-          height: 0.42 * ScreenHeight,
-          justifyContent: "space-around"
-        }}
+        style={profileMainView}
       >
       <TextInput
         style={textInputProfilStyle}
@@ -111,21 +110,8 @@ getPermissionAsync = async () => {
           this.props.updateCustomerProfile();
         }}
         underlayColor="white"
-        style={{ marginTop: 0.35 * ScreenHeight,
-                alignSelf:'center',
-                backgroundColor: "#7960FF",
-                height: 44,
-                width: 0.78 * ScreenWidth,
-                borderRadius: 25,
-                alignItems: "center",
-                marginBottom: 10,
-                justifyContent: "center"
-         }}
-      >
-          <Text style={{padding: 10,
-          fontSize: 18,
-          fontFamily: "circular-book",
-        color: "white"}}>{this.props.loadingCustomerProfile?'Loading...':'Continue'}</Text>
+        style={profileButton}>
+          <Text style={profileButtonText}>{this.props.loadingCustomerProfile?'Loading...':'Continue'}</Text>
       </TouchableHighlight>
       </KeyboardAwareScrollView>
       </View>

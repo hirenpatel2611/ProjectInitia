@@ -74,6 +74,26 @@ var styles = StyleSheet.create({
     // color: 'white',
     justifyContent: "center"
   },
-
+  profileMainView:{
+      marginTop:0.009 * ScreenHeight,
+    height: 0.42 * ScreenHeight,
+    justifyContent: "space-around"
+  },
+  profileButton:{ marginTop: 0.35 * ScreenHeight,
+          alignSelf:'center',
+          backgroundColor: "#7960FF",
+          height: 44,
+          width: 0.78 * ScreenWidth,
+          borderRadius: 25,
+          alignItems: "center",
+          marginBottom: 10,
+          justifyContent: "center"
+   },
+   profileButtonText:{
+     padding: 10,
+     fontSize: 18,
+     fontFamily: "circular-book",
+     color: "white"
+},
 });
 export default styles;

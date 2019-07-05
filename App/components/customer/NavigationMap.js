@@ -22,7 +22,7 @@ import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Actions } from "react-native-router-flux";
 import { setTimer, setScore } from "../../actions";
-import styles from "./usermapsStyle";
+import styles from "./customersStyle";
 import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";

@@ -17,7 +17,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import styles from "./usermapsStyle";
+import styles from "./customersStyle";
 import Header from "../../Common/Header";
 import { getBookings, getDistanceList} from "../../actions";
 import {Spinner} from "../../Common";
