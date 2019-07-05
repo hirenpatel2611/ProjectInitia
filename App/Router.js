@@ -14,12 +14,11 @@ import RegisterMobile from "./components/register/RegisterMobile";
 import RegisterOTP from "./components/register/RegisterOTP";
 import profile from "./components/register/Profile";
 import SplashFront from "./components/splash/SplashFront";
-import filter from "./components/user/filter";
-import NearbyGaraje from "./components/user/NearbyGaraje";
-import UserProfile from "./components/user/Profile";
-import NavigationMap from "./components/user/NavigationMap";
-import Booking from "./components/user/Booking";
-import customerRating from "./components/user/customerRating";
+import filter from "./components/customer/filter";
+import NearbyGaraje from "./components/customer/NearbyGaraje";
+import UserProfile from "./components/customer/Profile";
+import NavigationMap from "./components/customer/NavigationMap";
+import Booking from "./components/customer/Booking";
 import FutureBooking from "./components/vendors/FutureBooking";
 import VendorProfile from "./components/vendors/Profile";
 import ForgotMobile from "./components/forgotPassword/ForgotMobile";
@@ -147,13 +146,7 @@ class RouterComponent extends Component {
             hideNavBar={true}
             navTransparent="true"
           />
-          <Scene
-            key="customerRating"
-            component={customerRating}
-            hideNavBar={true}
-            navTransparent="true"
-            type={ActionConst.RESET}
-          />
+
           <Scene
             key="ForgotMobile"
             component={ForgotMobile}

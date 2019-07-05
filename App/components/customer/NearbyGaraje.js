@@ -505,7 +505,7 @@ const inStyle = {
   }
 };
 
-const mapStateToProps = ({ usermaps }) => {
+const mapStateToProps = ({ customers }) => {
   const {
     loading,
     vendors,
@@ -520,7 +520,7 @@ const mapStateToProps = ({ usermaps }) => {
     reasonCheckbox,
     isBookCancelModal,
     confirmDisable
-  } = usermaps;
+  } = customers;
   return {
     loading,
     vendors,

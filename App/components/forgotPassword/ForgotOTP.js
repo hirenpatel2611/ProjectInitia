@@ -95,30 +95,14 @@ class ForgotOTP extends Component {
           </View>
           <View elevation={5} style={otpViewStyle}>
             <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                flex: 1,
-                marginTop: -18
-              }}
+              style={inStyle.otpViewStyle}
             >
               <OtpInputs
                 focusedBorderColor={"white"}
                 handleChange={code => this.props.onForgotOTPChange(code)}
                 numberOfInputs={6}
-                inputStyles={{
-                backgroundColor: "white",
-                borderBottomWidth: 1,
-                color: "black",
-                borderColor: "#7960FF",
-                width: 0.06 * ScreenWidth,
-                fontSize: 0.03 * ScreenHeight,
-              }}
-              inputContainerStyles={{
-                backgroundColor: "white",
-                height: 0.052 * ScreenHeight,
-                marginLeft:-25
-              }}
+                inputStyles={inStyle.otpInputStyle}
+                inputContainerStyles={inStyle.otpInputContainerStyles}
                 inputContainerStyles={{ backgroundColor: "white",}}
               />
             </View>
@@ -146,6 +130,29 @@ class ForgotOTP extends Component {
     );
   }
 }
+
+const inStyle = {
+  otpInputStyle:{
+  backgroundColor: "white",
+  borderBottomWidth: 1,
+  color: "black",
+  borderColor: "#7960FF",
+  width: 0.06 * ScreenWidth,
+  fontSize: 0.03 * ScreenHeight,
+},
+otpInputContainerStyles:{
+  backgroundColor: "white",
+  height: 0.052 * ScreenHeight,
+  marginLeft:-25
+},
+otpViewStyle:{
+  flexDirection: "row",
+  alignItems: "center",
+  flex: 1,
+  marginTop: -18
+}
+};
+
 const notEmpty = test => !isEmpty(test);
 const rules = [
   {

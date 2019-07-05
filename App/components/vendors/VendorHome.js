@@ -186,8 +186,8 @@ class VendorHome extends Component {
   }
 }
 
-const mapStateToProps = ({ usermaps }) => {
-  const { loading, vendors, errorMessage, location } = usermaps;
+const mapStateToProps = ({ customers }) => {
+  const { loading, vendors, errorMessage, location } = customers;
   return {
     loading,
     vendors,

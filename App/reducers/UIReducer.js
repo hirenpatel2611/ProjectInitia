@@ -6,7 +6,7 @@ import {
 
 const INITIAL_STATE = {
   fontLoaded: false,
-  isLoggedIn: false,
+  isLoggedIn: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -19,13 +19,12 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, isLoggedIn: action.payload };
       break;
 
-      case SET_ALL_STATE_TO_INITIAL:
+    case SET_ALL_STATE_TO_INITIAL:
       {
-        return{
+        return {
           ...state,
-          isLoggedIn:false
-
-        }
+          isLoggedIn: false
+        };
       }
       break;
 

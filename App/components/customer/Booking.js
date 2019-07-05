@@ -50,70 +50,37 @@ class Booking extends Component {
          keyExtractor={(item, index) => index.toString()}
          renderItem={({item}) => (
            <View
-             style={{
-               margin: 5,
-               backgroundColor: "white",
-               padding: 10,
-               borderRadius: 5,
-               justifyContent: "space-around"
-             }}
+             style={inStyle.listMainView}
            >
              <View
-               style={{
-                 flexDirection: "row",
-                 justifyContent: "space-between"
-               }}
+               style={inStyle.viewMarginDirection}
              >
                <Text
-                 style={{
-                   fontFamily: "circular-bold",
-                   fontSize: 18,
-                   color: "#4A4A4A",
-                   fontFamily: "circular-bold"
-                 }}
+                 style={inStyle.textFont18}
                >
                  {item.vendor.first_name}
                </Text>
-               <Text style={{
-                 fontFamily: "circular-bold",
-                 fontSize: 18,
-                 color: "#4A4A4A",
-                 fontFamily: "circular-bold"
-               }}>
+               <Text style={inStyle.textFont18}>
                {item.status}
                </Text>
              </View>
              <View
-               style={{
-                 flexDirection: "row",
-                 justifyContent: "space-between",
-                 marginTop: 10
-               }}
+               style={[
+                 {marginTop: 10},
+                 inStyle.viewMarginDirection
+               ]}
              >
                <Text
-                 style={{
-                   fontFamily: "circular-bold",
-                   fontSize: 14,
-                   color: "#4A4A4A",
-                   fontFamily: "circular-book"
-                 }}
+                 style={inStyle.textFont14}
                >
                  {item.vendor.mobile}
                </Text>
              </View>
              <View
-               style={{
-                 flexDirection: "row",
-                 justifyContent: "space-between"
-               }}
+               style={inStyle.viewMarginDirection}
              >
                <Text
-                 style={{
-                   fontFamily: "circular-bold",
-                   fontSize: 14,
-                   color: "#7960FF",
-                   fontFamily: "circular-book"
-                 }}
+                 style={[inStyle.textFont14,{  color: "#7960FF",}]}
                >
                  {item.vendor.email}
                </Text>
@@ -142,16 +109,37 @@ const inStyle ={
   buttonReload:{
     alignSelf: "center",
     paddingTop: 20
+  },
+  textFont18:{
+    fontFamily: "circular-bold",
+    fontSize: 18,
+    color: "#4A4A4A",
+  },
+  textFont14:{
+    fontFamily: "circular-bold",
+    fontSize: 14,
+    color: "#4A4A4A",
+  },
+  listMainView:{
+    margin: 5,
+    backgroundColor: "white",
+    padding: 10,
+    borderRadius: 5,
+    justifyContent: "space-around"
+  },
+  viewMarginDirection:{
+    flexDirection: "row",
+    justifyContent: "space-between"
   }
 };
-const mapStateToProps = ({ usermaps }) => {
+const mapStateToProps = ({ customers }) => {
   const {
     loadingBookigList,
     vendorList,
     isBookingListFail,
     vendorDistanceList,
     bookingListFound
-  } = usermaps
+  } = customers
 
   return {
     loadingBookigList,

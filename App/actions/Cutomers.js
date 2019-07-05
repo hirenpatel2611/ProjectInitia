@@ -18,82 +18,87 @@ import {
   connectTosocketBookingCancle,
   socketLeave
 } from "./Socket";
-import { Asset, SplashScreen,ImagePicker, Permissions,Constants } from "expo";
+import { Asset, SplashScreen, ImagePicker, Permissions, Constants } from "expo";
 import { getUserData } from "./ui";
 
-export const GET_VENDORS_START = "usermaps/GET_VENDORS_START";
-export const GET_VENDORS_SUCCESS = "usermaps/GET_VENDORS_SUCCESS";
-export const GET_USER_LOCATION_FAIL = "usermaps/GET_USER_LOCATION_FAIL";
-export const GET_USER_LOCATION_SUCCESS = "usermaps/GET_USER_LOCATION_SUCCESS";
-export const IS_MENU_VISIBLE = "usermaps/IS_MENU_VISIBLE";
-export const GET_VENDOR_DETAILS = "usermaps/GET_VENDOR_DETAILS";
-export const CLOSE_VENDOR_DETAIL_MODAL = "usermaps/closeVendorDetailModal";
-export const GET_BOOKING_SUCCESS = "usermaps/GET_BOOKING_SUCCESS";
-export const GET_BOOKING_FAIL = "usermaps/GET_BOOKING_FAIL";
-export const GET_VENDOR_BOOKING_START = "usermaps/GET_VENDOR_BOOKING_START";
-export const GET_BOOKING_LIST_START = "usermaps/GET_BOOKING_LIST_START";
-export const GET_BOOKING_LIST_SUCCESS = "usermaps/GET_BOOKING_LIST_SUCCESS";
-export const GET_BOOKING_LIST_FAIL = "usermaps/GET_BOOKING_LIST_FAIL";
-export const UPDATE_FILTER_VEHICLE_BOOL = "usermaps/UPDATE_FILTER_VEHICLE_BOOL";
-export const UPDATE_FILTER_CAR_BOOL = "usermaps/UPDATE_FILTER_CAR_BOOL";
-export const UPDATE_FILTER_RATING = "usermaps/UPDATE_FILTER_RATING";
-export const UPDATE_FILTER_CHECKED1 = "usermaps/UPDATE_FILTER_CHECKED1";
-export const UPDATE_FILTER_CHECKED2 = "usermaps/UPDATE_FILTER_CHECKED2";
-export const UPDATE_FILTER_CHECKED3 = "usermaps/UPDATE_FILTER_CHECKED3";
-export const UPDATE_FILTER_DISTANCE = "usermaps/UPDATE_FILTER_DISTANCE";
-export const RESET_FILTER = "usermaps/RESET_FILTER";
-export const VENDOR_DISTANCE = "usermaps/VENDOR_DISTANCE";
-export const GET_DISTANCE = "usermaps/GET_DISTANCE";
-export const GET_BOOKING_CANCLE_START = "usermaps/GET_BOOKING_CANCLE_START";
-export const GET_BOOKING_CANCLE_SUCCESS = "usermaps/GET_BOOKING_CANCLE_SUCCESS";
-export const GET_BOOKING_CANCLE_FAIL = "usermaps/GET_BOOKING_CANCLE_FAIL";
-export const GET_BOOKING_STATUS = "usermaps/GET_BOOKING_STATUS";
+export const GET_VENDORS_START = "customers/GET_VENDORS_START";
+export const GET_VENDORS_SUCCESS = "customers/GET_VENDORS_SUCCESS";
+export const GET_USER_LOCATION_FAIL = "customers/GET_USER_LOCATION_FAIL";
+export const GET_USER_LOCATION_SUCCESS = "customers/GET_USER_LOCATION_SUCCESS";
+export const IS_MENU_VISIBLE = "customers/IS_MENU_VISIBLE";
+export const GET_VENDOR_DETAILS = "customers/GET_VENDOR_DETAILS";
+export const CLOSE_VENDOR_DETAIL_MODAL = "customers/closeVendorDetailModal";
+export const GET_BOOKING_SUCCESS = "customers/GET_BOOKING_SUCCESS";
+export const GET_BOOKING_FAIL = "customers/GET_BOOKING_FAIL";
+export const GET_VENDOR_BOOKING_START = "customers/GET_VENDOR_BOOKING_START";
+export const GET_BOOKING_LIST_START = "customers/GET_BOOKING_LIST_START";
+export const GET_BOOKING_LIST_SUCCESS = "customers/GET_BOOKING_LIST_SUCCESS";
+export const GET_BOOKING_LIST_FAIL = "customers/GET_BOOKING_LIST_FAIL";
+export const UPDATE_FILTER_VEHICLE_BOOL = "customers/UPDATE_FILTER_VEHICLE_BOOL";
+export const UPDATE_FILTER_CAR_BOOL = "customers/UPDATE_FILTER_CAR_BOOL";
+export const UPDATE_FILTER_RATING = "customers/UPDATE_FILTER_RATING";
+export const UPDATE_FILTER_CHECKED1 = "customers/UPDATE_FILTER_CHECKED1";
+export const UPDATE_FILTER_CHECKED2 = "customers/UPDATE_FILTER_CHECKED2";
+export const UPDATE_FILTER_CHECKED3 = "customers/UPDATE_FILTER_CHECKED3";
+export const UPDATE_FILTER_DISTANCE = "customers/UPDATE_FILTER_DISTANCE";
+export const RESET_FILTER = "customers/RESET_FILTER";
+export const VENDOR_DISTANCE = "customers/VENDOR_DISTANCE";
+export const GET_DISTANCE = "customers/GET_DISTANCE";
+export const GET_BOOKING_CANCLE_START = "customers/GET_BOOKING_CANCLE_START";
+export const GET_BOOKING_CANCLE_SUCCESS = "customers/GET_BOOKING_CANCLE_SUCCESS";
+export const GET_BOOKING_CANCLE_FAIL = "customers/GET_BOOKING_CANCLE_FAIL";
+export const GET_BOOKING_STATUS = "customers/GET_BOOKING_STATUS";
 export const GET_BOOKING_CANCEL_BY_VENDOR =
-  "usermaps/GET_BOOKING_CANCEL_BY_VENDOR";
+  "customers/GET_BOOKING_CANCEL_BY_VENDOR";
 export const GET_MECHANIC_CURREN_LOCATION =
-  "usermaps/GET_MECHANIC_CURREN_LOCATION";
+  "customers/GET_MECHANIC_CURREN_LOCATION";
 export const GET_DISTANCE_BETWEEN_USER_MECHANIC =
-  "usermaps/GET_DISTANCE_BETWEEN_USER_MECHANIC";
-export const GET_BOOKING_UPDATE_START = "usermaps/GET_BOOKING_UPDATE_START";
-export const GET_BOOKING_UPDATE_SUCCESS = "usermaps/GET_BOOKING_UPDATE_SUCCESS";
-export const GET_BOOKING_UPDATE_FAIL = "usermaps/GET_BOOKING_UPDATE_FAIL";
-export const GET_REASON_CHECKBOX = "usermaps/GET_REASON_CHECKBOX";
-export const GET_REASON_CHECKBOX2 = "usermaps/GET_REASON_CHECKBOX2";
-export const GET_REASON_CHECKBOX3 = "usermaps/GET_REASON_CHECKBOX3";
-export const GET_CANCEL_BOOKING_MODAL = "usermaps/GET_CANCEL_BOOKING_MODAL";
+  "customers/GET_DISTANCE_BETWEEN_USER_MECHANIC";
+export const GET_BOOKING_UPDATE_START = "customers/GET_BOOKING_UPDATE_START";
+export const GET_BOOKING_UPDATE_SUCCESS = "customers/GET_BOOKING_UPDATE_SUCCESS";
+export const GET_BOOKING_UPDATE_FAIL = "customers/GET_BOOKING_UPDATE_FAIL";
+export const GET_REASON_CHECKBOX = "customers/GET_REASON_CHECKBOX";
+export const GET_REASON_CHECKBOX2 = "customers/GET_REASON_CHECKBOX2";
+export const GET_REASON_CHECKBOX3 = "customers/GET_REASON_CHECKBOX3";
+export const GET_CANCEL_BOOKING_MODAL = "customers/GET_CANCEL_BOOKING_MODAL";
 export const GET_CANCEL_BOOKING_MODAL_CLOSE =
-  "usermaps/GET_CANCEL_BOOKING_MODAL_CLOSE";
-export const SET_DURATION_AND_DISTANCE = "usermaps/SET_DURATION_AND_DISTANCE";
-export const GET_BOOKING_COMPLETE = "usermaps/GET_BOOKING_COMPLETE";
-export const GET_VENDOR_RATING = "usermaps/GET_VENDOR_RATING";
-export const GET_RATING_SUCCESS = "usermaps/GET_RATING_SUCCESS";
-export const GET_RATING_START = "usermaps/GET_RATING_START";
-export const NO_BOOKING_FOUND_CUSTOMER = "usermaps/NO_BOOKING_FOUND_CUSTOMER";
-export const LOAD_CUSTOMER_PROFILE = "usermaps/LOAD_CUSTOMER_PROFILE";
-export const UPDATE_CUSTOMER_FULL_NAME = "usermaps/UPDATE_CUSTOMER_FULL_NAME";
-export const UPDATE_CUSTOMER_ADDRESS = "usermaps/UPDATE_CUSTOMER_ADDRESS";
-export const UPDATE_CUSTOMER_EMAIL = "usermaps/UPDATE_CUSTOMER_EMAIL";
-export const UPDATE_CUSTOMER_PROFILE_START = "usermaps/UPDATE_CUSTOMER_PROFILE_START";
-export const UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD = "usermaps/UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD";
-export const UPDATE_CUSTOMER_PROFILE_SUCCESS = "usermaps/UPDATE_CUSTOMER_PROFILE_SUCCESS";
-export const UPDATE_CUSTOMER_PROFILE_FAIL = "usermaps/UPDATE_CUSTOMER_PROFILE_FAIL";
-export const GET_FILTER_SUBMEET = "usermaps/GET_FILTER_SUBMEET";
-export const GET_VENDOR_RATING_MODAL = "usermaps/GET_VENDOR_RATING_MODAL";
+  "customers/GET_CANCEL_BOOKING_MODAL_CLOSE";
+export const SET_DURATION_AND_DISTANCE = "customers/SET_DURATION_AND_DISTANCE";
+export const GET_BOOKING_COMPLETE = "customers/GET_BOOKING_COMPLETE";
+export const GET_VENDOR_RATING = "customers/GET_VENDOR_RATING";
+export const GET_RATING_SUCCESS = "customers/GET_RATING_SUCCESS";
+export const GET_RATING_START = "customers/GET_RATING_START";
+export const NO_BOOKING_FOUND_CUSTOMER = "customers/NO_BOOKING_FOUND_CUSTOMER";
+export const LOAD_CUSTOMER_PROFILE = "customers/LOAD_CUSTOMER_PROFILE";
+export const UPDATE_CUSTOMER_FULL_NAME = "customers/UPDATE_CUSTOMER_FULL_NAME";
+export const UPDATE_CUSTOMER_ADDRESS = "customers/UPDATE_CUSTOMER_ADDRESS";
+export const UPDATE_CUSTOMER_EMAIL = "customers/UPDATE_CUSTOMER_EMAIL";
+export const UPDATE_CUSTOMER_PROFILE_START =
+  "customers/UPDATE_CUSTOMER_PROFILE_START";
+export const UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD =
+  "customers/UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD";
+export const UPDATE_CUSTOMER_PROFILE_SUCCESS =
+  "customers/UPDATE_CUSTOMER_PROFILE_SUCCESS";
+export const UPDATE_CUSTOMER_PROFILE_FAIL =
+  "customers/UPDATE_CUSTOMER_PROFILE_FAIL";
+export const GET_FILTER_SUBMEET = "customers/GET_FILTER_SUBMEET";
+export const GET_VENDOR_RATING_MODAL = "customers/GET_VENDOR_RATING_MODAL";
 
 var cancelAlertCounter = 0;
-var getVendorsCounter =0;
+var getVendorsCounter = 0;
 
 export const getVendors = () => async (dispatch, getState) => {
   dispatch({
     type: GET_VENDORS_START
   });
-   const {vendorServiceType,rating,location,distance} = await getState().usermaps;
-  if(!location){
-    var DistLatitude = 23.007
-    var DistLongitude= 72.505
+  const { vendorServiceType, rating, location, distance } = await getState()
+    .customers;
+  if (!location) {
+    var DistLatitude = 23.007;
+    var DistLongitude = 72.505;
   } else {
-    DistLatitude = location.coords.latitude
-    DistLongitude= location.coords.longitude
+    DistLatitude = location.coords.latitude;
+    DistLongitude = location.coords.longitude;
   }
   let test = new FormData();
   test.append("service_type", vendorServiceType);
@@ -104,9 +109,9 @@ export const getVendors = () => async (dispatch, getState) => {
   Api.post(GET_VENDOR, test)
     .then(response => {
       if (response.status === 0) {
-        if(getVendorsCounter<5){
-        dispatch(getVendors());
-      }
+        if (getVendorsCounter < 5) {
+          dispatch(getVendors());
+        }
       } else {
         dispatch({
           type: GET_VENDORS_SUCCESS,
@@ -149,7 +154,7 @@ export const BookVendor = () => async (dispatch, getState) => {
   dispatch({
     type: GET_VENDOR_BOOKING_START
   });
-  const { vendorsData, location } = getState().usermaps;
+  const { vendorsData, location } = getState().customers;
   const { userData } = getState().user;
   let test = new FormData();
   test.append("customer_id", userData.userId);
@@ -179,7 +184,7 @@ export const getBookingCancellation = () => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_CANCLE_START
   });
-  const { bookData, cancleReason } = getState().usermaps;
+  const { bookData, cancleReason } = getState().customers;
   let test = new FormData();
   test.append("booking_id", bookData.booking_id);
   test.append("status", "cancle");
@@ -286,7 +291,7 @@ export const resetFilter = val => async dispatch => {
 };
 
 export const getDistance = () => async (dispatch, getState) => {
-  const { vendorsData, location } = getState().usermaps;
+  const { vendorsData, location } = getState().customers;
 
   const mode = "driving"; // 'walking';
   const origin = location.coords;
@@ -295,11 +300,7 @@ export const getDistance = () => async (dispatch, getState) => {
     longitude: vendorsData.longitude
   };
   const APIKEY = "AIzaSyAm_cQCYcozNa9WUVmASmSABGuuS6OSsIw";
-  const url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${
-    origin.latitude
-  },${origin.longitude}&destinations=${destination.latitude},${
-    destination.longitude
-  }&key=${APIKEY}`;
+  const url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${origin.latitude},${origin.longitude}&destinations=${destination.latitude},${destination.longitude}&key=${APIKEY}`;
 
   fetch(url)
     .then(response => response.json())
@@ -351,7 +352,7 @@ export const getBookingStatus = val => async (dispatch, getState) => {
                 type: GET_BOOKING_CANCEL_BY_VENDOR
               });
               Actions.NearbyGaraje();
-              cancelAlertCounter=0;
+              cancelAlertCounter = 0;
             }
           }
         ],
@@ -367,7 +368,7 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
     type: GET_MECHANIC_CURREN_LOCATION,
     payload: val
   });
-  const { location } = getState().usermaps;
+  const { location } = getState().customers;
   if (location) {
     var dist = val.distance;
     console.log(val.distance);
@@ -387,7 +388,7 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_UPDATE_START
   });
-  const { bookingStatusRes, bookData } = getState().usermaps;
+  const { bookingStatusRes, bookData } = getState().customers;
   obj = Object.assign({}, bookingStatusRes);
 
   let test = new FormData();
@@ -396,7 +397,6 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       if (response.status !== 0) {
-
         obj.type = "REACHED";
 
         dispatch({
@@ -454,7 +454,7 @@ export const getRating = () => (dispatch, getState) => {
     type: GET_RATING_START
   });
 
-  const { vendorRating, bookData } = getState().usermaps;
+  const { vendorRating, bookData } = getState().customers;
 
   let test = new FormData();
   test.append("vendor_id", bookData.vendor_id);
@@ -475,58 +475,62 @@ export const getVendorRating = rating => dispatch => {
   });
 };
 
-export const loadCustomerProfile = () => (dispatch,getState) => {
+export const loadCustomerProfile = () => (dispatch, getState) => {
   const { userData } = getState().user;
   dispatch({
-    type:LOAD_CUSTOMER_PROFILE,
-    payload:userData
+    type: LOAD_CUSTOMER_PROFILE,
+    payload: userData
   });
-}
+};
 
-export const updateCustomerFullName = val => (dispatch) => {
+export const updateCustomerFullName = val => dispatch => {
   dispatch({
-    type:UPDATE_CUSTOMER_FULL_NAME,
-    payload:val
+    type: UPDATE_CUSTOMER_FULL_NAME,
+    payload: val
   });
-}
-export const updateCustomerAddress = val => (dispatch) =>{
+};
+export const updateCustomerAddress = val => dispatch => {
   dispatch({
-    type:UPDATE_CUSTOMER_ADDRESS,
-    payload:val
+    type: UPDATE_CUSTOMER_ADDRESS,
+    payload: val
   });
-}
-export const updateCustomerEmail = val => (dispatch) => {
+};
+export const updateCustomerEmail = val => dispatch => {
   dispatch({
-    type:UPDATE_CUSTOMER_EMAIL,
-    payload:val
+    type: UPDATE_CUSTOMER_EMAIL,
+    payload: val
   });
-}
+};
 
-export const updateCustomerProfile = val => (dispatch,getState) => {
+export const updateCustomerProfile = val => (dispatch, getState) => {
   dispatch({
-    type:UPDATE_CUSTOMER_PROFILE_START,
+    type: UPDATE_CUSTOMER_PROFILE_START
   });
-  const {fullNameCustomer,addressCustomer,emailCustomer} = getState().usermaps;
-  const {userData} = getState().user
+  const {
+    fullNameCustomer,
+    addressCustomer,
+    emailCustomer
+  } = getState().customers;
+  const { userData } = getState().user;
   let test = new FormData();
   test.append("id", userData.userId);
   test.append("first_name", fullNameCustomer);
   test.append("address", addressCustomer);
   Api.post(UPDATE_PROFILE, test).then(response => {
-    if(response.status === 1){
+    if (response.status === 1) {
       dispatch({
-        type:UPDATE_CUSTOMER_PROFILE_SUCCESS,
+        type: UPDATE_CUSTOMER_PROFILE_SUCCESS
       });
       alert(response.message);
     } else {
       dispatch({
-        type:UPDATE_CUSTOMER_PROFILE_FAIL,
+        type: UPDATE_CUSTOMER_PROFILE_FAIL
       });
     }
-  })
-}
+  });
+};
 
-export const upadteCustomerProfileImage = val => async (dispatch) => {
+export const upadteCustomerProfileImage = val => async dispatch => {
   // let result = await ImagePicker.launchImageLibraryAsync({
   //       mediaTypes: ImagePicker.MediaTypeOptions.All,
   //       base64: true,
@@ -543,10 +547,10 @@ export const upadteCustomerProfileImage = val => async (dispatch) => {
   //       });
   //
   //     }
-}
+};
 
-export const getFilterSubmeet = () => (dispatch,getState) => {
-  const {isVehicle,isCar,rating}=getState().usermaps;
+export const getFilterSubmeet = () => (dispatch, getState) => {
+  const { isVehicle, isCar, rating } = getState().customers;
   let vehicle_type = "";
   if (isVehicle === true && isCar === false) {
     vehicle_type = "bike";
@@ -554,23 +558,22 @@ export const getFilterSubmeet = () => (dispatch,getState) => {
     vehicle_type = "car";
   } else if (isVehicle === true && isCar === true) {
     vehicle_type = "both";
-  }else if (isVehicle === false && isCar === false) {
+  } else if (isVehicle === false && isCar === false) {
     vehicle_type = "both";
   }
 
-  var vendorPerameter ={vehicle_type:vehicle_type,
-                        rating:rating};
+  var vendorPerameter = { vehicle_type: vehicle_type, rating: rating };
 
   dispatch({
-    type:GET_FILTER_SUBMEET,
-    payload:vendorPerameter
+    type: GET_FILTER_SUBMEET,
+    payload: vendorPerameter
   });
   Actions.NearbyGaraje();
   dispatch(getVendors());
-}
+};
 
-export const getVendorRatingModal = () => (dispatch) => {
+export const getVendorRatingModal = () => dispatch => {
   dispatch({
-    type:GET_VENDOR_RATING_MODAL,
+    type: GET_VENDOR_RATING_MODAL
   });
-}
+};

@@ -33,7 +33,7 @@ import {
   UPDATE_REGISTER_DOCUMENT_UPLOAD,
   DELETE_REGISTER_DOCUMENT
 } from "../actions/Register";
-import {SET_ALL_STATE_TO_INITIAL} from '../actions/ui';
+import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
 const INITIAL_STATE = {
   isTwoWheeler: false,
@@ -70,10 +70,10 @@ const INITIAL_STATE = {
   longitudeDelta: 0,
   setLocationVisible: false,
   signupFail: "",
-  imageBase64Register:'',
-  imageRegisterUri:'',
-  documentRegisterUri:[],
-  documentBase64Register:[]
+  imageBase64Register: "",
+  imageRegisterUri: "",
+  documentRegisterUri: [],
+  documentBase64Register: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -98,7 +98,6 @@ export default (state = INITIAL_STATE, action) => {
 
     case UPDATE_USER_TYPE:
       {
-        
         return {
           ...state,
           isVendor: action.payload
@@ -259,13 +258,13 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          setLocationVisible:false,
+          setLocationVisible: false,
           loadingSignupB: false,
           visibleModalProfile: true,
           signupFail: "",
-          mobileno:'',
-          otp:'',
-          recievedOTP:'',
+          mobileno: "",
+          otp: "",
+          recievedOTP: "",
           name: "",
           address: "",
           mobilenoProfile: "",
@@ -274,7 +273,7 @@ export default (state = INITIAL_STATE, action) => {
           confirmPassword: "",
           isTwoWheeler: false,
           isFourWheeler: false,
-          onSubmeetSignupForm:false
+          onSubmeetSignupForm: false
         };
       }
       break;
@@ -283,10 +282,9 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          setLocationVisible:false,
+          setLocationVisible: false,
           loadingSignupB: false,
-          signupFail: action.payload,
-
+          signupFail: action.payload
         };
       }
       break;
@@ -376,44 +374,50 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-      case UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD:
-        {
-          return {
-            ...state,
-            imageRegisterUri:action.payload.uri,
-            imageBase64Register:action.payload.base64
-          };
-        }
-        break;
+    case UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD:
+      {
+        return {
+          ...state,
+          imageRegisterUri: action.payload.uri,
+          imageBase64Register: action.payload.base64
+        };
+      }
+      break;
 
     case UPDATE_REGISTER_DOCUMENT_UPLOAD:
-    {
-      return{
-        ...state,
-        documentRegisterUri:[...state.documentRegisterUri,action.payload.uri],
-        documentBase64Register:[...state.documentBase64Register,action.payload.base64]
+      {
+        return {
+          ...state,
+          documentRegisterUri: [
+            ...state.documentRegisterUri,
+            action.payload.uri
+          ],
+          documentBase64Register: [
+            ...state.documentBase64Register,
+            action.payload.base64
+          ]
+        };
       }
-    }
 
       break;
 
-      case DELETE_REGISTER_DOCUMENT:
+    case DELETE_REGISTER_DOCUMENT:
       {
-        return{
+        return {
           ...state,
-          documentRegisterUri:[...action.payload],
-        }
+          documentRegisterUri: [...action.payload]
+        };
       }
-        break;
+      break;
 
-        case SET_ALL_STATE_TO_INITIAL:
-        {
-          return{
-            ...state,
-            ...INITIAL_STATE
-          }
-        }
-        break;
+    case SET_ALL_STATE_TO_INITIAL:
+      {
+        return {
+          ...state,
+          ...INITIAL_STATE
+        };
+      }
+      break;
 
     default:
       return state;

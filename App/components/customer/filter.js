@@ -295,7 +295,7 @@ const inStyle = {
   }
 };
 
-const mapStateToProps = ({ usermaps }) => {
+const mapStateToProps = ({ customers }) => {
   const {
     isVehicle,
     isCar,
@@ -304,7 +304,7 @@ const mapStateToProps = ({ usermaps }) => {
     isChecked2,
     isChecked3,
     distance
-  } = usermaps;
+  } = customers;
   return {
     isVehicle,
     isCar,

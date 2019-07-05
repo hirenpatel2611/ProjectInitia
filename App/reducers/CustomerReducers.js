@@ -49,15 +49,18 @@ import {
   UPDATE_CUSTOMER_PROFILE_SUCCESS,
   UPDATE_CUSTOMER_PROFILE_FAIL,
   GET_FILTER_SUBMEET,
-  GET_VENDOR_RATING_MODAL,
-} from "../actions/UserMaps";
-import { GET_USER_BOOKING_STATUS_ACCEPT,SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
+  GET_VENDOR_RATING_MODAL
+} from "../actions/Cutomers";
+import {
+  GET_USER_BOOKING_STATUS_ACCEPT,
+  SET_ALL_STATE_TO_INITIAL
+} from "../actions/ui";
 
 const INITIAL_STATE = {
   loading: false,
   vendors: [],
-  vendorServiceType:'both',
-  vendorRating:0,
+  vendorServiceType: "both",
+  vendorRating: 0,
   location: "",
   errorMessage: "",
   isBookModalVisible: false,
@@ -90,11 +93,11 @@ const INITIAL_STATE = {
   fullNameCustomer: "",
   addressCustomer: "",
   emailCustomer: "",
-  imageBase64Customer:'',
-  loadingCustomerProfile:false,
-  isVendorRatingModal:false,
-  mechanicDestance:'',
-  mechanicDuration:''
+  imageBase64Customer: "",
+  loadingCustomerProfile: false,
+  isVendorRatingModal: false,
+  mechanicDestance: "",
+  mechanicDuration: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -451,7 +454,7 @@ export default (state = INITIAL_STATE, action) => {
     case GET_BOOKING_UPDATE_FAIL:
       {
         return {
-          ...state,
+          ...state
         };
       }
       break;
@@ -461,7 +464,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingRatingDone: false,
-          mechanicCurrentLocation:''
+          mechanicCurrentLocation: ""
         };
       }
       break;
@@ -475,8 +478,8 @@ export default (state = INITIAL_STATE, action) => {
           bookingStatusRes: "",
           isBookingSuccess: false,
           isBookModalVisible: false,
-          isVendorRatingModal:false,
-          vendorRating:0,
+          isVendorRatingModal: false,
+          vendorRating: 0
         };
       }
       break;
@@ -498,7 +501,7 @@ export default (state = INITIAL_STATE, action) => {
           fullNameCustomer: action.payload.userFullName,
           addressCustomer: action.payload.userAddress,
           emailCustomer: action.payload.userEmail,
-          imageCustomerUri:{uri:action.payload.uri},
+          imageCustomerUri: { uri: action.payload.uri }
         };
       }
       break;
@@ -538,66 +541,66 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           onSubmeetProfileForm: true,
-          loadingCustomerProfile:true
+          loadingCustomerProfile: true
         };
       }
       break;
 
-      case UPDATE_CUSTOMER_PROFILE_SUCCESS:
-        {
-          return {
-            ...state,
-            loadingCustomerProfile:false
-          };
-        }
-        break;
+    case UPDATE_CUSTOMER_PROFILE_SUCCESS:
+      {
+        return {
+          ...state,
+          loadingCustomerProfile: false
+        };
+      }
+      break;
 
-        case UPDATE_CUSTOMER_PROFILE_FAIL:
-          {
-            return {
-              ...state,
-              loadingCustomerProfile:false
-            };
-          }
-          break;
+    case UPDATE_CUSTOMER_PROFILE_FAIL:
+      {
+        return {
+          ...state,
+          loadingCustomerProfile: false
+        };
+      }
+      break;
 
-      case UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD:
-        {
-          return {
-            ...state,
-            imageCustomerUri:{uri:action.payload.uri},
-            imageBase64Customer:action.payload.base64
-          };
-        }
-        break;
+    case UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD:
+      {
+        return {
+          ...state,
+          imageCustomerUri: { uri: action.payload.uri },
+          imageBase64Customer: action.payload.base64
+        };
+      }
+      break;
 
-        case GET_FILTER_SUBMEET:
-          {
-            return {
-              ...state,
-              vendorServiceType:action.payload.vehicle_type,
-              vendorRating:action.payload.rating
-            };
-          }
-          break;
+    case GET_FILTER_SUBMEET:
+      {
+        return {
+          ...state,
+          vendorServiceType: action.payload.vehicle_type,
+          vendorRating: action.payload.rating
+        };
+      }
+      break;
 
-          case GET_VENDOR_RATING_MODAL:
-          {
-            return{
-              ...state,
-              isVendorRatingModal:true
-            }
-          }
-          break;
+    case GET_VENDOR_RATING_MODAL:
+      {
+        return {
+          ...state,
+          isVendorRatingModal: true
+        };
+      }
+      break;
 
-          case SET_ALL_STATE_TO_INITIAL:
-          {
-            return{
-              ...state,
-              ...INITIAL_STATE
-            }
-          }
-          break;
+    case SET_ALL_STATE_TO_INITIAL:
+      {
+        return {
+          ...state,
+          ...INITIAL_STATE
+        };
+      }
+      break;
 
     default:
       return state;

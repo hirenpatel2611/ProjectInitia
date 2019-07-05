@@ -401,6 +401,22 @@ var styles = StyleSheet.create({
     alignItems: "stretch",
     height: ScreenHeight
   },
+  resetMainContainer:{alignItems: "center",
+  marginTop: 25,
+  backgroundColor: "white",
+  borderRadius: 5,
+  marginLeft: 30,
+  marginRight: 30,
+  marginBottom: 10,
+  paddingBottom: 10,
+  shadowColor: "#000000",
+  shadowOffset: { width: 0, height: 3 },
+  shadowRadius: 5,
+  shadowOpacity: 1.0,
+  height: 0.32 * ScreenHeight,
+  paddingTop:0.03 * ScreenHeight,
+  marginTop:200
+},
 
 });
 export default styles;

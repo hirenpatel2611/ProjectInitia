@@ -119,6 +119,8 @@ class ForgotPassword extends Component {
   }
 }
 
+
+
 const notEmpty = test => !isEmpty(test);
 const rules = [
   {

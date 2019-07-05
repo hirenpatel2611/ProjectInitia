@@ -37,7 +37,7 @@ import {
   GET_RATING_TO_CUSTOMER_START,
   GET_RATING_TO_CUSTOMER_SUCCESS
 } from "../actions/Vendors";
-import {SET_ALL_STATE_TO_INITIAL} from '../actions/ui';
+import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
 const INITIAL_STATE = {
   loadingFutureBookigList: false,
@@ -64,17 +64,17 @@ const INITIAL_STATE = {
   fullNameVendor: "",
   addressVendor: "",
   emailVendor: "",
-  imageVendorUri:'',
-  imageBase64Vendor:'',
-  loadingProfileUpdate:false,
-  customerDistance:'',
-  loadingStartMap:false,
-  customerLocation:'',
-  mechanicBookedData:'',
-  modalCustomerRating:false,
-  customerRating:'',
-  ratingId:'',
-  loadingRating:false
+  imageVendorUri: "",
+  imageBase64Vendor: "",
+  loadingProfileUpdate: false,
+  customerDistance: "",
+  loadingStartMap: false,
+  customerLocation: "",
+  mechanicBookedData: "",
+  modalCustomerRating: false,
+  customerRating: "",
+  ratingId: "",
+  loadingRating: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -127,8 +127,8 @@ export default (state = INITIAL_STATE, action) => {
           isBooking: true,
           bookingData: action.payload.bookData,
           bookUserData: action.payload.userData,
-          customerDistance:action.payload.vendorDistance,
-          customerLocation:action.payload.location,
+          customerDistance: action.payload.vendorDistance,
+          customerLocation: action.payload.location
         };
       }
       break;
@@ -329,28 +329,28 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           onSubmeetProfileVendorForm: true,
-          loadingProfileUpdate:true
+          loadingProfileUpdate: true
         };
       }
       break;
 
-      case UPDATE_VENDOR_PROFILE_SUCCESS:
-        {
-          return {
-            ...state,
-          loadingProfileUpdate:false
-          };
-        }
-        break;
+    case UPDATE_VENDOR_PROFILE_SUCCESS:
+      {
+        return {
+          ...state,
+          loadingProfileUpdate: false
+        };
+      }
+      break;
 
-        case UPDATE_VENDOR_PROFILE_FAIL:
-          {
-            return {
-              ...state,
-            loadingProfileUpdate:false
-            };
-          }
-          break;
+    case UPDATE_VENDOR_PROFILE_FAIL:
+      {
+        return {
+          ...state,
+          loadingProfileUpdate: false
+        };
+      }
+      break;
 
     case LOAD_VENDOR_PROFILE:
       {
@@ -360,119 +360,116 @@ export default (state = INITIAL_STATE, action) => {
           fullNameVendor: action.payload.userFullName,
           addressVendor: action.payload.userAddress,
           emailVendor: action.payload.userEmail,
-          imageVendorUri:action.payload.uri.profile_image,
+          imageVendorUri: action.payload.uri.profile_image
         };
       }
       break;
 
-  case UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD:
-  {
-    return{
-      ...state,
-      imageVendorUri:action.payload.uri,
-      imageBase64Vendor:action.payload.base64
-    }
-  }
-  break;
+    case UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD:
+      {
+        return {
+          ...state,
+          imageVendorUri: action.payload.uri,
+          imageBase64Vendor: action.payload.base64
+        };
+      }
+      break;
 
-  case START_MAP_VENDOR_START:
-  {
-    return{
-      ...state,
-      loadingStartMap:true,
+    case START_MAP_VENDOR_START:
+      {
+        return {
+          ...state,
+          loadingStartMap: true
+        };
+      }
+      break;
 
-    }
-  }
-  break;
+    case START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS:
+      {
+        return {
+          ...state,
+          loadingStartMap: false,
+          isMechanicOtp: false
+        };
+      }
+      break;
 
-  case START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS:
-  {
-    return{
-      ...state,
-      loadingStartMap:false,
-      isMechanicOtp:false
-    }
-  }
-  break;
+    case MECHANIC_OTP_SUBMEET_FAIL:
+      {
+        return {
+          ...state,
+          loadingStartMap: false
+        };
+      }
+      break;
 
-  case MECHANIC_OTP_SUBMEET_FAIL:
-  {
-    return{
-      ...state,
-      loadingStartMap:false,
-
-    }
-  }
-  break;
-
-  case MECHANIC_OTP_SUBMEET_SUCCESS:
-  {
-    return{
-      ...state,
-      mechanicBookedData:action.payload,
-    }
-  }
-  break;
-
+    case MECHANIC_OTP_SUBMEET_SUCCESS:
+      {
+        return {
+          ...state,
+          mechanicBookedData: action.payload
+        };
+      }
+      break;
 
     case COMPELETE_BOOKING_BY_VENDOR:
-    {
-      return{
-        ...state,
-        FutureBookingList: [...action.payload.FutureBookingList],
-        mechanicOTP:'',
-        mechanicBookedData:'',
-        ratingId:action.payload.val
+      {
+        return {
+          ...state,
+          FutureBookingList: [...action.payload.FutureBookingList],
+          mechanicOTP: "",
+          mechanicBookedData: "",
+          ratingId: action.payload.val
+        };
       }
-    }
-    break;
+      break;
 
     case GET_CUSTOMER_RATING_MODAL:
-    {
-      return{
-        ...state,
-        modalCustomerRating:true,
+      {
+        return {
+          ...state,
+          modalCustomerRating: true
+        };
       }
-    }
-    break;
+      break;
 
     case GET_CUSTOMER_RATING:
-    {
-      return{
-        ...state,
-        customerRating:action.payload
+      {
+        return {
+          ...state,
+          customerRating: action.payload
+        };
       }
-    }
-    break;
+      break;
 
     case GET_RATING_TO_CUSTOMER_START:
-    {
-      return{
-        ...state,
-        loadingRating:true
+      {
+        return {
+          ...state,
+          loadingRating: true
+        };
       }
-    }
-    break;
+      break;
 
     case GET_RATING_TO_CUSTOMER_SUCCESS:
-    {
-      return{
-        ...state,
-        modalCustomerRating:false,
-        loadingRating:false,
-        customerRating:0
+      {
+        return {
+          ...state,
+          modalCustomerRating: false,
+          loadingRating: false,
+          customerRating: 0
+        };
       }
-    }
-    break;
+      break;
 
-  case SET_ALL_STATE_TO_INITIAL:
-  {
-    return{
-      ...state,
-      ...INITIAL_STATE
-    }
-  }
-  break;
+    case SET_ALL_STATE_TO_INITIAL:
+      {
+        return {
+          ...state,
+          ...INITIAL_STATE
+        };
+      }
+      break;
 
     default:
       return state;

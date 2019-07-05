@@ -289,10 +289,7 @@ class NearbyGaraje extends Component {
                   justifyContent: "space-around"
                 }}
               >
-              <View style={{
-                flexDirection:'row',
-                justifyContent:'space-between'
-              }}>
+              <View style={inStyle.rowSpaceBetweenStyle}>
                 <Text
                   style={{
                     fontSize: 18,
@@ -362,13 +359,7 @@ class NearbyGaraje extends Component {
                     this.props.getBookingCancellation();
                   }}
                 >
-                    {this.props.loadingBookig ? (
-                      <Text style={inStyle.modalButtonCancleText}>
-                        Loading...
-                      </Text>
-                    ) : (
-                      <Text style={inStyle.modalButtonCancleText}>Confirm</Text>
-                    )}
+                <Text style={inStyle.modalButtonCancleText}>{this.props.loadingBookig ? 'Loading...':'Confirm'}</Text>
                 </TouchableOpacity>
               </View>
           </Modal>
@@ -384,46 +375,31 @@ class NearbyGaraje extends Component {
             elevation: 2
           }}
         >
-          <Text style={{ fontSize: 16, fontFamily: "circular-book" }}>
+          <Text style={inStyle.textBlack16}>
             Mechanic is{" "}
             {this.props.bookingStatusRes
               ? this.props.bookingStatusRes.type
               : null}
           </Text>
-          <View style={{
-            justifyContent:'space-between',
-            flexDirection:'row'
-          }}>
+          <View style={inStyle.rowSpaceBetweenStyle}>
           {this.props.mechanicCurrentLocation?<TouchableOpacity
-            style={{
-              justifyContent: "space-between",
-              flexDirection: "row"
-            }}
+            style={inStyle.rowSpaceBetweenStyle}
             onPress={() => {
               this.callToMechanic();
             }}
           >
             <Text
-              style={{
-                fontFamily: "circular-book",
-                fontSize: 16,
-                color: "#4A4A4A",
-                marginTop: 3
-              }}
-            >
+              style={[inStyle.textBlack16,{marginTop: 3}]}>
             Contact :{this.props.mechanicCurrentLocation.mobile_no}
             </Text>
             <Image
-              style={{ height: 20, width: 20, borderRadius: 10 }}
+              style={inStyle.imageCall}
               source={CALL}
             />
           </TouchableOpacity>:null}
-            {this.props.mechanicCurrentLocation?<Text style={{
-              fontFamily: "circular-book",
-              fontSize: 16,
-              color: "#4A4A4A",
-              marginTop: 3
-            }}>Dist({this.props.mechanicDestance})({this.props.mechanicDuration})</Text>:null}
+            {this.props.mechanicCurrentLocation?<Text style={[inStyle.textBlack16,{
+              marginTop: 3}]}>
+              Dist({this.props.mechanicDestance})({this.props.mechanicDuration})</Text>:null}
           </View>
           <TouchableOpacity
             activeOpacity={1}
@@ -497,10 +473,24 @@ const inStyle = {
       shadowRadius: 5,
       shadowOpacity: 1.0
 
+  },
+  textBlack16:{
+    fontFamily: "circular-book",
+    fontSize: 16,
+    color: "#4A4A4A",
+  },
+  imageCall:{
+    height: 20,
+    width: 20,
+    borderRadius: 10
+  },
+  rowSpaceBetweenStyle:{
+    justifyContent:'space-between',
+    flexDirection:'row'
   }
 };
 
-const mapStateToProps = ({ usermaps }) => {
+const mapStateToProps = ({ customers }) => {
   const {
     location,
     bookData,
@@ -516,7 +506,7 @@ const mapStateToProps = ({ usermaps }) => {
     loadingRatingDone,
     mechanicDestance,
     mechanicDuration
-  } = usermaps;
+  } = customers;
   return {
     location,
     bookData,

@@ -98,7 +98,7 @@ class MapViewDirections extends Component {
 					const errorMessage = json.error_message || 'Unknown error';
 					return Promise.reject(errorMessage);
 				}
-				
+
 				var DandD = {distance:json.routes[0].legs[0].distance.text,duration:json.routes[0].legs[0].duration.text}
 				this.props.setDurationAndDistance(DandD);
 				if (json.routes.length) {
@@ -164,10 +164,10 @@ MapViewDirections.propTypes = {
 	onError: PropTypes.func,
 };
 
-const mapStateToProps = ({ usermaps }) => {
+const mapStateToProps = ({ customers }) => {
   const {
     location,
-  } = usermaps;
+  } = customers;
   return {
     location,
   };

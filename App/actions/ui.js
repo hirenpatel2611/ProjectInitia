@@ -1,4 +1,4 @@
-import {Asset, SplashScreen,ImagePicker,Font,AppLoading } from "expo";
+import { Asset, SplashScreen, ImagePicker, Font, AppLoading } from "expo";
 import { AsyncStorage } from "react-native";
 import Api from "../api/api";
 import { GET_USER_DATA } from "../config";
@@ -13,8 +13,7 @@ export const GET_USER_PROFILE_DATA_START = "ui/GET_USER_PROFILE_DATA_START";
 export const GET_USER_PROFILE_DATA = "ui/GET_USER_PROFILE_DATA";
 export const GET_USER_BOOKING_STATUS_ACCEPT =
   "ui/GET_USER_BOOKING_STATUS_ACCEPT";
-  export const SET_ALL_STATE_TO_INITIAL =
-    "ui/SET_ALL_STATE_TO_INITIAL";
+export const SET_ALL_STATE_TO_INITIAL = "ui/SET_ALL_STATE_TO_INITIAL";
 
 export const loadFont = () => async dispatch => {
   await Font.loadAsync({
@@ -63,7 +62,6 @@ export const getUserData = () => async (dispatch, getState) => {
   let test = new FormData();
   test.append("id", valueUserId);
   Api.post(GET_USER_DATA, test).then(response => {
-  
     if (response.status === 0) {
       if (i < 10) {
         dispatch(getUserData());
@@ -76,7 +74,7 @@ export const getUserData = () => async (dispatch, getState) => {
     });
 
     const { userCurrentBooking } = getState().user;
-    const { vendors, location } = getState().usermaps;
+    const { vendors, location } = getState().customers;
 
     if (location) {
       SplashScreen.hide();
@@ -158,8 +156,8 @@ export const getUserData = () => async (dispatch, getState) => {
   });
 };
 
-export const setAllStateToInitial = () =>  (dispatch) => {
+export const setAllStateToInitial = () => dispatch => {
   dispatch({
-    type:SET_ALL_STATE_TO_INITIAL,
-  })
-}
+    type: SET_ALL_STATE_TO_INITIAL
+  });
+};

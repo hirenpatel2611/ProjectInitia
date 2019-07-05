@@ -6,7 +6,7 @@ import {
   LOGIN_FAILED,
   ON_SUBMEET_LOGIN_FORM
 } from "../actions/Login";
-import {SET_ALL_STATE_TO_INITIAL} from '../actions/ui';
+import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
 const INITIAL_STATE = {
   password: "",
@@ -14,7 +14,7 @@ const INITIAL_STATE = {
   loading: false,
   loginFailed: false,
   loginStatus: 0,
-  onSubmeetLoginForm: false,
+  onSubmeetLoginForm: false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -53,7 +53,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loading: false,
           loginStatus: action.payload,
-          loginFailed: false,
+          loginFailed: false
         };
       }
       break;
@@ -70,12 +70,12 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-      case SET_ALL_STATE_TO_INITIAL:
+    case SET_ALL_STATE_TO_INITIAL:
       {
-        return{
+        return {
           ...state,
           ...INITIAL_STATE
-        }
+        };
       }
       break;
 

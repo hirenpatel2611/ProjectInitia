@@ -134,7 +134,7 @@ getPermissionAsync = async () => {
 }
 
 
-const mapStateToProps = ({ user ,usermaps}) => {
+const mapStateToProps = ({ user ,customers}) => {
   const {
   onSubmeetProfileForm,
   fullNameCustomer,
@@ -142,7 +142,7 @@ const mapStateToProps = ({ user ,usermaps}) => {
   emailCustomer,
   imageCustomerUri,
   loadingCustomerProfile
-  } = usermaps;
+  } = customers;
   const {
   userData
   } = user;

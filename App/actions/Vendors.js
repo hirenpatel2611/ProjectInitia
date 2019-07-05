@@ -1,6 +1,6 @@
 import TimerMixin from "react-timer-mixin";
 import Api from "../api/api";
-import { AsyncStorage, Alert,Share } from "react-native";
+import { AsyncStorage, Alert, Share } from "react-native";
 import {
   GET_FUTURE_BOOKINGLIST,
   BOOKING_UPDATE,
@@ -14,8 +14,17 @@ import {
   connectTosocketBookingCancle,
   socketBookingOnTheWay,
   socketVendorCurrentLocation,
-  socketBookingCompleted } from "./Socket";
-import { Asset, SplashScreen,ImagePicker,Permissions,Constants,TaskManager,Location } from "expo";
+  socketBookingCompleted
+} from "./Socket";
+import {
+  Asset,
+  SplashScreen,
+  ImagePicker,
+  Permissions,
+  Constants,
+  TaskManager,
+  Location
+} from "expo";
 import { Actions } from "react-native-router-flux";
 import openMap from "react-native-open-maps";
 
@@ -52,21 +61,28 @@ export const GET_FUTURE_BOOKING_LIST_NO_FOUND =
 export const UPDATE_VENDOR_FULL_NAME = "vendors/UPDATE_VENDOR_FULL_NAME";
 export const UPDATE_VENDOR_ADDRESS = "vendors/UPDATE_VENDOR_ADDRESS";
 export const UPDATE_VENDOR_EMAIL = "vendors/UPDATE_VENDOR_EMAIL";
-export const UPDATE_VENDOR_PROFILE_START = "vendors/UPDATE_VENDOR_PROFILE_START";
+export const UPDATE_VENDOR_PROFILE_START =
+  "vendors/UPDATE_VENDOR_PROFILE_START";
 export const LOAD_VENDOR_PROFILE = "vendors/LOAD_VENDOR_PROFILE";
-export const UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD = "vendors/UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD";
-export const UPDATE_VENDOR_PROFILE_SUCCESS = "vendors/UPDATE_VENDOR_PROFILE_SUCCESS";
+export const UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD =
+  "vendors/UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD";
+export const UPDATE_VENDOR_PROFILE_SUCCESS =
+  "vendors/UPDATE_VENDOR_PROFILE_SUCCESS";
 export const UPDATE_VENDOR_PROFILE_FAIL = "vendors/UPDATE_VENDOR_PROFILE_FAIL";
 export const START_MAP_VENDOR_START = "vendors/START_MAP_VENDOR_START";
-export const START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS = "vendors/START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS";
-export const MECHANIC_OTP_SUBMEET_SUCCESS = "vendors/MECHANIC_OTP_SUBMEET_SUCCESS";
+export const START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS =
+  "vendors/START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS";
+export const MECHANIC_OTP_SUBMEET_SUCCESS =
+  "vendors/MECHANIC_OTP_SUBMEET_SUCCESS";
 export const MECHANIC_OTP_SUBMEET_FAIL = "vendors/MECHANIC_OTP_SUBMEET_FAIL";
 export const GET_CUSTOMER_RATING = "vendors/GET_CUSTOMER_RATING";
 export const GET_CUSTOMER_RATING_MODAL = "vendors/GET_CUSTOMER_RATING_MODAL";
-export const COMPELETE_BOOKING_BY_VENDOR = "vendors/COMPELETE_BOOKING_BY_VENDOR";
-export const GET_RATING_TO_CUSTOMER_START = "vendors/GET_RATING_TO_CUSTOMER_START";
-export const GET_RATING_TO_CUSTOMER_SUCCESS = "vendors/GET_RATING_TO_CUSTOMER_SUCCESS";
-
+export const COMPELETE_BOOKING_BY_VENDOR =
+  "vendors/COMPELETE_BOOKING_BY_VENDOR";
+export const GET_RATING_TO_CUSTOMER_START =
+  "vendors/GET_RATING_TO_CUSTOMER_START";
+export const GET_RATING_TO_CUSTOMER_SUCCESS =
+  "vendors/GET_RATING_TO_CUSTOMER_SUCCESS";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -104,14 +120,12 @@ export const getFutureBookings = () => async (dispatch, getState) => {
 
 export const getCustomerDistanceList = val => async (dispatch, getState) => {
   const { vendorBookingList } = getState().vendors;
-  const {userData} = await getState().user;
+  const { userData } = await getState().user;
 
   var FutureBookingList = [];
   var url = "";
   const APIKEY = "AIzaSyAm_cQCYcozNa9WUVmASmSABGuuS6OSsIw";
-  var url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${userData.userLatitude},${userData.userLongitude}&destinations=${
-    vendorBookingList[0].booking_latitude
-  },${vendorBookingList[0].booking_longitude}`;
+  var url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${userData.userLatitude},${userData.userLongitude}&destinations=${vendorBookingList[0].booking_latitude},${vendorBookingList[0].booking_longitude}`;
   vendorBookingList.map(customer => {
     url =
       url + "|" + `${customer.booking_latitude},${customer.booking_longitude}`;
@@ -178,9 +192,11 @@ export const getBookingUpdate = val => (dispatch, getState) => {
     .then(response => {
       if (response.status === 1) {
         if (val === "accept") {
-        FutureBookingList.map(booking => {
-          if (booking.booking_id === bookingData.booking_id) {
-            booking.status = "accept";}});
+          FutureBookingList.map(booking => {
+            if (booking.booking_id === bookingData.booking_id) {
+              booking.status = "accept";
+            }
+          });
           dispatch(getMechanicOtp(bookingData.booking_id));
         }
 
@@ -200,7 +216,7 @@ export const getBookingUpdate = val => (dispatch, getState) => {
 };
 
 export const getMechanicOtp = val => (dispatch, getState) => {
-  const { bookingData,FutureBookingList } = getState().vendors;
+  const { bookingData, FutureBookingList } = getState().vendors;
   let testOtp = new FormData();
   testOtp.append("booking_id", val);
   Api.post(SEND_MECHANIC_OTP, testOtp)
@@ -254,7 +270,7 @@ export const BookingListCancle = () => (dispatch, getState) => {
           payload: FutureBookingList
         });
       } else {
-        if(response.message === 'something went wrong'){
+        if (response.message === "something went wrong") {
           BookingListCancle();
         }
       }
@@ -278,7 +294,7 @@ export const BookingListApprove = val => (dispatch, getState) => {
       console.log(response);
       if (response.status === 1) {
         dispatch(getMechanicOtp(val.booking_id));
-        dispatch(connectTosocketApprov(val.customer_id))
+        dispatch(connectTosocketApprov(val.customer_id));
         FutureBookingList.map(booking => {
           if (booking.booking_id === val.booking_id) {
             booking.status = "accept";
@@ -288,7 +304,6 @@ export const BookingListApprove = val => (dispatch, getState) => {
           type: GET_BOOKINGLIST_APPROVE_SUCCESS,
           payload: { val, FutureBookingList }
         });
-
       } else {
         dispatch({
           type: GET_BOOKINGLIST_APPROVE_FAIL
@@ -302,14 +317,12 @@ export const BookingListApprove = val => (dispatch, getState) => {
 };
 
 export const otpDone = val => (dispatch, getState) => {
-
-  const { FutureBookingList, bookingData,mechanicOTP } = getState().vendors;
+  const { FutureBookingList, bookingData, mechanicOTP } = getState().vendors;
   Share.share({
-    message:'Your OTP is '+`${val}`,
-  }).then(response=>{
+    message: "Your OTP is " + `${val}`
+  }).then(response => {
     console.log(response);
   });
-
 };
 
 export const getBookingVendorStatus = data => (dispatch, getState) => {
@@ -359,83 +372,85 @@ export const getCancelBookingModalCloseVendor = () => dispatch => {
   });
 };
 
-export const updateVendorFullName = val => (dispatch) => {
+export const updateVendorFullName = val => dispatch => {
   dispatch({
-    type:UPDATE_VENDOR_FULL_NAME,
-    payload:val
+    type: UPDATE_VENDOR_FULL_NAME,
+    payload: val
   });
-}
-export const updateVendorAddress = val => (dispatch) =>{
+};
+export const updateVendorAddress = val => dispatch => {
   dispatch({
-    type:UPDATE_VENDOR_ADDRESS,
-    payload:val
+    type: UPDATE_VENDOR_ADDRESS,
+    payload: val
   });
-}
-export const updateVendorEmail = val => (dispatch) => {
+};
+export const updateVendorEmail = val => dispatch => {
   dispatch({
-    type:UPDATE_VENDOR_EMAIL,
-    payload:val
+    type: UPDATE_VENDOR_EMAIL,
+    payload: val
   });
-}
+};
 
-export const updateVendorProfile = val => (dispatch,getState) => {
+export const updateVendorProfile = val => (dispatch, getState) => {
   dispatch({
-    type:UPDATE_VENDOR_PROFILE_START,
+    type: UPDATE_VENDOR_PROFILE_START
   });
-  const {fullNameVendor,addressVendor,emailVendor,imageBase64Vendor} = getState().vendors;
-  const {userData} = getState().user
+  const {
+    fullNameVendor,
+    addressVendor,
+    emailVendor,
+    imageBase64Vendor
+  } = getState().vendors;
+  const { userData } = getState().user;
   let test = new FormData();
   test.append("id", userData.userId);
   test.append("first_name", fullNameVendor);
   test.append("address", addressVendor);
   test.append("profile_image", imageBase64Vendor);
   Api.post(UPDATE_PROFILE, test).then(response => {
-
-    if(response.status === 1){
+    if (response.status === 1) {
       dispatch({
-        type:UPDATE_VENDOR_PROFILE_SUCCESS,
-      })
+        type: UPDATE_VENDOR_PROFILE_SUCCESS
+      });
       alert(response.message);
     } else {
       dispatch({
-        type:UPDATE_VENDOR_PROFILE_FAIL,
-      })
+        type: UPDATE_VENDOR_PROFILE_FAIL
+      });
     }
+  });
+};
 
-  })
-}
-
-export const loadVendorProfile = () => (dispatch,getState) => {
+export const loadVendorProfile = () => (dispatch, getState) => {
   const { userData } = getState().user;
   dispatch({
-    type:LOAD_VENDOR_PROFILE,
-    payload:userData
+    type: LOAD_VENDOR_PROFILE,
+    payload: userData
   });
-}
+};
 
-export const upadteVendorProfileImage = () => async (dispatch) => {
-
+export const upadteVendorProfileImage = () => async dispatch => {
   let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        base64: true,
-        allowsEditing: true,
-        aspect: [4, 4],
-      });
+    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    base64: true,
+    allowsEditing: true,
+    aspect: [4, 4]
+  });
 
-      if (!result.cancelled) {
-        dispatch({
-          type:UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD,
-          payload:result
-        });
-      }
-}
+  if (!result.cancelled) {
+    dispatch({
+      type: UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD,
+      payload: result
+    });
+  }
+};
 
-export const startMapVendor = startMapData => (dispatch,getState) =>{
+export const startMapVendor = startMapData => (dispatch, getState) => {
   dispatch({
-    type:START_MAP_VENDOR_START,
-  })
+    type: START_MAP_VENDOR_START
+  });
 
-  const { FutureBookingList,mechanicOTP } = getState().vendors;
+  const { FutureBookingList, mechanicOTP } = getState().vendors;
   console.log(startMapData);
   let test1 = new FormData();
   test1.append("otp", startMapData.otp);
@@ -446,38 +461,37 @@ export const startMapVendor = startMapData => (dispatch,getState) =>{
         type: MECHANIC_OTP_SUBMEET_SUCCESS,
         payload: response
       });
-       startMapData = {
+      startMapData = {
         booking_id: response.booking.booking_id,
-        customer_id:response.booking.customer.customer_id,
-      }
+        customer_id: response.booking.customer.customer_id
+      };
       console.log(startMapData);
       let test = new FormData();
       test.append("booking_id", startMapData.booking_id);
       test.append("status", "on-the-way");
-      Api.post(BOOKING_UPDATE, test)
-      .then(response => {
+      Api.post(BOOKING_UPDATE, test).then(response => {
         console.log(response);
-        if(response.status === 1){
+        if (response.status === 1) {
           dispatch(socketBookingOnTheWay(startMapData));
           dispatch(socketVendorCurrentLocation());
           FutureBookingList.map(booking => {
             if (booking.booking_id === startMapData.booking_id) {
-              booking.status = "on-the-way";}});
-              dispatch({
-                type:START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
-                payload:FutureBookingList
-              })
+              booking.status = "on-the-way";
             }
-          })
+          });
+          dispatch({
+            type: START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
+            payload: FutureBookingList
+          });
+        }
+      });
     } else {
       dispatch({
-        type: MECHANIC_OTP_SUBMEET_FAIL,
+        type: MECHANIC_OTP_SUBMEET_FAIL
       });
     }
-  })
-
-
-}
+  });
+};
 
 export const goToMap = () => async (dispatch, getState) => {
   let location = await Location.getCurrentPositionAsync({
@@ -491,46 +505,48 @@ export const goToMap = () => async (dispatch, getState) => {
     mechanicBookedData.booking.booking_longitude;
 
   openMap({ start: [startLat.toString()], end: [endLat.toString()] });
-
 };
 
-export const getCustomerRating = rating => (dispatch) => {
+export const getCustomerRating = rating => dispatch => {
   dispatch({
-    type:GET_CUSTOMER_RATING,
-    payload:rating
+    type: GET_CUSTOMER_RATING,
+    payload: rating
   });
-}
+};
 
-export const getCustomerRatingModal = val => (dispatch,getState) => {
+export const getCustomerRatingModal = val => (dispatch, getState) => {
   const { FutureBookingList } = getState().vendors;
   dispatch({
-    type:GET_CUSTOMER_RATING_MODAL,
+    type: GET_CUSTOMER_RATING_MODAL
   });
   dispatch(socketBookingCompleted(val));
   FutureBookingList.map(booking => {
     if (booking.booking_id === val.booking_id) {
-      booking.status = "completed",
-      booking.booking_otp=null
-    }});
-      dispatch({
-        type:COMPELETE_BOOKING_BY_VENDOR,
-        payload:{FutureBookingList:FutureBookingList,val:val.customer.customer_id}
-      })
-}
-
-export const getRatingToCustomer = val => (dispatch,getState) => {
+      (booking.status = "completed"), (booking.booking_otp = null);
+    }
+  });
   dispatch({
-    type:GET_RATING_TO_CUSTOMER_START,
-  })
-const { customerRating,ratingId } = getState().vendors;
+    type: COMPELETE_BOOKING_BY_VENDOR,
+    payload: {
+      FutureBookingList: FutureBookingList,
+      val: val.customer.customer_id
+    }
+  });
+};
+
+export const getRatingToCustomer = val => (dispatch, getState) => {
+  dispatch({
+    type: GET_RATING_TO_CUSTOMER_START
+  });
+  const { customerRating, ratingId } = getState().vendors;
   let test = new FormData();
   test.append("vendor_id", ratingId);
   test.append("rating", customerRating);
   Api.post(RATING_BY_CUSTOMER, test).then(response => {
-    if(response.status === 1){
+    if (response.status === 1) {
       dispatch({
-        type:GET_RATING_TO_CUSTOMER_SUCCESS,
-      })
+        type: GET_RATING_TO_CUSTOMER_SUCCESS
+      });
     }
   });
-}
+};

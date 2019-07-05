@@ -66,7 +66,8 @@ class ForgotResetPassword extends Component {
       otpResendText,
       headerOtpText,
       imageRefreshStyle,
-      inputStyle
+      inputStyle,
+      resetMainContainer
     } = styles;
     const { validate } = this.props;
 
@@ -75,21 +76,7 @@ class ForgotResetPassword extends Component {
       <View style={(containerStyle)}>
         <KeyboardAwareScrollView enableOnAndroid>
           <StatusBar backgroundColor="#7960FF" />
-          <View style={{alignItems: "center",
-          marginTop: 25,
-          backgroundColor: "white",
-          borderRadius: 5,
-          marginLeft: 30,
-          marginRight: 30,
-          marginBottom: 10,
-          paddingBottom: 10,
-          shadowColor: "#000000",
-          shadowOffset: { width: 0, height: 3 },
-          shadowRadius: 5,
-          shadowOpacity: 1.0,
-          height: 0.32 * ScreenHeight,
-          paddingTop:0.03 * ScreenHeight,
-        marginTop:200}}>
+          <View style={resetMainContainer}>
           <TextInput
             style={(inputStyle)}
             underlineColorAndroid="transparent"
