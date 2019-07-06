@@ -53,31 +53,14 @@ class Profile extends Component {
       textInputProfilStyle
     } = styles;
     return (
-      <ScrollView>
+      <View>
         <Header headerText="Profile" />
         <KeyboardAwareScrollView enableOnAndroid>
           <View
-            style={{
-              borderColor: "#7960FF",
-              borderRadius: 60,
-              width: 120,
-              height: 120,
-              alignSelf: "center",
-              marginTop: 10,
-              justifyContent: "center",
-              borderWidth: 1,
-              borderColor: "black",
-            }}
+            style={inStyle.containerStyle}
           >
             <Image
-              style={{
-                borderRadius: 60,
-                width: 120,
-                height: 120,
-                alignSelf: "center",
-                zIndex: -1,
-                position:'absolute'
-              }}
+              style={inStyle.imageStyle}
               resizeMode={"cover"}
               source={
                 this.props.imageVendorUri
@@ -87,35 +70,19 @@ class Profile extends Component {
             />
 
             <TouchableOpacity
-              style={{
-                borderRadius: 15,
-                width: 23,
-                height: 23,
-                alignSelf: "flex-end",
-                backgroundColor: "#F5FCFF",
-                alignItems: "center",
-                justifyContent: "center"
-              }}
+              style={inStyle.touchableOpacityStyle}
               onPress={() => {
                 this.props.upadteVendorProfileImage();
               }}
             >
               <Image
-                style={{
-                  width: 15,
-                  height: 15,
-                  resizeMode: "contain",
-                }}
+                style={inStyle.imagePencleStyle}
                 source={PENCIL}
               />
             </TouchableOpacity>
           </View>
           <View
-            style={{
-              marginTop: 0.001 * ScreenHeight,
-              height: 0.42 * ScreenHeight,
-              justifyContent: "space-around"
-            }}
+            style={inStyle.viewSubContainer}
           >
             <TextInput
               style={textInputProfilStyle}
@@ -164,34 +131,77 @@ class Profile extends Component {
               this.props.updateVendorProfile();
             }}
             underlayColor="white"
-            style={{
-              marginTop: 0.21 * ScreenHeight,
-              alignSelf: "center",
-              backgroundColor: "#7960FF",
-              height: 44,
-              width: 0.78 * ScreenWidth,
-              borderRadius: 25,
-              alignItems: "center",
-              marginBottom: 10,
-              justifyContent: "center"
-            }}
+            style={inStyle.continueButton}
           >
             <Text
-              style={{
-                padding: 10,
-                fontSize: 18,
-                fontFamily: "circular-book",
-                color: "white"
-              }}
+              style={inStyle.buttonTextStyle}
             >
               {this.props.loadingProfileUpdate ? "Loading..." : "Continue"}
             </Text>
           </TouchableHighlight>
         </KeyboardAwareScrollView>
-      </ScrollView>
+      </View>
     );
   }
 }
+
+const inStyle = {
+  containerStyle:{
+    borderColor: "#7960FF",
+    borderRadius: 60,
+    width: 120,
+    height: 120,
+    alignSelf: "center",
+    marginTop: 10,
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "black",
+  },
+ profileImageStyle:{
+   borderRadius: 60,
+   width: 120,
+   height: 120,
+   alignSelf: "center",
+   zIndex: -1,
+   position:'absolute'
+ },
+ touchableOpacityStyle:{
+   borderRadius: 15,
+   width: 23,
+   height: 23,
+   alignSelf: "flex-end",
+   backgroundColor: "#F5FCFF",
+   alignItems: "center",
+   justifyContent: "center"
+ },
+ imagePencleStyle:{
+   width: 15,
+   height: 15,
+   resizeMode: "contain",
+ },
+ viewSubContainer:{
+   marginTop: 0.001 * ScreenHeight,
+   height: 0.40 * ScreenHeight,
+   justifyContent: "space-around"
+ },
+ continueButton:{
+   marginTop: 0.20 * ScreenHeight,
+   alignSelf: "center",
+   backgroundColor: "#7960FF",
+   height: 44,
+   width: 0.78 * ScreenWidth,
+   borderRadius: 25,
+   alignItems: "center",
+   marginBottom: 10,
+   justifyContent: "center"
+ },
+ buttonTextStyle:{
+   padding: 10,
+   fontSize: 18,
+   fontFamily: "circular-book",
+   color: "white"
+ }
+};
 
 const mapStateToProps = ({ user, vendors }) => {
   const {
