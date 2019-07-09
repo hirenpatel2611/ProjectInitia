@@ -8,7 +8,8 @@ import {
   GET_VENDOR_BOOKINGLIST,
   BOOKING_UPDATE,
   RATING_BY_CUSTOMER,
-  UPDATE_PROFILE
+  UPDATE_PROFILE,
+  CUSTOMER_COMMENT
 } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage, Alert } from "react-native";
@@ -83,6 +84,7 @@ export const UPDATE_CUSTOMER_PROFILE_FAIL =
   "customers/UPDATE_CUSTOMER_PROFILE_FAIL";
 export const GET_FILTER_SUBMEET = "customers/GET_FILTER_SUBMEET";
 export const GET_VENDOR_RATING_MODAL = "customers/GET_VENDOR_RATING_MODAL";
+export const GET_CUSTOMER_COMMENT = "customers/GET_CUSTOMER_COMMENT";
 
 var cancelAlertCounter = 0;
 var getVendorsCounter = 0;
@@ -456,18 +458,26 @@ export const getRating = () => (dispatch, getState) => {
     type: GET_RATING_START
   });
 
-  const { vendorRating, bookData } = getState().customers;
-
-  let test = new FormData();
-  test.append("vendor_id", bookData.vendor_id);
-  test.append("rating", vendorRating);
-  Api.post(RATING_BY_CUSTOMER, test).then(response => {
+  const { vendorRating, bookData,customerComment } = getState().customers;
+  console.log(customerComment);
+  let test1 = new FormData();
+  test1.append("booking_id", bookData.booking_id);
+  test1.append("comment", customerComment);
+  Api.post(CUSTOMER_COMMENT, test1).then(response => {
+    console.log(test1);
     console.log(response);
-    dispatch({
-      type: GET_RATING_SUCCESS
-    });
-    Actions.NearbyGaraje();
-  });
+    if(response.status === 1){
+      let test = new FormData();
+      test.append("vendor_id", bookData.vendor_id);
+      test.append("rating", vendorRating);
+      Api.post(RATING_BY_CUSTOMER, test).then(response => {
+        dispatch({
+          type: GET_RATING_SUCCESS
+        });
+        Actions.NearbyGaraje();
+      });
+    }
+  })
 };
 
 export const getVendorRating = rating => dispatch => {
@@ -579,3 +589,10 @@ export const getVendorRatingModal = () => dispatch => {
     type: GET_VENDOR_RATING_MODAL
   });
 };
+
+export const getCustomerComment = comment => (dispatch) =>{
+  dispatch({
+    type:GET_CUSTOMER_COMMENT,
+    payload:comment
+  });
+}

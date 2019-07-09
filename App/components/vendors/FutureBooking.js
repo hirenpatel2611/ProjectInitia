@@ -101,14 +101,12 @@ calltocutomer()
                         fontFamily: "circular-bold",
                         fontSize: 20,
                         color: "#4A4A4A",
-                        fontFamily: "circular-bold"
                       }}
                     >
                       {item.customer.first_name}
                     </Text>
                     <Text
                       style={{
-                        fontFamily: "circular-bold",
                         fontSize: 16,
                         color: "#7960FF",
                         fontFamily: "circular-book"
@@ -126,7 +124,6 @@ calltocutomer()
                   >
                     <Text
                       style={{
-                        fontFamily: "circular-bold",
                         fontSize: 16,
                         color: "#4A4A4A",
                         fontFamily: "circular-book"
@@ -136,7 +133,6 @@ calltocutomer()
                     </Text>
                     <Text
                       style={{
-                        fontFamily: "circular-bold",
                         fontSize: 16,
                         color: "#4A4A4A",
                         fontFamily: "circular-book"
@@ -171,7 +167,6 @@ calltocutomer()
                         color: "#7960FF",
                         fontFamily: "circular-book",
                         top:4
-
                       }}
                       numberOfLines= {1}
                       ellipsizeMode="tail"

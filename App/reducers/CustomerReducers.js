@@ -49,7 +49,8 @@ import {
   UPDATE_CUSTOMER_PROFILE_SUCCESS,
   UPDATE_CUSTOMER_PROFILE_FAIL,
   GET_FILTER_SUBMEET,
-  GET_VENDOR_RATING_MODAL
+  GET_VENDOR_RATING_MODAL,
+  GET_CUSTOMER_COMMENT
 } from "../actions/Cutomers";
 import {
   GET_USER_BOOKING_STATUS_ACCEPT,
@@ -97,7 +98,8 @@ const INITIAL_STATE = {
   loadingCustomerProfile: false,
   isVendorRatingModal: false,
   mechanicDestance: "",
-  mechanicDuration: ""
+  mechanicDuration: "",
+  customerComment:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -592,6 +594,15 @@ export default (state = INITIAL_STATE, action) => {
         };
       }
       break;
+
+  case GET_CUSTOMER_COMMENT:
+  {
+      return{
+        ...state,
+        customerComment:action.payload
+      };
+  }
+  break;
 
     case SET_ALL_STATE_TO_INITIAL:
       {

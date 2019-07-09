@@ -36,6 +36,7 @@ import {
   getCancelBookingModal,
   getCancelBookingModalClose,
   getVendorRating,
+  getCustomerComment
 } from "../../actions";
 import  MapViewDirections  from "../../Common/MapViewDirection";
 import CheckBox from "react-native-check-box";
@@ -237,8 +238,9 @@ class NearbyGaraje extends Component {
                   placeholderTextColor="#9D9D9D"
                   placeholder="Comment..."
                   multiline={true}
+                  value={this.props.customerComment}
                   onChangeText={text => {
-                    console.log(text);
+                    this.props.getCustomerComment(text);
                   }}
                 />
             <TouchableHighlight
@@ -505,7 +507,8 @@ const mapStateToProps = ({ customers }) => {
     isVendorRatingModal,
     loadingRatingDone,
     mechanicDestance,
-    mechanicDuration
+    mechanicDuration,
+    customerComment
   } = customers;
   return {
     location,
@@ -521,7 +524,8 @@ const mapStateToProps = ({ customers }) => {
     isVendorRatingModal,
     loadingRatingDone,
     mechanicDestance,
-    mechanicDuration
+    mechanicDuration,
+    customerComment
   };
 };
 
@@ -536,6 +540,6 @@ export default connect(
     getCancelBookingModal,
     getCancelBookingModalClose,
     getVendorRating,
-
+    getCustomerComment
   }
 )(NearbyGaraje);
