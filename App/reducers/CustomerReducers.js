@@ -50,7 +50,9 @@ import {
   UPDATE_CUSTOMER_PROFILE_FAIL,
   GET_FILTER_SUBMEET,
   GET_VENDOR_RATING_MODAL,
-  GET_CUSTOMER_COMMENT
+  GET_CUSTOMER_COMMENT,
+  CUSTOMER_COMMENT_FAIL,
+  GET_RATING_FAIL
 } from "../actions/Cutomers";
 import {
   GET_USER_BOOKING_STATUS_ACCEPT,
@@ -466,7 +468,8 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingRatingDone: false,
-          mechanicCurrentLocation: ""
+          mechanicCurrentLocation: "",
+          customerComment:''
         };
       }
       break;
@@ -595,14 +598,32 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-  case GET_CUSTOMER_COMMENT:
-  {
-      return{
-        ...state,
-        customerComment:action.payload
-      };
-  }
-  break;
+    case GET_CUSTOMER_COMMENT:
+      {
+          return{
+            ...state,
+            customerComment:action.payload
+          };
+      }
+      break;
+
+      case CUSTOMER_COMMENT_FAIL:
+        {
+            return{
+              ...state,
+              loadingRatingDone:false
+            };
+        }
+        break;
+
+        case GET_RATING_FAIL:
+          {
+              return{
+                ...state,
+                loadingRatingDone:false
+              };
+          }
+          break;
 
     case SET_ALL_STATE_TO_INITIAL:
       {

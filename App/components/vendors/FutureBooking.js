@@ -66,7 +66,7 @@ calltocutomer()
   render() {
     const { containerStyle } = styles;
     return (
-      <View>
+      <View style={{opacity: this.props.isBooking || this.props.isMechanicOtp || this.props.modalCustomerRating || this.props.isConfirmModal?0.5:1}}>
         <Header headerText="Booking" />
         <ScrollView style={inStyle.ScrollViewStyle}>
           {this.props.isFutureBookingNoFound?<Text style={{ fontFamily: "circular-bold", alignSelf: "center",marginTop:0.40*ScreenHeight}}>  No booking found</Text>:this.props.loadingFutureBookigList ? (
@@ -823,13 +823,7 @@ calltocutomer()
                   this.props.getRatingToCustomer();
                 }}
               >
-                {this.props.loadingRating ? (
-                  <Text style={inStyle.modalButtonCancleText}>
-                    Loading...
-                  </Text>
-                ) : (
-                  <Text style={inStyle.modalButtonCancleText}>Confirm</Text>
-                )}
+                  <Text style={inStyle.modalButtonCancleText}>{this.props.loadingRating ?'Loading...':'Done'}</Text>
               </TouchableOpacity>
           </View>
           </Modal>
@@ -898,7 +892,8 @@ const mapStateToProps = ({ vendors }) => {
     customerDistance,
     loadingStartMap,
     modalCustomerRating,
-    customerRating
+    customerRating,
+    loadingRating
   } = vendors;
   return {
     loadingFutureBookigList,
@@ -921,7 +916,8 @@ const mapStateToProps = ({ vendors }) => {
     customerDistance,
     loadingStartMap,
     modalCustomerRating,
-    customerRating
+    customerRating,
+    loadingRating
   };
 };
 

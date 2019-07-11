@@ -354,7 +354,6 @@ export default (state = INITIAL_STATE, action) => {
 
     case LOAD_VENDOR_PROFILE:
       {
-        console.log(action.payload);
         return {
           ...state,
           fullNameVendor: action.payload.userFullName,

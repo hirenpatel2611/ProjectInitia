@@ -59,8 +59,6 @@ export const GET_BOOKING_UPDATE_START = "customers/GET_BOOKING_UPDATE_START";
 export const GET_BOOKING_UPDATE_SUCCESS = "customers/GET_BOOKING_UPDATE_SUCCESS";
 export const GET_BOOKING_UPDATE_FAIL = "customers/GET_BOOKING_UPDATE_FAIL";
 export const GET_REASON_CHECKBOX = "customers/GET_REASON_CHECKBOX";
-export const GET_REASON_CHECKBOX2 = "customers/GET_REASON_CHECKBOX2";
-export const GET_REASON_CHECKBOX3 = "customers/GET_REASON_CHECKBOX3";
 export const GET_CANCEL_BOOKING_MODAL = "customers/GET_CANCEL_BOOKING_MODAL";
 export const GET_CANCEL_BOOKING_MODAL_CLOSE =
   "customers/GET_CANCEL_BOOKING_MODAL_CLOSE";
@@ -85,6 +83,8 @@ export const UPDATE_CUSTOMER_PROFILE_FAIL =
 export const GET_FILTER_SUBMEET = "customers/GET_FILTER_SUBMEET";
 export const GET_VENDOR_RATING_MODAL = "customers/GET_VENDOR_RATING_MODAL";
 export const GET_CUSTOMER_COMMENT = "customers/GET_CUSTOMER_COMMENT";
+export const CUSTOMER_COMMENT_FAIL = "customers/CUSTOMER_COMMENT_FAIL";
+export const GET_RATING_FAIL = "customers/GET_RATING_FAIL";
 
 var cancelAlertCounter = 0;
 var getVendorsCounter = 0;
@@ -166,14 +166,12 @@ export const BookVendor = () => async (dispatch, getState) => {
   Api.post(GET_BOOKING, test)
     .then(response => {
       if (response.status === 1) {
-        alert(response.message);
         dispatch({
           type: GET_BOOKING_SUCCESS,
           payload: response
         });
         dispatch(connectTosocket());
       } else {
-        alert(response.message);
         dispatch({
           type: GET_BOOKING_FAIL
         });
@@ -457,24 +455,32 @@ export const getRating = () => (dispatch, getState) => {
   dispatch({
     type: GET_RATING_START
   });
-
   const { vendorRating, bookData,customerComment } = getState().customers;
-  console.log(customerComment);
+  console.log(bookData);
   let test1 = new FormData();
   test1.append("booking_id", bookData.booking_id);
   test1.append("comment", customerComment);
   Api.post(CUSTOMER_COMMENT, test1).then(response => {
-    console.log(test1);
-    console.log(response);
     if(response.status === 1){
       let test = new FormData();
       test.append("vendor_id", bookData.vendor_id);
       test.append("rating", vendorRating);
-      Api.post(RATING_BY_CUSTOMER, test).then(response => {
+      Api.post(RATING_BY_CUSTOMER, test).then(responseRating => {
+        console.log(responseRating);
+        if(responseRating.status === 1){
         dispatch({
           type: GET_RATING_SUCCESS
         });
         Actions.NearbyGaraje();
+      } else {
+        dispatch({
+          type: GET_RATING_FAIL
+        });
+      }
+      });
+    } else {
+      dispatch({
+        type:CUSTOMER_COMMENT_FAIL
       });
     }
   })

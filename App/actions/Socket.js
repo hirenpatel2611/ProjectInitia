@@ -255,10 +255,10 @@ export const socketBookingOnTheWay = socketData => async (
   getState
 ) => {
   const { bookingData, mechanicBookedData } = getState().vendors;
-
+console.log(mechanicBookedData);
   chatSocket.emit("booking_status", {
     room: `${socketData.customer_id} ${mechanicBookedData.booking.vendor.vendor_id}`,
-    message: bookingData,
+    message: mechanicBookedData,
     type: "ON-THE-WAY"
   });
   channelName = `${socketData.booking_id} ${socketData.customer_id}`;
@@ -311,6 +311,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
 
   if (bookingDetails) {
     const { locations } = data;
+    console.log(locations);
     var radlat1 = (Math.PI * bookingDetails.booking.booking_latitude) / 180;
 
     var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;

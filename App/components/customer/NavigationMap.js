@@ -137,6 +137,7 @@ class NearbyGaraje extends Component {
   render() {
     const { containerStyle, continueButton, buttonText, createButton,textInputProfilStyle } = styles;
     return (
+      <KeyboardAwareScrollView enableOnAndroid>
       <View style={containerStyle}>
         <StatusBar backgroundColor="#7960FF" />
         <View
@@ -228,7 +229,7 @@ class NearbyGaraje extends Component {
                   defaultRating={this.props.vendorRating}
                   showRating={false}
                   onFinishRating={rating => {
-                    console.log(rating);
+
                     this.props.getVendorRating(rating);
                   }}
                 />
@@ -414,7 +415,9 @@ class NearbyGaraje extends Component {
                 <Text style={inStyle.modalButtonCancleText}>Cancel</Text>
           </TouchableOpacity>
         </View>
-      </View>
+        </View>
+      </KeyboardAwareScrollView>
+
     );
   }
 }

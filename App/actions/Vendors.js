@@ -23,7 +23,8 @@ import {
   Permissions,
   Constants,
   TaskManager,
-  Location
+  Location,
+  IntentLauncherAndroid
 } from "expo";
 import { Actions } from "react-native-router-flux";
 import openMap from "react-native-open-maps";
@@ -285,13 +286,13 @@ export const BookingListApprove = val => (dispatch, getState) => {
     type: GET_BOOKINGLIST_APPROVE_START
   });
   const { FutureBookingList } = getState().vendors;
-  console.log(val);
+
   let test = new FormData();
   test.append("booking_id", val.booking_id);
   test.append("status", "accept");
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log(response);
+
       if (response.status === 1) {
         dispatch(getMechanicOtp(val.booking_id));
         dispatch(connectTosocketApprov(val.customer_id));
@@ -321,7 +322,7 @@ export const otpDone = val => (dispatch, getState) => {
   Share.share({
     message: "Your OTP is " + `${val}`
   }).then(response => {
-    console.log(response);
+
   });
 };
 
@@ -451,11 +452,10 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
   });
 
   const { FutureBookingList, mechanicOTP } = getState().vendors;
-  console.log(startMapData);
+
   let test1 = new FormData();
   test1.append("otp", startMapData.otp);
   Api.post(VERIFY_MECHANIC_OTP, test1).then(async response => {
-    console.log(response);
     if (response.status === 1) {
       dispatch({
         type: MECHANIC_OTP_SUBMEET_SUCCESS,
@@ -465,13 +465,13 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
         booking_id: response.booking.booking_id,
         customer_id: response.booking.customer.customer_id
       };
-      console.log(startMapData);
+
       let test = new FormData();
       test.append("booking_id", startMapData.booking_id);
       test.append("status", "on-the-way");
-      Api.post(BOOKING_UPDATE, test).then(response => {
-        console.log(response);
-        if (response.status === 1) {
+      Api.post(BOOKING_UPDATE, test).then(responseBooking => {
+        console.log(responseBooking);
+        if (responseBooking.status === 1) {
           dispatch(socketBookingOnTheWay(startMapData));
           dispatch(socketVendorCurrentLocation());
           FutureBookingList.map(booking => {
@@ -494,6 +494,25 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
 };
 
 export const goToMap = () => async (dispatch, getState) => {
+
+  await Location.hasServicesEnabledAsync()
+    .then(async res => {
+      if (!res) {
+        perm = await IntentLauncherAndroid.startActivityAsync(
+          IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+        );
+      }
+      await Location.hasServicesEnabledAsync()
+        .then(async res => {
+          this.locationIsEnabled = res;
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    })
+    .catch(err => {
+      console.error(err);
+    });
   let location = await Location.getCurrentPositionAsync({
     accuracy: Location.Accuracy.BestForNavigation
   });

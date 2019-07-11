@@ -130,7 +130,7 @@ class filter extends Component {
                   defaultRating={this.props.rating.toString()}
                   showRating={false}
                   onFinishRating={rating => {
-                    console.log(rating);
+                    
                     this.props.getFilterRating(rating);
                   }}
                 />
