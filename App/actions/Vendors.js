@@ -87,13 +87,15 @@ export const GET_RATING_TO_CUSTOMER_SUCCESS =
   export const OTP_SHARE ="vendors/OTP_SHARE";
   export const OTP_SHARE_SUCCESS ="vendors/OTP_SHARE_SUCCESS";
   export const VENDOR_NEXT_BOOKING ="vendors/VENDOR_NEXT_BOOKING";
+  export const LOAD_MORE_BOOKING_LIST ="vendors/LOAD_MORE_BOOKING_LIST";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
     type: GET_FUTURE_BOOKING_LIST_START
   });
   const valueUserId = await AsyncStorage.getItem("user_id");
-
+  const {noOfCusomer} = getState().vendors;
+  console.log(noOfCusomer);
   let test = new FormData();
   test.append("vendor_id", valueUserId);
   Api.post(GET_FUTURE_BOOKINGLIST, test)
@@ -112,6 +114,8 @@ export const getFutureBookings = () => async (dispatch, getState) => {
           dispatch(getFutureBookings());
         }
       } else {
+        response = response.slice(0,noOfCusomer);
+        console.log(response);
         dispatch({
           type: GET_FUTURE_BOOKING_LIST_SUCCESS,
           payload: response
@@ -125,7 +129,6 @@ export const getFutureBookings = () => async (dispatch, getState) => {
 export const getCustomerDistanceList = val => async (dispatch, getState) => {
   const { vendorBookingList } = getState().vendors;
   const { userData } = await getState().user;
-
   var FutureBookingList = [];
   var url = "";
   const APIKEY = "AIzaSyAm_cQCYcozNa9WUVmASmSABGuuS6OSsIw";
@@ -176,11 +179,11 @@ export const getCustomerDistanceList = val => async (dispatch, getState) => {
 
 export const getBookingModal = val => async (dispatch, getState) => {
   Actions.FutureBooking();
-  dispatch(getFutureBookings());
   dispatch({
     type: GET_BOOKING_MODAL,
     payload: val
   });
+  dispatch(getFutureBookings());
 };
 
 export const getBookingUpdate = val => (dispatch, getState) => {
@@ -609,3 +612,13 @@ export const getRatingToCustomer = val => (dispatch, getState) => {
     }
   });
 };
+
+export const loadMoreBookingList = () => (dispatch,getState) => {
+  const { noOfCusomer } = getState().vendors;
+  var index = noOfCusomer+10;
+  dispatch({
+    type:LOAD_MORE_BOOKING_LIST,
+    payload:index
+  });
+  dispatch(getFutureBookings());
+}

@@ -38,7 +38,8 @@ import {
   GET_RATING_TO_CUSTOMER_SUCCESS,
   OTP_SHARE,
   OTP_SHARE_SUCCESS,
-  VENDOR_NEXT_BOOKING
+  VENDOR_NEXT_BOOKING,
+  LOAD_MORE_BOOKING_LIST
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -78,7 +79,8 @@ const INITIAL_STATE = {
   customerRating: "",
   ratingId: "",
   loadingRating: false,
-  bookings:[]
+  bookings:[],
+  noOfCusomer:10
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -133,7 +135,8 @@ export default (state = INITIAL_STATE, action) => {
           bookingData: action.payload.bookData,
           bookUserData: action.payload.userData,
           customerDistance: action.payload.vendorDistance,
-          customerLocation: action.payload.location
+          customerLocation: action.payload.location,
+          noOfCusomer:10
         };
       }
       break;
@@ -467,6 +470,15 @@ export default (state = INITIAL_STATE, action) => {
           modalCustomerRating: false,
           loadingRating: false,
           customerRating: 0
+        };
+      }
+      break;
+
+    case LOAD_MORE_BOOKING_LIST:
+      {
+        return{
+          ...state,
+          noOfCusomer:action.payload
         };
       }
       break;

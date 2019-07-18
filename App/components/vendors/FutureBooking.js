@@ -36,7 +36,8 @@ import {
   socketBookingCompleted,
   getCustomerRating,
   getCustomerRatingModal,
-  getRatingToCustomer
+  getRatingToCustomer,
+  loadMoreBookingList
 } from "../../actions";
 import { FutureBookingList, Spinner } from "../../Common";
 import { CALL, BITMAP2 } from "../../images";
@@ -72,7 +73,7 @@ calltocutomer()
           {this.props.isFutureBookingNoFound?<Text style={{ fontFamily: "circular-bold", alignSelf: "center",marginTop:0.40*ScreenHeight}}>  No booking found</Text>:this.props.loadingFutureBookigList ? (
             <View style={{height:0.80*ScreenHeight,justifyContent:'center',alignSelf:'center'}}><Spinner /></View>
           ) : (
-
+            <View>
             <FlatList
               data={this.props.FutureBookingList}
               keyExtractor={(item, index) => index.toString()}
@@ -332,6 +333,25 @@ calltocutomer()
                 </View>
               )}
             />
+            {this.props.FutureBookingList.length >= 10?
+              <TouchableOpacity
+              onPress={()=>{
+                this.props.loadMoreBookingList();
+              }}
+            style={{
+              width:ScreenWidth,
+              paddingTop:10,
+              paddingBottom:20,
+              justifyContent:'center',
+              alignItems:'center'
+            }}
+            >
+            <Text style={{
+              fontFamily:'circular-bold',
+              color:'#7960FF'
+            }}>Load More</Text>
+            </TouchableOpacity> : null}
+            </View>
           )}
           <Modal
             visible={this.props.isBooking}
@@ -942,6 +962,7 @@ export default connect(
     socketBookingCompleted,
     getCustomerRating,
     getCustomerRatingModal,
-    getRatingToCustomer
+    getRatingToCustomer,
+    loadMoreBookingList
   }
 )(FutureBooking);
