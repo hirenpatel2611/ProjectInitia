@@ -181,6 +181,7 @@ export const getBookingModal = val => async (dispatch, getState) => {
     type: GET_BOOKING_MODAL,
     payload: val
   });
+
 };
 
 export const getBookingUpdate = val => (dispatch, getState) => {
@@ -507,10 +508,15 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
             }
           });
 
-          var ar = bookings;
+
+          const namesArr = bookings.filter((val, id) => {
+              bookings.indexOf(val) == id;  // this just returns true
+          });
+          
+            var ar = bookings;
           ar.shift();
           console.log(ar);
-          if(bookings.length > 0){
+          if(bookings.length !== 0){
             dispatch({
               type: VENDOR_NEXT_BOOKING,
               payload: {FutureBookingList,ar}

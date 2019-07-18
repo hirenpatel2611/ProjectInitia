@@ -124,7 +124,6 @@ export default (state = INITIAL_STATE, action) => {
 
     case GET_BOOKING_MODAL:
       // let newFuturBookingList = state.FutureBookingList;
-      console.log([...state.bookings,action.payload]);
       {
         return {
           ...state,
@@ -397,8 +396,9 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loadingStartMap: false,
           isMechanicOtp: false,
+          bookings:[...action.payload.ar],
           FutureBookingList: [...action.payload.FutureBookingList],
-          bookings:[...action.payload.ar]
+
         };
       }
       break;
