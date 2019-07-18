@@ -43,6 +43,7 @@ import CheckBox from "react-native-check-box";
 import { MECHANIC_MAP_ICON,BIKE_FOR_MAP,CALL } from "../../images";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import call from "react-native-phone-call";
+import {statusToPhrase} from '../../config';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -137,7 +138,7 @@ class NearbyGaraje extends Component {
   render() {
     const { containerStyle, continueButton, buttonText, createButton,textInputProfilStyle } = styles;
     return (
-      <KeyboardAwareScrollView enableOnAndroid>
+
       <View style={containerStyle}>
         <StatusBar backgroundColor="#7960FF" />
         <View
@@ -213,6 +214,7 @@ class NearbyGaraje extends Component {
                 height: 0.2 * ScreenHeight,
               }}
           >
+          <KeyboardAwareScrollView enableOnAndroid>
           <View style={{marginTop: 0.40 * ScreenHeight,
                         height:0.25 * ScreenHeight,
                         margin:10,
@@ -266,6 +268,7 @@ class NearbyGaraje extends Component {
                 <Text style={buttonText}>{this.props.loadingRatingDone?'loading...':'Done'}</Text>
             </TouchableHighlight>
             </View>
+            </KeyboardAwareScrollView>
             </Modal>
           <Modal
             visible={this.props.isBookCancelModal}
@@ -369,20 +372,22 @@ class NearbyGaraje extends Component {
         </View>
         <View
           style={{
-            height: 0.15 * ScreenHeight,
+            height: 0.20 * ScreenHeight,
             backgroundColor: "white",
             padding: 10,
             shadowColor: "#000",
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.5,
-            elevation: 2
+            elevation: 2,
+            justifyContent:'space-between'
           }}
         >
-          <Text style={inStyle.textBlack16}>
-            Mechanic is{" "}
-            {this.props.bookingStatusRes
-              ? this.props.bookingStatusRes.type
-              : null}
+          <Text style={[inStyle.textBlack16,{fontFamily:'circular-bold'}]}>
+          {
+            this.props.bookingStatusRes
+            ? statusToPhrase(this.props.bookingStatusRes.type)
+            : null
+          }
           </Text>
           <View style={inStyle.rowSpaceBetweenStyle}>
           {this.props.mechanicCurrentLocation?<TouchableOpacity
@@ -416,8 +421,6 @@ class NearbyGaraje extends Component {
           </TouchableOpacity>
         </View>
         </View>
-      </KeyboardAwareScrollView>
-
     );
   }
 }
@@ -453,7 +456,7 @@ const inStyle = {
     alignItems: "center",
     margin: 10,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   modalButtonCancleText: {
     fontSize: 14,

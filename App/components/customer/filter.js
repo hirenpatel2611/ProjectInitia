@@ -22,9 +22,6 @@ import {
   updateFilterVehicleBool,
   updateFilterCarBool,
   getFilterRating,
-  getFilterCheckBox1,
-  getFilterCheckBox2,
-  getFilterCheckBox3,
   getFilterDistance,
   resetFilter,
   getFilterSubmeet
@@ -130,7 +127,6 @@ class filter extends Component {
                   defaultRating={this.props.rating.toString()}
                   showRating={false}
                   onFinishRating={rating => {
-                    
                     this.props.getFilterRating(rating);
                   }}
                 />
@@ -300,18 +296,12 @@ const mapStateToProps = ({ customers }) => {
     isVehicle,
     isCar,
     rating,
-    isChecked1,
-    isChecked2,
-    isChecked3,
     distance
   } = customers;
   return {
     isVehicle,
     isCar,
     rating,
-    isChecked1,
-    isChecked2,
-    isChecked3,
     distance
   };
 };
@@ -322,9 +312,6 @@ export default connect(
     updateFilterVehicleBool,
     updateFilterCarBool,
     getFilterRating,
-    getFilterCheckBox1,
-    getFilterCheckBox2,
-    getFilterCheckBox3,
     getFilterDistance,
     resetFilter,
     getFilterSubmeet

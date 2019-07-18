@@ -38,9 +38,6 @@ export const GET_BOOKING_LIST_FAIL = "customers/GET_BOOKING_LIST_FAIL";
 export const UPDATE_FILTER_VEHICLE_BOOL = "customers/UPDATE_FILTER_VEHICLE_BOOL";
 export const UPDATE_FILTER_CAR_BOOL = "customers/UPDATE_FILTER_CAR_BOOL";
 export const UPDATE_FILTER_RATING = "customers/UPDATE_FILTER_RATING";
-export const UPDATE_FILTER_CHECKED1 = "customers/UPDATE_FILTER_CHECKED1";
-export const UPDATE_FILTER_CHECKED2 = "customers/UPDATE_FILTER_CHECKED2";
-export const UPDATE_FILTER_CHECKED3 = "customers/UPDATE_FILTER_CHECKED3";
 export const UPDATE_FILTER_DISTANCE = "customers/UPDATE_FILTER_DISTANCE";
 export const RESET_FILTER = "customers/RESET_FILTER";
 export const VENDOR_DISTANCE = "customers/VENDOR_DISTANCE";
@@ -258,24 +255,6 @@ export const getFilterRating = val => async dispatch => {
   });
 };
 
-export const getFilterCheckBox1 = () => async dispatch => {
-  dispatch({
-    type: UPDATE_FILTER_CHECKED1
-  });
-};
-
-export const getFilterCheckBox2 = () => async dispatch => {
-  dispatch({
-    type: UPDATE_FILTER_CHECKED2
-  });
-};
-
-export const getFilterCheckBox3 = () => async dispatch => {
-  dispatch({
-    type: UPDATE_FILTER_CHECKED3
-  });
-};
-
 export const getFilterDistance = val => async dispatch => {
   dispatch({
     type: UPDATE_FILTER_DISTANCE,
@@ -456,7 +435,7 @@ export const getRating = () => (dispatch, getState) => {
     type: GET_RATING_START
   });
   const { vendorRating, bookData,customerComment } = getState().customers;
-  console.log(bookData);
+
   let test1 = new FormData();
   test1.append("booking_id", bookData.booking_id);
   test1.append("comment", customerComment);
@@ -466,17 +445,18 @@ export const getRating = () => (dispatch, getState) => {
       test.append("vendor_id", bookData.vendor_id);
       test.append("rating", vendorRating);
       Api.post(RATING_BY_CUSTOMER, test).then(responseRating => {
-        console.log(responseRating);
+
         if(responseRating.status === 1){
         dispatch({
           type: GET_RATING_SUCCESS
         });
-        Actions.NearbyGaraje();
+
       } else {
         dispatch({
           type: GET_RATING_FAIL
         });
       }
+      Actions.NearbyGaraje();
       });
     } else {
       dispatch({

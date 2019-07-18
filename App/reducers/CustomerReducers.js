@@ -14,9 +14,6 @@ import {
   UPDATE_FILTER_VEHICLE_BOOL,
   UPDATE_FILTER_CAR_BOOL,
   UPDATE_FILTER_RATING,
-  UPDATE_FILTER_CHECKED1,
-  UPDATE_FILTER_CHECKED2,
-  UPDATE_FILTER_CHECKED3,
   UPDATE_FILTER_DISTANCE,
   RESET_FILTER,
   GET_BOOKING_CANCLE_START,
@@ -75,9 +72,6 @@ const INITIAL_STATE = {
   isVehicle: false,
   isCar: false,
   rating: 0,
-  isChecked1: false,
-  isChecked2: false,
-  isChecked3: false,
   distance: 10,
   isBookingSuccess: false,
   vendorDistance: "",
@@ -268,10 +262,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           isVehicle: false,
           isCar: false,
-          rating: "",
-          isChecked1: false,
-          isChecked2: false,
-          isChecked3: false,
+          rating: 0,
           distance: 10
         };
       }

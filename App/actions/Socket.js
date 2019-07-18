@@ -311,7 +311,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
 
   if (bookingDetails) {
     const { locations } = data;
-    console.log(locations);
+  
     var radlat1 = (Math.PI * bookingDetails.booking.booking_latitude) / 180;
 
     var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;
@@ -359,9 +359,9 @@ export const socketBookingCompleted = val => (dispatch, getState) => {
   const { FutureBookingList } = getState().vendors;
   var booking = { booking: val };
   chatSocket.emit("booking_status", {
-    room: `${val.customer.customer_id} ${userData.userId}`,
+    room: `${val.customer.customer_id} ${userData.userId} ${val.booking_id}`,
     message: booking,
     type: "COMPLETED"
   });
-  channelName = `${userData.userId} ${val.customer.customer_id}`;
+  channelName = `${userData.userId} ${val.customer.customer_id} ${val.booking_id}`;
 };

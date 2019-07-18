@@ -35,7 +35,10 @@ import {
   GET_CUSTOMER_RATING,
   GET_CUSTOMER_RATING_MODAL,
   GET_RATING_TO_CUSTOMER_START,
-  GET_RATING_TO_CUSTOMER_SUCCESS
+  GET_RATING_TO_CUSTOMER_SUCCESS,
+  OTP_SHARE,
+  OTP_SHARE_SUCCESS,
+  VENDOR_NEXT_BOOKING
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -74,7 +77,8 @@ const INITIAL_STATE = {
   modalCustomerRating: false,
   customerRating: "",
   ratingId: "",
-  loadingRating: false
+  loadingRating: false,
+  bookings:[]
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -120,11 +124,12 @@ export default (state = INITIAL_STATE, action) => {
 
     case GET_BOOKING_MODAL:
       // let newFuturBookingList = state.FutureBookingList;
-
+      console.log([...state.bookings,action.payload]);
       {
         return {
           ...state,
           isBooking: true,
+          bookings:[...state.bookings,action.payload],
           bookingData: action.payload.bookData,
           bookUserData: action.payload.userData,
           customerDistance: action.payload.vendorDistance,
@@ -140,7 +145,7 @@ export default (state = INITIAL_STATE, action) => {
           loadingBookigUpdate: false,
           bookingStatus: action.payload,
           isBooking: false,
-          FutureBookingList: [...action.payload.FutureBookingList]
+          FutureBookingList: [...action.payload.FutureBookingList],
         };
       }
       break;
@@ -218,8 +223,9 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           bookingVendorStatus: action.payload.data,
           FutureBookingList: [...action.payload.FutureBookingList],
+          bookings:[...action.payload.ar],
+          isMechanicOtp: false,
           isBooking: false,
-          isMechanicOtp: false
         };
       }
       break;
@@ -257,11 +263,13 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          FutureBookingList: [...action.payload],
+          FutureBookingList: [...action.payload.FutureBookingList],
+          bookings:[...action.payload.ar],
           isConfirmModal: false,
           cancleReasonVendor: null,
           reasonCheckboxVendor: [false, false, false],
-          loadingConfirm: false
+          loadingConfirm: false,
+
         };
       }
       break;
@@ -388,7 +396,9 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingStartMap: false,
-          isMechanicOtp: false
+          isMechanicOtp: false,
+          FutureBookingList: [...action.payload.FutureBookingList],
+          bookings:[...action.payload.ar]
         };
       }
       break;
@@ -469,6 +479,37 @@ export default (state = INITIAL_STATE, action) => {
         };
       }
       break;
+
+    case OTP_SHARE:
+    {
+      return{
+        ...state,
+        bookings:action.payload,
+      }
+    }
+    break;
+
+    case OTP_SHARE_SUCCESS:
+    {
+      return{
+        ...state,
+        isMechanicOtp: false,
+      }
+    }
+    break;
+
+    case VENDOR_NEXT_BOOKING:
+    {
+      return{
+        ...state,
+        loadingStartMap: false,
+        isMechanicOtp: false,
+        FutureBookingList: [...action.payload.FutureBookingList],
+        bookings:[...action.payload.ar],
+        isBooking: true,
+      }
+    }
+    break;
 
     default:
       return state;

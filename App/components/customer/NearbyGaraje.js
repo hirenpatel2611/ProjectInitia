@@ -55,6 +55,7 @@ import {
 import { MECHANIC, USER2, FILTER } from "../../images";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import CheckBox from "react-native-check-box";
+import {statusToPhrase} from '../../config';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -155,7 +156,7 @@ class NearbyGaraje extends Component {
     }
     return (
       <View style={containerStyle}>
-        <Header headerText="Near by Garaje" filterIcon={FILTER} />
+        <Header headerText="Near by Partners" filterIcon={FILTER} />
         <StatusBar backgroundColor="#7960FF" />
         <View
           style={[
@@ -163,7 +164,7 @@ class NearbyGaraje extends Component {
               flex: 1
             },
             this.props.isBookModalVisible || this.props.isBookCancelModal
-              ? { opacity: 0.6 }
+              ? { opacity: 0.5 }
               : null
           ]}
         >
@@ -210,7 +211,7 @@ class NearbyGaraje extends Component {
                 <View
                   style={{
                     backgroundColor: "#FFFFFF",
-                    width: 0.3 * ScreenWidth,
+                    width: 0.7 * ScreenWidth,
                     alignSelf: "center",
                     alignItems: "center",
                     justifyContent: "center",
@@ -227,7 +228,7 @@ class NearbyGaraje extends Component {
                       fontSize: 14
                     }}
                   >
-                    {this.props.bookingStatusRes.type}
+                    {statusToPhrase(this.props.bookingStatusRes.type)}
                   </Text>
                 </View>
               ) : null}

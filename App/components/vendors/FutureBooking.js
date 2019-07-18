@@ -25,7 +25,7 @@ import {
   getBookingModal,
   getBookingUpdate,
   connectTosocketApprov,
-  otpDone,
+  otpShare,
   connectTosocketBookingCancle,
   BookingListApprove,
   BookingListCancle,
@@ -238,7 +238,7 @@ calltocutomer()
                     disabled={item.booking_otp? false
                       : true}
                     onPress={() => {
-                      this.props.otpDone(item.booking_otp);
+                      this.props.otpShare(item.booking_otp);
                     }}
                   >
                       <Text
@@ -405,8 +405,8 @@ calltocutomer()
                         color: "#4A4A4A"
                       }}
                     >
-                      {this.props.bookUserData
-                        ? this.props.bookUserData.userFullName
+                      {this.props.bookings.length
+                        ? this.props.bookings[0].userData.userFullName
                         : null}
                     </Text>
                     <TouchableOpacity
@@ -426,8 +426,8 @@ calltocutomer()
                           marginTop: 3
                         }}
                       >
-                        {this.props.bookUserData
-                          ? this.props.bookUserData.userMobileno
+                        {this.props.bookings.length
+                          ? this.props.bookings[0].userData.userMobileno
                           : null}
                       </Text>
                       <Image
@@ -458,7 +458,7 @@ calltocutomer()
                       }}
                     >
                       {
-                        this.props.customerDistance?this.props.customerDistance:0
+                        this.props.bookings.length?this.props.bookings[0].vendorDistance:0
                       }
                     </Text>
                   </View>
@@ -477,7 +477,7 @@ calltocutomer()
                       var status = "accept";
                       await this.props.getBookingUpdate(status);
                       this.props.connectTosocketApprov(
-                        this.props.bookUserData.userId
+                        this.props.bookings[0].userData.userId
                       );
                     }}
                   >
@@ -507,8 +507,8 @@ calltocutomer()
                     style={{ alignSelf: "flex-end" }}
                     onPress={() => {
                       var cancleBookingData = {
-                        booking_id: this.props.bookingData.booking_id,
-                        customer_id: this.props.bookUserData.userId
+                        booking_id: this.props.bookings[0].bookData.booking_id,
+                        customer_id: this.props.bookings[0].userData.userId
                       };
                       this.props.getCancleBookingModal(cancleBookingData);
                     }}
@@ -612,9 +612,9 @@ calltocutomer()
                  }}
                   onPress={() => {
                     var startMapData = {
-                      booking_id: this.props.bookingData.booking_id,
-                      customer_id:this.props.bookingData.customer_id,
-                      vendor_id:this.props.bookingData.vendor_id,
+                      booking_id: this.props.bookings[0].bookData.booking_id,
+                      customer_id:this.props.bookings[0].bookData.customer_id,
+                      vendor_id:this.props.bookings[0].bookData.vendor_id,
                       otp:this.props.mechanicOTP
                     }
                    this.props.startMapVendor(startMapData);
@@ -638,7 +638,7 @@ calltocutomer()
                   borderRadius: 3
                  }}
                   onPress={() => {
-                    this.props.otpDone(this.props.mechanicOTP);
+                    this.props.otpShare(this.props.mechanicOTP);
                   }}
                 >
                     <Text
@@ -893,7 +893,8 @@ const mapStateToProps = ({ vendors }) => {
     loadingStartMap,
     modalCustomerRating,
     customerRating,
-    loadingRating
+    loadingRating,
+    bookings
   } = vendors;
   return {
     loadingFutureBookigList,
@@ -917,7 +918,8 @@ const mapStateToProps = ({ vendors }) => {
     loadingStartMap,
     modalCustomerRating,
     customerRating,
-    loadingRating
+    loadingRating,
+    bookings
   };
 };
 
@@ -929,7 +931,7 @@ export default connect(
     getBookingModal,
     getBookingUpdate,
     connectTosocketApprov,
-    otpDone,
+    otpShare,
     connectTosocketBookingCancle,
     BookingListApprove,
     BookingListCancle,

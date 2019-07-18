@@ -67,7 +67,7 @@ var styles = StyleSheet.create({
   },
   createButton: {
     backgroundColor: "#7960FF",
-    height: 44,
+    height: 50,
     width: 280,
     borderRadius: 25,
 
@@ -78,7 +78,7 @@ var styles = StyleSheet.create({
   },
   loginButton: {
     backgroundColor: "transparent",
-    height: 44,
+    height: 50,
     width: 280,
     borderRadius: 25,
     borderColor: "#7960FF",

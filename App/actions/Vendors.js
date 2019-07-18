@@ -84,6 +84,9 @@ export const GET_RATING_TO_CUSTOMER_START =
   "vendors/GET_RATING_TO_CUSTOMER_START";
 export const GET_RATING_TO_CUSTOMER_SUCCESS =
   "vendors/GET_RATING_TO_CUSTOMER_SUCCESS";
+  export const OTP_SHARE ="vendors/OTP_SHARE";
+  export const OTP_SHARE_SUCCESS ="vendors/OTP_SHARE_SUCCESS";
+  export const VENDOR_NEXT_BOOKING ="vendors/VENDOR_NEXT_BOOKING";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -184,27 +187,29 @@ export const getBookingUpdate = val => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_UAPDATE_START
   });
-  const { bookingData, FutureBookingList } = getState().vendors;
-
+  const { bookingData, FutureBookingList,bookings } = getState().vendors;
+  console.log(bookings);
   let test = new FormData();
-  test.append("booking_id", bookingData.booking_id);
+  test.append("booking_id", bookings[0].bookData.booking_id);
   test.append("status", val);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       if (response.status === 1) {
         if (val === "accept") {
           FutureBookingList.map(booking => {
-            if (booking.booking_id === bookingData.booking_id) {
+            if (booking.booking_id === bookings[0].bookData.booking_id) {
               booking.status = "accept";
             }
           });
-          dispatch(getMechanicOtp(bookingData.booking_id));
+          dispatch(getMechanicOtp(bookings[0].bookData.booking_id));
         }
+
 
         dispatch({
           type: GET_BOOKING_UAPDATE_SUCCESS,
-          payload: { val, FutureBookingList }
+          payload: { val, FutureBookingList}
         });
+
       } else {
         dispatch({
           type: GET_BOOKING_UAPDATE_FAIL
@@ -244,6 +249,9 @@ export const getMechanicOtp = val => (dispatch, getState) => {
 };
 
 export const BookingListCancle = () => (dispatch, getState) => {
+  const {bookings} = getState().vendors;
+  var ar = bookings;
+  ar.shift();
   dispatch({
     type: BOOKING_CANCLE_START
   });
@@ -268,7 +276,7 @@ export const BookingListCancle = () => (dispatch, getState) => {
         });
         dispatch({
           type: BOOKING_LIST_CANCLE_SUCCESS,
-          payload: FutureBookingList
+          payload: {FutureBookingList,ar}
         });
       } else {
         if (response.message === "something went wrong") {
@@ -317,18 +325,37 @@ export const BookingListApprove = val => (dispatch, getState) => {
     });
 };
 
-export const otpDone = val => (dispatch, getState) => {
-  const { FutureBookingList, bookingData, mechanicOTP } = getState().vendors;
+export const otpShare = val => (dispatch, getState) => {
+  const { bookings,FutureBookingList } = getState().vendors;
   Share.share({
     message: "Your OTP is " + `${val}`
   }).then(response => {
-
+    dispatch({
+      type:OTP_SHARE_SUCCESS,
+    })
   });
+
+  var ar = bookings;
+  ar.shift();
+  console.log(ar);
+  if(bookings.length > 0){
+    dispatch({
+      type: VENDOR_NEXT_BOOKING,
+      payload:{FutureBookingList,ar}
+    });
+  } else {
+    dispatch({
+      type:OTP_SHARE,
+      payload:ar
+    })
+  }
 };
 
 export const getBookingVendorStatus = data => (dispatch, getState) => {
-  const { FutureBookingList } = getState().vendors;
-
+  const { FutureBookingList,bookings } = getState().vendors;
+  var ar = bookings;
+  if (data.type === "CANCEL") {
+  ar.shift();}
   FutureBookingList.map(booking => {
     if (booking.booking_id === data.message.booking_id) {
       if (data.type === "CANCEL") {
@@ -349,7 +376,7 @@ export const getBookingVendorStatus = data => (dispatch, getState) => {
   });
   dispatch({
     type: GET_BOOKING_VENDOR_STATUS,
-    payload: { data, FutureBookingList }
+    payload: { data, FutureBookingList,ar }
   });
 };
 
@@ -451,7 +478,7 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
     type: START_MAP_VENDOR_START
   });
 
-  const { FutureBookingList, mechanicOTP } = getState().vendors;
+  const { FutureBookingList, mechanicOTP,bookings } = getState().vendors;
 
   let test1 = new FormData();
   test1.append("otp", startMapData.otp);
@@ -479,10 +506,23 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
               booking.status = "on-the-way";
             }
           });
-          dispatch({
-            type: START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
-            payload: FutureBookingList
-          });
+
+          var ar = bookings;
+          ar.shift();
+          console.log(ar);
+          if(bookings.length > 0){
+            dispatch({
+              type: VENDOR_NEXT_BOOKING,
+              payload: {FutureBookingList,ar}
+            });
+          } else {
+            dispatch({
+              type: START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
+              payload: {FutureBookingList,ar}
+            });
+          }
+
+
         }
       });
     } else {
