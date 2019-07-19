@@ -188,20 +188,20 @@ export const getBookingUpdate = val => (dispatch, getState) => {
     type: GET_BOOKING_UAPDATE_START
   });
   const { bookingData, FutureBookingList,bookings } = getState().vendors;
-  console.log(bookings);
+
   let test = new FormData();
-  test.append("booking_id", bookings[0].bookData.booking_id);
+  test.append("booking_id", bookings.bookData.booking_id);
   test.append("status", val);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       if (response.status === 1) {
         if (val === "accept") {
           FutureBookingList.map(booking => {
-            if (booking.booking_id === bookings[0].bookData.booking_id) {
+            if (booking.booking_id === bookings.bookData.booking_id) {
               booking.status = "accept";
             }
           });
-          dispatch(getMechanicOtp(bookings[0].bookData.booking_id));
+          dispatch(getMechanicOtp(bookings.bookData.booking_id));
         }
 
 
@@ -249,9 +249,6 @@ export const getMechanicOtp = val => (dispatch, getState) => {
 };
 
 export const BookingListCancle = () => (dispatch, getState) => {
-  const {bookings} = getState().vendors;
-  var ar = bookings;
-  ar.shift();
   dispatch({
     type: BOOKING_CANCLE_START
   });
@@ -276,7 +273,7 @@ export const BookingListCancle = () => (dispatch, getState) => {
         });
         dispatch({
           type: BOOKING_LIST_CANCLE_SUCCESS,
-          payload: {FutureBookingList,ar}
+          payload: {FutureBookingList}
         });
       } else {
         if (response.message === "something went wrong") {
@@ -335,27 +332,16 @@ export const otpShare = val => (dispatch, getState) => {
     })
   });
 
-  var ar = bookings;
-  ar.shift();
-  console.log(ar);
-  if(bookings.length > 0){
-    dispatch({
-      type: VENDOR_NEXT_BOOKING,
-      payload:{FutureBookingList,ar}
-    });
-  } else {
+
     dispatch({
       type:OTP_SHARE,
-      payload:ar
     })
-  }
 };
 
 export const getBookingVendorStatus = data => (dispatch, getState) => {
   const { FutureBookingList,bookings } = getState().vendors;
-  var ar = bookings;
-  if (data.type === "CANCEL") {
-  ar.shift();}
+
+
   FutureBookingList.map(booking => {
     if (booking.booking_id === data.message.booking_id) {
       if (data.type === "CANCEL") {
@@ -376,7 +362,7 @@ export const getBookingVendorStatus = data => (dispatch, getState) => {
   });
   dispatch({
     type: GET_BOOKING_VENDOR_STATUS,
-    payload: { data, FutureBookingList,ar }
+    payload: { data, FutureBookingList}
   });
 };
 
@@ -507,22 +493,11 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
             }
           });
 
-          var ar = bookings;
-          ar.shift();
-          console.log(ar);
-          if(bookings.length > 0){
-            dispatch({
-              type: VENDOR_NEXT_BOOKING,
-              payload: {FutureBookingList,ar}
-            });
-          } else {
+
             dispatch({
               type: START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
-              payload: {FutureBookingList,ar}
+              payload: {FutureBookingList}
             });
-          }
-
-
         }
       });
     } else {
@@ -602,6 +577,8 @@ export const getRatingToCustomer = val => (dispatch, getState) => {
   test.append("vendor_id", ratingId);
   test.append("rating", customerRating);
   Api.post(RATING_BY_CUSTOMER, test).then(response => {
+    console.log(response);
+    console.log(test);
     if (response.status === 1) {
       dispatch({
         type: GET_RATING_TO_CUSTOMER_SUCCESS

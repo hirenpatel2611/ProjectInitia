@@ -78,7 +78,7 @@ const INITIAL_STATE = {
   customerRating: "",
   ratingId: "",
   loadingRating: false,
-  bookings:[]
+  bookings:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -124,12 +124,11 @@ export default (state = INITIAL_STATE, action) => {
 
     case GET_BOOKING_MODAL:
       // let newFuturBookingList = state.FutureBookingList;
-      console.log([...state.bookings,action.payload]);
       {
         return {
           ...state,
           isBooking: true,
-          bookings:[...state.bookings,action.payload],
+          bookings:action.payload,
           bookingData: action.payload.bookData,
           bookUserData: action.payload.userData,
           customerDistance: action.payload.vendorDistance,
@@ -223,7 +222,6 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           bookingVendorStatus: action.payload.data,
           FutureBookingList: [...action.payload.FutureBookingList],
-          bookings:[...action.payload.ar],
           isMechanicOtp: false,
           isBooking: false,
         };
@@ -264,7 +262,6 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           FutureBookingList: [...action.payload.FutureBookingList],
-          bookings:[...action.payload.ar],
           isConfirmModal: false,
           cancleReasonVendor: null,
           reasonCheckboxVendor: [false, false, false],
@@ -398,7 +395,6 @@ export default (state = INITIAL_STATE, action) => {
           loadingStartMap: false,
           isMechanicOtp: false,
           FutureBookingList: [...action.payload.FutureBookingList],
-          bookings:[...action.payload.ar]
         };
       }
       break;
@@ -484,7 +480,6 @@ export default (state = INITIAL_STATE, action) => {
     {
       return{
         ...state,
-        bookings:action.payload,
       }
     }
     break;

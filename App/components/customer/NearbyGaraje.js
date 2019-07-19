@@ -278,19 +278,14 @@ class NearbyGaraje extends Component {
                   </TouchableOpacity>
                 ) : (
                   <TouchableOpacity
+                    disabled={this.props.loadingBookig?true:false}
                     underlayColor="white"
                     onPress={async () => {
                       await this.props.BookVendor();
                     }}
                   >
                     <View style={inStyle.modalButtonCancle}>
-                      {this.props.loadingBookig ? (
-                        <Text style={inStyle.modalButtonCancleText}>
-                          Loading...
-                        </Text>
-                      ) : (
-                        <Text style={inStyle.modalButtonCancleText}>Book</Text>
-                      )}
+                        <Text style={inStyle.modalButtonCancleText}>{this.props.loadingBookig ?'Loading...':'Book'}</Text>
                     </View>
                   </TouchableOpacity>
                 )}

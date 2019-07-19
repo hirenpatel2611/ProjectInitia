@@ -93,8 +93,8 @@ export const getVendors = () => async (dispatch, getState) => {
   const { vendorServiceType, rating, location, distance } = await getState()
     .customers;
   if (!location) {
-    var DistLatitude = 23.007;
-    var DistLongitude = 72.505;
+    var DistLatitude = '';
+    var DistLongitude = '';
   } else {
     DistLatitude = location.coords.latitude;
     DistLongitude = location.coords.longitude;
@@ -436,11 +436,7 @@ export const getRating = () => (dispatch, getState) => {
   });
   const { vendorRating, bookData,customerComment } = getState().customers;
 
-  let test1 = new FormData();
-  test1.append("booking_id", bookData.booking_id);
-  test1.append("comment", customerComment);
-  Api.post(CUSTOMER_COMMENT, test1).then(response => {
-    if(response.status === 1){
+
       let test = new FormData();
       test.append("vendor_id", bookData.vendor_id);
       test.append("rating", vendorRating);
@@ -456,14 +452,21 @@ export const getRating = () => (dispatch, getState) => {
           type: GET_RATING_FAIL
         });
       }
-      Actions.NearbyGaraje();
+      let test1 = new FormData();
+      test1.append("booking_id", bookData.booking_id);
+      test1.append("comment", customerComment);
+      Api.post(CUSTOMER_COMMENT, test1).then(response => {
+        if(response.status === 1){
+        } else {
+          dispatch({
+            type:CUSTOMER_COMMENT_FAIL
+          });
+        }
+
       });
-    } else {
-      dispatch({
-        type:CUSTOMER_COMMENT_FAIL
-      });
-    }
+
   })
+  Actions.NearbyGaraje();
 };
 
 export const getVendorRating = rating => dispatch => {

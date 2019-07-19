@@ -405,8 +405,8 @@ calltocutomer()
                         color: "#4A4A4A"
                       }}
                     >
-                      {this.props.bookings.length
-                        ? this.props.bookings[0].userData.userFullName
+                      {this.props.bookings
+                        ? this.props.bookings.userData.userFullName
                         : null}
                     </Text>
                     <TouchableOpacity
@@ -426,8 +426,8 @@ calltocutomer()
                           marginTop: 3
                         }}
                       >
-                        {this.props.bookings.length
-                          ? this.props.bookings[0].userData.userMobileno
+                        {this.props.bookings
+                          ? this.props.bookings.userData.userMobileno
                           : null}
                       </Text>
                       <Image
@@ -458,7 +458,7 @@ calltocutomer()
                       }}
                     >
                       {
-                        this.props.bookings.length?this.props.bookings[0].vendorDistance:0
+                        this.props.bookings?this.props.bookings.vendorDistance:0
                       }
                     </Text>
                   </View>
@@ -477,7 +477,7 @@ calltocutomer()
                       var status = "accept";
                       await this.props.getBookingUpdate(status);
                       this.props.connectTosocketApprov(
-                        this.props.bookings[0].userData.userId
+                        this.props.bookings.userData.userId
                       );
                     }}
                   >
@@ -507,8 +507,8 @@ calltocutomer()
                     style={{ alignSelf: "flex-end" }}
                     onPress={() => {
                       var cancleBookingData = {
-                        booking_id: this.props.bookings[0].bookData.booking_id,
-                        customer_id: this.props.bookings[0].userData.userId
+                        booking_id: this.props.bookings.bookData.booking_id,
+                        customer_id: this.props.bookings.userData.userId
                       };
                       this.props.getCancleBookingModal(cancleBookingData);
                     }}
@@ -612,9 +612,9 @@ calltocutomer()
                  }}
                   onPress={() => {
                     var startMapData = {
-                      booking_id: this.props.bookings[0].bookData.booking_id,
-                      customer_id:this.props.bookings[0].bookData.customer_id,
-                      vendor_id:this.props.bookings[0].bookData.vendor_id,
+                      booking_id: this.props.bookings.bookData.booking_id,
+                      customer_id:this.props.bookings.bookData.customer_id,
+                      vendor_id:this.props.bookings.bookData.vendor_id,
                       otp:this.props.mechanicOTP
                     }
                    this.props.startMapVendor(startMapData);
