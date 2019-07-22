@@ -806,6 +806,7 @@ calltocutomer()
                 }}
               />
               <TouchableOpacity
+              disabled={this.props.customerRating >= 1?false:true}
                 style={{
                   alignSelf: "center",
                   backgroundColor: "#7960FF",
@@ -815,7 +816,8 @@ calltocutomer()
                   margin: 10,
                   padding: 5,
                   alignItems: "center",
-                  justifyContent: "center"
+                  justifyContent: "center",
+                  opacity:this.props.customerRating >= 1?1:0.5
                 }}
                 activeOpacity={1}
                 underlayColor="white"
