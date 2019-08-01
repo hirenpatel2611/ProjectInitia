@@ -122,7 +122,6 @@ class NearbyGaraje extends Component {
           else  {
           phoneNumber = `tel:${phone}`;
           }
-          console.log(phoneNumber);
           Linking.canOpenURL(phoneNumber)
           .then(supported => {
           if (!supported) {

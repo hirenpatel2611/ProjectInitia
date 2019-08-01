@@ -350,7 +350,7 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
   const { location } = getState().customers;
   if (location) {
     var dist = val.distance;
-    console.log(val.distance);
+  
     if (dist < 0.055) {
       dispatch({
         type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
@@ -462,11 +462,11 @@ export const getRating = () => (dispatch, getState) => {
             type:CUSTOMER_COMMENT_FAIL
           });
         }
-
+        Actions.NearbyGaraje();
       });
-
+      Actions.NearbyGaraje();
   })
-  Actions.NearbyGaraje();
+
 };
 
 export const getVendorRating = rating => dispatch => {

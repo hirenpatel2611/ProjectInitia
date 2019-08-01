@@ -78,33 +78,33 @@ class SplashFront extends Component {
         </View>
         <View style={buttonViewstyle}>
         {
-          // <TouchableHighlight
-          //   onPress={() => {
-          //     this.props.updateUserType(true);
-          //     Actions.registerMobile();
-          //   }}
-          //   underlayColor="white"
-          // >
-          //   <View style={createButton}>
-          //     <Text style={[buttonText, whiteText]}>Join Our Network!</Text>
-          //   </View>
-          // </TouchableHighlight>
-        }
-        {
-           <TouchableHighlight
+          <TouchableHighlight
             onPress={() => {
-              this.props.updateUserType(false);
+              this.props.updateUserType(true);
               Actions.registerMobile();
             }}
             underlayColor="white"
           >
             <View style={createButton}>
-              <Text style={[buttonText, whiteText]}>
-                Looking for mechanic?
-              </Text>
+              <Text style={[buttonText, whiteText]}>Join Our Network!</Text>
             </View>
-
           </TouchableHighlight>
+        }
+        {
+          //  <TouchableHighlight
+          //   onPress={() => {
+          //     this.props.updateUserType(false);
+          //     Actions.registerMobile();
+          //   }}
+          //   underlayColor="white"
+          // >
+          //   <View style={createButton}>
+          //     <Text style={[buttonText, whiteText]}>
+          //       Looking for mechanic?
+          //     </Text>
+          //   </View>
+          //
+          // </TouchableHighlight>
         }
 
           <TouchableHighlight

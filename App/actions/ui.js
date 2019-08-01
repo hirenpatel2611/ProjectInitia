@@ -4,6 +4,7 @@ import Api from "../api/api";
 import { GET_USER_DATA } from "../config";
 import { Actions } from "react-native-router-flux";
 import { createSocketChannel } from "./Socket";
+import {loadVendorProfile} from './Vendors';
 
 export const LOAD_FONT_SUCCESS = "ui/LOAD_FONT_SUCCESS";
 export const UPDATE_LOGGED_IN_STATE = "ui/UPDATE_LOGGED_IN_STATE";
@@ -62,6 +63,7 @@ export const getUserData = () => async (dispatch, getState) => {
   let test = new FormData();
   test.append("id", valueUserId);
   Api.post(GET_USER_DATA, test).then(response => {
+    console.log(response);
     if (response.status === 0) {
       if (i < 10) {
         dispatch(getUserData());
@@ -72,7 +74,7 @@ export const getUserData = () => async (dispatch, getState) => {
       type: GET_USER_PROFILE_DATA,
       payload: response[0]
     });
-
+    dispatch(loadVendorProfile());
     const { userCurrentBooking } = getState().user;
     const { vendors, location } = getState().customers;
 

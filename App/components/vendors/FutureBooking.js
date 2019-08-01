@@ -612,9 +612,9 @@ calltocutomer()
                  }}
                   onPress={() => {
                     var startMapData = {
-                      booking_id: this.props.bookings.bookData.booking_id,
-                      customer_id:this.props.bookings.bookData.customer_id,
-                      vendor_id:this.props.bookings.bookData.vendor_id,
+                      booking_id: '',
+                      customer_id:'',
+                      vendor_id:'',
                       otp:this.props.mechanicOTP
                     }
                    this.props.startMapVendor(startMapData);

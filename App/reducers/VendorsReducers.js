@@ -38,7 +38,12 @@ import {
   GET_RATING_TO_CUSTOMER_SUCCESS,
   OTP_SHARE,
   OTP_SHARE_SUCCESS,
-  VENDOR_NEXT_BOOKING
+  VENDOR_NEXT_BOOKING,
+  GET_RATING_TO_CUSTOMER_FAIL,
+  GET_WALLET_AMOUNT,
+  ADD_BALANCE_REQUEST_START,
+  ADD_BALANCE_REQUEST_SUCCESS,
+  GET_WALLET_PAYMENTID
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -78,7 +83,11 @@ const INITIAL_STATE = {
   customerRating: "",
   ratingId: "",
   loadingRating: false,
-  bookings:''
+  bookings: "",
+  walletAmount: '',
+  loadingAddBalace: false,
+  WalletOrderId: "",
+  paymentId:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -128,7 +137,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isBooking: true,
-          bookings:action.payload,
+          bookings: action.payload,
           bookingData: action.payload.bookData,
           bookUserData: action.payload.userData,
           customerDistance: action.payload.vendorDistance,
@@ -144,7 +153,7 @@ export default (state = INITIAL_STATE, action) => {
           loadingBookigUpdate: false,
           bookingStatus: action.payload,
           isBooking: false,
-          FutureBookingList: [...action.payload.FutureBookingList],
+          FutureBookingList: [...action.payload.FutureBookingList]
         };
       }
       break;
@@ -223,7 +232,7 @@ export default (state = INITIAL_STATE, action) => {
           bookingVendorStatus: action.payload.data,
           FutureBookingList: [...action.payload.FutureBookingList],
           isMechanicOtp: false,
-          isBooking: false,
+          isBooking: false
         };
       }
       break;
@@ -265,8 +274,7 @@ export default (state = INITIAL_STATE, action) => {
           isConfirmModal: false,
           cancleReasonVendor: null,
           reasonCheckboxVendor: [false, false, false],
-          loadingConfirm: false,
-
+          loadingConfirm: false
         };
       }
       break;
@@ -364,7 +372,7 @@ export default (state = INITIAL_STATE, action) => {
           fullNameVendor: action.payload.userFullName,
           addressVendor: action.payload.userAddress,
           emailVendor: action.payload.userEmail,
-          imageVendorUri: action.payload.uri.profile_image
+          imageVendorUri: action.payload.uri
         };
       }
       break;
@@ -394,7 +402,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loadingStartMap: false,
           isMechanicOtp: false,
-          FutureBookingList: [...action.payload.FutureBookingList],
+          FutureBookingList: [...action.payload.FutureBookingList]
         };
       }
       break;
@@ -467,6 +475,15 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
+    case GET_RATING_TO_CUSTOMER_FAIL:
+      {
+        return {
+          ...state,
+          loadingRating: false
+        };
+      }
+      break;
+
     case SET_ALL_STATE_TO_INITIAL:
       {
         return {
@@ -477,31 +494,70 @@ export default (state = INITIAL_STATE, action) => {
       break;
 
     case OTP_SHARE:
-    {
-      return{
-        ...state,
+      {
+        return {
+          ...state
+        };
       }
-    }
-    break;
+      break;
 
     case OTP_SHARE_SUCCESS:
-    {
-      return{
-        ...state,
-        isMechanicOtp: false,
+      {
+        return {
+          ...state,
+          isMechanicOtp: false
+        };
       }
-    }
-    break;
+      break;
 
     case VENDOR_NEXT_BOOKING:
+      {
+        return {
+          ...state,
+          loadingStartMap: false,
+          isMechanicOtp: false,
+          FutureBookingList: [...action.payload.FutureBookingList],
+          bookings: [...action.payload.ar],
+          isBooking: true
+        };
+      }
+      break;
+
+    case GET_WALLET_AMOUNT:
+      {
+        return {
+          ...state,
+          walletAmount: action.payload
+        };
+      }
+      break;
+
+    case ADD_BALANCE_REQUEST_START:
+      {
+        return {
+          ...state,
+          loadingAddBalace: true
+        };
+      }
+      break;
+
+    case ADD_BALANCE_REQUEST_SUCCESS:
+      {
+        return {
+          ...state,
+          WalletOrderId: action.payload,
+          loadingAddBalace: false
+        };
+      }
+      break;
+
+    case GET_WALLET_PAYMENTID:
     {
       return{
         ...state,
-        loadingStartMap: false,
-        isMechanicOtp: false,
-        FutureBookingList: [...action.payload.FutureBookingList],
-        bookings:[...action.payload.ar],
-        isBooking: true,
+        paymentId:action.payload,
+        walletAmount:'',
+        WalletOrderId:''
       }
     }
     break;

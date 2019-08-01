@@ -84,9 +84,16 @@ export const GET_RATING_TO_CUSTOMER_START =
   "vendors/GET_RATING_TO_CUSTOMER_START";
 export const GET_RATING_TO_CUSTOMER_SUCCESS =
   "vendors/GET_RATING_TO_CUSTOMER_SUCCESS";
-  export const OTP_SHARE ="vendors/OTP_SHARE";
-  export const OTP_SHARE_SUCCESS ="vendors/OTP_SHARE_SUCCESS";
-  export const VENDOR_NEXT_BOOKING ="vendors/VENDOR_NEXT_BOOKING";
+export const GET_RATING_TO_CUSTOMER_FAIL =
+  "vendors/GET_RATING_TO_CUSTOMER_FAIL";
+export const OTP_SHARE = "vendors/OTP_SHARE";
+export const OTP_SHARE_SUCCESS = "vendors/OTP_SHARE_SUCCESS";
+export const VENDOR_NEXT_BOOKING = "vendors/VENDOR_NEXT_BOOKING";
+export const GET_WALLET_AMOUNT = "vendors/GET_WALLET_AMOUNT";
+export const ADD_BALANCE_REQUEST_START = "vendors/ADD_BALANCE_REQUEST_START";
+export const ADD_BALANCE_REQUEST_SUCCESS =
+  "vendors/ADD_BALANCE_REQUEST_SUCCESS";
+  export const GET_WALLET_PAYMENTID = "vendors/GET_WALLET_PAYMENTID";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -187,7 +194,7 @@ export const getBookingUpdate = val => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_UAPDATE_START
   });
-  const { bookingData, FutureBookingList,bookings } = getState().vendors;
+  const { bookingData, FutureBookingList, bookings } = getState().vendors;
 
   let test = new FormData();
   test.append("booking_id", bookings.bookData.booking_id);
@@ -204,12 +211,10 @@ export const getBookingUpdate = val => (dispatch, getState) => {
           dispatch(getMechanicOtp(bookings.bookData.booking_id));
         }
 
-
         dispatch({
           type: GET_BOOKING_UAPDATE_SUCCESS,
-          payload: { val, FutureBookingList}
+          payload: { val, FutureBookingList }
         });
-
       } else {
         dispatch({
           type: GET_BOOKING_UAPDATE_FAIL
@@ -273,7 +278,7 @@ export const BookingListCancle = () => (dispatch, getState) => {
         });
         dispatch({
           type: BOOKING_LIST_CANCLE_SUCCESS,
-          payload: {FutureBookingList}
+          payload: { FutureBookingList }
         });
       } else {
         if (response.message === "something went wrong") {
@@ -297,7 +302,6 @@ export const BookingListApprove = val => (dispatch, getState) => {
   test.append("status", "accept");
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-
       if (response.status === 1) {
         dispatch(getMechanicOtp(val.booking_id));
         dispatch(connectTosocketApprov(val.customer_id));
@@ -323,24 +327,22 @@ export const BookingListApprove = val => (dispatch, getState) => {
 };
 
 export const otpShare = val => (dispatch, getState) => {
-  const { bookings,FutureBookingList } = getState().vendors;
+  const { bookings, FutureBookingList } = getState().vendors;
   Share.share({
     message: "Your OTP is " + `${val}`
   }).then(response => {
     dispatch({
-      type:OTP_SHARE_SUCCESS,
-    })
+      type: OTP_SHARE_SUCCESS
+    });
   });
 
-
-    dispatch({
-      type:OTP_SHARE,
-    })
+  dispatch({
+    type: OTP_SHARE
+  });
 };
 
 export const getBookingVendorStatus = data => (dispatch, getState) => {
-  const { FutureBookingList,bookings } = getState().vendors;
-
+  const { FutureBookingList, bookings } = getState().vendors;
 
   FutureBookingList.map(booking => {
     if (booking.booking_id === data.message.booking_id) {
@@ -362,7 +364,7 @@ export const getBookingVendorStatus = data => (dispatch, getState) => {
   });
   dispatch({
     type: GET_BOOKING_VENDOR_STATUS,
-    payload: { data, FutureBookingList}
+    payload: { data, FutureBookingList }
   });
 };
 
@@ -437,6 +439,7 @@ export const updateVendorProfile = val => (dispatch, getState) => {
 
 export const loadVendorProfile = () => (dispatch, getState) => {
   const { userData } = getState().user;
+
   dispatch({
     type: LOAD_VENDOR_PROFILE,
     payload: userData
@@ -464,7 +467,7 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
     type: START_MAP_VENDOR_START
   });
 
-  const { FutureBookingList, mechanicOTP,bookings } = getState().vendors;
+  const { FutureBookingList, mechanicOTP, bookings } = getState().vendors;
 
   let test1 = new FormData();
   test1.append("otp", startMapData.otp);
@@ -483,7 +486,6 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
       test.append("booking_id", startMapData.booking_id);
       test.append("status", "on-the-way");
       Api.post(BOOKING_UPDATE, test).then(responseBooking => {
-        console.log(responseBooking);
         if (responseBooking.status === 1) {
           dispatch(socketBookingOnTheWay(startMapData));
           dispatch(socketVendorCurrentLocation());
@@ -493,11 +495,10 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
             }
           });
 
-
-            dispatch({
-              type: START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
-              payload: {FutureBookingList}
-            });
+          dispatch({
+            type: START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
+            payload: { FutureBookingList }
+          });
         }
       });
     } else {
@@ -509,7 +510,6 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
 };
 
 export const goToMap = () => async (dispatch, getState) => {
-
   await Location.hasServicesEnabledAsync()
     .then(async res => {
       if (!res) {
@@ -577,12 +577,57 @@ export const getRatingToCustomer = val => (dispatch, getState) => {
   test.append("vendor_id", ratingId);
   test.append("rating", customerRating);
   Api.post(RATING_BY_CUSTOMER, test).then(response => {
-    console.log(response);
-    console.log(test);
     if (response.status === 1) {
       dispatch({
         type: GET_RATING_TO_CUSTOMER_SUCCESS
       });
+    } else {
+      dispatch({
+        type: GET_RATING_TO_CUSTOMER_FAIL
+      });
     }
   });
+};
+
+export const getWalletAmount = val => dispatch => {
+  dispatch({
+    type: GET_WALLET_AMOUNT,
+    payload: val
+  });
+};
+
+export const addBalanceRequest = () => (dispatch, getState) => {
+  dispatch({
+    type: ADD_BALANCE_REQUEST_START
+  });
+  const { walletAmount } = getState().vendors;
+  fetch("http://103.50.153.25:3000/createOrder", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      amount: parseInt(walletAmount), // amount in the smallest currency unit
+      currency: "INR",
+      receipt: "order_rcptid_11",
+      payment_capture: "0"
+    })
+  }).then(res => {
+    console.log(JSON.parse(res._bodyInit).order.id);
+    dispatch({
+      type: ADD_BALANCE_REQUEST_SUCCESS,
+      payload: JSON.parse(res._bodyInit).order.id
+    });
+  });
+};
+
+export const getWalletPaymentId = val => dispatch => {
+
+  dispatch({
+    type: GET_WALLET_PAYMENTID,
+    payload: val
+  });
+  var alt = 'You Payment Id Is : ' + val;
+  alert(alt);
 };

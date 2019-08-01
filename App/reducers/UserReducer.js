@@ -47,7 +47,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           userData: {
-            uri: action.payload,
+            uri: action.payload.profile_image,
             userId: action.payload.id,
             userEmail: action.payload.email,
             userMobileno: action.payload.mobile,
@@ -63,7 +63,13 @@ export default (state = INITIAL_STATE, action) => {
       break;
 
     case UPDATE_IS_VENDOR:
-      return { ...state, isVendorLoggedIn: action.payload };
+    {
+      console.log(action.payload);
+      return {
+        ...state,
+        isVendorLoggedIn: action.payload
+      };
+    }
       break;
 
     case SET_ALL_STATE_TO_INITIAL:

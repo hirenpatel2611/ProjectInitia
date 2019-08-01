@@ -1616,7 +1616,7 @@ art@^0.10.0, art@^0.10.1:
   resolved "https://registry.yarnpkg.com/art/-/art-0.10.3.tgz#b01d84a968ccce6208df55a733838c96caeeaea2"
   integrity sha512-HXwbdofRTiJT6qZX/FnchtldzJjS3vkLJxQilc3Xj+ma2MXjY4UAyQ0ls1XZYVnDvVIBiFZbC6QsvtW86TD6tQ==
 
-asap@~2.0.3:
+asap@~2.0.3, asap@~2.0.6:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
   integrity sha1-5QNHYR1+aQlDIIu9r+vLwvuGbUY=
@@ -2910,7 +2910,7 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@^3.4.7:
+bluebird@^3.4.7, bluebird@^3.5.0:
   version "3.5.5"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.5.tgz#a8d0afd73251effbbd5fe384a77d73003c17a71f"
   integrity sha512-5am6HnnfN+urzt4yfg7IgTbotDjIT/u8AJpEt0sIU9FtXfVeezXAPKswrG+xKUCOYAINpSdgZVDU6QFh+cuH3w==
@@ -4058,6 +4058,11 @@ crypto-token@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/crypto-token/-/crypto-token-1.0.1.tgz#27c6482faf3b63c2f5da11577f8304346fe797a5"
   integrity sha1-J8ZIL687Y8L12hFXf4MENG/nl6U=
+
+crypto@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/crypto/-/crypto-1.0.1.tgz#2af1b7cad8175d24c8a1b0778255794a21803037"
+  integrity sha512-VxBKmeNcqQdiUQUW2Tzq0t377b54N2bMtXO/qiLa+6eRRmmC4qT3D4OnTGoT/U6O9aklQ/jTwbOtRMTTY8G0Ig==
 
 css-color-names@0.0.4:
   version "0.0.4"
@@ -5694,6 +5699,11 @@ expo-sms@~2.0.0:
   dependencies:
     expo-core "~2.0.0"
     expo-permissions-interface "~2.0.0"
+
+expo-stripe-checkout@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/expo-stripe-checkout/-/expo-stripe-checkout-1.0.1.tgz#d766a43e01ae2e0ecce285ec1b277ddeabfc1744"
+  integrity sha512-mReYOh+VNNzHBlQaGj6kYb78LfdB4+6OMcWsSAGNkyMX+7E0SzRRV65TOjWn3m7f8S5y9jBNitx2wtndlso8dg==
 
 expo-task-manager-interface@~1.0.0:
   version "1.0.0"
@@ -11170,6 +11180,13 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
+promise@^8.0.1:
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/promise/-/promise-8.0.3.tgz#f592e099c6cddc000d538ee7283bb190452b0bf6"
+  integrity sha512-HeRDUL1RJiLhyA0/grn+PTShlBAcLuh/1BJGtrvjwbvRDCTLLMEz9rOGCV+R3vHY4MixIuoMEd9Yq/XvsTPcjw==
+  dependencies:
+    asap "~2.0.6"
+
 prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.5.9, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
@@ -11365,6 +11382,15 @@ raw-body@2.4.0:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
+razorpay@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/razorpay/-/razorpay-2.0.4.tgz#cf772fea27ca7870c8b217a7a98c8e009affe654"
+  integrity sha512-I6mBwmO9VUVtB5fdmas/D10n2lxB+PIu2jZMZZSsNphXlaDcOj7rPu27GEfTLdnghP/LjbJpJNGXT3zpi4PZJA==
+  dependencies:
+    promise "^8.0.1"
+    request "^2.88.0"
+    request-promise "^4.2.2"
+
 rc@^1.0.1, rc@^1.1.6, rc@^1.1.7, rc@^1.2.7:
   version "1.2.8"
   resolved "https://registry.yarnpkg.com/rc/-/rc-1.2.8.tgz#cd924bf5200a075b83c188cd6b9e211b7fc0d3ed"
@@ -11485,11 +11511,6 @@ react-lifecycles-compat@^3, react-lifecycles-compat@^3.0.0, react-lifecycles-com
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
-
-react-native-actionsheet@^2.4.2:
-  version "2.4.2"
-  resolved "https://registry.yarnpkg.com/react-native-actionsheet/-/react-native-actionsheet-2.4.2.tgz#6a00dd51a75ef2c8974312130e405af73191500f"
-  integrity sha512-DBoWIvVwuWXuptF4t46pBqkFxaUxS+rsIdHiA05t0n4BdTIDV2R4s9bLEUVOGzb94D7VxIamsXZPA/3mmw+SXg==
 
 react-native-animatable@^1.2.4:
   version "1.3.2"
@@ -11673,15 +11694,6 @@ react-native-modal@^9.0.0:
     prop-types "^15.6.2"
     react-native-animatable "^1.2.4"
 
-react-native-open-map@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-open-map/-/react-native-open-map-3.0.0.tgz#b7c79fbb31c84491b3a941fa7d05842d07925711"
-  integrity sha512-LYdl22ZSYUxk+hQ/XiI501LdzB4ysPcB87Tl/B+PkjLQVfvRBdw37Ud2/yRpFlSEg7KetbccHCCXSkWYPSQT3Q==
-  dependencies:
-    prop-types "^15.7.2"
-    react-native-actionsheet "^2.4.2"
-    react-native-root-siblings "^3.1.7"
-
 react-native-open-maps@^0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/react-native-open-maps/-/react-native-open-maps-0.3.3.tgz#5120a740dcbcf84d7205ede6ec308139a499c96f"
@@ -11721,18 +11733,20 @@ react-native-ratings@^6.3.0, react-native-ratings@^6.3.1:
     lodash "^4.17.4"
     prop-types "^15.5.10"
 
+react-native-razorpay-expo@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-razorpay-expo/-/react-native-razorpay-expo-2.0.1.tgz#cadf5ab2ba852577af2fb22fde15390b84ec9548"
+  integrity sha512-Cvyz19I43aARimGszxdu55vN5Q6dA7azBK/FeGxZ1WzHN6QE/tR7kFuJDrzLeYe1uvTUxCO6njtejjkNU9TkrQ==
+
+react-native-razorpay-expokit@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-razorpay-expokit/-/react-native-razorpay-expokit-2.1.1.tgz#629927d0859230248b42fd0cb4617dc513a6cfd5"
+  integrity sha512-EreBGrpdb3XuZW5HE2jVvs4DN/FkA7p1ZSXvLRUXwSW2h/3W6GYqtPDLwq5w+FXGKcvuJpzTKL7eumPpaiVBaA==
+
 react-native-reanimated@1.0.0-alpha.11:
   version "1.0.0-alpha.11"
   resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.0.0-alpha.11.tgz#b78c839bae878d149561b56a3c750414957ea86d"
   integrity sha512-lDakjY8CXmZiSN71hyc276b3d7M9mKV9ZyYw4W/rTnnJbgBFaqdIxSHq4S4LxSbVqpAoQMfUJqPTE0BKbAz7Aw==
-
-react-native-root-siblings@^3.1.7:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-root-siblings/-/react-native-root-siblings-3.2.1.tgz#06bd8722babe8a30e914b73eae4beffa3218ec57"
-  integrity sha512-WNNhLRFpyK8R00OOdMhQVepeBV+khMTi+Yk3QcPRetMLvao8kLkCP5SObiXpbTFPZlkuSfHo/0jtEKyUA8qWpw==
-  dependencies:
-    prop-types "^15.6.2"
-    static-container "^1.0.0"
 
 react-native-router-flux@^4.0.6:
   version "4.0.6"
@@ -11759,10 +11773,17 @@ react-native-safe-module@^1.1.0:
   dependencies:
     dedent "^0.6.0"
 
-react-native-screens@1.0.0-alpha.22, react-native-screens@^1.0.0-alpha.11:
+react-native-screens@1.0.0-alpha.22:
   version "1.0.0-alpha.22"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-1.0.0-alpha.22.tgz#7a120377b52aa9bbb94d0b8541a014026be9289b"
   integrity sha512-kSyAt0AeVU6N7ZonfV6dP6iZF8B7Bce+tk3eujXhzBGsLg0VSLnU7uE9VqJF0xdQrHR91ZjGgVMieo/8df9KTA==
+
+react-native-screens@^1.0.0-alpha.11:
+  version "1.0.0-alpha.23"
+  resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-1.0.0-alpha.23.tgz#25d7ea4d11bda4fcde2d1da7ae50271c6aa636e0"
+  integrity sha512-tOxHGQUN83MTmQB4ghoQkibqOdGiX4JQEmeyEv96MKWO/x8T2PJv84ECUos9hD3blPRQwVwSpAid1PPPhrVEaw==
+  dependencies:
+    debounce "^1.2.0"
 
 react-native-status-bar-height@^2.2.0:
   version "2.3.1"
@@ -12514,6 +12535,16 @@ request-promise-native@^1.0.5:
     stealthy-require "^1.1.1"
     tough-cookie "^2.3.3"
 
+request-promise@^4.2.2:
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/request-promise/-/request-promise-4.2.4.tgz#1c5ed0d71441e38ad58c7ce4ea4ea5b06d54b310"
+  integrity sha512-8wgMrvE546PzbR5WbYxUQogUnUDfM0S7QIFZMID+J73vdFARkFy+HElj4T+MWYhpXwlLp0EQ8Zoj8xUA0he4Vg==
+  dependencies:
+    bluebird "^3.5.0"
+    request-promise-core "1.1.2"
+    stealthy-require "^1.1.1"
+    tough-cookie "^2.3.3"
+
 request@2.81.0:
   version "2.81.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.81.0.tgz#c6928946a0e06c5f8d6f8a9333469ffda46298a0"
@@ -12542,7 +12573,7 @@ request@2.81.0:
     tunnel-agent "^0.6.0"
     uuid "^3.0.0"
 
-request@^2.79.0, request@^2.81.0, request@^2.83.0, request@^2.87.0:
+request@^2.79.0, request@^2.81.0, request@^2.83.0, request@^2.87.0, request@^2.88.0:
   version "2.88.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.88.0.tgz#9c2fca4f7d35b592efe57c7f0a55e81052124fef"
   integrity sha512-NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==
@@ -13386,11 +13417,6 @@ staged-git-files@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/staged-git-files/-/staged-git-files-1.0.0.tgz#cdb847837c1fcc52c08a872d4883cc0877668a80"
   integrity sha1-zbhHg3wfzFLAioctSIPMCHdmioA=
-
-static-container@^1.0.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/static-container/-/static-container-1.3.0.tgz#e4f7b4be4e42954e3d1955ab7b3974a78b7bad87"
-  integrity sha512-OJnvgv6tq9T5QbFUMioEK4WP48pMn/X4qdcrWAhop6boMMz6pMmWPWXgjimn1wKqcClZ6Ff0iSKViRXzwx111w==
 
 static-extend@^0.1.1:
   version "0.1.2"
