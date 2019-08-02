@@ -21,3 +21,4 @@ export const CALL=require("../images/phone-receiver.png");
 export const BIKE_FOR_MAP=require("../images/bikeForMap.jpg");
 export const PENCIL=require("../images/edit.png");
 export const MECHANIC_MAP_ICON=require("../images/mechanic_2.png");
+export const SUCCESS=require('../images/success.png');

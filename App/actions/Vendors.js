@@ -94,6 +94,7 @@ export const ADD_BALANCE_REQUEST_START = "vendors/ADD_BALANCE_REQUEST_START";
 export const ADD_BALANCE_REQUEST_SUCCESS =
   "vendors/ADD_BALANCE_REQUEST_SUCCESS";
   export const GET_WALLET_PAYMENTID = "vendors/GET_WALLET_PAYMENTID";
+  export const PAYMENT_SUCCESS_OK = "vendors/PAYMENT_SUCCESS_OK";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -628,6 +629,11 @@ export const getWalletPaymentId = val => dispatch => {
     type: GET_WALLET_PAYMENTID,
     payload: val
   });
-  var alt = 'You Payment Id Is : ' + val;
-  alert(alt);
+};
+
+export const paymentSuccessOk = () => dispatch => {
+
+  dispatch({
+    type:PAYMENT_SUCCESS_OK,
+  });
 };

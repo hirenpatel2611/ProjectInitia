@@ -43,7 +43,8 @@ import {
   GET_WALLET_AMOUNT,
   ADD_BALANCE_REQUEST_START,
   ADD_BALANCE_REQUEST_SUCCESS,
-  GET_WALLET_PAYMENTID
+  GET_WALLET_PAYMENTID,
+  PAYMENT_SUCCESS_OK
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -87,7 +88,8 @@ const INITIAL_STATE = {
   walletAmount: '',
   loadingAddBalace: false,
   WalletOrderId: "",
-  paymentId:''
+  paymentId:'',
+  successPaymentModal:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -557,7 +559,17 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         paymentId:action.payload,
         walletAmount:'',
-        WalletOrderId:''
+        successPaymentModal:true
+      }
+    }
+    break;
+
+    case PAYMENT_SUCCESS_OK:
+    {
+      return{
+        ...state,
+        WalletOrderId:'',
+        successPaymentModal:false
       }
     }
     break;
