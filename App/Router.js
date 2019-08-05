@@ -33,7 +33,8 @@ import {
   updateIsVendor,
   createSocketChannel,
   getUserData,
-  getFutureBookings
+  getFutureBookings,
+  getWalletAmount
 } from "./actions";
 import SideMenu from "./components/drawer/SideMenu";
 import SideMenuVendor from "./components/drawer/SideMenuVendor";
@@ -64,6 +65,7 @@ class RouterComponent extends Component {
       this.props.createSocketChannel(myId);
       if (valueIsvendor === '1') {
         this.props.getFutureBookings();
+        this.props.getWalletAmount();
       } else {
         this.props.getUserData();
       }
@@ -269,6 +271,7 @@ export default connect(
     updateIsVendor,
     createSocketChannel,
     getUserData,
-    getFutureBookings
+    getFutureBookings,
+    getWalletAmount
   }
 )(RouterComponent);

@@ -69,27 +69,24 @@ class SideMenuVendor extends Component {
         </View>
         <View
           style={{
+            width: 170,
+            alignSelf:'center',
             alignItems: "center",
+            backgroundColor: "#ffffff",
+            borderRadius: 10,
+            padding: 5,
             marginTop: 20,
             shadowColor: "#000",
-            shadowOffset: { width: 2, height: 2 },
-            shadowOpacity: 0.2,
+            shadowOffset: { width: 4, height: 4 },
+            shadowOpacity: 0.5,
             elevation: 2
           }}
         >
-          <TouchableOpacity
-            style={{
-              width: 170,
-              alignItems: "center",
-              backgroundColor: "#ffffff",
-              borderRadius: 10,
-              padding: 5
-            }}
-          >
+
             <Text style={{ fontFamily: "circular-book" }}>
-              Available Points : 100
+              Available Points : {this.props.walletBalance}
             </Text>
-          </TouchableOpacity>
+
         </View>
         <CardSection
           style={{
@@ -167,10 +164,12 @@ class SideMenuVendor extends Component {
   }
 }
 
-const mapStateToProps = ({ forgot }) => {
+const mapStateToProps = ({ forgot,vendors }) => {
   const { forgotOTP } = forgot;
+  const {walletBalance} = vendors;
   return {
-    forgotOTP
+    forgotOTP,
+    walletBalance
   };
 };
 

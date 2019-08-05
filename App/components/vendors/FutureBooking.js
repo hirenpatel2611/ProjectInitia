@@ -36,7 +36,8 @@ import {
   socketBookingCompleted,
   getCustomerRating,
   getCustomerRatingModal,
-  getRatingToCustomer
+  getRatingToCustomer,
+  getWalletAmount
 } from "../../actions";
 import { FutureBookingList, Spinner } from "../../Common";
 import { CALL, BITMAP2 } from "../../images";
@@ -52,7 +53,7 @@ const LOCATION_TASK_NAME1 = "background-location-task-current";
 class FutureBooking extends Component {
   componentDidMount() {
     this.props.getFutureBookings();
-
+    this.props.getWalletAmount();
   }
 calltocutomer()
   {
@@ -944,6 +945,7 @@ export default connect(
     socketBookingCompleted,
     getCustomerRating,
     getCustomerRatingModal,
-    getRatingToCustomer
+    getRatingToCustomer,
+    getWalletAmount
   }
 )(FutureBooking);

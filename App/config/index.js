@@ -18,6 +18,9 @@ export const SEND_FORGOT_PASSWORD_OTP = "/customers/send_forgot_password_otp";
 export const SEND_FORGOT_PASSWORD = "/customers/forgot_password";
 export const VERIFY_MECHANIC_OTP = "/customers/verify_mechanic_otp";
 export const CUSTOMER_COMMENT = "/bookings/booking_comment";
+export const GET_WALLET_AMOUNT = "/wallets/get_wallet_amount";
+export const UPDATE_WALLET_AMOUNT = "/wallets/update_wallet_amount";
+export const ADD_PAYMENT = "/payments/add_payment";
 export const WEBCALL_SUCCESSFUL_FLAG = 100;
 export const URL_USER_LOGOUT = "/app/api/logout";
 

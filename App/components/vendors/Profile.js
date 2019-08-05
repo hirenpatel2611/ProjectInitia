@@ -45,7 +45,9 @@ class Profile extends Component {
       }
     }
   };
+
   render() {
+      console.log(this.props.imageVendorUri)
     const {
       containerStyle,
       subContainerProfile,
@@ -59,11 +61,11 @@ class Profile extends Component {
             style={inStyle.containerStyle}
           >
             <Image
-              style={inStyle.imageStyle}
+              style={inStyle.profileImageStyle}
               resizeMode={"cover"}
               source={
                 this.props.imageVendorUri
-                  ? { uri: this.props.imageVendorUri }
+                  ? {uri:this.props.imageVendorUri}
                   : USER2
               }
             />

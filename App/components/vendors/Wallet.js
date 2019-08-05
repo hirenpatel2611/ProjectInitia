@@ -15,10 +15,11 @@ import { Actions } from "react-native-router-flux";
 import Header from "../../Common/Header";
 import { DangerZone } from "expo";
 import {
-  getWalletAmount,
+  getInputWalletAmount,
   addBalanceRequest,
   getWalletPaymentId,
-  paymentSuccessOk
+  paymentSuccessOk,
+  getWalletAmount
 } from "../../actions";
 import { SUCCESS, BITMAP2 } from "../../images";
 
@@ -28,8 +29,11 @@ let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
 class Wallet extends Component {
+  componentWillMount() {
+    this.props.getWalletAmount();
+  }
   render() {
-    console.log(this.props.successPaymentModal);
+    
     const htmls =
       `
 
@@ -139,7 +143,7 @@ class Wallet extends Component {
                     alignSelf: "center"
                   }}
                 >
-                  100
+                  {this.props.walletBalance}
                 </Text>
               </View>
             </View>
@@ -163,7 +167,7 @@ class Wallet extends Component {
               value={this.props.walletAmount}
               keyboardType={"phone-pad"}
               onChangeText={text => {
-                this.props.getWalletAmount(text);
+                this.props.getInputWalletAmount(text);
               }}
             />
             <TouchableHighlight
@@ -337,7 +341,8 @@ const mapStateToProps = ({ vendors, user }) => {
     loadingAddBalace,
     WalletOrderId,
     paymentId,
-    successPaymentModal
+    successPaymentModal,
+    walletBalance
   } = vendors;
   const { userData } = user;
   return {
@@ -346,16 +351,18 @@ const mapStateToProps = ({ vendors, user }) => {
     WalletOrderId,
     userData,
     paymentId,
-    successPaymentModal
+    successPaymentModal,
+    walletBalance
   };
 };
 
 export default connect(
   mapStateToProps,
   {
-    getWalletAmount,
+    getInputWalletAmount,
     addBalanceRequest,
     getWalletPaymentId,
-    paymentSuccessOk
+    paymentSuccessOk,
+    getWalletAmount
   }
 )(Wallet);

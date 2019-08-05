@@ -7,7 +7,10 @@ import {
   SEND_MECHANIC_OTP,
   UPDATE_PROFILE,
   VERIFY_MECHANIC_OTP,
-  RATING_BY_CUSTOMER
+  RATING_BY_CUSTOMER,
+  GET_WALLET_AMOUNT,
+  ADD_PAYMENT,
+  UPDATE_WALLET_AMOUNT
 } from "../config";
 import {
   connectTosocketApprov,
@@ -89,12 +92,14 @@ export const GET_RATING_TO_CUSTOMER_FAIL =
 export const OTP_SHARE = "vendors/OTP_SHARE";
 export const OTP_SHARE_SUCCESS = "vendors/OTP_SHARE_SUCCESS";
 export const VENDOR_NEXT_BOOKING = "vendors/VENDOR_NEXT_BOOKING";
-export const GET_WALLET_AMOUNT = "vendors/GET_WALLET_AMOUNT";
+export const GET_INPUT_WALLET_AMOUNT = "vendors/GET_INPUT_WALLET_AMOUNT";
 export const ADD_BALANCE_REQUEST_START = "vendors/ADD_BALANCE_REQUEST_START";
 export const ADD_BALANCE_REQUEST_SUCCESS =
   "vendors/ADD_BALANCE_REQUEST_SUCCESS";
   export const GET_WALLET_PAYMENTID = "vendors/GET_WALLET_PAYMENTID";
   export const PAYMENT_SUCCESS_OK = "vendors/PAYMENT_SUCCESS_OK";
+  export const GET_WALLET_AMOUNT_START = "vendors/GET_WALLET_AMOUNT_START";
+  export const GET_WALLET_AMOUNT_SUCCESS = "vendors/GET_WALLET_AMOUNT_SUCCESS";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -210,6 +215,7 @@ export const getBookingUpdate = val => (dispatch, getState) => {
             }
           });
           dispatch(getMechanicOtp(bookings.bookData.booking_id));
+          dispatch(updateWalletAmount());
         }
 
         dispatch({
@@ -306,6 +312,7 @@ export const BookingListApprove = val => (dispatch, getState) => {
       if (response.status === 1) {
         dispatch(getMechanicOtp(val.booking_id));
         dispatch(connectTosocketApprov(val.customer_id));
+        dispatch(updateWalletAmount());
         FutureBookingList.map(booking => {
           if (booking.booking_id === val.booking_id) {
             booking.status = "accept";
@@ -590,9 +597,9 @@ export const getRatingToCustomer = val => (dispatch, getState) => {
   });
 };
 
-export const getWalletAmount = val => dispatch => {
+export const getInputWalletAmount = val => dispatch => {
   dispatch({
-    type: GET_WALLET_AMOUNT,
+    type: GET_INPUT_WALLET_AMOUNT,
     payload: val
   });
 };
@@ -629,6 +636,8 @@ export const getWalletPaymentId = val => dispatch => {
     type: GET_WALLET_PAYMENTID,
     payload: val
   });
+
+  dispatch(addWalletPayment());
 };
 
 export const paymentSuccessOk = () => dispatch => {
@@ -637,3 +646,56 @@ export const paymentSuccessOk = () => dispatch => {
     type:PAYMENT_SUCCESS_OK,
   });
 };
+
+export const getWalletAmount = () => async (dispatch,getState) => {
+  const { userData } = await getState().user;
+  dispatch({
+    type:GET_WALLET_AMOUNT_START,
+  });
+  let test = new FormData();
+  test.append("customer_id", userData.userId);
+  Api.post(GET_WALLET_AMOUNT, test).then(response => {
+          if(response.status === 1){
+            dispatch({
+              type:GET_WALLET_AMOUNT_SUCCESS,
+              payload:response.data[0]
+            });
+          } else {
+            dispatch(getWalletAmount())
+          }
+
+          })
+}
+
+export const updateWalletAmount = () => async (dispatch,getState) => {
+  const { userData } = await getState().user;
+
+  let test = new FormData();
+  test.append("customer_id", userData.userId);
+  Api.post(UPDATE_WALLET_AMOUNT, test).then(response => {
+
+            console.log(response);
+
+          })
+}
+
+export const addWalletPayment = () => async (dispatch,getState) => {
+  const { userData } = await getState().user;
+  const { walletAmount,WalletOrderId,paymentId } = getState().vendors;
+
+
+  let test = new FormData();
+  test.append("customer_id", userData.userId);
+  test.append("order_id", WalletOrderId);
+  test.append("payment_id", paymentId);
+  test.append("amount", walletAmount);
+  Api.post(ADD_PAYMENT, test).then(response => {
+    console.log(response);
+          if(response.status === 1){
+              dispatch(getWalletAmount())
+          }else {
+            dispatch(addWalletPayment())
+          }
+
+          })
+}

@@ -253,9 +253,9 @@ class Profile extends Component {
                       this.props.updateName(text);
                     }}
                   />
-                  {errors.name ? (
+                  {this.props.isVendor?errors.name ? (
                     <Text style={styles.textError2}>{errors.name[0]}</Text>
-                  ) : null}
+                  ) : null:null}
                 </View>
                 <View style={subContainerProfile}>
                   <TextInput
@@ -269,9 +269,9 @@ class Profile extends Component {
                       this.props.updateAddress(text);
                     }}
                   />
-                  {errors.address ? (
+                  {this.props.isVendor?errors.address ? (
                     <Text style={styles.textError2}>{errors.address[0]}</Text>
-                  ) : null}
+                  ) : null:null}
                 </View>
 
                 <View style={subContainerProfile}>
@@ -286,9 +286,9 @@ class Profile extends Component {
                       this.props.updateEmail(text);
                     }}
                   />
-                  {errors.email ? (
+                  {this.props.isVendor?errors.email ? (
                     <Text style={styles.textError2}>{errors.email[0]}</Text>
-                  ) : null}
+                  ) : null:null}
                 </View>
 
                 <View style={subContainerProfile}>
@@ -304,6 +304,9 @@ class Profile extends Component {
                       this.props.updatePasswordProfile(text);
                     }}
                   />
+                  {
+                    this.props.password.length <6 &&   this.props.password !== ''?<Text style={styles.textError2}>Minimum 6 Character</Text>:null
+                  }
                   {errors.password ? (
                     <Text style={styles.textError2}>{errors.password[0]}</Text>
                   ) : null}

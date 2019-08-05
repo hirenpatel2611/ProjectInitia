@@ -40,11 +40,13 @@ import {
   OTP_SHARE_SUCCESS,
   VENDOR_NEXT_BOOKING,
   GET_RATING_TO_CUSTOMER_FAIL,
-  GET_WALLET_AMOUNT,
+  GET_INPUT_WALLET_AMOUNT,
   ADD_BALANCE_REQUEST_START,
   ADD_BALANCE_REQUEST_SUCCESS,
   GET_WALLET_PAYMENTID,
-  PAYMENT_SUCCESS_OK
+  PAYMENT_SUCCESS_OK,
+  GET_WALLET_AMOUNT_START,
+  GET_WALLET_AMOUNT_SUCCESS
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -89,7 +91,8 @@ const INITIAL_STATE = {
   loadingAddBalace: false,
   WalletOrderId: "",
   paymentId:'',
-  successPaymentModal:false
+  successPaymentModal:false,
+  walletBalance:0
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -369,6 +372,7 @@ export default (state = INITIAL_STATE, action) => {
 
     case LOAD_VENDOR_PROFILE:
       {
+      
         return {
           ...state,
           fullNameVendor: action.payload.userFullName,
@@ -525,7 +529,7 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-    case GET_WALLET_AMOUNT:
+    case GET_INPUT_WALLET_AMOUNT:
       {
         return {
           ...state,
@@ -558,7 +562,7 @@ export default (state = INITIAL_STATE, action) => {
       return{
         ...state,
         paymentId:action.payload,
-        walletAmount:'',
+
         successPaymentModal:true
       }
     }
@@ -569,7 +573,26 @@ export default (state = INITIAL_STATE, action) => {
       return{
         ...state,
         WalletOrderId:'',
-        successPaymentModal:false
+        successPaymentModal:false,
+        walletAmount:'',
+      }
+    }
+    break;
+
+    case GET_WALLET_AMOUNT_START:
+    {
+      return{
+        ...state,
+
+      }
+    }
+    break;
+
+    case GET_WALLET_AMOUNT_SUCCESS:
+    {
+      return{
+        ...state,
+        walletBalance:action.payload.total
       }
     }
     break;
