@@ -140,8 +140,9 @@ var styles = StyleSheet.create({
     marginLeft: 20,
     marginRight: 20,
     backgroundColor: "#FFFFFF",
-    justifyContent: "center",
-    height: 0.6 * ScreenHeight,
+    justifyContent: "space-between",
+    alignItems:'center',
+    height: 0.55 * ScreenHeight,
     borderRadius: 10,
     borderColor: "#7960FF",
     borderWidth: 1
@@ -174,7 +175,7 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column",
     alignItems: "stretch",
-    marginTop: 50
+    marginTop: 0
   },
   profileModal1View: {
     alignItems: "center",
@@ -185,17 +186,17 @@ var styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: "#7960FF",
-    fontFamily: "circular-book"
+    fontFamily: "circular-book",
   },
   profileModalText2: {
-    fontSize: 25,
+    fontSize: 0.058 * ScreenWidth,
     color: "#000000",
     marginTop: 13,
     fontFamily: "open-sans-regular"
   },
   profilImage1style: {
-    width: 140,
-    height: 140
+    width: 0.50 * ScreenWidth,
+    height: 0.25 * ScreenHeight
   },
   profileButtonView: {
     alignItems: "center",

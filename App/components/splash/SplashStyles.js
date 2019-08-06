@@ -68,7 +68,7 @@ var styles = StyleSheet.create({
   createButton: {
     backgroundColor: "#7960FF",
     height: 50,
-    width: 280,
+    width: 0.75*ScreenWidth,
     borderRadius: 25,
 
     alignItems: "center",
@@ -79,7 +79,7 @@ var styles = StyleSheet.create({
   loginButton: {
     backgroundColor: "transparent",
     height: 50,
-    width: 280,
+    width: 0.75*ScreenWidth,
     borderRadius: 25,
     borderColor: "#7960FF",
     borderWidth: 1,
@@ -93,7 +93,7 @@ var styles = StyleSheet.create({
   },
   buttonText: {
     padding: 10,
-    fontSize: 18,
+    fontSize: 0.055*ScreenWidth,
     fontFamily: "circular-book"
   },
   themeColor: {

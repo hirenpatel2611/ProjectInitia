@@ -345,7 +345,7 @@ class Profile extends Component {
                 style={{
                 backgroundColor: "transparent",
                 height: 25,
-                width: 0.35 * ScreenWidth,
+                width: 0.37 * ScreenWidth,
                 borderRadius: 25,
                 borderColor: "#7960FF",
                 borderWidth: 1,
@@ -360,7 +360,7 @@ class Profile extends Component {
                 }}
               >
                   <Text style={{fontFamily:'circular-book',
-                                fontSize:14,
+                                fontSize:0.033*ScreenWidth,
                                 color:'#7960FF'
                                 }}>
                     +Add Documents
@@ -475,29 +475,25 @@ class Profile extends Component {
               style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
             >
               <View style={styles.containertwo}>
-                <View style={profileModalView}>
                   <View style={{ alignItems: "center" }}>
                     <Image style={profilImage1style} source={BITMAP2} />
                   </View>
-                  <View style={profileModal1View}>
+
                     <Text style={profileModalText1}>Congratulations</Text>
                     <Text style={profileModalText2}>
                       Now you are registered.
                     </Text>
                     <Text
                       style={{
-                        fontSize: 16,
+                        fontSize: 0.038 * ScreenWidth,
                         textAlign: "center",
                         width: 350,
                         marginTop: 13,
                         fontFamily: "circular-book"
                       }}
                     >
-                      {this.props.isVendor ? (
-                        <Text>Wait for an approval from us.</Text>
-                      ) : (
-                        <Text>Get ready to find your mechanic.</Text>
-                      )}
+                      {this.props.isVendor ? 'Wait for an approval from us.':
+                        'Get ready to find your mechanic.'}
                     </Text>
                     <TouchableHighlight
                       onPress={() => {
@@ -511,8 +507,8 @@ class Profile extends Component {
                         <Text style={[buttonText, whiteText]}>Continue</Text>
                       </View>
                     </TouchableHighlight>
-                  </View>
-                </View>
+
+
               </View>
             </Modal>
           </View>

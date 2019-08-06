@@ -84,10 +84,9 @@ class SplashFront extends Component {
               Actions.registerMobile();
             }}
             underlayColor="white"
+            style={createButton}
           >
-            <View style={createButton}>
               <Text style={[buttonText, whiteText]}>Join Our Network!</Text>
-            </View>
           </TouchableHighlight>
         }
         {
@@ -110,10 +109,9 @@ class SplashFront extends Component {
           <TouchableHighlight
             onPress={() => Actions.login()}
             underlayColor="white"
+            style={loginButton}
           >
-            <View style={loginButton}>
               <Text style={[buttonText, themeColor]}>Login</Text>
-            </View>
           </TouchableHighlight>
         </View>
       </View>

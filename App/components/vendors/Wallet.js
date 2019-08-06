@@ -33,7 +33,7 @@ class Wallet extends Component {
     this.props.getWalletAmount();
   }
   render() {
-    
+
     const htmls =
       `
 
@@ -82,6 +82,7 @@ class Wallet extends Component {
         <Header headerText="Wallet" />
 
         {this.props.WalletOrderId ? (
+
           <WebView
             source={{ html: htmls }}
             javaScriptEnabled={true}

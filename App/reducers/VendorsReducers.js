@@ -46,7 +46,8 @@ import {
   GET_WALLET_PAYMENTID,
   PAYMENT_SUCCESS_OK,
   GET_WALLET_AMOUNT_START,
-  GET_WALLET_AMOUNT_SUCCESS
+  GET_WALLET_AMOUNT_SUCCESS,
+  ADD_WALLET_PAYMENT_SUCCESS
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -372,7 +373,7 @@ export default (state = INITIAL_STATE, action) => {
 
     case LOAD_VENDOR_PROFILE:
       {
-      
+
         return {
           ...state,
           fullNameVendor: action.payload.userFullName,
@@ -572,9 +573,9 @@ export default (state = INITIAL_STATE, action) => {
     {
       return{
         ...state,
-        WalletOrderId:'',
+
         successPaymentModal:false,
-        walletAmount:'',
+
       }
     }
     break;
@@ -593,6 +594,16 @@ export default (state = INITIAL_STATE, action) => {
       return{
         ...state,
         walletBalance:action.payload.total
+      }
+    }
+    break;
+
+    case ADD_WALLET_PAYMENT_SUCCESS:
+    {
+      return{
+        ...state,
+        WalletOrderId:'',
+        walletAmount:'',
       }
     }
     break;

@@ -100,6 +100,7 @@ export const ADD_BALANCE_REQUEST_SUCCESS =
   export const PAYMENT_SUCCESS_OK = "vendors/PAYMENT_SUCCESS_OK";
   export const GET_WALLET_AMOUNT_START = "vendors/GET_WALLET_AMOUNT_START";
   export const GET_WALLET_AMOUNT_SUCCESS = "vendors/GET_WALLET_AMOUNT_SUCCESS";
+  export const ADD_WALLET_PAYMENT_SUCCESS = "vendors/ADD_WALLET_PAYMENT_SUCCESS";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -693,8 +694,10 @@ export const addWalletPayment = () => async (dispatch,getState) => {
     console.log(response);
           if(response.status === 1){
               dispatch(getWalletAmount())
+              dispatch({
+                type:ADD_WALLET_PAYMENT_SUCCESS,
+              })
           }else {
-            dispatch(addWalletPayment())
           }
 
           })
