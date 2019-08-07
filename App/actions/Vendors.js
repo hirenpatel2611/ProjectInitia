@@ -24,13 +24,14 @@ import {
   SplashScreen,
   ImagePicker,
   Permissions,
-  Constants,
+  
   TaskManager,
   Location,
-  IntentLauncherAndroid
+  IntentLauncher
 } from "expo";
 import { Actions } from "react-native-router-flux";
 import openMap from "react-native-open-maps";
+import * as Constants from 'expo-constants'
 
 export const GET_FUTURE_BOOKING_LIST_START =
   "vendors/GET_FUTURE_BOOKING_LIST_START";
@@ -522,8 +523,8 @@ export const goToMap = () => async (dispatch, getState) => {
   await Location.hasServicesEnabledAsync()
     .then(async res => {
       if (!res) {
-        perm = await IntentLauncherAndroid.startActivityAsync(
-          IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+        perm = await IntentLauncher.startActivityAsync(
+          IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
         );
       }
       await Location.hasServicesEnabledAsync()

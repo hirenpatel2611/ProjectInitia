@@ -28,11 +28,10 @@ import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import {
   Asset,
   SplashScreen,
-  Constants,
-  Location,
-  Permissions,
-  IntentLauncherAndroid
+  IntentLauncher
 } from "expo";
+import * as Permissions from 'expo-permissions';
+import * as Constants from 'expo-constants'
 import {
   getVendors,
   getUserLocationFail,
@@ -56,6 +55,7 @@ import { MECHANIC, USER2, FILTER } from "../../images";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import CheckBox from "react-native-check-box";
 import {statusToPhrase} from '../../config';
+import * as Location from 'expo-location';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -84,8 +84,8 @@ class NearbyGaraje extends Component {
     await Location.hasServicesEnabledAsync()
       .then(async res => {
         if (!res) {
-          perm = await IntentLauncherAndroid.startActivityAsync(
-            IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+          perm = await IntentLauncher.startActivityAsync(
+            IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
           );
         }
         await Location.hasServicesEnabledAsync()
@@ -101,7 +101,7 @@ class NearbyGaraje extends Component {
       });
 
     let location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.BestForNavigation
+      enableHighAccuracy: true
     });
     this.props.getUserLocationSuccess(location);
     {

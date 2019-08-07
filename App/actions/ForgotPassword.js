@@ -2,7 +2,7 @@ import TimerMixin from "react-timer-mixin";
 import Api from "../api/api";
 import { Actions } from "react-native-router-flux";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { Constants, Location, Permissions } from "expo";
+import * as Permissions from 'expo-permissions';
 import { SEND_FORGOT_PASSWORD_OTP, SEND_FORGOT_PASSWORD } from "../config";
 
 export const UPDATE_FORGOT_MOBILE_NUMBER =

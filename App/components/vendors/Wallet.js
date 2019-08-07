@@ -13,7 +13,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
 import Header from "../../Common/Header";
-import { DangerZone } from "expo";
 import {
   getInputWalletAmount,
   addBalanceRequest,
@@ -23,7 +22,7 @@ import {
 } from "../../actions";
 import { SUCCESS, BITMAP2 } from "../../images";
 
-const { Stripe } = DangerZone;
+
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;

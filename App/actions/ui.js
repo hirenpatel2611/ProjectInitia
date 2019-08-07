@@ -1,10 +1,11 @@
-import { Asset, SplashScreen, ImagePicker, Font, AppLoading } from "expo";
+import { Asset, SplashScreen, ImagePicker, AppLoading } from "expo";
 import { AsyncStorage } from "react-native";
 import Api from "../api/api";
 import { GET_USER_DATA } from "../config";
 import { Actions } from "react-native-router-flux";
 import { createSocketChannel } from "./Socket";
 import {loadVendorProfile} from './Vendors';
+import * as Font from 'expo-font';
 
 export const LOAD_FONT_SUCCESS = "ui/LOAD_FONT_SUCCESS";
 export const UPDATE_LOGGED_IN_STATE = "ui/UPDATE_LOGGED_IN_STATE";

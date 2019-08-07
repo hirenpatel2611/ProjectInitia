@@ -26,7 +26,9 @@ import styles from "./customersStyle";
 import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { IntentLauncherAndroid,Location,Permissions,Constants } from "expo";
+import { IntentLauncher } from "expo";
+import * as Permissions from 'expo-permissions';
+import * as Constants from 'expo-constants'
 import {
   getUserLocationSuccess,
   getBookingCancellation,
@@ -44,6 +46,7 @@ import { MECHANIC_MAP_ICON,BIKE_FOR_MAP,CALL } from "../../images";
 import { Rating, AirbnbRating } from "react-native-ratings";
 import call from "react-native-phone-call";
 import {statusToPhrase} from '../../config';
+import * as Location from 'expo-location';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -66,8 +69,8 @@ class NearbyGaraje extends Component {
     await Location.hasServicesEnabledAsync()
       .then(async res => {
         if (!res) {
-          perm = await IntentLauncherAndroid.startActivityAsync(
-            IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+          perm = await IntentLauncher.startActivityAsync(
+            IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
           );
         }
         await Location.hasServicesEnabledAsync()

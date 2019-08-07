@@ -28,7 +28,9 @@ import {
   upadteVendorProfileImage
 } from "../../actions";
 import { USER2, PENCIL } from "../../images";
-import { Asset,Permissions,Constants } from "expo";
+import { Asset } from "expo";
+import * as Constants from 'expo-constants'
+import * as Permissions from 'expo-permissions';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;

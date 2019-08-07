@@ -3,11 +3,8 @@ import { AsyncStorage } from "react-native";
 import io from "socket.io-client";
 import {
   BackgroundFetch,
-  Location,
-  TaskManager,
-  Permissions,
-  IntentLauncherAndroid,
-  Constants
+  IntentLauncher,
+
 } from "expo";
 import { getBookingModal, getBookingVendorStatus, goToMap } from "./Vendors";
 import {
@@ -16,6 +13,10 @@ import {
   getVendorRatingModal
 } from "./Cutomers";
 import { Actions } from "react-native-router-flux";
+import * as Location from 'expo-location';
+import * as Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
+import * as TaskManager from 'expo-task-manager';
 
 export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
@@ -281,8 +282,8 @@ export const socketVendorCurrentLocation = val => async (
   await Location.hasServicesEnabledAsync()
     .then(async res => {
       if (!res) {
-        perm = await IntentLauncherAndroid.startActivityAsync(
-          IntentLauncherAndroid.ACTION_LOCATION_SOURCE_SETTINGS
+        perm = await IntentLauncher.startActivityAsync(
+          IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
         );
       }
       await Location.hasServicesEnabledAsync()
@@ -304,55 +305,55 @@ export const socketVendorCurrentLocation = val => async (
   });
 };
 
-TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
-  if (error) {
-    return;
-  }
-
-  if (bookingDetails) {
-    const { locations } = data;
-
-    var radlat1 = (Math.PI * bookingDetails.booking.booking_latitude) / 180;
-
-    var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;
-    var theta =
-      bookingDetails.booking.booking_longitude - locations[0].coords.longitude;
-
-    var radtheta = (Math.PI * theta) / 180;
-    var dist =
-      Math.sin(radlat1) * Math.sin(radlat2) +
-      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-    if (dist > 1) {
-      dist = 1;
-    }
-    dist = Math.acos(dist);
-    dist = (dist * 180) / Math.PI;
-    dist = dist * 60 * 1.1515;
-    dist = dist * 1.609344;
-    console.log(dist);
-    dist = parseFloat(dist.toFixed(3));
-    if (dist > 0.05) {
-      chatSocket.emit("booking_status", {
-        room: `${bookingDetails.booking.customer.customer_id} ${bookingDetails.booking.vendor.vendor_id}`,
-        message: locations,
-        distance: dist,
-        mobile_no: vendorMobileno,
-        type: "MECHANIC_CURRENT_LOCATION"
-      });
-      channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
-    } else {
-      chatSocket.emit("booking_status", {
-        room: `${bookingDetails.booking.customer.customer_id} ${bookingDetails.booking.vendor.vendor_id}`,
-        message: locations,
-        distance: dist,
-        mobile_no: vendorMobileno,
-        type: "MECHANIC_CURRENT_LOCATION"
-      });
-      channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
-      TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
-    }
-  }
-});
+// TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
+//   if (error) {
+//     return;
+//   }
+//
+//   if (bookingDetails) {
+//     const { locations } = data;
+//
+//     var radlat1 = (Math.PI * bookingDetails.booking.booking_latitude) / 180;
+//
+//     var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;
+//     var theta =
+//       bookingDetails.booking.booking_longitude - locations[0].coords.longitude;
+//
+//     var radtheta = (Math.PI * theta) / 180;
+//     var dist =
+//       Math.sin(radlat1) * Math.sin(radlat2) +
+//       Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+//     if (dist > 1) {
+//       dist = 1;
+//     }
+//     dist = Math.acos(dist);
+//     dist = (dist * 180) / Math.PI;
+//     dist = dist * 60 * 1.1515;
+//     dist = dist * 1.609344;
+//     console.log(dist);
+//     dist = parseFloat(dist.toFixed(3));
+//     if (dist > 0.05) {
+//       chatSocket.emit("booking_status", {
+//         room: `${bookingDetails.booking.customer.customer_id} ${bookingDetails.booking.vendor.vendor_id}`,
+//         message: locations,
+//         distance: dist,
+//         mobile_no: vendorMobileno,
+//         type: "MECHANIC_CURRENT_LOCATION"
+//       });
+//       channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
+//     } else {
+//       chatSocket.emit("booking_status", {
+//         room: `${bookingDetails.booking.customer.customer_id} ${bookingDetails.booking.vendor.vendor_id}`,
+//         message: locations,
+//         distance: dist,
+//         mobile_no: vendorMobileno,
+//         type: "MECHANIC_CURRENT_LOCATION"
+//       });
+//       channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
+//       TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
+//     }
+//   }
+// });
 
 export const socketBookingCompleted = val => (dispatch, getState) => {
   const { userData } = getState().user;
