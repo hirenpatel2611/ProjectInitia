@@ -28,9 +28,11 @@ import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import {
   Asset,
   SplashScreen,
-  IntentLauncher
+
 } from "expo";
 import * as Permissions from 'expo-permissions';
+import * as IntentLauncher from 'expo-intent-launcher';
+
 import * as Constants from 'expo-constants'
 import {
   getVendors,
@@ -70,6 +72,7 @@ class NearbyGaraje extends Component {
     await this.props.getVendors();
 
     if (Platform.OS === "android" && !Constants.isDevice) {
+      this._getLocationAsync();
     } else {
       await this._getLocationAsync();
     }
@@ -99,9 +102,9 @@ class NearbyGaraje extends Component {
       .catch(err => {
         console.error(err);
       });
-
+    
     let location = await Location.getCurrentPositionAsync({
-      enableHighAccuracy: true
+     accuracy: Location.Accuracy.BestForNavigation,
     });
     this.props.getUserLocationSuccess(location);
     {

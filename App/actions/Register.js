@@ -6,6 +6,7 @@ import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { ImagePicker } from "expo";
 import * as Permissions from 'expo-permissions';
 import * as Constants from 'expo-constants';
+import * as Location from 'expo-location';
 
 export const UPDATE_VEHICLE_BOOL = "register/UPDATE_VEHICLE_BOOL";
 export const UPDATE_CAR_BOOL = "register/UPDATE_CAR_BOOL";

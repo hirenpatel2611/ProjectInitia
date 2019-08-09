@@ -3,7 +3,7 @@ import { AsyncStorage } from "react-native";
 import io from "socket.io-client";
 import {
   BackgroundFetch,
-  IntentLauncher,
+Notifications,
 
 } from "expo";
 import { getBookingModal, getBookingVendorStatus, goToMap } from "./Vendors";
@@ -17,6 +17,7 @@ import * as Location from 'expo-location';
 import * as Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import * as TaskManager from 'expo-task-manager';
+import * as IntentLauncher from 'expo-intent-launcher';
 
 export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
@@ -26,7 +27,7 @@ var disp = null;
 var bookingDetails = null;
 var vendorMobileno = null;
 
-const LOCATION_TASK_NAME = "background-location-task";
+// const LOCATION_TASK_NAME = "background-location-task";
 const LOCATION_TASK_NAME1 = "background-location-task-current";
 var peer = null;
 export const createSocketChannel = val => async (dispatch, getState) => {
@@ -42,6 +43,7 @@ export const createSocketChannel = val => async (dispatch, getState) => {
   chatSocket.emit("self_room", { room: `${val}` });
 
   chatSocket.on("ping", function(data) {
+    console.log(data);
     chatSocket.emit("pong");
   });
 
@@ -101,79 +103,79 @@ export const createSocketChannel = val => async (dispatch, getState) => {
         return null;
     }
   });
-  await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
-    accuracy: Location.Accuracy.BestForNavigation
-  });
+  // await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+  //   accuracy: Location.Accuracy.BestForNavigation
+  // });
 };
 
-TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
-  if (error) {
-    console.error();
-  }
-  chatSocket.on("broadcast", function(data) {
-    switch (data.type) {
-      case "BOOK":
-        disp(getBookingModal(data.message));
-        break;
-
-      case "ACCEPT":
-        if (isVen !== "1") {
-          disp(getBookingStatus(data));
-        } else {
-          disp(getBookingVendorStatus(data));
-        }
-
-        break;
-
-      case "ON-THE-WAY":
-        if (isVen !== "1") {
-          disp(getBookingStatus(data));
-        } else {
-          disp(getBookingVendorStatus(data));
-        }
-
-        break;
-
-      case "CANCEL":
-        if (isVen !== "1") {
-          disp(getBookingStatus(data));
-        } else {
-          disp(getBookingVendorStatus(data));
-        }
-        break;
-
-      case "MECHANIC_CURRENT_LOCATION":
-        if (isVen !== "1") {
-          disp(getMechanicCurrentLocation(data));
-        }
-        break;
-
-      case "REACHED":
-        if (isVen !== "1") {
-        } else {
-          disp(getBookingVendorStatus(data));
-        }
-        break;
-
-      case "REACHED":
-        if (isVen === "1") {
-          disp(getBookingVendorStatus(data));
-        }
-        break;
-
-      case "COMPLETED":
-        if (isVen === "1") {
-          disp(getBookingVendorStatus(data));
-        } else {
-          disp(getVendorRatingModal());
-        }
-        break;
-
-      default:
-        return null;
-    }
-  });
-});
+// TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
+//   if (error) {
+//     console.error();
+//   }
+//   chatSocket.on("broadcast", function(data) {
+//     switch (data.type) {
+//       case "BOOK":
+//         disp(getBookingModal(data.message));
+//         break;
+//
+//       case "ACCEPT":
+//         if (isVen !== "1") {
+//           disp(getBookingStatus(data));
+//         } else {
+//           disp(getBookingVendorStatus(data));
+//         }
+//
+//         break;
+//
+//       case "ON-THE-WAY":
+//         if (isVen !== "1") {
+//           disp(getBookingStatus(data));
+//         } else {
+//           disp(getBookingVendorStatus(data));
+//         }
+//
+//         break;
+//
+//       case "CANCEL":
+//         if (isVen !== "1") {
+//           disp(getBookingStatus(data));
+//         } else {
+//           disp(getBookingVendorStatus(data));
+//         }
+//         break;
+//
+//       case "MECHANIC_CURRENT_LOCATION":
+//         if (isVen !== "1") {
+//           disp(getMechanicCurrentLocation(data));
+//         }
+//         break;
+//
+//       case "REACHED":
+//         if (isVen !== "1") {
+//         } else {
+//           disp(getBookingVendorStatus(data));
+//         }
+//         break;
+//
+//       case "REACHED":
+//         if (isVen === "1") {
+//           disp(getBookingVendorStatus(data));
+//         }
+//         break;
+//
+//       case "COMPLETED":
+//         if (isVen === "1") {
+//           disp(getBookingVendorStatus(data));
+//         } else {
+//           disp(getVendorRatingModal());
+//         }
+//         break;
+//
+//       default:
+//         return null;
+//     }
+//   });
+// });
 
 export const connectTosocket = () => async (dispatch, getState) => {
   const {
@@ -300,60 +302,121 @@ export const socketVendorCurrentLocation = val => async (
   // console.error(Location.getHeadingAsync());
 
   dispatch(goToMap());
+  var localNotification = {title:"Title",body:"Title"};
+
+  Notifications.scheduleLocalNotificationAsync(localNotification, {time:(new Date()).getTime() + 1000,repeat:'minute'});
+
+  Notifications.addListener(async()=>{
+    let locations = [await Location.getCurrentPositionAsync({
+     accuracy: Location.Accuracy.BestForNavigation,
+   })];
+
+    if (bookingDetails) {
+
+      var radlat1 = (Math.PI * bookingDetails.booking.booking_latitude) / 180;
+
+      var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;
+      var theta =
+        bookingDetails.booking.booking_longitude - locations[0].coords.longitude;
+
+      var radtheta = (Math.PI * theta) / 180;
+      var dist =
+        Math.sin(radlat1) * Math.sin(radlat2) +
+        Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+      if (dist > 1) {
+        dist = 1;
+      }
+      dist = Math.acos(dist);
+      dist = (dist * 180) / Math.PI;
+      dist = dist * 60 * 1.1515;
+      dist = dist * 1.609344;
+      console.log(dist);
+      dist = parseFloat(dist.toFixed(3));
+      disp(createSocketChannel(bookingDetails.booking.vendor.vendor_id));
+      if (dist > 0.05) {
+        chatSocket.emit("booking_status", {
+          room: `${bookingDetails.booking.customer.customer_id} ${bookingDetails.booking.vendor.vendor_id}`,
+          message: locations,
+          distance: dist,
+          mobile_no: vendorMobileno,
+          type: "MECHANIC_CURRENT_LOCATION"
+        });
+        channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
+      } else {
+        chatSocket.emit("booking_status", {
+          room: `${bookingDetails.booking.customer.customer_id} ${bookingDetails.booking.vendor.vendor_id}`,
+          message: locations,
+          distance: dist,
+          mobile_no: vendorMobileno,
+          type: "MECHANIC_CURRENT_LOCATION"
+        });
+        channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
+        // TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
+      }
+    }
+  })
   await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME1, {
-    accuracy: Location.Accuracy.BestForNavigation
+    accuracy: Location.Accuracy.BestForNavigation,
+    foregroundService:{
+      notificationTitle:'Location Tracking ',
+      notificationBody:'Location used for tracking purpose'
+    },
+    timeInterval:1000,
+    distanceInterval:0.5,
+    showsBackgroundLocationIndicator:true
   });
 };
 
-// TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
-//   if (error) {
-//     return;
-//   }
-//
-//   if (bookingDetails) {
-//     const { locations } = data;
-//
-//     var radlat1 = (Math.PI * bookingDetails.booking.booking_latitude) / 180;
-//
-//     var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;
-//     var theta =
-//       bookingDetails.booking.booking_longitude - locations[0].coords.longitude;
-//
-//     var radtheta = (Math.PI * theta) / 180;
-//     var dist =
-//       Math.sin(radlat1) * Math.sin(radlat2) +
-//       Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-//     if (dist > 1) {
-//       dist = 1;
-//     }
-//     dist = Math.acos(dist);
-//     dist = (dist * 180) / Math.PI;
-//     dist = dist * 60 * 1.1515;
-//     dist = dist * 1.609344;
-//     console.log(dist);
-//     dist = parseFloat(dist.toFixed(3));
-//     if (dist > 0.05) {
-//       chatSocket.emit("booking_status", {
-//         room: `${bookingDetails.booking.customer.customer_id} ${bookingDetails.booking.vendor.vendor_id}`,
-//         message: locations,
-//         distance: dist,
-//         mobile_no: vendorMobileno,
-//         type: "MECHANIC_CURRENT_LOCATION"
-//       });
-//       channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
-//     } else {
-//       chatSocket.emit("booking_status", {
-//         room: `${bookingDetails.booking.customer.customer_id} ${bookingDetails.booking.vendor.vendor_id}`,
-//         message: locations,
-//         distance: dist,
-//         mobile_no: vendorMobileno,
-//         type: "MECHANIC_CURRENT_LOCATION"
-//       });
-//       channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
-//       TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
-//     }
-//   }
-// });
+TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
+  if (error) {
+    return;
+  }
+
+  if (bookingDetails) {
+    const { locations } = data;
+  console.log(locations);
+    var radlat1 = (Math.PI * bookingDetails.booking.booking_latitude) / 180;
+
+    var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;
+    var theta =
+      bookingDetails.booking.booking_longitude - locations[0].coords.longitude;
+
+    var radtheta = (Math.PI * theta) / 180;
+    var dist =
+      Math.sin(radlat1) * Math.sin(radlat2) +
+      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) {
+      dist = 1;
+    }
+    dist = Math.acos(dist);
+    dist = (dist * 180) / Math.PI;
+    dist = dist * 60 * 1.1515;
+    dist = dist * 1.609344;
+
+    dist = parseFloat(dist.toFixed(3));
+    disp(createSocketChannel(bookingDetails.booking.vendor.vendor_id));
+    if (dist > 0.05) {
+      chatSocket.emit("booking_status", {
+        room: `${bookingDetails.booking.customer.customer_id} ${bookingDetails.booking.vendor.vendor_id}`,
+        message: locations,
+        distance: dist,
+        mobile_no: vendorMobileno,
+        type: "MECHANIC_CURRENT_LOCATION"
+      });
+      channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
+    } else {
+      chatSocket.emit("booking_status", {
+        room: `${bookingDetails.booking.customer.customer_id} ${bookingDetails.booking.vendor.vendor_id}`,
+        message: locations,
+        distance: dist,
+        mobile_no: vendorMobileno,
+        type: "MECHANIC_CURRENT_LOCATION"
+      });
+      channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
+      // TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
+    }
+  }
+});
 
 export const socketBookingCompleted = val => (dispatch, getState) => {
   const { userData } = getState().user;

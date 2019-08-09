@@ -23,15 +23,14 @@ import {
   Asset,
   SplashScreen,
   ImagePicker,
-  Permissions,
-  
   TaskManager,
-  Location,
-  IntentLauncher
 } from "expo";
 import { Actions } from "react-native-router-flux";
 import openMap from "react-native-open-maps";
 import * as Constants from 'expo-constants'
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+import * as IntentLauncher from 'expo-intent-launcher';
 
 export const GET_FUTURE_BOOKING_LIST_START =
   "vendors/GET_FUTURE_BOOKING_LIST_START";
