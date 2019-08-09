@@ -64,7 +64,6 @@ export default (state = INITIAL_STATE, action) => {
 
     case UPDATE_IS_VENDOR:
     {
-      console.log(action.payload);
       return {
         ...state,
         isVendorLoggedIn: action.payload

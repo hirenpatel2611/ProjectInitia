@@ -218,6 +218,15 @@ export const getBookingUpdate = val => (dispatch, getState) => {
           dispatch(getMechanicOtp(bookings.bookData.booking_id));
           dispatch(updateWalletAmount());
         }
+        if (val === "completed") {
+          FutureBookingList.map(booking => {
+            if (booking.booking_id === bookings.bookData.booking_id) {
+              booking.status = "completed";
+            }
+          });
+          dispatch(getMechanicOtp(bookings.bookData.booking_id));
+          dispatch(updateWalletAmount());
+        }
 
         dispatch({
           type: GET_BOOKING_UAPDATE_SUCCESS,

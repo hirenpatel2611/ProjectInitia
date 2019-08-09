@@ -5,9 +5,8 @@ import { connect } from "react-redux";
 import {
 	setDurationAndDistance
 } from "../actions";
-
-// import MapView from 'react-native-maps';
-import { MapView } from 'expo';
+ import MapView from 'react-native-maps';
+//import { MapView } from 'expo';
 
 class MapViewDirections extends Component {
 

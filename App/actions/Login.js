@@ -4,7 +4,7 @@ import Api from "../api/api";
 import { URL_USER_LOGIN } from "../config";
 import { Actions } from "react-native-router-flux";
 import { AsyncStorage } from "react-native";
-import { updateIsVendor, getUserData } from "./ui";
+import { updateIsVendor, getUserData,updateLoggedInState } from "./ui";
 import { createSocketChannel } from "./Socket";
 
 export const UPDATE_PASSWORD = "login/UPDATE_PASSWORD";
@@ -47,6 +47,7 @@ export const loginUser = () => (dispatch, getState) => {
         await AsyncStorage.setItem("user_id", response.data.id.toString());
         dispatch(getUserData());
         dispatch(createSocketChannel(response.data.id));
+        dispatch(updateLoggedInState(true))
         if (response.data.is_vendor == 1) {
           dispatch(updateIsVendor(true));
 

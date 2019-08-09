@@ -188,6 +188,7 @@ export const getBookingCancellation = () => (dispatch, getState) => {
   test.append("reason", cancleReason);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
+      console.log(response);
       if (response.status !== 0) {
         dispatch({
           type: GET_BOOKING_CANCLE_SUCCESS
@@ -350,7 +351,7 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
   const { location } = getState().customers;
   if (location) {
     var dist = val.distance;
-  
+
     if (dist < 0.055) {
       dispatch({
         type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
@@ -464,9 +465,9 @@ export const getRating = () => (dispatch, getState) => {
         }
         Actions.NearbyGaraje();
       });
-      Actions.NearbyGaraje();
-  })
 
+  })
+  Actions.NearbyGaraje();
 };
 
 export const getVendorRating = rating => dispatch => {

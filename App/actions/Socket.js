@@ -27,7 +27,7 @@ var disp = null;
 var bookingDetails = null;
 var vendorMobileno = null;
 
-// const LOCATION_TASK_NAME = "background-location-task";
+const LOCATION_TASK_NAME = "background-location-task";
 const LOCATION_TASK_NAME1 = "background-location-task-current";
 var peer = null;
 export const createSocketChannel = val => async (dispatch, getState) => {
@@ -103,79 +103,79 @@ export const createSocketChannel = val => async (dispatch, getState) => {
         return null;
     }
   });
-  // await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
-  //   accuracy: Location.Accuracy.BestForNavigation
-  // });
+  await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME, {
+    accuracy: Location.Accuracy.BestForNavigation
+  });
 };
 
-// TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
-//   if (error) {
-//     console.error();
-//   }
-//   chatSocket.on("broadcast", function(data) {
-//     switch (data.type) {
-//       case "BOOK":
-//         disp(getBookingModal(data.message));
-//         break;
-//
-//       case "ACCEPT":
-//         if (isVen !== "1") {
-//           disp(getBookingStatus(data));
-//         } else {
-//           disp(getBookingVendorStatus(data));
-//         }
-//
-//         break;
-//
-//       case "ON-THE-WAY":
-//         if (isVen !== "1") {
-//           disp(getBookingStatus(data));
-//         } else {
-//           disp(getBookingVendorStatus(data));
-//         }
-//
-//         break;
-//
-//       case "CANCEL":
-//         if (isVen !== "1") {
-//           disp(getBookingStatus(data));
-//         } else {
-//           disp(getBookingVendorStatus(data));
-//         }
-//         break;
-//
-//       case "MECHANIC_CURRENT_LOCATION":
-//         if (isVen !== "1") {
-//           disp(getMechanicCurrentLocation(data));
-//         }
-//         break;
-//
-//       case "REACHED":
-//         if (isVen !== "1") {
-//         } else {
-//           disp(getBookingVendorStatus(data));
-//         }
-//         break;
-//
-//       case "REACHED":
-//         if (isVen === "1") {
-//           disp(getBookingVendorStatus(data));
-//         }
-//         break;
-//
-//       case "COMPLETED":
-//         if (isVen === "1") {
-//           disp(getBookingVendorStatus(data));
-//         } else {
-//           disp(getVendorRatingModal());
-//         }
-//         break;
-//
-//       default:
-//         return null;
-//     }
-//   });
-// });
+TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
+  if (error) {
+    console.error();
+  }
+  chatSocket.on("broadcast", function(data) {
+    switch (data.type) {
+      case "BOOK":
+        disp(getBookingModal(data.message));
+        break;
+
+      case "ACCEPT":
+        if (isVen !== "1") {
+          disp(getBookingStatus(data));
+        } else {
+          disp(getBookingVendorStatus(data));
+        }
+
+        break;
+
+      case "ON-THE-WAY":
+        if (isVen !== "1") {
+          disp(getBookingStatus(data));
+        } else {
+          disp(getBookingVendorStatus(data));
+        }
+
+        break;
+
+      case "CANCEL":
+        if (isVen !== "1") {
+          disp(getBookingStatus(data));
+        } else {
+          disp(getBookingVendorStatus(data));
+        }
+        break;
+
+      case "MECHANIC_CURRENT_LOCATION":
+        if (isVen !== "1") {
+          disp(getMechanicCurrentLocation(data));
+        }
+        break;
+
+      case "REACHED":
+        if (isVen !== "1") {
+        } else {
+          disp(getBookingVendorStatus(data));
+        }
+        break;
+
+      case "REACHED":
+        if (isVen === "1") {
+          disp(getBookingVendorStatus(data));
+        }
+        break;
+
+      case "COMPLETED":
+        if (isVen === "1") {
+          disp(getBookingVendorStatus(data));
+        } else {
+          disp(getVendorRatingModal());
+        }
+        break;
+
+      default:
+        return null;
+    }
+  });
+});
 
 export const connectTosocket = () => async (dispatch, getState) => {
   const {
@@ -351,7 +351,9 @@ export const socketVendorCurrentLocation = val => async (
           type: "MECHANIC_CURRENT_LOCATION"
         });
         channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
-        // TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
+
+        Notifications.cancelAllScheduledNotificationsAsync()
+
       }
     }
   })
@@ -413,7 +415,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
         type: "MECHANIC_CURRENT_LOCATION"
       });
       channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
-      // TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
+      TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
     }
   }
 });

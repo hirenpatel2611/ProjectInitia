@@ -823,6 +823,8 @@ calltocutomer()
                 activeOpacity={1}
                 underlayColor="white"
                 onPress={() => {
+                  var sts = 'completed';
+                  this.props.getBookingUpdate();
                   this.props.getRatingToCustomer();
                 }}
               >

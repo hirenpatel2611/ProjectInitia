@@ -102,7 +102,7 @@ class NearbyGaraje extends Component {
       .catch(err => {
         console.error(err);
       });
-    
+
     let location = await Location.getCurrentPositionAsync({
      accuracy: Location.Accuracy.BestForNavigation,
     });
@@ -159,7 +159,7 @@ class NearbyGaraje extends Component {
     }
     return (
       <View style={containerStyle}>
-        <Header headerText="Near by Partners" filterIcon={FILTER} />
+        <Header headerText="Near by Partners" filterIcon={FILTER} filterPress={()=>{Actions.filter()}}/>
         <StatusBar backgroundColor="#7960FF" />
         <View
           style={[
@@ -498,8 +498,8 @@ const inStyle = {
   imageVendor: {
     borderRadius:17.5,
     borderColor: "#7960FF",
-    width: 35,
-    height: 35,
+    width: 40,
+    height: 40,
     resizeMode: "contain"
   }
 };

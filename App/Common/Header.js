@@ -45,7 +45,7 @@ const Header = props => {
       <Text style={styles.textStyle}>{props.headerText}</Text>
 
       <TouchableOpacity style={{width:50}}
-      onPress={()=>Actions.filter()}
+      onPress={props.filterPress}
       >
         <Image
           style={{

@@ -172,12 +172,16 @@ class RouterComponent extends Component {
             navTransparent="true"
             type={ActionConst.RESET}
           />
+          {
+            console.log(this.props.isLoggedIn)
+          }
           {!this.props.isVendorLoggedIn ? (
             <Scene
-              key="drawer"
-              type={ActionConst.RESET}
+            key="root"
               drawer
-              initial={this.props.isLoggedIn}
+              type={ActionConst.RESET}
+                initial={this.props.isLoggedIn}
+
               hideNavBar={true}
               drawerPosition="left"
               contentComponent={SideMenu}
@@ -186,18 +190,6 @@ class RouterComponent extends Component {
               <Scene
                 key="NearbyGaraje"
                 component={NearbyGaraje}
-                hideNavBar={true}
-                navTransparent="true"
-              />
-              <Scene
-                key="FutureBooking"
-                component={FutureBooking}
-                hideNavBar={true}
-                navTransparent="true"
-              />
-              <Scene
-                key="VendorProfile"
-                component={VendorProfile}
                 hideNavBar={true}
                 navTransparent="true"
               />
@@ -218,6 +210,7 @@ class RouterComponent extends Component {
                 component={NavigationMap}
                 hideNavBar={true}
                 navTransparent="true"
+
               />
             </Scene>
           ) : (
@@ -236,6 +229,7 @@ class RouterComponent extends Component {
                 component={FutureBooking}
                 hideNavBar={true}
                 navTransparent="true"
+                type={ActionConst.RESET}
               />
               <Scene
                 key="VendorProfile"

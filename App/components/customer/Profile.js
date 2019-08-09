@@ -28,8 +28,9 @@ import {
 } from "../../actions";
 import withValidation from "simple-hoc-validator";
 import { USER2,PENCIL } from "../../images";
-import { Asset ,Constants} from "expo";
+import { Asset} from "expo";
 import * as Permissions from 'expo-permissions';
+import * as Constants from 'expo-constants';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
