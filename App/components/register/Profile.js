@@ -255,15 +255,15 @@ class Profile extends Component {
                       this.props.updateName(text);
                     }}
                   />
-                  {this.props.isVendor?errors.name ? (
+                  {errors.name ? (
                     <Text style={styles.textError2}>{errors.name[0]}</Text>
-                  ) : null:null}
+                  ) : null}
                 </View>
                 <View style={subContainerProfile}>
                   <TextInput
                     style={textInputProfilStyle}
                     underlineColorAndroid="transparent"
-                    placeholder="Address"
+                    placeholder={this.props.isVendor?"Address":"Address (Optinal)"}
                     placeholderTextColor="#9D9D9D"
                     autoCapitalize="none"
                     value={this.props.address}
@@ -280,7 +280,7 @@ class Profile extends Component {
                   <TextInput
                     style={textInputProfilStyle}
                     underlineColorAndroid="transparent"
-                    placeholder="Email"
+                    placeholder={this.props.isVendor?"Email":"Email (Optinal)"}
                     placeholderTextColor="#9D9D9D"
                     autoCapitalize="none"
                     value={this.props.email}

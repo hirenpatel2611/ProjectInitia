@@ -202,30 +202,29 @@ export const getBookingUpdate = val => (dispatch, getState) => {
     type: GET_BOOKING_UAPDATE_START
   });
   const { bookingData, FutureBookingList, bookings } = getState().vendors;
-
+  console.log(bookings);
   let test = new FormData();
-  test.append("booking_id", bookings.bookData.booking_id);
-  test.append("status", val);
+  test.append("booking_id", val.Id);
+  test.append("status", val.status);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       if (response.status === 1) {
-        if (val === "accept") {
+        if (val.status === "accept") {
           FutureBookingList.map(booking => {
-            if (booking.booking_id === bookings.bookData.booking_id) {
+            if (booking.booking_id === val.Id) {
               booking.status = "accept";
             }
           });
-          dispatch(getMechanicOtp(bookings.bookData.booking_id));
+          dispatch(getMechanicOtp(val.Id));
           dispatch(updateWalletAmount());
         }
-        if (val === "completed") {
+        if (val.status === "completed") {
+          console.log(response);
           FutureBookingList.map(booking => {
-            if (booking.booking_id === bookings.bookData.booking_id) {
+            if (booking.booking_id === val.Id) {
               booking.status = "completed";
             }
           });
-          dispatch(getMechanicOtp(bookings.bookData.booking_id));
-          dispatch(updateWalletAmount());
         }
 
         dispatch({
@@ -572,11 +571,11 @@ export const getCustomerRatingModal = val => (dispatch, getState) => {
     type: GET_CUSTOMER_RATING_MODAL
   });
   dispatch(socketBookingCompleted(val));
-  FutureBookingList.map(booking => {
-    if (booking.booking_id === val.booking_id) {
-      (booking.status = "completed"), (booking.booking_otp = null);
-    }
-  });
+  var CompleteValue={
+    status:'completed',
+    Id:val.booking_id
+  }
+  dispatch(getBookingUpdate(CompleteValue));
   dispatch({
     type: COMPELETE_BOOKING_BY_VENDOR,
     payload: {

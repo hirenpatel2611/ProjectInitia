@@ -204,11 +204,14 @@ calltocutomer()
                       var startMapData = {
                         booking_id: item.booking_id,
                         customer_id:item.customer.customer_id,
-                        otp:item.booking_otp
+                        otp:item.booking_otp,
+                        
                       }
-                      item.status === "reached"?
-                      this.props.getCustomerRatingModal(item):
-                     this.props.startMapVendor(startMapData)
+                      item.status === "reached"?(
+
+                        this.props.getCustomerRatingModal(item)
+                    ):(
+                     this.props.startMapVendor(startMapData))
 
                     }}
 
@@ -475,7 +478,9 @@ calltocutomer()
                   <TouchableOpacity
                     style={{ alignSelf: "flex-end" }}
                     onPress={async () => {
-                      var status = "accept";
+                      var val ={status:"accept",
+                                Id:this.props.bookings.bookData.booking_id
+                                };
                       await this.props.getBookingUpdate(status);
                       this.props.connectTosocketApprov(
                         this.props.bookings.userData.userId
@@ -823,8 +828,7 @@ calltocutomer()
                 activeOpacity={1}
                 underlayColor="white"
                 onPress={() => {
-                  var sts = 'completed';
-                  this.props.getBookingUpdate();
+
                   this.props.getRatingToCustomer();
                 }}
               >
