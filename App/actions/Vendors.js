@@ -622,7 +622,7 @@ export const addBalanceRequest = () => (dispatch, getState) => {
     method: "POST",
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json"
+     'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       amount: parseInt(walletAmount), // amount in the smallest currency unit
@@ -630,12 +630,16 @@ export const addBalanceRequest = () => (dispatch, getState) => {
       receipt: "order_rcptid_11",
       payment_capture: "0"
     })
-  }).then(res => {
-    console.log(JSON.parse(res._bodyInit).order.id);
+  }).then((response) => response.json())
+    .then((responseJson) => {
+      console.log(responseJson);
+
+
     dispatch({
       type: ADD_BALANCE_REQUEST_SUCCESS,
-      payload: JSON.parse(res._bodyInit).order.id
+      payload: responseJson.order.id
     });
+
   });
 };
 

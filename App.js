@@ -6,14 +6,10 @@ import ReduxThunk from "redux-thunk";
 import reducers from "./App/reducers";
 import Router from "./App/Router";
 import { connect } from "react-redux";
-import { Notifications } from 'expo';
 
 class App extends Component {
-  componentDidMount(){
   
-  }
   render() {
-
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
     return (
