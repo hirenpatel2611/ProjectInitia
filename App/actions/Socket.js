@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import {
   BackgroundFetch,
 Notifications,
-
+Util
 } from "expo";
 import { getBookingModal, getBookingVendorStatus, goToMap } from "./Vendors";
 import {
@@ -56,6 +56,7 @@ export const createSocketChannel = val => async (dispatch, getState) => {
       case "ACCEPT":
         if (isUserVendor !== "1") {
           dispatch(getBookingStatus(data));
+          // Util.reload()
         } else {
           dispatch(getBookingVendorStatus(data));
         }

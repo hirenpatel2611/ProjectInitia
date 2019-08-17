@@ -40,6 +40,7 @@ export const GET_FUTURE_BOOKING_LIST_FAIL =
   "vendors/GET_FUTURE_BOOKING_LIST_FAIL";
 export const GET_CUSTOMER_DISTANCELIST = "vendors/GET_CUSTOMER_DISTANCELIST";
 export const GET_BOOKING_MODAL = "vendors/GET_BOOKING_MODAL";
+export const GET_CUSTOMER_CURRENT_DISTANCE = "vendors/GET_CUSTOMER_CURRENT_DISTANCE";
 export const GET_BOOKING_UAPDATE_START = "vendors/GET_BOOKING_UAPDATE_START";
 export const GET_BOOKING_UAPDATE_SUCCESS =
   "vendors/GET_BOOKING_UAPDATE_SUCCESS";
@@ -101,17 +102,20 @@ export const ADD_BALANCE_REQUEST_SUCCESS =
   export const GET_WALLET_AMOUNT_START = "vendors/GET_WALLET_AMOUNT_START";
   export const GET_WALLET_AMOUNT_SUCCESS = "vendors/GET_WALLET_AMOUNT_SUCCESS";
   export const ADD_WALLET_PAYMENT_SUCCESS = "vendors/ADD_WALLET_PAYMENT_SUCCESS";
+  export const LOAD_MORE_BOOKING_LIST = "vendors/LOAD_MORE_BOOKING_LIST";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
     type: GET_FUTURE_BOOKING_LIST_START
   });
   const valueUserId = await AsyncStorage.getItem("user_id");
-
+  const { pages,vendorBookingList } = getState().vendors;
   let test = new FormData();
   test.append("vendor_id", valueUserId);
+  test.append("page", pages);
   Api.post(GET_FUTURE_BOOKINGLIST, test)
     .then(response => {
+      console.log(test);
       if (response.status === 0) {
         if (response.message === "No booking found") {
           dispatch({
@@ -126,9 +130,11 @@ export const getFutureBookings = () => async (dispatch, getState) => {
           dispatch(getFutureBookings());
         }
       } else {
+        console.log('old'+vendorBookingList+'old');
+        var VendorBookingList = vendorBookingList.concat(response)
         dispatch({
           type: GET_FUTURE_BOOKING_LIST_SUCCESS,
-          payload: response
+          payload: VendorBookingList
         });
         dispatch(getCustomerDistanceList());
       }
@@ -191,10 +197,39 @@ export const getCustomerDistanceList = val => async (dispatch, getState) => {
 export const getBookingModal = val => async (dispatch, getState) => {
   Actions.FutureBooking();
   dispatch(getFutureBookings());
+
+
+
   dispatch({
     type: GET_BOOKING_MODAL,
     payload: val
   });
+  const { customerLocation } = getState().vendors;
+  let locations = [await Location.getCurrentPositionAsync({
+   accuracy: Location.Accuracy.BestForNavigation,
+ })];
+    var radlat1 = (Math.PI * customerLocation.coords.latitude) / 180;
+
+    var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;
+    var theta =customerLocation.coords.longitude - locations[0].coords.longitude;
+
+    var radtheta = (Math.PI * theta) / 180;
+    var dist =
+      Math.sin(radlat1) * Math.sin(radlat2) +
+      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+    if (dist > 1) {
+      dist = 1;
+    }
+    dist = Math.acos(dist);
+    dist = (dist * 180) / Math.PI;
+    dist = dist * 60 * 1.1515;
+    dist = dist * 1.609344;
+    dist = parseFloat(dist.toFixed(3));
+    dispatch({
+      type: GET_CUSTOMER_CURRENT_DISTANCE,
+      payload: dist
+    });
+
 };
 
 export const getBookingUpdate = val => (dispatch, getState) => {
@@ -713,4 +748,14 @@ export const addWalletPayment = () => async (dispatch,getState) => {
           }
 
           })
+}
+
+export const loadMoreBookingList = () => (dispatch,getState) =>{
+  const { pages } = getState().vendors;
+  var page = pages +1;
+  dispatch({
+    type:LOAD_MORE_BOOKING_LIST,
+    payload:page
+  })
+  dispatch(getFutureBookings())
 }

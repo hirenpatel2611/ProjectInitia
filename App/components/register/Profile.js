@@ -41,9 +41,7 @@ import {
   signupUser,
   updateMobileNoProfile,
   updateOnSubmeetSignup,
-  getLocationFail,
   getLocationSuccess,
-  setLocationVisibility,
   setLocation,
   upadteRegisterProfileImage,
   addDocument,
@@ -55,7 +53,7 @@ import TimerMixin from "react-timer-mixin";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { IntentLauncher } from "expo";
+import * as IntentLauncher from 'expo-intent-launcher';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import * as Constants from 'expo-constants'
@@ -72,7 +70,7 @@ class Profile extends Component {
 
   componentWillMount() {
     if (Platform.OS === "android" && !Constants.isDevice) {
-
+      this._getLocationAsync();
     } else {
       this._getLocationAsync();
     }
@@ -81,7 +79,7 @@ class Profile extends Component {
   }
 
   getPermissionAsync = async () => {
-   if (Constants.platform.ios) {
+   if (Platform.OS === 'ios') {
      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
      if (status !== 'granted') {
        alert('Sorry, we need camera roll permissions to make this work!');
@@ -122,7 +120,7 @@ class Profile extends Component {
 
   renderDocument(){
     arr=  this.props.documentRegisterUri.map((documentUri)=>{
-      return <View style={{width: 0.10 * ScreenHeight,margin:0.009 *ScreenHeight}}><Image style={{
+      return <View key={documentUri} style={{width: 0.10 * ScreenHeight,margin:0.009 *ScreenHeight}}><Image style={{
       width: 0.10 * ScreenHeight,
       height:0.10 * ScreenHeight,
       resizeMode: "contain",
@@ -405,12 +403,12 @@ class Profile extends Component {
                   backgroundColor: "rgba(0,0,0,0.5)"
                 }}
               >
-                <View style={styles.containertwo}>
+                <View style={[styles.containertwo,{justifyContent:'space-around'}]}>
                   <View
                     style={{
                       borderRadius: 10,
                       width: 0.83 * ScreenWidth,
-                      height: 0.49 * ScreenHeight
+                      height: 0.45 * ScreenHeight,
                     }}
                   >
                     <MapView
@@ -425,8 +423,8 @@ class Profile extends Component {
                       onLayout={e => {
                         this._map.animateToRegion(
                           {
-                            latitude: this.props.location.coords.latitude,
-                            longitude: this.props.location.coords.longitude,
+                            latitude: this.props.locationVendor.coords.latitude,
+                            longitude: this.props.locationVendor.coords.longitude,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421
                           },
@@ -434,9 +432,9 @@ class Profile extends Component {
                         );
                       }}
                     >
-                      {this.props.location ? (
+                      {this.props.locationVendor ? (
                         <MapView.Marker.Animated
-                          coordinate={this.props.location.coords}
+                          coordinate={this.props.locationVendor.coords}
                         />
                       ) : null}
                     </MapView>
@@ -445,22 +443,16 @@ class Profile extends Component {
                     underlayColor="white"
                     onPress={() => {
                       this.props.signupUser();
-
                     }}
-                    disabled={this.props.location ? false : true}
-                    style={{ opacity: this.props.location ? 1 : 0.8, top: 10 }}
+                    disabled={this.props.locationVendor ? false : true}
+                    style={{opacity: this.props.locationVendor ? 1 : 0.8,
+                            backgroundColor: "#7960FF",
+                            height: 44,
+                            width: 280,
+                            borderRadius: 25,
+                            alignItems: "center" }}
                   >
-                    <View
-                      style={{
-                        backgroundColor: "#7960FF",
-                        height: 44,
-                        width: 280,
-                        borderRadius: 25,
-                        alignItems: "center"
-                      }}
-                    >
-                      <Text style={[buttonText, whiteText]}>{this.props.loadingSignupB?'Loading...':'Set Location'}</Text>
-                    </View>
+                  <Text style={[buttonText, whiteText]}>{this.props.loadingSignupB?'Loading...':'Set Location'}</Text>
                   </TouchableHighlight>
                 </View>
               </Modal>
@@ -583,7 +575,7 @@ const mapStateToProps = ({ register }) => {
     onSubmeetSignupForm,
     isVendor,
     errorMessage,
-    location,
+    locationVendor,
     setLocationVisible,
     imageRegisterUri,
     signupFail,
@@ -603,7 +595,7 @@ const mapStateToProps = ({ register }) => {
     onSubmeetSignupForm,
     isVendor,
     errorMessage,
-    location,
+    locationVendor,
     setLocationVisible,
     register,
     imageRegisterUri,
@@ -626,9 +618,7 @@ export default connect(
     signupUser,
     updateMobileNoProfile,
     updateOnSubmeetSignup,
-    getLocationFail,
     getLocationSuccess,
-    setLocationVisibility,
     setLocation,
     upadteRegisterProfileImage,
     addDocument,

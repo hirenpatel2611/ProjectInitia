@@ -4,6 +4,7 @@ import {
   GET_FUTURE_BOOKING_LIST_FAIL,
   GET_CUSTOMER_DISTANCELIST,
   GET_BOOKING_MODAL,
+  GET_CUSTOMER_CURRENT_DISTANCE,
   GET_BOOKING_UAPDATE_START,
   GET_BOOKING_UAPDATE_SUCCESS,
   GET_BOOKING_UAPDATE_FAIL,
@@ -47,7 +48,8 @@ import {
   PAYMENT_SUCCESS_OK,
   GET_WALLET_AMOUNT_START,
   GET_WALLET_AMOUNT_SUCCESS,
-  ADD_WALLET_PAYMENT_SUCCESS
+  ADD_WALLET_PAYMENT_SUCCESS,
+  LOAD_MORE_BOOKING_LIST
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -93,7 +95,8 @@ const INITIAL_STATE = {
   WalletOrderId: "",
   paymentId:'',
   successPaymentModal:false,
-  walletBalance:0
+  walletBalance:0,
+  pages:1
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -146,11 +149,20 @@ export default (state = INITIAL_STATE, action) => {
           bookings: action.payload,
           bookingData: action.payload.bookData,
           bookUserData: action.payload.userData,
-          customerDistance: action.payload.vendorDistance,
           customerLocation: action.payload.location
         };
       }
       break;
+
+    case GET_CUSTOMER_CURRENT_DISTANCE:
+    {
+      console.log(action.payload);
+      return{
+        ...state,
+        customerDistance:action.payload
+      }
+    }
+    break;
 
     case GET_BOOKING_UAPDATE_SUCCESS:
       {
@@ -604,6 +616,15 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         WalletOrderId:'',
         walletAmount:'',
+      }
+    }
+    break;
+
+    case LOAD_MORE_BOOKING_LIST:
+    {
+      return{
+        ...state,
+        pages:action.payload
       }
     }
     break;

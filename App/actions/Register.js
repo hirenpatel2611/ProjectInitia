@@ -3,7 +3,7 @@ import Api from "../api/api";
 import { URL_USER_SIGNUP, URL_USER_OTP } from "../config";
 import { Actions } from "react-native-router-flux";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { ImagePicker } from "expo";
+import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import * as Constants from 'expo-constants';
 import * as Location from 'expo-location';
@@ -35,7 +35,6 @@ export const UPDATE_ON_SUBMEET_OTP = "register/UPDATE_ON_SUBMEET_OTP";
 export const UPDATE_ON_SUBMEET_SIGNUP = "register/UPDATE_ON_SUBMEET_SIGNUP";
 export const GET_LOCATION_FAIL = "register/GET_LOCATION_FAIL";
 export const GET_LOCATION_SUCCESS = "register/GET_LOCATION_SUCCESS";
-export const SET_LOCATION_VISIBILITY = "register/SET_LOCATION_VISIBILITY";
 export const SET_LOCATION = "register/SET_LOCATION";
 export const UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD =
   "register/UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD";
@@ -79,6 +78,7 @@ export const requestOtp = () => (dispatch, getState) => {
   test.append("mobile", mobileno);
   Api.post(URL_USER_OTP, test)
     .then(response => {
+      console.log(response);
       if (response.loggedIn === 1) {
         dispatch({
           type: REQUEST_OTP_SUCCESS,
@@ -276,13 +276,6 @@ export const updateOnSubmeetSignup = () => (dispatch, getState) => {
   });
 };
 
-export const getLocationFail = () => (dispatch, getState) => {
-  dispatch({
-    type: GET_LOCATION_FAIL,
-    payload: "Permission to access location was denied"
-  });
-};
-
 export const getLocationSuccess = location => (dispatch, getState) => {
   dispatch({
     type: GET_LOCATION_SUCCESS,
@@ -319,7 +312,8 @@ export const addDocument = () => async dispatch => {
     mediaTypes: ImagePicker.MediaTypeOptions.Images,
     base64: true,
     allowsEditing: true,
-    aspect: [4, 4]
+    aspect: [4, 4],
+    key: '123'
   });
 
   // console.log(result);

@@ -27,7 +27,6 @@ import {
   GET_LOCATION_START,
   GET_LOCATION_FAIL,
   GET_LOCATION_SUCCESS,
-  SET_LOCATION_VISIBILITY,
   SET_LOCATION,
   UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD,
   UPDATE_REGISTER_DOCUMENT_UPLOAD,
@@ -62,7 +61,7 @@ const INITIAL_STATE = {
   requestOtpFail: false,
   requestOtpMessage: "",
   requestOtpSuccess: false,
-  location: null,
+  locationVendor: null,
   errorMessage: null,
   latitude: 0,
   longitude: 0,
@@ -360,7 +359,7 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          location: action.payload
+          locationVendor: action.payload
         };
       }
       break;

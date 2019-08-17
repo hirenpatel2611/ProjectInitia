@@ -37,7 +37,8 @@ import {
   getCustomerRating,
   getCustomerRatingModal,
   getRatingToCustomer,
-  getWalletAmount
+  getWalletAmount,
+  loadMoreBookingList
 } from "../../actions";
 import { FutureBookingList, Spinner } from "../../Common";
 import { CALL, BITMAP2 } from "../../images";
@@ -103,6 +104,7 @@ class FutureBooking extends Component {
               <Spinner />
             </View>
           ) : (
+            <View >
             <FlatList
               data={this.props.FutureBookingList}
               keyExtractor={(item, index) => index.toString()}
@@ -355,9 +357,29 @@ class FutureBooking extends Component {
                       </TouchableOpacity>
                     </View>
                   )}
+
                 </View>
               )}
             />
+            {this.props.FutureBookingList.length >= 10?
+              <TouchableOpacity
+              onPress={()=>{
+                this.props.loadMoreBookingList();
+              }}
+            style={{
+              width:ScreenWidth,
+              paddingTop:10,
+              paddingBottom:20,
+              justifyContent:'center',
+              alignItems:'center'
+            }}
+            >
+            <Text style={{
+              fontFamily:'circular-bold',
+              color:'#7960FF'
+            }}>Load More</Text>
+            </TouchableOpacity> : null}
+            </View>
           )}
           <Modal
             visible={this.props.isBooking}
@@ -483,9 +505,9 @@ class FutureBooking extends Component {
                         color: "#7960FF"
                       }}
                     >
-                      {this.props.bookings
-                        ? this.props.bookings.vendorDistance
-                        : 0}
+                      {this.props.customerDistance
+                        ? this.props.customerDistance
+                        : 0} km
                     </Text>
                   </View>
                 </View>
@@ -990,6 +1012,7 @@ export default connect(
     getCustomerRating,
     getCustomerRatingModal,
     getRatingToCustomer,
-    getWalletAmount
+    getWalletAmount,
+    loadMoreBookingList
   }
 )(FutureBooking);

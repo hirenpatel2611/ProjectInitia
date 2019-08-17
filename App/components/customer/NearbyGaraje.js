@@ -26,9 +26,7 @@ import Header from "../../Common/Header";
 import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import {
-  Asset,
   SplashScreen,
-
 } from "expo";
 import * as Permissions from 'expo-permissions';
 import * as IntentLauncher from 'expo-intent-launcher';

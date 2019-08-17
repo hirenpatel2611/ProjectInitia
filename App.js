@@ -8,7 +8,6 @@ import Router from "./App/Router";
 import { connect } from "react-redux";
 
 class App extends Component {
-  
   render() {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
 
