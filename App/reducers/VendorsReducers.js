@@ -90,13 +90,13 @@ const INITIAL_STATE = {
   ratingId: "",
   loadingRating: false,
   bookings: "",
-  walletAmount: '',
+  walletAmount: "",
   loadingAddBalace: false,
   WalletOrderId: "",
-  paymentId:'',
-  successPaymentModal:false,
-  walletBalance:0,
-  pages:1
+  paymentId: "",
+  successPaymentModal: false,
+  walletBalance: 0,
+  pages: 1
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -155,14 +155,14 @@ export default (state = INITIAL_STATE, action) => {
       break;
 
     case GET_CUSTOMER_CURRENT_DISTANCE:
-    {
-      console.log(action.payload);
-      return{
-        ...state,
-        customerDistance:action.payload
+      {
+        console.log(action.payload);
+        return {
+          ...state,
+          customerDistance: action.payload
+        };
       }
-    }
-    break;
+      break;
 
     case GET_BOOKING_UAPDATE_SUCCESS:
       {
@@ -385,7 +385,6 @@ export default (state = INITIAL_STATE, action) => {
 
     case LOAD_VENDOR_PROFILE:
       {
-
         return {
           ...state,
           fullNameVendor: action.payload.userFullName,
@@ -571,63 +570,61 @@ export default (state = INITIAL_STATE, action) => {
       break;
 
     case GET_WALLET_PAYMENTID:
-    {
-      return{
-        ...state,
-        paymentId:action.payload,
+      {
+        return {
+          ...state,
+          paymentId: action.payload,
 
-        successPaymentModal:true
+          successPaymentModal: true
+        };
       }
-    }
-    break;
+      break;
 
     case PAYMENT_SUCCESS_OK:
-    {
-      return{
-        ...state,
+      {
+        return {
+          ...state,
 
-        successPaymentModal:false,
-
+          successPaymentModal: false
+        };
       }
-    }
-    break;
+      break;
 
     case GET_WALLET_AMOUNT_START:
-    {
-      return{
-        ...state,
-
+      {
+        return {
+          ...state
+        };
       }
-    }
-    break;
+      break;
 
     case GET_WALLET_AMOUNT_SUCCESS:
-    {
-      return{
-        ...state,
-        walletBalance:action.payload.total
+      {
+        return {
+          ...state,
+          walletBalance: action.payload.total
+        };
       }
-    }
-    break;
+      break;
 
     case ADD_WALLET_PAYMENT_SUCCESS:
-    {
-      return{
-        ...state,
-        WalletOrderId:'',
-        walletAmount:'',
+      {
+        return {
+          ...state,
+          WalletOrderId: "",
+          walletAmount: ""
+        };
       }
-    }
-    break;
+      break;
 
     case LOAD_MORE_BOOKING_LIST:
-    {
-      return{
-        ...state,
-        pages:action.payload
+      {
+        return {
+          ...state,
+          pages: action.payload
+        };
       }
-    }
-    break;
+      break;
 
     default:
       return state;

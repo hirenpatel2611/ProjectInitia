@@ -1,11 +1,7 @@
 import Peer from "peerjs";
 import { AsyncStorage } from "react-native";
 import io from "socket.io-client";
-import {
-  BackgroundFetch,
-Notifications,
-Util
-} from "expo";
+import { BackgroundFetch, Notifications, Util } from "expo";
 import { getBookingModal, getBookingVendorStatus, goToMap } from "./Vendors";
 import {
   getBookingStatus,
@@ -13,11 +9,11 @@ import {
   getVendorRatingModal
 } from "./Cutomers";
 import { Actions } from "react-native-router-flux";
-import * as Location from 'expo-location';
-import * as Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
-import * as TaskManager from 'expo-task-manager';
-import * as IntentLauncher from 'expo-intent-launcher';
+import * as Location from "expo-location";
+import * as Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
+import * as TaskManager from "expo-task-manager";
+import * as IntentLauncher from "expo-intent-launcher";
 
 export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
@@ -303,22 +299,27 @@ export const socketVendorCurrentLocation = val => async (
   // console.error(Location.getHeadingAsync());
 
   dispatch(goToMap());
-  var localNotification = {title:"Title",body:"Title"};
+  var localNotification = { title: "Title", body: "Title" };
 
-  Notifications.scheduleLocalNotificationAsync(localNotification, {time:(new Date()).getTime() + 1000,repeat:'minute'});
+  Notifications.scheduleLocalNotificationAsync(localNotification, {
+    time: new Date().getTime() + 1000,
+    repeat: "minute"
+  });
 
-  Notifications.addListener(async()=>{
-    let locations = [await Location.getCurrentPositionAsync({
-     accuracy: Location.Accuracy.BestForNavigation,
-   })];
+  Notifications.addListener(async () => {
+    let locations = [
+      await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.BestForNavigation
+      })
+    ];
 
     if (bookingDetails) {
-
       var radlat1 = (Math.PI * bookingDetails.booking.booking_latitude) / 180;
 
       var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;
       var theta =
-        bookingDetails.booking.booking_longitude - locations[0].coords.longitude;
+        bookingDetails.booking.booking_longitude -
+        locations[0].coords.longitude;
 
       var radtheta = (Math.PI * theta) / 180;
       var dist =
@@ -353,20 +354,19 @@ export const socketVendorCurrentLocation = val => async (
         });
         channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
 
-        Notifications.cancelAllScheduledNotificationsAsync()
-
+        Notifications.cancelAllScheduledNotificationsAsync();
       }
     }
-  })
+  });
   await Location.startLocationUpdatesAsync(LOCATION_TASK_NAME1, {
     accuracy: Location.Accuracy.BestForNavigation,
-    foregroundService:{
-      notificationTitle:'Location Tracking ',
-      notificationBody:'Location used for tracking purpose'
+    foregroundService: {
+      notificationTitle: "Location Tracking ",
+      notificationBody: "Location used for tracking purpose"
     },
-    timeInterval:1000,
-    distanceInterval:0.5,
-    showsBackgroundLocationIndicator:true
+    timeInterval: 1000,
+    distanceInterval: 0.5,
+    showsBackgroundLocationIndicator: true
   });
 };
 
@@ -377,7 +377,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
 
   if (bookingDetails) {
     const { locations } = data;
-  console.log(locations);
+    console.log(locations);
     var radlat1 = (Math.PI * bookingDetails.booking.booking_latitude) / 180;
 
     var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;

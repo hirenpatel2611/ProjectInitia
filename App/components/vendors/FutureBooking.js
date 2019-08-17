@@ -104,281 +104,285 @@ class FutureBooking extends Component {
               <Spinner />
             </View>
           ) : (
-            <View >
-            <FlatList
-              data={this.props.FutureBookingList}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item }) => (
-                <View
-                  style={{
-                    margin: 5,
-                    backgroundColor: "white",
-                    padding: 15,
-                    borderRadius: 4,
-                    justifyContent: "space-around",
-                    shadowColor: "#000000",
-                    shadowOffset: { width: 0, height: 3 },
-                    shadowRadius: 5,
-                    shadowOpacity: 0.5
-                  }}
-                >
+            <View>
+              <FlatList
+                data={this.props.FutureBookingList}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item }) => (
                   <View
                     style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between"
+                      margin: 5,
+                      backgroundColor: "white",
+                      padding: 15,
+                      borderRadius: 4,
+                      justifyContent: "space-around",
+                      shadowColor: "#000000",
+                      shadowOffset: { width: 0, height: 3 },
+                      shadowRadius: 5,
+                      shadowOpacity: 0.5
                     }}
                   >
-                    <Text
+                    <View
                       style={{
-                        fontFamily: "circular-bold",
-                        fontSize: 20,
-                        color: "#4A4A4A"
+                        flexDirection: "row",
+                        justifyContent: "space-between"
                       }}
                     >
-                      {item.customer.first_name}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        color: "#7960FF",
-                        fontFamily: "circular-book"
-                      }}
-                    >
-                      Dist.(
-                      {item.customer.distance ? item.customer.distance : 0})
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginTop: 10
-                    }}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        color: "#4A4A4A",
-                        fontFamily: "circular-book"
-                      }}
-                    >
-                      {item.customer.mobile}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        color: "#4A4A4A",
-                        fontFamily: "circular-book"
-                      }}
-                    >
-                      {item.booking_otp}
-                    </Text>
-
-                    <Text
-                      style={{
-                        fontFamily: "circular-bold",
-                        fontSize: 14,
-                        color: "#7960FF"
-                      }}
-                    >
-                      Status :{item.status}
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginTop: 10
-                    }}
-                  >
-                    <View style={{ width: 140 }}>
                       <Text
                         style={{
-                          fontSize: 10,
-                          color: "#7960FF",
-                          fontFamily: "circular-book",
-                          top: 4
+                          fontFamily: "circular-bold",
+                          fontSize: 20,
+                          color: "#4A4A4A"
                         }}
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
                       >
-                        {item.customer.email}
+                        {item.customer.first_name}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: "#7960FF",
+                          fontFamily: "circular-book"
+                        }}
+                      >
+                        Dist.(
+                        {item.customer.distance ? item.customer.distance : 0})
                       </Text>
                     </View>
-                  </View>
-                  {item.status === "cancle" ||
-                  item.status === "completed" ? null : (
                     <View
                       style={{
                         flexDirection: "row",
                         justifyContent: "space-between",
-                        width: 0.85 * ScreenWidth,
-                        marginTop: 5
+                        marginTop: 10
                       }}
                     >
-                      <TouchableOpacity
+                      <Text
                         style={{
-                          width: 75,
-                          height: 28,
-                          backgroundColor: "#7960FF",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          borderRadius: 3,
-                          opacity: item.booking_otp ? 1 : 0
-                        }}
-                        disabled={item.booking_otp ? false : true}
-                        onPress={() => {
-                          var startMapData = {
-                            booking_id: item.booking_id,
-                            customer_id: item.customer.customer_id,
-                            otp: item.booking_otp
-                          };
-                          item.status === "reached"
-                            ? this.props.getCustomerRatingModal(item)
-                            : this.props.startMapVendor(startMapData);
+                          fontSize: 16,
+                          color: "#4A4A4A",
+                          fontFamily: "circular-book"
                         }}
                       >
+                        {item.customer.mobile}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: 16,
+                          color: "#4A4A4A",
+                          fontFamily: "circular-book"
+                        }}
+                      >
+                        {item.booking_otp}
+                      </Text>
+
+                      <Text
+                        style={{
+                          fontFamily: "circular-bold",
+                          fontSize: 14,
+                          color: "#7960FF"
+                        }}
+                      >
+                        Status :{item.status}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginTop: 10
+                      }}
+                    >
+                      <View style={{ width: 140 }}>
                         <Text
                           style={{
-                            color: "white",
+                            fontSize: 10,
+                            color: "#7960FF",
                             fontFamily: "circular-book",
-                            fontSize: 14
+                            top: 4
                           }}
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
                         >
-                          {item.status === "reached"
-                            ? "complete"
-                            : this.props.loadingStartMap
-                            ? "Loading..."
-                            : "Start Map"}
+                          {item.customer.email}
                         </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
+                      </View>
+                    </View>
+                    {item.status === "cancle" ||
+                    item.status === "completed" ? null : (
+                      <View
                         style={{
-                          width: 70,
-                          height: 28,
-                          backgroundColor: "#7960FF",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          borderRadius: 3,
-                          opacity: item.booking_otp ? 1 : 0
-                        }}
-                        disabled={item.booking_otp ? false : true}
-                        onPress={() => {
-                          this.props.otpShare(item.booking_otp);
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          width: 0.85 * ScreenWidth,
+                          marginTop: 5
                         }}
                       >
-                        <Text
+                        <TouchableOpacity
                           style={{
-                            color: "white",
-                            fontFamily: "circular-book",
-                            fontSize: 14
-                          }}
-                        >
-                          Share
-                        </Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={{
-                          alignSelf: "flex-end",
-                          opacity: item.status === "pending" ? 1 : 0
-                        }}
-                        disabled={item.status === "pending" ? false : true}
-                        onPress={() => {
-                          var data = {
-                            booking_id: item.booking_id,
-                            customer_id: item.customer.customer_id
-                          };
-                          this.props.BookingListApprove(data);
-                        }}
-                      >
-                        <View
-                          style={{
-                            width: 70,
+                            width: 75,
                             height: 28,
-                            backgroundColor: "#4EA352",
+                            backgroundColor: "#7960FF",
                             alignItems: "center",
                             justifyContent: "center",
-                            borderRadius: 3
+                            borderRadius: 3,
+                            opacity: item.booking_otp ? 1 : 0
+                          }}
+                          disabled={item.booking_otp ? false : true}
+                          onPress={() => {
+                            var startMapData = {
+                              booking_id: item.booking_id,
+                              customer_id: item.customer.customer_id,
+                              otp: item.booking_otp
+                            };
+                            item.status === "reached"
+                              ? this.props.getCustomerRatingModal(item)
+                              : this.props.startMapVendor(startMapData);
                           }}
                         >
                           <Text
                             style={{
-                              color: "white"
+                              color: "white",
+                              fontFamily: "circular-book",
+                              fontSize: 14
                             }}
                           >
-                            {this.props.loadingBookigUpdate
+                            {item.status === "reached"
+                              ? "complete"
+                              : this.props.loadingStartMap
                               ? "Loading..."
-                              : "Approve"}
+                              : "Start Map"}
                           </Text>
-                        </View>
-                      </TouchableOpacity>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={{
+                            width: 70,
+                            height: 28,
+                            backgroundColor: "#7960FF",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: 3,
+                            opacity: item.booking_otp ? 1 : 0
+                          }}
+                          disabled={item.booking_otp ? false : true}
+                          onPress={() => {
+                            this.props.otpShare(item.booking_otp);
+                          }}
+                        >
+                          <Text
+                            style={{
+                              color: "white",
+                              fontFamily: "circular-book",
+                              fontSize: 14
+                            }}
+                          >
+                            Share
+                          </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          style={{
+                            alignSelf: "flex-end",
+                            opacity: item.status === "pending" ? 1 : 0
+                          }}
+                          disabled={item.status === "pending" ? false : true}
+                          onPress={() => {
+                            var data = {
+                              booking_id: item.booking_id,
+                              customer_id: item.customer.customer_id
+                            };
+                            this.props.BookingListApprove(data);
+                          }}
+                        >
+                          <View
+                            style={{
+                              width: 70,
+                              height: 28,
+                              backgroundColor: "#4EA352",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: 3
+                            }}
+                          >
+                            <Text
+                              style={{
+                                color: "white"
+                              }}
+                            >
+                              {this.props.loadingBookigUpdate
+                                ? "Loading..."
+                                : "Approve"}
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
 
-                      <TouchableOpacity
-                        style={{
-                          alignSelf: "flex-end",
-                          opacity:
+                        <TouchableOpacity
+                          style={{
+                            alignSelf: "flex-end",
+                            opacity:
+                              item.status === "cancle" ||
+                              item.status === "completed"
+                                ? 0
+                                : 1
+                          }}
+                          disabled={
                             item.status === "cancle" ||
                             item.status === "completed"
-                              ? 0
-                              : 1
-                        }}
-                        disabled={
-                          item.status === "cancle" ||
-                          item.status === "completed"
-                            ? true
-                            : false
-                        }
-                        onPress={() => {
-                          var cancleBookingData = {
-                            booking_id: item.booking_id,
-                            customer_id: item.customer.customer_id
-                          };
-                          this.props.getCancleBookingModal(cancleBookingData);
-                        }}
-                      >
-                        <View
-                          style={{
-                            width: 70,
-                            height: 28,
-                            backgroundColor: "#D35400",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            borderRadius: 3
+                              ? true
+                              : false
+                          }
+                          onPress={() => {
+                            var cancleBookingData = {
+                              booking_id: item.booking_id,
+                              customer_id: item.customer.customer_id
+                            };
+                            this.props.getCancleBookingModal(cancleBookingData);
                           }}
                         >
-                          <Text
+                          <View
                             style={{
-                              color: "white"
+                              width: 70,
+                              height: 28,
+                              backgroundColor: "#D35400",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: 3
                             }}
                           >
-                            Cancel
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
-                  )}
-
-                </View>
-              )}
-            />
-            {this.props.FutureBookingList.length >= 10?
-              <TouchableOpacity
-              onPress={()=>{
-                this.props.loadMoreBookingList();
-              }}
-            style={{
-              width:ScreenWidth,
-              paddingTop:10,
-              paddingBottom:20,
-              justifyContent:'center',
-              alignItems:'center'
-            }}
-            >
-            <Text style={{
-              fontFamily:'circular-bold',
-              color:'#7960FF'
-            }}>Load More</Text>
-            </TouchableOpacity> : null}
+                            <Text
+                              style={{
+                                color: "white"
+                              }}
+                            >
+                              Cancel
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+                  </View>
+                )}
+              />
+              {this.props.FutureBookingList.length >= 10 ? (
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.loadMoreBookingList();
+                  }}
+                  style={{
+                    width: ScreenWidth,
+                    paddingTop: 10,
+                    paddingBottom: 20,
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: "circular-bold",
+                      color: "#7960FF"
+                    }}
+                  >
+                    Load More
+                  </Text>
+                </TouchableOpacity>
+              ) : null}
             </View>
           )}
           <Modal
@@ -507,7 +511,8 @@ class FutureBooking extends Component {
                     >
                       {this.props.customerDistance
                         ? this.props.customerDistance
-                        : 0} km
+                        : 0}{" "}
+                      km
                     </Text>
                   </View>
                 </View>

@@ -3,10 +3,10 @@ import Api from "../api/api";
 import { URL_USER_SIGNUP, URL_USER_OTP } from "../config";
 import { Actions } from "react-native-router-flux";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import * as ImagePicker from 'expo-image-picker';
-import * as Permissions from 'expo-permissions';
-import * as Constants from 'expo-constants';
-import * as Location from 'expo-location';
+import * as ImagePicker from "expo-image-picker";
+import * as Permissions from "expo-permissions";
+import * as Constants from "expo-constants";
+import * as Location from "expo-location";
 
 export const UPDATE_VEHICLE_BOOL = "register/UPDATE_VEHICLE_BOOL";
 export const UPDATE_CAR_BOOL = "register/UPDATE_CAR_BOOL";
@@ -313,7 +313,7 @@ export const addDocument = () => async dispatch => {
     base64: true,
     allowsEditing: true,
     aspect: [4, 4],
-    key: '123'
+    key: "123"
   });
 
   // console.log(result);

@@ -19,18 +19,13 @@ import {
   socketVendorCurrentLocation,
   socketBookingCompleted
 } from "./Socket";
-import {
-  Asset,
-  SplashScreen,
-  ImagePicker,
-  TaskManager,
-} from "expo";
+import { Asset, SplashScreen, ImagePicker, TaskManager } from "expo";
 import { Actions } from "react-native-router-flux";
 import openMap from "react-native-open-maps";
-import * as Constants from 'expo-constants'
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
-import * as IntentLauncher from 'expo-intent-launcher';
+import * as Constants from "expo-constants";
+import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
+import * as IntentLauncher from "expo-intent-launcher";
 
 export const GET_FUTURE_BOOKING_LIST_START =
   "vendors/GET_FUTURE_BOOKING_LIST_START";
@@ -40,7 +35,8 @@ export const GET_FUTURE_BOOKING_LIST_FAIL =
   "vendors/GET_FUTURE_BOOKING_LIST_FAIL";
 export const GET_CUSTOMER_DISTANCELIST = "vendors/GET_CUSTOMER_DISTANCELIST";
 export const GET_BOOKING_MODAL = "vendors/GET_BOOKING_MODAL";
-export const GET_CUSTOMER_CURRENT_DISTANCE = "vendors/GET_CUSTOMER_CURRENT_DISTANCE";
+export const GET_CUSTOMER_CURRENT_DISTANCE =
+  "vendors/GET_CUSTOMER_CURRENT_DISTANCE";
 export const GET_BOOKING_UAPDATE_START = "vendors/GET_BOOKING_UAPDATE_START";
 export const GET_BOOKING_UAPDATE_SUCCESS =
   "vendors/GET_BOOKING_UAPDATE_SUCCESS";
@@ -97,19 +93,19 @@ export const GET_INPUT_WALLET_AMOUNT = "vendors/GET_INPUT_WALLET_AMOUNT";
 export const ADD_BALANCE_REQUEST_START = "vendors/ADD_BALANCE_REQUEST_START";
 export const ADD_BALANCE_REQUEST_SUCCESS =
   "vendors/ADD_BALANCE_REQUEST_SUCCESS";
-  export const GET_WALLET_PAYMENTID = "vendors/GET_WALLET_PAYMENTID";
-  export const PAYMENT_SUCCESS_OK = "vendors/PAYMENT_SUCCESS_OK";
-  export const GET_WALLET_AMOUNT_START = "vendors/GET_WALLET_AMOUNT_START";
-  export const GET_WALLET_AMOUNT_SUCCESS = "vendors/GET_WALLET_AMOUNT_SUCCESS";
-  export const ADD_WALLET_PAYMENT_SUCCESS = "vendors/ADD_WALLET_PAYMENT_SUCCESS";
-  export const LOAD_MORE_BOOKING_LIST = "vendors/LOAD_MORE_BOOKING_LIST";
+export const GET_WALLET_PAYMENTID = "vendors/GET_WALLET_PAYMENTID";
+export const PAYMENT_SUCCESS_OK = "vendors/PAYMENT_SUCCESS_OK";
+export const GET_WALLET_AMOUNT_START = "vendors/GET_WALLET_AMOUNT_START";
+export const GET_WALLET_AMOUNT_SUCCESS = "vendors/GET_WALLET_AMOUNT_SUCCESS";
+export const ADD_WALLET_PAYMENT_SUCCESS = "vendors/ADD_WALLET_PAYMENT_SUCCESS";
+export const LOAD_MORE_BOOKING_LIST = "vendors/LOAD_MORE_BOOKING_LIST";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
     type: GET_FUTURE_BOOKING_LIST_START
   });
   const valueUserId = await AsyncStorage.getItem("user_id");
-  const { pages,vendorBookingList } = getState().vendors;
+  const { pages, vendorBookingList } = getState().vendors;
   let test = new FormData();
   test.append("vendor_id", valueUserId);
   test.append("page", pages);
@@ -130,8 +126,8 @@ export const getFutureBookings = () => async (dispatch, getState) => {
           dispatch(getFutureBookings());
         }
       } else {
-        console.log('old'+vendorBookingList+'old');
-        var VendorBookingList = vendorBookingList.concat(response)
+        console.log("old" + vendorBookingList + "old");
+        var VendorBookingList = vendorBookingList.concat(response);
         dispatch({
           type: GET_FUTURE_BOOKING_LIST_SUCCESS,
           payload: VendorBookingList
@@ -198,38 +194,37 @@ export const getBookingModal = val => async (dispatch, getState) => {
   Actions.FutureBooking();
   dispatch(getFutureBookings());
 
-
-
   dispatch({
     type: GET_BOOKING_MODAL,
     payload: val
   });
   const { customerLocation } = getState().vendors;
-  let locations = [await Location.getCurrentPositionAsync({
-   accuracy: Location.Accuracy.BestForNavigation,
- })];
-    var radlat1 = (Math.PI * customerLocation.coords.latitude) / 180;
+  let locations = [
+    await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.BestForNavigation
+    })
+  ];
+  var radlat1 = (Math.PI * customerLocation.coords.latitude) / 180;
 
-    var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;
-    var theta =customerLocation.coords.longitude - locations[0].coords.longitude;
+  var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;
+  var theta = customerLocation.coords.longitude - locations[0].coords.longitude;
 
-    var radtheta = (Math.PI * theta) / 180;
-    var dist =
-      Math.sin(radlat1) * Math.sin(radlat2) +
-      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-    if (dist > 1) {
-      dist = 1;
-    }
-    dist = Math.acos(dist);
-    dist = (dist * 180) / Math.PI;
-    dist = dist * 60 * 1.1515;
-    dist = dist * 1.609344;
-    dist = parseFloat(dist.toFixed(3));
-    dispatch({
-      type: GET_CUSTOMER_CURRENT_DISTANCE,
-      payload: dist
-    });
-
+  var radtheta = (Math.PI * theta) / 180;
+  var dist =
+    Math.sin(radlat1) * Math.sin(radlat2) +
+    Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+  if (dist > 1) {
+    dist = 1;
+  }
+  dist = Math.acos(dist);
+  dist = (dist * 180) / Math.PI;
+  dist = dist * 60 * 1.1515;
+  dist = dist * 1.609344;
+  dist = parseFloat(dist.toFixed(3));
+  dispatch({
+    type: GET_CUSTOMER_CURRENT_DISTANCE,
+    payload: dist
+  });
 };
 
 export const getBookingUpdate = val => (dispatch, getState) => {
@@ -606,10 +601,10 @@ export const getCustomerRatingModal = val => (dispatch, getState) => {
     type: GET_CUSTOMER_RATING_MODAL
   });
   dispatch(socketBookingCompleted(val));
-  var CompleteValue={
-    status:'completed',
-    Id:val.booking_id
-  }
+  var CompleteValue = {
+    status: "completed",
+    Id: val.booking_id
+  };
   dispatch(getBookingUpdate(CompleteValue));
   dispatch({
     type: COMPELETE_BOOKING_BY_VENDOR,
@@ -657,7 +652,7 @@ export const addBalanceRequest = () => (dispatch, getState) => {
     method: "POST",
     headers: {
       Accept: "application/json",
-     'Content-Type': 'application/json',
+      "Content-Type": "application/json"
     },
     body: JSON.stringify({
       amount: parseInt(walletAmount), // amount in the smallest currency unit
@@ -665,21 +660,19 @@ export const addBalanceRequest = () => (dispatch, getState) => {
       receipt: "order_rcptid_11",
       payment_capture: "0"
     })
-  }).then((response) => response.json())
-    .then((responseJson) => {
+  })
+    .then(response => response.json())
+    .then(responseJson => {
       console.log(responseJson);
 
-
-    dispatch({
-      type: ADD_BALANCE_REQUEST_SUCCESS,
-      payload: responseJson.order.id
+      dispatch({
+        type: ADD_BALANCE_REQUEST_SUCCESS,
+        payload: responseJson.order.id
+      });
     });
-
-  });
 };
 
 export const getWalletPaymentId = val => dispatch => {
-
   dispatch({
     type: GET_WALLET_PAYMENTID,
     payload: val
@@ -689,48 +682,43 @@ export const getWalletPaymentId = val => dispatch => {
 };
 
 export const paymentSuccessOk = () => dispatch => {
-
   dispatch({
-    type:PAYMENT_SUCCESS_OK,
+    type: PAYMENT_SUCCESS_OK
   });
 };
 
-export const getWalletAmount = () => async (dispatch,getState) => {
+export const getWalletAmount = () => async (dispatch, getState) => {
   const { userData } = await getState().user;
   dispatch({
-    type:GET_WALLET_AMOUNT_START,
+    type: GET_WALLET_AMOUNT_START
   });
   let test = new FormData();
   test.append("customer_id", userData.userId);
   Api.post(GET_WALLET_AMOUNT, test).then(response => {
-          if(response.status === 1){
-            dispatch({
-              type:GET_WALLET_AMOUNT_SUCCESS,
-              payload:response.data[0]
-            });
-          } else {
-            dispatch(getWalletAmount())
-          }
+    if (response.status === 1) {
+      dispatch({
+        type: GET_WALLET_AMOUNT_SUCCESS,
+        payload: response.data[0]
+      });
+    } else {
+      dispatch(getWalletAmount());
+    }
+  });
+};
 
-          })
-}
-
-export const updateWalletAmount = () => async (dispatch,getState) => {
+export const updateWalletAmount = () => async (dispatch, getState) => {
   const { userData } = await getState().user;
 
   let test = new FormData();
   test.append("customer_id", userData.userId);
   Api.post(UPDATE_WALLET_AMOUNT, test).then(response => {
+    console.log(response);
+  });
+};
 
-            console.log(response);
-
-          })
-}
-
-export const addWalletPayment = () => async (dispatch,getState) => {
+export const addWalletPayment = () => async (dispatch, getState) => {
   const { userData } = await getState().user;
-  const { walletAmount,WalletOrderId,paymentId } = getState().vendors;
-
+  const { walletAmount, WalletOrderId, paymentId } = getState().vendors;
 
   let test = new FormData();
   test.append("customer_id", userData.userId);
@@ -739,23 +727,22 @@ export const addWalletPayment = () => async (dispatch,getState) => {
   test.append("amount", walletAmount);
   Api.post(ADD_PAYMENT, test).then(response => {
     console.log(response);
-          if(response.status === 1){
-              dispatch(getWalletAmount())
-              dispatch({
-                type:ADD_WALLET_PAYMENT_SUCCESS,
-              })
-          }else {
-          }
+    if (response.status === 1) {
+      dispatch(getWalletAmount());
+      dispatch({
+        type: ADD_WALLET_PAYMENT_SUCCESS
+      });
+    } else {
+    }
+  });
+};
 
-          })
-}
-
-export const loadMoreBookingList = () => (dispatch,getState) =>{
+export const loadMoreBookingList = () => (dispatch, getState) => {
   const { pages } = getState().vendors;
-  var page = pages +1;
+  var page = pages + 1;
   dispatch({
-    type:LOAD_MORE_BOOKING_LIST,
-    payload:page
-  })
-  dispatch(getFutureBookings())
-}
+    type: LOAD_MORE_BOOKING_LIST,
+    payload: page
+  });
+  dispatch(getFutureBookings());
+};

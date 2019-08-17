@@ -16,12 +16,18 @@ import {
   Platform
 } from "react-native";
 import { connect } from "react-redux";
-import { BITMAP1, BITMAP2, CAR, MOTORCYCLE, ICON_REFRESH,PENCIL,USER2 } from "../../images";
+import {
+  BITMAP1,
+  BITMAP2,
+  CAR,
+  MOTORCYCLE,
+  ICON_REFRESH,
+  PENCIL,
+  USER2
+} from "../../images";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Slider } from "react-native-elements";
 import CheckBox from "react-native-check-box";
-
-// import { Col, Row, Grid } from "react-native-easy-grid";
 import {
   MECHANIC,
   HAND_HOLDING_UP,
@@ -53,16 +59,15 @@ import TimerMixin from "react-timer-mixin";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import * as IntentLauncher from 'expo-intent-launcher';
-import * as Permissions from 'expo-permissions';
-import * as Location from 'expo-location';
-import * as Constants from 'expo-constants'
+import * as IntentLauncher from "expo-intent-launcher";
+import * as Permissions from "expo-permissions";
+import * as Location from "expo-location";
+import * as Constants from "expo-constants";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
 class Profile extends Component {
-
   constructor(props) {
     super(props);
     this.locationIsEnabled = false;
@@ -75,17 +80,16 @@ class Profile extends Component {
       this._getLocationAsync();
     }
     this.getPermissionAsync();
-
   }
 
   getPermissionAsync = async () => {
-   if (Platform.OS === 'ios') {
-     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-     if (status !== 'granted') {
-       alert('Sorry, we need camera roll permissions to make this work!');
-     }
-   }
- }
+    if (Platform.OS === "ios") {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
+      }
+    }
+  };
 
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -118,35 +122,46 @@ class Profile extends Component {
     this.props.getLocationSuccess(location);
   };
 
-  renderDocument(){
-    arr=  this.props.documentRegisterUri.map((documentUri)=>{
-      return <View key={documentUri} style={{width: 0.10 * ScreenHeight,margin:0.009 *ScreenHeight}}><Image style={{
-      width: 0.10 * ScreenHeight,
-      height:0.10 * ScreenHeight,
-      resizeMode: "contain",
-      borderRadius:5,
-      position: 'absolute',
-    }}
-      source={{uri:documentUri}}
-  />
-    <TouchableOpacity
-    style={{
-      height:17,
-      width:17,
-      borderRadius:10,
-      backgroundColor:'#FFFFFFFF',
-      alignSelf:'center',
-      alignItems:'center',
-      justifyContent:'center',
-      margin: 0.04 * ScreenHeight
-    }}
-    onPress={()=>{this.props.deleteRegisterDocument(documentUri)}}
-    >
-    <Text style={{color:'#7960FF',fontFamily:'circular-bold'}}>X</Text>
-    </TouchableOpacity>
-    </View>
-    })
-    return arr ;
+  renderDocument() {
+    arr = this.props.documentRegisterUri.map(documentUri => {
+      return (
+        <View
+          key={documentUri}
+          style={{ width: 0.1 * ScreenHeight, margin: 0.009 * ScreenHeight }}
+        >
+          <Image
+            style={{
+              width: 0.1 * ScreenHeight,
+              height: 0.1 * ScreenHeight,
+              resizeMode: "contain",
+              borderRadius: 5,
+              position: "absolute"
+            }}
+            source={{ uri: documentUri }}
+          />
+          <TouchableOpacity
+            style={{
+              height: 17,
+              width: 17,
+              borderRadius: 10,
+              backgroundColor: "#FFFFFFFF",
+              alignSelf: "center",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: 0.04 * ScreenHeight
+            }}
+            onPress={() => {
+              this.props.deleteRegisterDocument(documentUri);
+            }}
+          >
+            <Text style={{ color: "#7960FF", fontFamily: "circular-bold" }}>
+              X
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
+    });
+    return arr;
   }
 
   render() {
@@ -175,7 +190,7 @@ class Profile extends Component {
       profileButtonView,
       textError2
     } = styles;
-    const { validate,documentRegisterUri,isVendor } = this.props;
+    const { validate, documentRegisterUri, isVendor } = this.props;
     errors = this.props.onSubmeetSignupForm
       ? validate(this.props.register)
       : {};
@@ -198,44 +213,60 @@ class Profile extends Component {
           <View style={headerViewProfile}>
             <Text style={headerTextStyle}>Personal Details</Text>
             <View style={{ height: 0.78 * ScreenHeight, top: 20 }}>
-            {this.props.isVendor?<View style={{borderRadius: 15,
-                          borderColor: "#7960FF",
-                          width: 0.15 * ScreenHeight,
-                          height:0.15 * ScreenHeight,
-                          alignSelf:'center',
-                          marginTop:0.003 * ScreenHeight,
-                          justifyContent: "center"
-                      }}>
-            <Image style={{borderRadius: 0.065 * ScreenHeight,
-                          width: 0.14 * ScreenHeight,
-                          height:0.14 * ScreenHeight,
-                          resizeMode: "contain",
-                          alignSelf:'center',
-                          position: 'absolute',
-                          zIndex: 0
-                      }} source={this.props.imageRegisterUri?{uri:this.props.imageRegisterUri}:USER2} />
+              {this.props.isVendor ? (
+                <View
+                  style={{
+                    borderRadius: 15,
+                    borderColor: "#7960FF",
+                    width: 0.15 * ScreenHeight,
+                    height: 0.15 * ScreenHeight,
+                    alignSelf: "center",
+                    marginTop: 0.003 * ScreenHeight,
+                    justifyContent: "center"
+                  }}
+                >
+                  <Image
+                    style={{
+                      borderRadius: 0.065 * ScreenHeight,
+                      width: 0.14 * ScreenHeight,
+                      height: 0.14 * ScreenHeight,
+                      resizeMode: "contain",
+                      alignSelf: "center",
+                      position: "absolute",
+                      zIndex: 0
+                    }}
+                    source={
+                      this.props.imageRegisterUri
+                        ? { uri: this.props.imageRegisterUri }
+                        : USER2
+                    }
+                  />
 
-                      <TouchableOpacity style={{
-                        borderRadius:15,
-                        width: 22,
-                        height:22,
-                        alignSelf:'flex-end',
-                        backgroundColor: '#F5FCFF',
-                        justifyContent:'center',
-                        alignItems:'center'
+                  <TouchableOpacity
+                    style={{
+                      borderRadius: 15,
+                      width: 22,
+                      height: 22,
+                      alignSelf: "flex-end",
+                      backgroundColor: "#F5FCFF",
+                      justifyContent: "center",
+                      alignItems: "center"
+                    }}
+                    onPress={() => {
+                      this.props.upadteRegisterProfileImage();
+                    }}
+                  >
+                    <Image
+                      style={{
+                        width: 15,
+                        height: 15,
+                        resizeMode: "contain"
                       }}
-                      onPress={()=>{
-                        this.props.upadteRegisterProfileImage();
-                      }}
-                      >
-                      <Image style={{
-                                    width: 15,
-                                    height:15,
-                                    resizeMode: "contain",
-
-                                }} source={PENCIL} />
-                                </TouchableOpacity>
-            </View>:null}
+                      source={PENCIL}
+                    />
+                  </TouchableOpacity>
+                </View>
+              ) : null}
               <View
                 style={{
                   height: 0.38 * ScreenHeight,
@@ -261,7 +292,9 @@ class Profile extends Component {
                   <TextInput
                     style={textInputProfilStyle}
                     underlineColorAndroid="transparent"
-                    placeholder={this.props.isVendor?"Address":"Address (Optinal)"}
+                    placeholder={
+                      this.props.isVendor ? "Address" : "Address (Optinal)"
+                    }
                     placeholderTextColor="#9D9D9D"
                     autoCapitalize="none"
                     value={this.props.address}
@@ -269,16 +302,20 @@ class Profile extends Component {
                       this.props.updateAddress(text);
                     }}
                   />
-                  {this.props.isVendor?errors.address ? (
-                    <Text style={styles.textError2}>{errors.address[0]}</Text>
-                  ) : null:null}
+                  {this.props.isVendor ? (
+                    errors.address ? (
+                      <Text style={styles.textError2}>{errors.address[0]}</Text>
+                    ) : null
+                  ) : null}
                 </View>
 
                 <View style={subContainerProfile}>
                   <TextInput
                     style={textInputProfilStyle}
                     underlineColorAndroid="transparent"
-                    placeholder={this.props.isVendor?"Email":"Email (Optinal)"}
+                    placeholder={
+                      this.props.isVendor ? "Email" : "Email (Optinal)"
+                    }
                     placeholderTextColor="#9D9D9D"
                     autoCapitalize="none"
                     value={this.props.email}
@@ -286,9 +323,11 @@ class Profile extends Component {
                       this.props.updateEmail(text);
                     }}
                   />
-                  {this.props.isVendor?errors.email ? (
-                    <Text style={styles.textError2}>{errors.email[0]}</Text>
-                  ) : null:null}
+                  {this.props.isVendor ? (
+                    errors.email ? (
+                      <Text style={styles.textError2}>{errors.email[0]}</Text>
+                    ) : null
+                  ) : null}
                 </View>
 
                 <View style={subContainerProfile}>
@@ -304,9 +343,10 @@ class Profile extends Component {
                       this.props.updatePasswordProfile(text);
                     }}
                   />
-                  {
-                    this.props.password.length <6 &&   this.props.password !== ''?<Text style={styles.textError2}>Minimum 6 Character</Text>:null
-                  }
+                  {this.props.password.length < 6 &&
+                  this.props.password !== "" ? (
+                    <Text style={styles.textError2}>Minimum 6 Character</Text>
+                  ) : null}
                   {errors.password ? (
                     <Text style={styles.textError2}>{errors.password[0]}</Text>
                   ) : null}
@@ -331,49 +371,58 @@ class Profile extends Component {
                   ) : null}
                 </View>
               </View>
-              {this.props.isVendor?
-                <View style={{
-                  height:0.22 *ScreenHeight,
-                  justifyContent:'space-between'
-                }}>
-                <View style={{flexDirection:'row'}}>
-                {this.renderDocument()}
-
+              {this.props.isVendor ? (
+                <View
+                  style={{
+                    height: 0.22 * ScreenHeight,
+                    justifyContent: "space-between"
+                  }}
+                >
+                  <View style={{ flexDirection: "row" }}>
+                    {this.renderDocument()}
+                  </View>
+                  <TouchableOpacity
+                    underlayColor="white"
+                    style={{
+                      backgroundColor: "transparent",
+                      height: 25,
+                      width: 0.37 * ScreenWidth,
+                      borderRadius: 25,
+                      borderColor: "#7960FF",
+                      borderWidth: 1,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      alignSelf: "center",
+                      opacity:
+                        this.props.documentRegisterUri.length === 3 ? 0.5 : 1
+                    }}
+                    disabled={
+                      this.props.documentRegisterUri.length === 3 ? true : false
+                    }
+                    onPress={() => {
+                      this.props.addDocument();
+                    }}
+                  >
+                    <Text
+                      style={{
+                        fontFamily: "circular-book",
+                        fontSize: 0.033 * ScreenWidth,
+                        color: "#7960FF"
+                      }}
+                    >
+                      +Add Documents
+                    </Text>
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity
-                underlayColor="white"
-                style={{
-                backgroundColor: "transparent",
-                height: 25,
-                width: 0.37 * ScreenWidth,
-                borderRadius: 25,
-                borderColor: "#7960FF",
-                borderWidth: 1,
-                alignItems: "center",
-                justifyContent: "center",
-                alignSelf:'center',
-                opacity:this.props.documentRegisterUri.length===3?0.5:1
-                }}
-                disabled={this.props.documentRegisterUri.length===3?true:false}
-                onPress={()=>{
-                  this.props.addDocument()
-                }}
-              >
-                  <Text style={{fontFamily:'circular-book',
-                                fontSize:0.033*ScreenWidth,
-                                color:'#7960FF'
-                                }}>
-                    +Add Documents
-                  </Text>
-              </TouchableOpacity>
-              </View>
-              :null}
+              ) : null}
               {errors.documentRegisterUri ? (
                 <Text style={styles.textError2}>
                   {errors.documentRegisterUri[0]}
                 </Text>
               ) : null}
-              <Text style={styles.textError2}>{this.props.signupFail?this.props.signupFail:null}</Text>
+              <Text style={styles.textError2}>
+                {this.props.signupFail ? this.props.signupFail : null}
+              </Text>
               <TouchableHighlight
                 onPress={() => {
                   this.props.updateOnSubmeetSignup();
@@ -386,9 +435,14 @@ class Profile extends Component {
                   }
                 }}
                 underlayColor="white"
-                style={([createButton,{marginTop:this.props.isVendor?-5:0.35 * ScreenHeight}])}
+                style={[
+                  createButton,
+                  { marginTop: this.props.isVendor ? -5 : 0.35 * ScreenHeight }
+                ]}
               >
-                    <Text style={[buttonText, whiteText]}>{this.props.loadingSignupB ?'Loading...':'Continue'}</Text>
+                <Text style={[buttonText, whiteText]}>
+                  {this.props.loadingSignupB ? "Loading..." : "Continue"}
+                </Text>
               </TouchableHighlight>
               <Modal
                 visible={this.props.setLocationVisible}
@@ -403,12 +457,17 @@ class Profile extends Component {
                   backgroundColor: "rgba(0,0,0,0.5)"
                 }}
               >
-                <View style={[styles.containertwo,{justifyContent:'space-around'}]}>
+                <View
+                  style={[
+                    styles.containertwo,
+                    { justifyContent: "space-around" }
+                  ]}
+                >
                   <View
                     style={{
                       borderRadius: 10,
                       width: 0.83 * ScreenWidth,
-                      height: 0.45 * ScreenHeight,
+                      height: 0.45 * ScreenHeight
                     }}
                   >
                     <MapView
@@ -424,7 +483,8 @@ class Profile extends Component {
                         this._map.animateToRegion(
                           {
                             latitude: this.props.locationVendor.coords.latitude,
-                            longitude: this.props.locationVendor.coords.longitude,
+                            longitude: this.props.locationVendor.coords
+                              .longitude,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421
                           },
@@ -445,14 +505,20 @@ class Profile extends Component {
                       this.props.signupUser();
                     }}
                     disabled={this.props.locationVendor ? false : true}
-                    style={{opacity: this.props.locationVendor ? 1 : 0.8,
-                            backgroundColor: "#7960FF",
-                            height: 44,
-                            width: 280,
-                            borderRadius: 25,
-                            alignItems: "center" }}
+                    style={{
+                      opacity: this.props.locationVendor ? 1 : 0.8,
+                      backgroundColor: "#7960FF",
+                      height: 44,
+                      width: 280,
+                      borderRadius: 25,
+                      alignItems: "center"
+                    }}
                   >
-                  <Text style={[buttonText, whiteText]}>{this.props.loadingSignupB?'Loading...':'Set Location'}</Text>
+                    <Text style={[buttonText, whiteText]}>
+                      {this.props.loadingSignupB
+                        ? "Loading..."
+                        : "Set Location"}
+                    </Text>
                   </TouchableHighlight>
                 </View>
               </Modal>
@@ -469,40 +535,37 @@ class Profile extends Component {
               style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
             >
               <View style={styles.containertwo}>
-                  <View style={{ alignItems: "center" }}>
-                    <Image style={profilImage1style} source={BITMAP2} />
+                <View style={{ alignItems: "center" }}>
+                  <Image style={profilImage1style} source={BITMAP2} />
+                </View>
+
+                <Text style={profileModalText1}>Congratulations</Text>
+                <Text style={profileModalText2}>Now you are registered.</Text>
+                <Text
+                  style={{
+                    fontSize: 0.038 * ScreenWidth,
+                    textAlign: "center",
+                    width: 350,
+                    marginTop: 13,
+                    fontFamily: "circular-book"
+                  }}
+                >
+                  {this.props.isVendor
+                    ? "Wait for an approval from us."
+                    : "Get ready to find your mechanic."}
+                </Text>
+                <TouchableHighlight
+                  onPress={() => {
+                    this.props.toggleModalProfile(false);
+                    Actions.login();
+                  }}
+                  underlayColor="white"
+                  style={{ marginTop: 13 }}
+                >
+                  <View style={createButton}>
+                    <Text style={[buttonText, whiteText]}>Continue</Text>
                   </View>
-
-                    <Text style={profileModalText1}>Congratulations</Text>
-                    <Text style={profileModalText2}>
-                      Now you are registered.
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 0.038 * ScreenWidth,
-                        textAlign: "center",
-                        width: 350,
-                        marginTop: 13,
-                        fontFamily: "circular-book"
-                      }}
-                    >
-                      {this.props.isVendor ? 'Wait for an approval from us.':
-                        'Get ready to find your mechanic.'}
-                    </Text>
-                    <TouchableHighlight
-                      onPress={() => {
-                        this.props.toggleModalProfile(false);
-                        Actions.login();
-                      }}
-                      underlayColor="white"
-                      style={{ marginTop: 13 }}
-                    >
-                      <View style={createButton}>
-                        <Text style={[buttonText, whiteText]}>Continue</Text>
-                      </View>
-                    </TouchableHighlight>
-
-
+                </TouchableHighlight>
               </View>
             </Modal>
           </View>
@@ -542,14 +605,12 @@ const rules = [
   },
   {
     field: "documentRegisterUri",
-    condition: (documentRegisterUri,{isVendor})=>{
-      if(isVendor)
-      {
-        return documentRegisterUri.length >= 1?true:false
+    condition: (documentRegisterUri, { isVendor }) => {
+      if (isVendor) {
+        return documentRegisterUri.length >= 1 ? true : false;
       }
 
       return true;
-
     },
     error: "Please Add Document"
   }
