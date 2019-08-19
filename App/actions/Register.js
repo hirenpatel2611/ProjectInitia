@@ -2,7 +2,6 @@ import TimerMixin from "react-timer-mixin";
 import Api from "../api/api";
 import { URL_USER_SIGNUP, URL_USER_OTP } from "../config";
 import { Actions } from "react-native-router-flux";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import * as Constants from "expo-constants";
@@ -207,7 +206,7 @@ export const signupUser = () => (dispatch, getState) => {
     isTwoWheeler,
     isFourWheeler,
     loadingSignupB,
-    location,
+    locationVendor,
     imageBase64Register,
     documentBase64Register
   } = getState().register;
@@ -242,8 +241,8 @@ export const signupUser = () => (dispatch, getState) => {
   test.append("is_vendor", is_vendor);
   test.append("profile_image", imageBase64Register);
   if (isVendor === true) {
-    test.append("latitude", location.coords.latitude);
-    test.append("longitude", location.coords.longitude);
+    test.append("latitude", locationVendor.coords.latitude);
+    test.append("longitude", locationVendor.coords.longitude);
   }
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {

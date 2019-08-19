@@ -61,6 +61,11 @@
       "com.sec.android.provider.badge.permission.WRITE",
       "com.sonyericsson.home.permission.BROADCAST_BADGE"
     ],
+    "config":{
+      "googleMaps":{
+        "apiKey":"AIzaSyAm_cQCYcozNa9WUVmASmSABGuuS6OSsIw"
+      }
+    },
          "splash":{
             "resizeMode":"cover",
             "mdpi":"./assets/android-splash/drawable-mdpi/background.png",

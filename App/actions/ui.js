@@ -1,4 +1,4 @@
-import { Asset, SplashScreen, ImagePicker, AppLoading } from "expo";
+import { Asset, SplashScreen, AppLoading } from "expo";
 import { AsyncStorage } from "react-native";
 import Api from "../api/api";
 import { GET_USER_DATA } from "../config";

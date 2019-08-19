@@ -19,7 +19,9 @@ import {
   connectTosocketBookingCancle,
   socketLeave
 } from "./Socket";
-import { Asset, SplashScreen, ImagePicker, Permissions, Constants } from "expo";
+import { Asset, SplashScreen, Permissions, Constants } from "expo";
+import * as ImagePicker from "expo-image-picker";
+
 import { getUserData } from "./ui";
 
 export const GET_VENDORS_START = "customers/GET_VENDORS_START";

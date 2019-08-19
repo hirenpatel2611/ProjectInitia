@@ -470,7 +470,7 @@ class Profile extends Component {
                       height: 0.45 * ScreenHeight
                     }}
                   >
-                    <MapView
+                  {this.props.locationVendor ?  <MapView
                       style={{
                         ...StyleSheet.absoluteFillObject,
                         borderRadius: 15,
@@ -483,8 +483,7 @@ class Profile extends Component {
                         this._map.animateToRegion(
                           {
                             latitude: this.props.locationVendor.coords.latitude,
-                            longitude: this.props.locationVendor.coords
-                              .longitude,
+                            longitude: this.props.locationVendor.coords.longitude,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421
                           },
@@ -492,12 +491,13 @@ class Profile extends Component {
                         );
                       }}
                     >
-                      {this.props.locationVendor ? (
+
                         <MapView.Marker.Animated
                           coordinate={this.props.locationVendor.coords}
                         />
-                      ) : null}
+
                     </MapView>
+                    : null}
                   </View>
                   <TouchableHighlight
                     underlayColor="white"
