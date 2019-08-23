@@ -148,16 +148,18 @@ var styles = StyleSheet.create({
     borderWidth: 1
   },
   textInputProfilStyle: {
-    fontSize: 14,
-    fontFamily: "circular-book"
-  },
-  subContainerProfile: {
-    paddingLeft: 16,
+    fontSize: 16,
+    fontFamily: "circular-book",
+    marginLeft: 16,
+    marginRight:16,
+    paddingBottom:5,
     flexDirection: "column",
     justifyContent: "center",
     borderBottomWidth: 0.5,
     borderColor: "grey",
-    minHeight: 0.08 * ScreenHeight
+  },
+  subContainerProfile: {
+
   },
   profileHeadText: {
     fontSize: 14,
@@ -214,6 +216,7 @@ var styles = StyleSheet.create({
     color: "red",
     fontSize: 12,
     fontFamily: "circular-book",
+    marginLeft:16
   },
   textError1: {
     color: "red",

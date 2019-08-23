@@ -30,7 +30,9 @@ import {
   SET_LOCATION,
   UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD,
   UPDATE_REGISTER_DOCUMENT_UPLOAD,
-  DELETE_REGISTER_DOCUMENT
+  DELETE_REGISTER_DOCUMENT,
+  UPDATE_WORSHOP_NAME,
+  UPDATE_GSTIN
 } from "../actions/Register";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -44,6 +46,7 @@ const INITIAL_STATE = {
   otp: "",
   visibleModalProfile: false,
   visibleModalOtp: false,
+  workshop_name:"",
   name: "",
   address: "",
   mobilenoProfile: "",
@@ -72,7 +75,8 @@ const INITIAL_STATE = {
   imageBase64Register: "",
   imageRegisterUri: "",
   documentRegisterUri: [],
-  documentBase64Register: []
+  documentBase64Register: [],
+  gstin:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -163,6 +167,16 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
+    case UPDATE_WORSHOP_NAME:
+    {
+      return{
+        ...state,
+        workshop_name:action.payload,
+        onSubmeetSignupForm: false,
+      };
+    }
+    break;
+
     case UPDATE_NAME:
       {
         return {
@@ -191,6 +205,15 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           mobilenoProfile: action.payload,
           onSubmeetSignupForm: false
+        };
+      }
+      break;
+
+    case UPDATE_GSTIN:
+      {
+        return{
+          ...state,
+          gstin:action.payload
         };
       }
       break;

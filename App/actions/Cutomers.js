@@ -1,5 +1,3 @@
-import { SET_TIMER, SET_SCORE } from "./types";
-import TimerMixin from "react-timer-mixin";
 import Api from "../api/api";
 import {
   GET_VENDOR,
@@ -12,14 +10,12 @@ import {
   CUSTOMER_COMMENT
 } from "../config";
 import { Actions } from "react-native-router-flux";
-import { AsyncStorage, Alert } from "react-native";
+import { Alert } from "react-native";
 import {
   connectTosocket,
   connectTosocketReached,
   connectTosocketBookingCancle,
-  socketLeave
 } from "./Socket";
-import { Asset, SplashScreen, ImagePicker, Permissions, Constants } from "expo";
 import { getUserData } from "./ui";
 
 export const GET_VENDORS_START = "customers/GET_VENDORS_START";
@@ -188,7 +184,6 @@ export const getBookingCancellation = () => (dispatch, getState) => {
   test.append("reason", cancleReason);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log(response);
       if (response.status !== 0) {
         dispatch({
           type: GET_BOOKING_CANCLE_SUCCESS
@@ -533,22 +528,7 @@ export const updateCustomerProfile = val => (dispatch, getState) => {
 };
 
 export const upadteCustomerProfileImage = val => async dispatch => {
-  // let result = await ImagePicker.launchImageLibraryAsync({
-  //       mediaTypes: ImagePicker.MediaTypeOptions.All,
-  //       base64: true,
-  //       allowsEditing: true,
-  //       aspect: [4, 4],
-  //     });
-  //
-  //     console.log(result);
-  //
-  //     if (!result.cancelled) {
-  //       dispatch({
-  //         type:UPDATE_CUSTOMER_PROFILE_IMAGE_UPLOAD,
-  //         payload:result
-  //       });
-  //
-  //     }
+
 };
 
 export const getFilterSubmeet = () => (dispatch, getState) => {

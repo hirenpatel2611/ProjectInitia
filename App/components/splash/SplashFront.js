@@ -96,13 +96,11 @@ class SplashFront extends Component {
           //     Actions.registerMobile();
           //   }}
           //   underlayColor="white"
+          //   style={createButton}
           // >
-          //   <View style={createButton}>
           //     <Text style={[buttonText, whiteText]}>
           //       Looking for mechanic?
           //     </Text>
-          //   </View>
-          //
           // </TouchableHighlight>
         }
 

@@ -14,7 +14,7 @@ const INITIAL_STATE = {
   userAddress: "",
   isUserVendor: "",
   userData: "",
-  isVendorLoggedIn: true,
+  isVendorLoggedIn: false,
   userCurrentBooking: ""
 };
 
@@ -48,6 +48,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           userData: {
             uri: state.isVendorLoggedIn?action.payload.profile_image:null,
+            workshop_name:state.isVendorLoggedIn?action.payload.workshop_name:null,
             userId: action.payload.id,
             userEmail: action.payload.email,
             userMobileno: action.payload.mobile,

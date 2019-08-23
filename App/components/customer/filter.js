@@ -2,14 +2,10 @@ import React, { Component } from "react";
 import {
   View,
   Text,
-  TextInput,
   Image,
   TouchableOpacity,
   StatusBar,
-  Animated,
-  ImageBackground,
   Dimensions,
-  Button,
   TouchableHighlight,
   Slider
 } from "react-native";

@@ -5,7 +5,6 @@ import {
   Dimensions,
   TouchableOpacity,
   Image,
-  Modal,
   AsyncStorage
 } from "react-native";
 import { FILTER, MENU } from "../images";

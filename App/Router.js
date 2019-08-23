@@ -7,7 +7,7 @@ import {
   Dimensions,
   AppState
 } from "react-native";
-import { Scene, Router, ActionConst } from "react-native-router-flux";
+import { Scene, Router, ActionConst,Drawer } from "react-native-router-flux";
 import CardStackStyleInterpolator from "react-navigation/src/views/CardStack/CardStackStyleInterpolator";
 import Login from "./components/login/Login";
 import RegisterMobile from "./components/register/RegisterMobile";
@@ -37,7 +37,7 @@ import {
 } from "./actions";
 import SideMenu from "./components/drawer/SideMenu";
 import SideMenuVendor from "./components/drawer/SideMenuVendor";
-import { Asset, SplashScreen } from "expo";
+import { Asset, SplashScreen,Notifications } from "expo";
 
 import { connect } from "react-redux";
 
@@ -53,7 +53,11 @@ class RouterComponent extends Component {
 
   componentDidMount() {
     AppState.addEventListener("change", this._handleAppStateChange);
+    this._notificationSubscription = Notifications.addListener(this._handleNotification);
   }
+  _handleNotification = (notification) => {
+    console.log({notification: notification});
+  };
   // componentWillUnmount() {
   //   AppState.removeEventListener("change", this._handleAppStateChange);
   // }
@@ -102,6 +106,8 @@ class RouterComponent extends Component {
       <Router>
         <Scene
           key="root"
+          panHandlers={null}
+          gesturesEnabled={false}
           transitionConfig={() => ({
             screenInterpolator: CardStackStyleInterpolator.forHorizontal
           })}
@@ -173,6 +179,9 @@ class RouterComponent extends Component {
           {!this.props.isVendorLoggedIn ? (
             <Scene
               key="drawer"
+              drawerLockMode="locked-closed"
+              panHandlers={null}
+              gesturesEnabled={false}
               type={ActionConst.RESET}
               drawer
               initial={this.props.isLoggedIn}
@@ -221,8 +230,10 @@ class RouterComponent extends Component {
           ) : (
             <Scene
               key="drawer"
+
               type={ActionConst.RESET}
               drawer
+              drawerLockMode="locked-closed"
               initial={this.props.isLoggedIn}
               hideNavBar={true}
               drawerPosition="left"

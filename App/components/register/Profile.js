@@ -37,6 +37,7 @@ import {
 import { Actions } from "react-native-router-flux";
 import {
   toggleModalProfile,
+  updateWorkshopName,
   updateName,
   updateAddress,
   updateEmail,
@@ -51,7 +52,8 @@ import {
   setLocation,
   upadteRegisterProfileImage,
   addDocument,
-  deleteRegisterDocument
+  deleteRegisterDocument,
+  updateGstin
 } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
@@ -207,7 +209,7 @@ class Profile extends Component {
           ])
         }
       >
-        <KeyboardAwareScrollView enableOnAndroid>
+        <KeyboardAwareScrollView enableOnAndroid contentContainerStyle={{paddingBottom:this.props.isVendor? 180:null}}>
           <StatusBar backgroundColor="#FFFFFFFF" />
 
           <View style={headerViewProfile}>
@@ -233,7 +235,9 @@ class Profile extends Component {
                       resizeMode: "contain",
                       alignSelf: "center",
                       position: "absolute",
-                      zIndex: 0
+                      zIndex: 0,
+                      borderWidth: 0.5,
+                      borderColor: "grey",
                     }}
                     source={
                       this.props.imageRegisterUri
@@ -269,11 +273,25 @@ class Profile extends Component {
               ) : null}
               <View
                 style={{
-                  height: 0.38 * ScreenHeight,
+                  height: 0.55 * ScreenHeight,
                   justifyContent: "space-around"
                 }}
               >
-                <View style={subContainerProfile}>
+              {this.props.isVendor?(<View style={subContainerProfile}>
+                <TextInput
+                  style={[textInputProfilStyle,{fontSize:15,fontFamily:'circular-bold'}]}
+                  underlineColorAndroid="transparent"
+                  placeholderTextColor="#9D9D9D"
+                  placeholder="Workshop Name"
+                  value={this.props.workshop_name}
+                  onChangeText={text => {
+                    this.props.updateWorkshopName(text);
+                  }}
+                />
+                {this.props.isVendor ? (errors.workshop_name ? (
+                  <Text style={styles.textError2}>{errors.workshop_name[0]}</Text>
+                ) : null):null}
+              </View>):null}
                   <TextInput
                     style={textInputProfilStyle}
                     underlineColorAndroid="transparent"
@@ -287,8 +305,6 @@ class Profile extends Component {
                   {errors.name ? (
                     <Text style={styles.textError2}>{errors.name[0]}</Text>
                   ) : null}
-                </View>
-                <View style={subContainerProfile}>
                   <TextInput
                     style={textInputProfilStyle}
                     underlineColorAndroid="transparent"
@@ -307,9 +323,8 @@ class Profile extends Component {
                       <Text style={styles.textError2}>{errors.address[0]}</Text>
                     ) : null
                   ) : null}
-                </View>
 
-                <View style={subContainerProfile}>
+
                   <TextInput
                     style={textInputProfilStyle}
                     underlineColorAndroid="transparent"
@@ -328,9 +343,26 @@ class Profile extends Component {
                       <Text style={styles.textError2}>{errors.email[0]}</Text>
                     ) : null
                   ) : null}
-                </View>
+                  {this.props.isVendor ?
+                  <TextInput
+                    style={textInputProfilStyle}
+                    underlineColorAndroid="transparent"
+                    placeholder={"GSTIN(Optional)"}
+                    placeholderTextColor="#9D9D9D"
+                    autoCapitalize="none"
+                    value={this.props.gstin}
+                    onChangeText={text => {
+                      this.props.updateGstin(text);
+                    }}
+                  />
+                  :null
+                 }
+                  {this.props.isVendor ? (
+                    errors.name ? (
+                      <Text style={styles.textError2}></Text>
+                    ) : null
+                  ) : null}
 
-                <View style={subContainerProfile}>
                   <TextInput
                     style={textInputProfilStyle}
                     underlineColorAndroid="transparent"
@@ -350,8 +382,7 @@ class Profile extends Component {
                   {errors.password ? (
                     <Text style={styles.textError2}>{errors.password[0]}</Text>
                   ) : null}
-                </View>
-                <View style={subContainerProfile}>
+
                   <TextInput
                     style={textInputProfilStyle}
                     underlineColorAndroid="transparent"
@@ -369,13 +400,34 @@ class Profile extends Component {
                       {errors.confirmPassword[0]}
                     </Text>
                   ) : null}
-                </View>
+
               </View>
+
               {this.props.isVendor ? (
+                <View>
+                <Text
+                  style={{
+                    fontFamily: "circular-book",
+                    fontSize: 0.033 * ScreenWidth,
+                    marginTop:0.023 * ScreenHeight,
+                    marginLeft:16,
+                    marginBottom:5
+                  }}
+                >
+                Kindly add One of the following document-GST/AADHAR/LICENCE
+                </Text>
+                {errors.documentRegisterUri ? (
+                  <Text style={styles.textError2}>
+                    {errors.documentRegisterUri[0]}
+                  </Text>
+                ) : null}
+
                 <View
                   style={{
                     height: 0.22 * ScreenHeight,
-                    justifyContent: "space-between"
+                    justifyContent: "space-between",
+                    marginLeft:16,
+                    marginRight:16
                   }}
                 >
                   <View style={{ flexDirection: "row" }}>
@@ -413,13 +465,11 @@ class Profile extends Component {
                       +Add Documents
                     </Text>
                   </TouchableOpacity>
+
+                </View>
                 </View>
               ) : null}
-              {errors.documentRegisterUri ? (
-                <Text style={styles.textError2}>
-                  {errors.documentRegisterUri[0]}
-                </Text>
-              ) : null}
+
               <Text style={styles.textError2}>
                 {this.props.signupFail ? this.props.signupFail : null}
               </Text>
@@ -437,7 +487,7 @@ class Profile extends Component {
                 underlayColor="white"
                 style={[
                   createButton,
-                  { marginTop: this.props.isVendor ? -5 : 0.35 * ScreenHeight }
+                  { marginTop: this.props.isVendor ? -5 : 0.05 * ScreenHeight }
                 ]}
               >
                 <Text style={[buttonText, whiteText]}>
@@ -470,7 +520,7 @@ class Profile extends Component {
                       height: 0.45 * ScreenHeight
                     }}
                   >
-                    <MapView
+                  {this.props.locationVendor ?  <MapView
                       style={{
                         ...StyleSheet.absoluteFillObject,
                         borderRadius: 15,
@@ -483,8 +533,7 @@ class Profile extends Component {
                         this._map.animateToRegion(
                           {
                             latitude: this.props.locationVendor.coords.latitude,
-                            longitude: this.props.locationVendor.coords
-                              .longitude,
+                            longitude: this.props.locationVendor.coords.longitude,
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421
                           },
@@ -492,12 +541,13 @@ class Profile extends Component {
                         );
                       }}
                     >
-                      {this.props.locationVendor ? (
+
                         <MapView.Marker.Animated
                           coordinate={this.props.locationVendor.coords}
                         />
-                      ) : null}
+
                     </MapView>
+                    : null}
                   </View>
                   <TouchableHighlight
                     underlayColor="white"
@@ -578,6 +628,11 @@ class Profile extends Component {
 const notEmpty = test => !isEmpty(test);
 const rules = [
   {
+    field: "workshop_name",
+    condition: notEmpty,
+    error: "Workshop Name is Require"
+  },
+  {
     field: "name",
     condition: notEmpty,
     error: "Name is Require"
@@ -640,7 +695,8 @@ const mapStateToProps = ({ register }) => {
     setLocationVisible,
     imageRegisterUri,
     signupFail,
-    documentRegisterUri
+    documentRegisterUri,
+    workshop_name
   } = register;
   return {
     visibleModalProfile,
@@ -661,7 +717,8 @@ const mapStateToProps = ({ register }) => {
     register,
     imageRegisterUri,
     signupFail,
-    documentRegisterUri
+    documentRegisterUri,
+    workshop_name
   };
 };
 
@@ -669,6 +726,7 @@ export default connect(
   mapStateToProps,
   {
     toggleModalProfile,
+    updateWorkshopName,
     updateName,
     updateAddress,
     updateEmail,
@@ -683,6 +741,7 @@ export default connect(
     setLocation,
     upadteRegisterProfileImage,
     addDocument,
-    deleteRegisterDocument
+    deleteRegisterDocument,
+    updateGstin
   }
 )(withValidation(rules, Profile));

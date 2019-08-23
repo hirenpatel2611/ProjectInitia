@@ -1,11 +1,11 @@
 import { SET_TIMER, SET_SCORE } from "./types";
-import TimerMixin from "react-timer-mixin";
 import Api from "../api/api";
 import { URL_USER_LOGIN } from "../config";
 import { Actions } from "react-native-router-flux";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage,Platform } from "react-native";
 import { updateIsVendor, getUserData,updateLoggedInState } from "./ui";
 import { createSocketChannel } from "./Socket";
+import {Notifications} from 'expo';
 
 export const UPDATE_PASSWORD = "login/UPDATE_PASSWORD";
 export const UPDATE_MOBILE_NUMBER = "login/UPDATE_MOBILE_NUMBER";
@@ -28,20 +28,23 @@ export const updatePassword = val => (dispatch, getState) => {
   });
 };
 
-export const loginUser = () => (dispatch, getState) => {
+export const loginUser = () => async (dispatch, getState) => {
   dispatch({
     type: LOGIN_START
   });
   const { mobileno, password } = getState().login;
 
   let test = new FormData();
+  let token = await Notifications.getExpoPushTokenAsync();
   test.append("username", mobileno);
   test.append("password", password);
-  test.append("device_token", "djhsgdf87sfdfs7dfsfsfs");
-  test.append("device_type", "android");
+  test.append("device_token", token);
+  test.append("device_type", Platform.OS);
   Api.post(URL_USER_LOGIN, test)
     .then(async response => {
+      console.log(response);
       if (response.status === 1) {
+        await AsyncStorage.setItem("device_token", response.data.device_token);
         await AsyncStorage.setItem("token", response.token);
         await AsyncStorage.setItem("is_vendor", response.data.is_vendor);
         await AsyncStorage.setItem("user_id", response.data.id.toString());

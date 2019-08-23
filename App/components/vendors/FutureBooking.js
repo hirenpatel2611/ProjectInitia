@@ -110,6 +110,7 @@ class FutureBooking extends Component {
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                   <View
+                    key={item.booking_id}
                     style={{
                       margin: 5,
                       backgroundColor: "white",

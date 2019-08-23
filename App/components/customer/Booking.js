@@ -4,14 +4,8 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  StatusBar,
   Dimensions,
-  TouchableHighlight,
-  Slider,
-  StyleSheet,
   Platform,
-  Animated,
-  AsyncStorage,
   ScrollView,
   FlatList
 } from "react-native";

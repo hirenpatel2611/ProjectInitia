@@ -1,4 +1,3 @@
-import TimerMixin from "react-timer-mixin";
 import Api from "../api/api";
 import { AsyncStorage, Alert, Share } from "react-native";
 import {
@@ -19,13 +18,14 @@ import {
   socketVendorCurrentLocation,
   socketBookingCompleted
 } from "./Socket";
-import { Asset, SplashScreen, ImagePicker, TaskManager } from "expo";
+import { SplashScreen } from "expo";
 import { Actions } from "react-native-router-flux";
 import openMap from "react-native-open-maps";
 import * as Constants from "expo-constants";
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import * as IntentLauncher from "expo-intent-launcher";
+import * as ImagePicker from "expo-image-picker";
 
 export const GET_FUTURE_BOOKING_LIST_START =
   "vendors/GET_FUTURE_BOOKING_LIST_START";
@@ -99,19 +99,19 @@ export const GET_WALLET_AMOUNT_START = "vendors/GET_WALLET_AMOUNT_START";
 export const GET_WALLET_AMOUNT_SUCCESS = "vendors/GET_WALLET_AMOUNT_SUCCESS";
 export const ADD_WALLET_PAYMENT_SUCCESS = "vendors/ADD_WALLET_PAYMENT_SUCCESS";
 export const LOAD_MORE_BOOKING_LIST = "vendors/LOAD_MORE_BOOKING_LIST";
+export const UPDATE_VENDOR_WORSHOP_NAME = "vendors/UPDATE_VENDOR_WORSHOP_NAME";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
     type: GET_FUTURE_BOOKING_LIST_START
   });
   const valueUserId = await AsyncStorage.getItem("user_id");
-  const { pages, vendorBookingList } = getState().vendors;
+  const { pages, vendorBookingList,paginate } = getState().vendors;
   let test = new FormData();
   test.append("vendor_id", valueUserId);
   test.append("page", pages);
   Api.post(GET_FUTURE_BOOKINGLIST, test)
     .then(response => {
-      console.log(test);
       if (response.status === 0) {
         if (response.message === "No booking found") {
           dispatch({
@@ -126,8 +126,7 @@ export const getFutureBookings = () => async (dispatch, getState) => {
           dispatch(getFutureBookings());
         }
       } else {
-        console.log("old" + vendorBookingList + "old");
-        var VendorBookingList = vendorBookingList.concat(response);
+        var VendorBookingList = paginate?vendorBookingList.concat(response):response;
         dispatch({
           type: GET_FUTURE_BOOKING_LIST_SUCCESS,
           payload: VendorBookingList
@@ -232,7 +231,6 @@ export const getBookingUpdate = val => (dispatch, getState) => {
     type: GET_BOOKING_UAPDATE_START
   });
   const { bookingData, FutureBookingList, bookings } = getState().vendors;
-  console.log(bookings);
   let test = new FormData();
   test.append("booking_id", val.Id);
   test.append("status", val.status);
@@ -249,7 +247,6 @@ export const getBookingUpdate = val => (dispatch, getState) => {
           dispatch(updateWalletAmount());
         }
         if (val.status === "completed") {
-          console.log(response);
           FutureBookingList.map(booking => {
             if (booking.booking_id === val.Id) {
               booking.status = "completed";
@@ -435,6 +432,13 @@ export const getCancelBookingModalCloseVendor = () => dispatch => {
   });
 };
 
+export const updateVendorWorkshopName = val => (dispatch,getState) => {
+  dispatch({
+    type: UPDATE_VENDOR_WORSHOP_NAME,
+    payload: val
+  });
+}
+
 export const updateVendorFullName = val => dispatch => {
   dispatch({
     type: UPDATE_VENDOR_FULL_NAME,
@@ -462,7 +466,8 @@ export const updateVendorProfile = val => (dispatch, getState) => {
     fullNameVendor,
     addressVendor,
     emailVendor,
-    imageBase64Vendor
+    imageBase64Vendor,
+    workshop_nameVendor
   } = getState().vendors;
   const { userData } = getState().user;
   let test = new FormData();
@@ -470,6 +475,7 @@ export const updateVendorProfile = val => (dispatch, getState) => {
   test.append("first_name", fullNameVendor);
   test.append("address", addressVendor);
   test.append("profile_image", imageBase64Vendor);
+  test.append("workshop_name", workshop_nameVendor);
   Api.post(UPDATE_PROFILE, test).then(response => {
     if (response.status === 1) {
       dispatch({
@@ -495,12 +501,11 @@ export const loadVendorProfile = () => (dispatch, getState) => {
 
 export const upadteVendorProfileImage = () => async dispatch => {
   let result = await ImagePicker.launchImageLibraryAsync({
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
     base64: true,
     allowsEditing: true,
     aspect: [4, 4]
   });
-
   if (!result.cancelled) {
     dispatch({
       type: UPDATE_VENDOR_PROFILE_IMAGE_UPLOAD,
@@ -663,7 +668,6 @@ export const addBalanceRequest = () => (dispatch, getState) => {
   })
     .then(response => response.json())
     .then(responseJson => {
-      console.log(responseJson);
 
       dispatch({
         type: ADD_BALANCE_REQUEST_SUCCESS,

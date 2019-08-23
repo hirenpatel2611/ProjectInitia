@@ -25,7 +25,8 @@ import {
   updateVendorAddress,
   updateVendorEmail,
   updateVendorProfile,
-  upadteVendorProfileImage
+  upadteVendorProfileImage,
+  updateVendorWorkshopName
 } from "../../actions";
 import { USER2, PENCIL } from "../../images";
 import { Asset } from "expo";
@@ -87,6 +88,16 @@ class Profile extends Component {
           <View
             style={inStyle.viewSubContainer}
           >
+            <TextInput
+              style={[textInputProfilStyle,{fontSize:15,fontFamily:'circular-bold'}]}
+              underlineColorAndroid="transparent"
+              placeholderTextColor="#9D9D9D"
+              placeholder="Workshop Name"
+              value={this.props.workshop_nameVendor}
+              onChangeText={text => {
+                this.props.updateVendorWorkshopName(text);
+              }}
+            />
             <TextInput
               style={textInputProfilStyle}
               underlineColorAndroid="transparent"
@@ -209,6 +220,7 @@ const inStyle = {
 const mapStateToProps = ({ user, vendors }) => {
   const {
     onSubmeetProfileVendorForm,
+    workshop_nameVendor,
     fullNameVendor,
     addressVendor,
     emailVendor,
@@ -219,6 +231,7 @@ const mapStateToProps = ({ user, vendors }) => {
   return {
     userData,
     onSubmeetProfileVendorForm,
+    workshop_nameVendor,
     fullNameVendor,
     addressVendor,
     emailVendor,
@@ -236,6 +249,7 @@ export default connect(
     updateVendorAddress,
     updateVendorEmail,
     updateVendorProfile,
-    upadteVendorProfileImage
+    upadteVendorProfileImage,
+    updateVendorWorkshopName
   }
 )(Profile);

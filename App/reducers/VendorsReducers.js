@@ -49,7 +49,8 @@ import {
   GET_WALLET_AMOUNT_START,
   GET_WALLET_AMOUNT_SUCCESS,
   ADD_WALLET_PAYMENT_SUCCESS,
-  LOAD_MORE_BOOKING_LIST
+  LOAD_MORE_BOOKING_LIST,
+  UPDATE_VENDOR_WORSHOP_NAME
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -75,6 +76,7 @@ const INITIAL_STATE = {
   loadingConfirm: false,
   isFutureBookingNoFound: false,
   onSubmeetProfileVendorForm: false,
+  workshop_nameVendor:"",
   fullNameVendor: "",
   addressVendor: "",
   emailVendor: "",
@@ -96,7 +98,8 @@ const INITIAL_STATE = {
   paymentId: "",
   successPaymentModal: false,
   walletBalance: 0,
-  pages: 1
+  pages: 1,
+  paginate:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -115,7 +118,8 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loadingFutureBookigList: false,
           vendorBookingList: action.payload,
-          isFutureBookingNoFound: false
+          isFutureBookingNoFound: false,
+          paginate:false
         };
       }
       break;
@@ -325,6 +329,16 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
+      case UPDATE_VENDOR_WORSHOP_NAME:
+        {
+          return {
+            ...state,
+            workshop_nameVendor: action.payload,
+
+          };
+        }
+        break;
+
     case UPDATE_VENDOR_FULL_NAME:
       {
         return {
@@ -385,8 +399,10 @@ export default (state = INITIAL_STATE, action) => {
 
     case LOAD_VENDOR_PROFILE:
       {
+        console.log(action.payload);
         return {
           ...state,
+          workshop_nameVendor:action.payload.workshop_name,
           fullNameVendor: action.payload.userFullName,
           addressVendor: action.payload.userAddress,
           emailVendor: action.payload.userEmail,
@@ -621,7 +637,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          pages: action.payload
+          pages: action.payload,
+          paginate:true
         };
       }
       break;

@@ -2,7 +2,6 @@ import TimerMixin from "react-timer-mixin";
 import Api from "../api/api";
 import { URL_USER_SIGNUP, URL_USER_OTP } from "../config";
 import { Actions } from "react-native-router-flux";
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import * as Constants from "expo-constants";
@@ -17,6 +16,7 @@ export const SET_TIME_OUT = "register/SET_TIME_OUT";
 export const ON_OTP_CHANGE = "register/ON_OTP_CHANGE";
 export const TOGGLE_MODAL_PROFILE = "register/TOGGLE_MODAL_PROFILE";
 export const TOGGLE_MODAL_OTP = "register/TOGGLE_MODAL_OTP";
+export const UPDATE_WORSHOP_NAME = "register/UPDATE_WORSHOP_NAME";
 export const UPDATE_NAME = "register/UPDATE_NAME";
 export const UPDATE_ADDRESS = "register/UPDATE_ADDRESS";
 export const UPDATE_EMAIL = "register/UPDATE_EMAIL";
@@ -41,6 +41,7 @@ export const UPDATE_REGISTER_PROFILE_IMAGE_UPLOAD =
 export const UPDATE_REGISTER_DOCUMENT_UPLOAD =
   "register/UPDATE_REGISTER_DOCUMENT_UPLOAD";
 export const DELETE_REGISTER_DOCUMENT = "register/DELETE_REGISTER_DOCUMENT";
+export const UPDATE_GSTIN = "register/UPDATE_GSTIN";
 
 export const updateVehicleBool = () => dispatch => {
   dispatch({
@@ -68,6 +69,13 @@ export const updateMobileNo = val => (dispatch, getState) => {
   });
 };
 
+export const updateWorkshopName = val => (dispatch,getState) => {
+  dispatch({
+    type: UPDATE_WORSHOP_NAME,
+    payload: val
+  });
+}
+
 export const requestOtp = () => (dispatch, getState) => {
   dispatch({
     type: REQUEST_OTP
@@ -78,7 +86,6 @@ export const requestOtp = () => (dispatch, getState) => {
   test.append("mobile", mobileno);
   Api.post(URL_USER_OTP, test)
     .then(response => {
-      console.log(response);
       if (response.loggedIn === 1) {
         dispatch({
           type: REQUEST_OTP_SUCCESS,
@@ -114,77 +121,84 @@ export const updateOTPTimeOut = () => (dispatch, getState) => {
   }, 1000);
 };
 
-export const onOTPChange = code => (dispatch, getState) => {
+export const onOTPChange = code => (dispatch) => {
   dispatch({
     type: ON_OTP_CHANGE,
     payload: code
   });
 };
 
-export const toggleModalProfile = val => (dispatch, getState) => {
+export const toggleModalProfile = val => (dispatch) => {
   dispatch({
     type: TOGGLE_MODAL_PROFILE,
     payload: val
   });
 };
 
-export const toggleModalOtp = () => (dispatch, getState) => {
+export const toggleModalOtp = () => (dispatch) => {
   dispatch({
     type: TOGGLE_MODAL_OTP,
     payload: true
   });
 };
 
-export const updateName = val => (dispatch, getState) => {
+export const updateName = val => (dispatch) => {
   dispatch({
     type: UPDATE_NAME,
     payload: val
   });
 };
 
-export const updateAddress = val => (dispatch, getState) => {
+export const updateAddress = val => (dispatch) => {
   dispatch({
     type: UPDATE_ADDRESS,
     payload: val
   });
 };
 
-export const updateMobileNoProfile = val => (dispatch, getState) => {
+export const updateMobileNoProfile = val => (dispatch) => {
   dispatch({
     type: UPDATE_MOBILE_NO_PROFILE,
     payload: val
   });
 };
 
-export const updateEmail = val => (dispatch, getState) => {
+export const updateEmail = val => (dispatch) => {
   dispatch({
     type: UPDATE_EMAIL,
     payload: val
   });
 };
 
-export const updateDateOfBirth = val => (dispatch, getState) => {
+export const updateGstin = val => (dispatch) => {
+  dispatch({
+    type: UPDATE_GSTIN,
+    payload: val
+  });
+};
+
+export const updateDateOfBirth = val => (dispatch) => {
   dispatch({
     type: UPDATE_DATE_OF_BIRTH,
     payload: val
   });
 };
 
-export const updatePasswordProfile = val => (dispatch, getState) => {
+export const updatePasswordProfile = val => (dispatch) => {
   dispatch({
     type: UPDATE_PASSWORD_PROFILE,
     payload: val
   });
 };
 
-export const updateConfirmPassword = val => (dispatch, getState) => {
+export const updateConfirmPassword = val => (dispatch) => {
   dispatch({
     type: UPDATE_CONFIRM_PASSWORD,
     payload: val
   });
 };
 
-export const updateLanguage = val => (dispatch, getState) => {
+export const updateLanguage = val => (dispatch) => {
   dispatch({
     type: UPDATE_LANGUAGE,
     payload: val
@@ -197,6 +211,8 @@ export const signupUser = () => (dispatch, getState) => {
     payload: true
   });
   const {
+    workshop_name,
+    gstin,
     name,
     address,
     email,
@@ -207,7 +223,7 @@ export const signupUser = () => (dispatch, getState) => {
     isTwoWheeler,
     isFourWheeler,
     loadingSignupB,
-    location,
+    locationVendor,
     imageBase64Register,
     documentBase64Register
   } = getState().register;
@@ -242,9 +258,13 @@ export const signupUser = () => (dispatch, getState) => {
   test.append("is_vendor", is_vendor);
   test.append("profile_image", imageBase64Register);
   if (isVendor === true) {
-    test.append("latitude", location.coords.latitude);
-    test.append("longitude", location.coords.longitude);
+    test.append("gstin", gstin);
+    test.append("workshop_name", workshop_name);
+    test.append("latitude", locationVendor.coords.latitude);
+    test.append("longitude", locationVendor.coords.longitude);
+    // test.append("other_image", documentBase64Register);
   }
+
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
       if (response.status === 1) {

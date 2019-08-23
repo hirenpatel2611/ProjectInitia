@@ -3,7 +3,6 @@ import { AsyncStorage } from "react-native";
 import Api from "../api/api";
 import { GET_USER_DATA } from "../config";
 import { Actions } from "react-native-router-flux";
-import { createSocketChannel } from "./Socket";
 import {loadVendorProfile} from './Vendors';
 import * as Font from 'expo-font';
 

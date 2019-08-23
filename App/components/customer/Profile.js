@@ -3,15 +3,10 @@ import {
   View,
   Text,
   Image,
-  TouchableOpacity,
-  StatusBar,
   Dimensions,
   TouchableHighlight,
-  Slider,
-  StyleSheet,
   Platform,
   TextInput,
-  AsyncStorage,
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -24,11 +19,8 @@ import {
   updateCustomerAddress,
   updateCustomerEmail,
   updateCustomerProfile,
-  upadteCustomerProfileImage
 } from "../../actions";
 import withValidation from "simple-hoc-validator";
-import { USER2,PENCIL } from "../../images";
-import { Asset} from "expo";
 import * as Permissions from 'expo-permissions';
 import * as Constants from 'expo-constants';
 
@@ -128,7 +120,6 @@ const mapStateToProps = ({ user ,customers}) => {
   fullNameCustomer,
   addressCustomer,
   emailCustomer,
-  imageCustomerUri,
   loadingCustomerProfile
   } = customers;
   const {
@@ -140,7 +131,6 @@ onSubmeetProfileForm,
 fullNameCustomer,
 addressCustomer,
 emailCustomer,
-imageCustomerUri,
 loadingCustomerProfile
   };
 };
@@ -154,6 +144,5 @@ export default connect(
     updateCustomerAddress,
     updateCustomerEmail,
     updateCustomerProfile,
-    upadteCustomerProfileImage
   }
 )(Profile);

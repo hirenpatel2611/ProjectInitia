@@ -2,35 +2,23 @@ import React, { Component } from "react";
 import {
   View,
   Text,
-  TextInput,
   Image,
   TouchableOpacity,
   StatusBar,
-  ImageBackground,
   Dimensions,
-  Button,
-  TouchableHighlight,
-  Slider,
   StyleSheet,
   Platform,
   Animated,
-  AsyncStorage,
   Modal
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Actions } from "react-native-router-flux";
-import { setTimer, setScore } from "../../actions";
 import styles from "./customersStyle";
 import Header from "../../Common/Header";
-import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import {
-  SplashScreen,
-} from "expo";
 import * as Permissions from 'expo-permissions';
 import * as IntentLauncher from 'expo-intent-launcher';
-
 import * as Constants from 'expo-constants'
 import {
   getVendors,

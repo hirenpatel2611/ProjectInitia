@@ -6,25 +6,18 @@ import {
   Image,
   TouchableOpacity,
   StatusBar,
-  ImageBackground,
   Dimensions,
-  Button,
   TouchableHighlight,
-  Slider,
   StyleSheet,
   Platform,
   Animated,
-  AsyncStorage,
   Modal,
   Linking
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Actions } from "react-native-router-flux";
-import { setTimer, setScore } from "../../actions";
 import styles from "./customersStyle";
-import Header from "../../Common/Header";
-import Footer from "../../Common/Footer";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { IntentLauncher } from "expo";
 import * as Permissions from 'expo-permissions';
@@ -42,8 +35,8 @@ import {
 } from "../../actions";
 import  MapViewDirections  from "../../Common/MapViewDirection";
 import CheckBox from "react-native-check-box";
-import { MECHANIC_MAP_ICON,BIKE_FOR_MAP,CALL } from "../../images";
-import { Rating, AirbnbRating } from "react-native-ratings";
+import { BIKE_FOR_MAP,CALL } from "../../images";
+import {AirbnbRating } from "react-native-ratings";
 import call from "react-native-phone-call";
 import {statusToPhrase} from '../../config';
 import * as Location from 'expo-location';
