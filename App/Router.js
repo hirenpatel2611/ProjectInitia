@@ -38,6 +38,7 @@ import {
 import SideMenu from "./components/drawer/SideMenu";
 import SideMenuVendor from "./components/drawer/SideMenuVendor";
 import { Asset, SplashScreen,Notifications } from "expo";
+import {getBookingVendorStatus,getBookingModal,getBookingStatus} from './actions'
 
 import { connect } from "react-redux";
 
@@ -55,8 +56,51 @@ class RouterComponent extends Component {
     AppState.addEventListener("change", this._handleAppStateChange);
     this._notificationSubscription = Notifications.addListener(this._handleNotification);
   }
-  _handleNotification = (notification) => {
-    console.log({notification: notification});
+  _handleNotification = async (notification) => {
+      const isVen = await AsyncStorage.getItem("is_vendor");
+      
+      switch (notification.data.data.type) {
+
+        case 'BOOK':
+        if (isVen === "1") {
+            this.props.getBookingModal(notification.data.data);
+          }
+        break;
+
+        case 'ACCEPT':
+        if (isVen !== "1") {
+          this.props.getBookingStatus(notification.data.data);
+        } else {
+          this.props.getBookingVendorStatus(notification.data.data);
+        }
+        break;
+
+        case 'CANCEL':
+        if (isVen !== "1") {
+          this.props.getBookingStatus(notification.data.data);
+        } else {
+          this.props.getBookingVendorStatus(notification.data.data);
+        }
+        break;
+
+          case "ON-THE-WAY":
+            if (isVen !== "1") {
+              this.props.getBookingStatus(notification.data.data);
+            } else {
+            this.props.getBookingVendorStatus(notification.data.data);
+            }
+          break;
+
+          case "REACHED":
+            if (isVen === "1") {
+              this.props.getBookingVendorStatus(notification.data.data);
+            }
+            break;
+
+        default:
+          return null;
+        break;
+      }
   };
   // componentWillUnmount() {
   //   AppState.removeEventListener("change", this._handleAppStateChange);
@@ -280,6 +324,9 @@ export default connect(
     updateIsVendor,
     createSocketChannel,
     getUserData,
-    getFutureBookings
+    getFutureBookings,
+    getBookingVendorStatus,
+    getBookingModal,
+    getBookingStatus
   }
 )(RouterComponent);

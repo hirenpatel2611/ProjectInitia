@@ -28,6 +28,7 @@ class SideMenuVendor extends Component {
       await AsyncStorage.removeItem("token");
       await AsyncStorage.removeItem("is_vendor");
       await AsyncStorage.removeItem("user_id");
+      await AsyncStorage.removeItem("device_token");
     } catch (error) {
       // Error retrieving data
       console.log(error.message);

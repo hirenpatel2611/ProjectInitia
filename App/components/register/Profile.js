@@ -629,7 +629,12 @@ const notEmpty = test => !isEmpty(test);
 const rules = [
   {
     field: "workshop_name",
-    condition: notEmpty,
+    condition: (confirmPassword, {isVendor}) => {
+      if (isVendor) {
+        return notEmpty
+      }
+        return true;
+    },
     error: "Workshop Name is Require"
   },
   {
@@ -639,12 +644,22 @@ const rules = [
   },
   {
     field: "address",
-    condition: notEmpty,
+    condition: (confirmPassword, {isVendor}) => {
+      if (isVendor) {
+        return notEmpty
+      }
+      return true;
+    },
     error: "Address is Require"
   },
   {
     field: "email",
-    condition: notEmpty,
+    condition: (confirmPassword, {isVendor}) => {
+      if (isVendor) {
+        return notEmpty
+      }
+      return true;
+    },
     error: "Email is Require"
   },
 

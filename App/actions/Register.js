@@ -86,6 +86,7 @@ export const requestOtp = () => (dispatch, getState) => {
   test.append("mobile", mobileno);
   Api.post(URL_USER_OTP, test)
     .then(response => {
+      console.log(response);
       if (response.loggedIn === 1) {
         dispatch({
           type: REQUEST_OTP_SUCCESS,
@@ -252,8 +253,8 @@ export const signupUser = () => (dispatch, getState) => {
   test.append("first_name", name);
   test.append("last_name", name);
   test.append("mobile", mobileno);
-  test.append("email", email);
   test.append("address", address);
+  test.append("email", email);
   test.append("service_vehicle_type", vehicle_type);
   test.append("is_vendor", is_vendor);
   test.append("profile_image", imageBase64Register);
@@ -267,6 +268,7 @@ export const signupUser = () => (dispatch, getState) => {
 
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
+      console.log(response);
       if (response.status === 1) {
         dispatch({
           type: SIGNUP_SUCCESSFUL,

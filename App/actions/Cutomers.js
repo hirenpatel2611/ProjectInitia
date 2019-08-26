@@ -177,7 +177,7 @@ export const getBookingCancellation = () => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_CANCLE_START
   });
-  const { bookData, cancleReason } = getState().customers;
+  const { bookData, cancleReason,vendorsData } = getState().customers;
   let test = new FormData();
   test.append("booking_id", bookData.booking_id);
   test.append("status", "cancle");
@@ -188,7 +188,11 @@ export const getBookingCancellation = () => (dispatch, getState) => {
         dispatch({
           type: GET_BOOKING_CANCLE_SUCCESS
         });
-        dispatch(connectTosocketBookingCancle(bookData.vendor_id));
+        var cancelData={
+          customer_id:bookData.vendor_id,
+          toToken:vendorsData.device_token
+        }
+        dispatch(connectTosocketBookingCancle(cancelData));
         dispatch(getUserData());
         Actions.NearbyGaraje();
       } else {

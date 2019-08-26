@@ -38,7 +38,7 @@ import {
   getCustomerRatingModal,
   getRatingToCustomer,
   getWalletAmount,
-  loadMoreBookingList
+  loadMoreBookingList,
 } from "../../actions";
 import { FutureBookingList, Spinner } from "../../Common";
 import { CALL, BITMAP2 } from "../../images";
@@ -232,7 +232,8 @@ class FutureBooking extends Component {
                             var startMapData = {
                               booking_id: item.booking_id,
                               customer_id: item.customer.customer_id,
-                              otp: item.booking_otp
+                              otp: item.booking_otp,
+                              customerToken:item.customer.device_token
                             };
                             item.status === "reached"
                               ? this.props.getCustomerRatingModal(item)
@@ -287,7 +288,8 @@ class FutureBooking extends Component {
                           onPress={() => {
                             var data = {
                               booking_id: item.booking_id,
-                              customer_id: item.customer.customer_id
+                              customer_id: item.customer.customer_id,
+                              customerToken:item.customer.device_token
                             };
                             this.props.BookingListApprove(data);
                           }}
@@ -332,7 +334,8 @@ class FutureBooking extends Component {
                           onPress={() => {
                             var cancleBookingData = {
                               booking_id: item.booking_id,
-                              customer_id: item.customer.customer_id
+                              customer_id: item.customer.customer_id,
+                              customerToken:item.customer.device_token
                             };
                             this.props.getCancleBookingModal(cancleBookingData);
                           }}
@@ -532,10 +535,12 @@ class FutureBooking extends Component {
                         status: "accept",
                         Id: this.props.bookings.bookData.booking_id
                       };
+                      var approve = {
+                        customer_id:this.props.bookings.userData.userId,
+                        customerToken:this.props.bookingModalData.fromToken
+                      }
                       await this.props.getBookingUpdate(val);
-                      this.props.connectTosocketApprov(
-                        this.props.bookings.userData.userId
-                      );
+                      this.props.connectTosocketApprov(approve);
                     }}
                   >
                     <View
@@ -565,7 +570,8 @@ class FutureBooking extends Component {
                     onPress={() => {
                       var cancleBookingData = {
                         booking_id: this.props.bookings.bookData.booking_id,
-                        customer_id: this.props.bookings.userData.userId
+                        customer_id: this.props.bookings.userData.userId,
+                        customerToken:this.props.bookingModalData.fromToken
                       };
                       this.props.getCancleBookingModal(cancleBookingData);
                     }}
@@ -675,7 +681,8 @@ class FutureBooking extends Component {
                           booking_id: "",
                           customer_id: "",
                           vendor_id: "",
-                          otp: this.props.mechanicOTP
+                          otp: this.props.mechanicOTP,
+                          customerToken:this.props.bookingModalData.fromToken
                         };
                         this.props.startMapVendor(startMapData);
                       }}
@@ -969,6 +976,7 @@ const mapStateToProps = ({ vendors }) => {
     modalCustomerRating,
     customerRating,
     loadingRating,
+    bookingModalData,
     bookings
   } = vendors;
   return {
@@ -994,7 +1002,8 @@ const mapStateToProps = ({ vendors }) => {
     modalCustomerRating,
     customerRating,
     loadingRating,
-    bookings
+    bookings,
+    bookingModalData
   };
 };
 
@@ -1019,6 +1028,7 @@ export default connect(
     getCustomerRatingModal,
     getRatingToCustomer,
     getWalletAmount,
-    loadMoreBookingList
+    loadMoreBookingList,
+
   }
 )(FutureBooking);

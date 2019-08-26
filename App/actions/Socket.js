@@ -1,3 +1,4 @@
+import { AsyncStorage } from "react-native";
 import Peer from "peerjs";
 import io from "socket.io-client";
 import { Notifications, Util } from "expo";
@@ -47,7 +48,7 @@ export const createSocketChannel = val => async (dispatch, getState) => {
   chatSocket.on("broadcast", function(data) {
     switch (data.type) {
       case "BOOK":
-        dispatch(getBookingModal(data.message));
+        dispatch(getBookingModal(data));
         break;
 
       case "ACCEPT":
@@ -113,7 +114,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
   chatSocket.on("broadcast", function(data) {
     switch (data.type) {
       case "BOOK":
-        disp(getBookingModal(data.message));
+        disp(getBookingModal(data));
         break;
 
       case "ACCEPT":
@@ -155,12 +156,6 @@ TaskManager.defineTask(LOCATION_TASK_NAME, async ({ data, error }) => {
         }
         break;
 
-      case "REACHED":
-        if (isVen === "1") {
-          disp(getBookingVendorStatus(data));
-        }
-        break;
-
       case "COMPLETED":
         if (isVen === "1") {
           disp(getBookingVendorStatus(data));
@@ -182,14 +177,17 @@ export const connectTosocket = () => async (dispatch, getState) => {
     vendorDistance,
     location
   } = getState().customers;
+  const myToken = await AsyncStorage.getItem("device_token");
   const { userId, userData } = getState().user;
   userData.userLatitude = location.coords.latitude;
   userData.userLongitude = location.coords.longitude;
-
+  console.log(vendorsData);
   chatSocket.emit("booking", {
     room: `${userId} ${vendorsData.id}`,
-    message: { bookData, userData, vendorDistance, location,device_token:vendorsData.device_token },
-    type: "BOOK"
+    message: { bookData, userData, vendorDistance, location},
+    type: "BOOK",
+    toToken:vendorsData.device_token,
+    fromToken:myToken
   });
   channelName = `${vendorsData.id} ${userId}`;
 
@@ -199,12 +197,14 @@ export const connectTosocket = () => async (dispatch, getState) => {
 };
 
 export const connectTosocketApprov = val => async (dispatch, getState) => {
-  const { bookingData } = getState().vendors;
+  console.log(val);
+  const { bookingData,bookingModalData } = getState().vendors;
   const { userId } = getState().user;
   chatSocket.emit("booking_status", {
     room: `${val} ${userId}`,
     message: bookingData,
-    type: "ACCEPT"
+    type: "ACCEPT",
+    toToken:val.customerToken
   });
   channelName = `${userId} ${val}`;
 };
@@ -213,21 +213,23 @@ export const connectTosocketBookingCancle = val => async (
   dispatch,
   getState
 ) => {
-  const { bookingData, bookingStatus } = getState().vendors;
+  const { bookingData, bookingStatus, cancelBookingData} = getState().vendors;
   const { userId, isUserVendor } = getState().user;
-  const { bookData } = getState().customers;
+  const { bookData,vendorsData } = getState().customers;
   var cancelData;
+  var toToken;
   if (isUserVendor === "1") {
     cancelData = bookingData;
+
   } else {
     cancelData = bookData;
   }
 
   chatSocket.emit("booking_status", {
-    room: `${val}`,
+    room: `${val.customer_id}`,
     message: cancelData,
     type: "CANCEL",
-    
+    toToken:val.toToken,
   });
   channelName = `${userId} ${val}`;
 };
@@ -235,10 +237,12 @@ export const connectTosocketBookingCancle = val => async (
 export const connectTosocketReached = val => async (dispatch, getState) => {
   const { vendorsData, bookData } = getState().customers;
   const { userId } = getState().user;
+
   chatSocket.emit("booking_status", {
     room: `${vendorsData.id} ${userId}`,
     message: bookData,
-    type: "REACHED"
+    type: "REACHED",
+    toToken:vendorsData.device_token
   });
   channelName = `${userId} ${vendorsData.id}`;
 };
@@ -257,11 +261,12 @@ export const socketBookingOnTheWay = socketData => async (
   getState
 ) => {
   const { bookingData, mechanicBookedData } = getState().vendors;
-
+  console.log(socketData);
   chatSocket.emit("booking_status", {
     room: `${socketData.customer_id} ${mechanicBookedData.booking.vendor.vendor_id}`,
     message: mechanicBookedData,
-    type: "ON-THE-WAY"
+    type: "ON-THE-WAY",
+    toToken:socketData.customerToken,
   });
   channelName = `${socketData.booking_id} ${socketData.customer_id}`;
 };
@@ -343,7 +348,8 @@ export const socketVendorCurrentLocation = val => async (
           message: locations,
           distance: dist,
           mobile_no: vendorMobileno,
-          type: "MECHANIC_CURRENT_LOCATION"
+          type: "MECHANIC_CURRENT_LOCATION",
+          toToken:null
         });
         channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
       } else {
@@ -352,7 +358,8 @@ export const socketVendorCurrentLocation = val => async (
           message: locations,
           distance: dist,
           mobile_no: vendorMobileno,
-          type: "MECHANIC_CURRENT_LOCATION"
+          type: "MECHANIC_CURRENT_LOCATION",
+          toToken:null
         });
         channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
 
@@ -406,7 +413,8 @@ TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
         message: locations,
         distance: dist,
         mobile_no: vendorMobileno,
-        type: "MECHANIC_CURRENT_LOCATION"
+        type: "MECHANIC_CURRENT_LOCATION",
+        toToken:null
       });
       channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
     } else {
@@ -415,7 +423,8 @@ TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
         message: locations,
         distance: dist,
         mobile_no: vendorMobileno,
-        type: "MECHANIC_CURRENT_LOCATION"
+        type: "MECHANIC_CURRENT_LOCATION",
+        toToken:null
       });
       channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
       TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
@@ -430,7 +439,8 @@ export const socketBookingCompleted = val => (dispatch, getState) => {
   chatSocket.emit("booking_status", {
     room: `${val.customer.customer_id} ${userData.userId} ${val.booking_id}`,
     message: booking,
-    type: "COMPLETED"
+    type: "COMPLETED",
+    toToken:val.customer.device_token
   });
   channelName = `${userData.userId} ${val.customer.customer_id} ${val.booking_id}`;
 };

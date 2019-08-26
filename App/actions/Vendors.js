@@ -195,7 +195,7 @@ export const getBookingModal = val => async (dispatch, getState) => {
 
   dispatch({
     type: GET_BOOKING_MODAL,
-    payload: val
+    payload:val
   });
   const { customerLocation } = getState().vendors;
   let locations = [
@@ -313,7 +313,11 @@ export const BookingListCancle = () => (dispatch, getState) => {
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
       if (response.status === 1) {
-        dispatch(connectTosocketBookingCancle(cancelBookingData.customer_id));
+        var cancelData={
+          customer_id:cancelBookingData.customer_id,
+          toToken:cancelBookingData.customerToken
+        }
+        dispatch(connectTosocketBookingCancle(cancelData));
         FutureBookingList.map(booking => {
           if (booking.booking_id === cancelBookingData.booking_id) {
             booking.status = "cancle";
@@ -347,7 +351,7 @@ export const BookingListApprove = val => (dispatch, getState) => {
     .then(response => {
       if (response.status === 1) {
         dispatch(getMechanicOtp(val.booking_id));
-        dispatch(connectTosocketApprov(val.customer_id));
+        dispatch(connectTosocketApprov(val));
         dispatch(updateWalletAmount());
         FutureBookingList.map(booking => {
           if (booking.booking_id === val.booking_id) {
@@ -531,7 +535,8 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
       });
       startMapData = {
         booking_id: response.booking.booking_id,
-        customer_id: response.booking.customer.customer_id
+        customer_id: response.booking.customer.customer_id,
+        customerToken:startMapData.customerToken
       };
 
       let test = new FormData();
@@ -730,7 +735,6 @@ export const addWalletPayment = () => async (dispatch, getState) => {
   test.append("payment_id", paymentId);
   test.append("amount", walletAmount);
   Api.post(ADD_PAYMENT, test).then(response => {
-    console.log(response);
     if (response.status === 1) {
       dispatch(getWalletAmount());
       dispatch({

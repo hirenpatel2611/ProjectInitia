@@ -99,7 +99,8 @@ const INITIAL_STATE = {
   successPaymentModal: false,
   walletBalance: 0,
   pages: 1,
-  paginate:false
+  paginate:false,
+  bookingModalData:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -150,10 +151,11 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isBooking: true,
-          bookings: action.payload,
-          bookingData: action.payload.bookData,
-          bookUserData: action.payload.userData,
-          customerLocation: action.payload.location
+          bookings: action.payload.message,
+          bookingData: action.payload.message.bookData,
+          bookUserData: action.payload.message.userData,
+          customerLocation: action.payload.message.location,
+          bookingModalData:action.payload
         };
       }
       break;
