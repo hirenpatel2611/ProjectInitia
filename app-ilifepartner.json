@@ -9,6 +9,9 @@
    "version": "1.0.1",
    "orientation": "portrait",
    "icon": "./assets/icon2.png",
+   "notification": {
+        "icon": "./assets/icon2.png"
+      },
    "splash": {
      "image": "./assets/splash.png",
      "resizeMode": "contain",
@@ -32,7 +35,7 @@
        },
        "android": {
          "package": "com.ilifepartner.app",
-          "versionCode":2,
+          "versionCode":3,
          "permissions": [
       "ACCESS_COARSE_LOCATION",
       "ACCESS_FINE_LOCATION",

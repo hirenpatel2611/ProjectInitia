@@ -306,7 +306,7 @@ export const socketVendorCurrentLocation = val => async (
   // console.error(Location.getHeadingAsync());
 
   dispatch(goToMap());
-  var localNotification = { title: "Title", body: "Title" };
+  var localNotification = { title: "iLife", body: "Location" ,android:{icon:'../../assets/icon2.png'}};
 
   Notifications.scheduleLocalNotificationAsync(localNotification, {
     time: new Date().getTime() + 1000,
@@ -362,7 +362,7 @@ export const socketVendorCurrentLocation = val => async (
           toToken:null
         });
         channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
-
+        Notifications.dismissAllNotificationsAsync()
         Notifications.cancelAllScheduledNotificationsAsync();
       }
     }
