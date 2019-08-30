@@ -13,6 +13,9 @@ import {
   GET_BOOKING_LIST_FAIL,
   UPDATE_FILTER_VEHICLE_BOOL,
   UPDATE_FILTER_CAR_BOOL,
+  UPDATE_FILTER_HEAVY_VEHICLE_BOOL,
+  UPDATE_FILTER_TOWING_SERVICE_BOOL,
+  UPDATE_FILTER_TYRE_SERVICE_BOOL,
   UPDATE_FILTER_RATING,
   UPDATE_FILTER_DISTANCE,
   RESET_FILTER,
@@ -71,6 +74,9 @@ const INITIAL_STATE = {
   vendorList: [],
   isVehicle: false,
   isCar: false,
+  isFilterHeavyVehicle: false,
+  isFilterTowingService: false,
+  isFilterTyreService: false,
   rating: 0,
   distance: 10,
   isBookingSuccess: false,
@@ -95,7 +101,7 @@ const INITIAL_STATE = {
   isVendorRatingModal: false,
   mechanicDestance: "",
   mechanicDuration: "",
-  customerComment:''
+  customerComment: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -234,6 +240,31 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isCar: !state.isCar
+        };
+      }
+      break;
+
+    case UPDATE_FILTER_HEAVY_VEHICLE_BOOL:
+      {
+        return {
+          ...state,
+          isFilterHeavyVehicle: !state.isFilterHeavyVehicle
+        };
+      }
+      break;
+    case UPDATE_FILTER_TOWING_SERVICE_BOOL:
+      {
+        return {
+          ...state,
+          isFilterTowingService: !state.isFilterTowingService
+        };
+      }
+      break;
+    case UPDATE_FILTER_TYRE_SERVICE_BOOL:
+      {
+        return {
+          ...state,
+          isFilterTyreService: !state.isFilterTyreService
         };
       }
       break;
@@ -460,7 +491,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loadingRatingDone: false,
           mechanicCurrentLocation: "",
-          customerComment:''
+          customerComment: ""
         };
       }
       break;
@@ -591,30 +622,30 @@ export default (state = INITIAL_STATE, action) => {
 
     case GET_CUSTOMER_COMMENT:
       {
-          return{
-            ...state,
-            customerComment:action.payload
-          };
+        return {
+          ...state,
+          customerComment: action.payload
+        };
       }
       break;
 
-      case CUSTOMER_COMMENT_FAIL:
-        {
-            return{
-              ...state,
-              loadingRatingDone:false
-            };
-        }
-        break;
+    case CUSTOMER_COMMENT_FAIL:
+      {
+        return {
+          ...state,
+          loadingRatingDone: false
+        };
+      }
+      break;
 
-        case GET_RATING_FAIL:
-          {
-              return{
-                ...state,
-                loadingRatingDone:false
-              };
-          }
-          break;
+    case GET_RATING_FAIL:
+      {
+        return {
+          ...state,
+          loadingRatingDone: false
+        };
+      }
+      break;
 
     case SET_ALL_STATE_TO_INITIAL:
       {

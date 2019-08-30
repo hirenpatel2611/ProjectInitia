@@ -33,6 +33,9 @@ export const GET_BOOKING_LIST_SUCCESS = "customers/GET_BOOKING_LIST_SUCCESS";
 export const GET_BOOKING_LIST_FAIL = "customers/GET_BOOKING_LIST_FAIL";
 export const UPDATE_FILTER_VEHICLE_BOOL = "customers/UPDATE_FILTER_VEHICLE_BOOL";
 export const UPDATE_FILTER_CAR_BOOL = "customers/UPDATE_FILTER_CAR_BOOL";
+export const UPDATE_FILTER_HEAVY_VEHICLE_BOOL = "customers/UPDATE_FILTER_HEAVY_VEHICLE_BOOL";
+export const UPDATE_FILTER_TOWING_SERVICE_BOOL = "customers/UPDATE_FILTER_TOWING_SERVICE_BOOL";
+export const UPDATE_FILTER_TYRE_SERVICE_BOOL = "customers/UPDATE_FILTER_TYRE_SERVICE_BOOL";
 export const UPDATE_FILTER_RATING = "customers/UPDATE_FILTER_RATING";
 export const UPDATE_FILTER_DISTANCE = "customers/UPDATE_FILTER_DISTANCE";
 export const RESET_FILTER = "customers/RESET_FILTER";
@@ -245,6 +248,24 @@ export const updateFilterVehicleBool = () => dispatch => {
 export const updateFilterCarBool = () => async dispatch => {
   dispatch({
     type: UPDATE_FILTER_CAR_BOOL
+  });
+};
+
+export const updateFilterHeavyVehicleBool = () => async dispatch => {
+  dispatch({
+    type: UPDATE_FILTER_HEAVY_VEHICLE_BOOL
+  });
+};
+
+export const updateFilterTowingServiceBool = () => async dispatch => {
+  dispatch({
+    type: UPDATE_FILTER_TOWING_SERVICE_BOOL
+  });
+};
+
+export const updateFilterTyreServiceBool = () => async dispatch => {
+  dispatch({
+    type: UPDATE_FILTER_TYRE_SERVICE_BOOL
   });
 };
 
@@ -536,17 +557,26 @@ export const upadteCustomerProfileImage = val => async dispatch => {
 };
 
 export const getFilterSubmeet = () => (dispatch, getState) => {
-  const { isVehicle, isCar, rating } = getState().customers;
-  let vehicle_type = "";
-  if (isVehicle === true && isCar === false) {
-    vehicle_type = "bike";
-  } else if (isVehicle === false && isCar === true) {
-    vehicle_type = "car";
-  } else if (isVehicle === true && isCar === true) {
-    vehicle_type = "both";
-  } else if (isVehicle === false && isCar === false) {
-    vehicle_type = "both";
+  const { isVehicle, isCar, rating,isFilterHeavyVehicle,isFilterTowingService,isFilterTyreService } = getState().customers;
+  let vehicle_type = [];
+
+  if (isVehicle === true) {
+    vehicle_type = vehicle_type.concat("bike");
   }
+  if (isCar === true) {
+    vehicle_type = vehicle_type.concat("car");
+  }
+  if (isFilterHeavyVehicle === true) {
+    vehicle_type = vehicle_type.concat("Heavy Vehicle");
+  }
+  if (isFilterTowingService === true) {
+    vehicle_type = vehicle_type.concat("Towing Service");
+  }
+  if (isFilterTyreService === true) {
+    vehicle_type = vehicle_type.concat("Tyre Service");
+  }
+
+  console.log(vehicle_type);
 
   var vendorPerameter = { vehicle_type: vehicle_type, rating: rating };
 

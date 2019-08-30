@@ -81,7 +81,7 @@ class SplashFront extends Component {
           <TouchableHighlight
             onPress={() => {
               this.props.updateUserType(true);
-              Actions.registerMobile();
+              Actions.registerOTP();
             }}
             underlayColor="white"
             style={createButton}

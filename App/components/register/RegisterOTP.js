@@ -17,17 +17,29 @@ import {
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // import { Col, Row, Grid } from "react-native-easy-grid";
-import { BITMAP1, BITMAP2, CAR, MOTORCYCLE, ICON_REFRESH } from "../../images";
+import {
+  BITMAP1,
+  CAR,
+  MOTORCYCLE,
+  ICON_REFRESH,
+  HEAVY_VEHICLE,
+  TOWING,
+  TYRE
+} from "../../images";
 import { Actions } from "react-native-router-flux";
 import {
   updateVehicleBool,
   updateCarBool,
+  updateHeavyVehicleBool,
+  updateTowingServiceBool,
+  updateTyreServiceBool,
   updateOTPTimeOut,
   setTimeOut,
   onOTPChange,
   toggleModalOtp,
   updateOnSubmeetOtp,
-  requestOtp
+  requestOtp,
+  signupUser
 } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
@@ -36,6 +48,7 @@ import OtpInputs from "react-native-otp-inputs";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
 
+let ScreenHeight = Dimensions.get("window").height;
 class RegisterOTP extends Component {
   componentDidMount() {
     this.props.updateOTPTimeOut();
@@ -75,6 +88,9 @@ class RegisterOTP extends Component {
     const {
       isTwoWheeler,
       isFourWheeler,
+      isHeavyVehicle,
+      isTowingService,
+      isTyreService,
       isVendor,
       otpTimeOut,
       otp,
@@ -90,75 +106,118 @@ class RegisterOTP extends Component {
         <KeyboardAwareScrollView enableOnAndroid>
           <StatusBar backgroundColor="#7960FF" />
           <Modal
-            visible={visibleModalOtp ? true : false}
-            onRequestClose={()=>{}}
+            visible={visibleModalOtp ? true : true}
+            onRequestClose={() => {}}
             animationType="slide"
             transparent={true}
           >
             <View style={styles.containertwo}>
-              <View style={subContainorOtp}>
-                <View style={{ marginLeft: 30 }}>
-                  <Text style={modalHTextStyle}>
-                    Select your{" "}
-                    {isVendor ? <Text>Service</Text> : <Text>Vehicle</Text>}{" "}
-                    Type
-                  </Text>
-                </View>
-                <View style={modalButtonViewStyle}>
-                  <TouchableOpacity
-                    onPress={() => this.props.updateVehicleBool()}
-                  >
-                    <View elevation={5} style={buttonOtpStyle}>
-                      <Image
-                        style={{
-                          width: 95,
-                          height: 95,
-                          resizeMode: "contain",
-                          opacity: isTwoWheeler ? 0.2 : 1
-                        }}
-                        source={MOTORCYCLE}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => this.props.updateCarBool()}>
-                    <View elevation={5} style={buttonOtpStyle1}>
-                      <Image
-                        style={{
-                          width: 95,
-                          height: 95,
-                          resizeMode: "contain",
-                          opacity: isFourWheeler ? 0.2 : 1
-                        }}
-                        source={CAR}
-                      />
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View style={modalVahicle}>
-                  <TouchableHighlight
-                    disabled={
-                      isTwoWheeler
-                        ? false
-                        : true && isFourWheeler
-                        ? false
-                        : true
-                    }
-                    onPress={() => {
-                      this.props.toggleModalOtp(false);
-                      Actions.profile();
-                    }}
-                    underlayColor="white"
-                    style={{
-                      marginTop: 13,
-                      opacity: isTwoWheeler ? 1 : 0.8 && isFourWheeler ? 1 : 0.8
-                    }}
-                  >
-                    <View style={createButton}>
-                      <Text style={[buttonText, whiteText]}>Continue</Text>
-                    </View>
-                  </TouchableHighlight>
-                </View>
+              <Text style={modalHTextStyle}>
+                Select your{" "}
+                {isVendor ? <Text>Service</Text> : <Text>Vehicle</Text>} Type
+              </Text>
+              <View style={{height:0.6 * ScreenHeight, flexDirection:'column',justifyContent:'space-around'}}>
+              <View style={[modalButtonViewStyle]}>
+                <TouchableOpacity
+                  onPress={() => this.props.updateVehicleBool()}
+                >
+                  <View elevation={5} style={buttonOtpStyle}>
+                    <Image
+                      style={{
+                        width: 95,
+                        height: 95,
+                        resizeMode: "contain",
+                        opacity: isTwoWheeler ? 0.2 : 1
+                      }}
+                      source={MOTORCYCLE}
+                    />
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.props.updateCarBool()}>
+                  <View elevation={5} style={buttonOtpStyle1}>
+                    <Image
+                      style={{
+                        width: 95,
+                        height: 95,
+                        resizeMode: "contain",
+                        opacity: isFourWheeler ? 0.2 : 1
+                      }}
+                      source={CAR}
+                    />
+                  </View>
+                </TouchableOpacity>
               </View>
+
+              <View style={modalButtonViewStyle}>
+                <TouchableOpacity
+                  onPress={() => this.props.updateHeavyVehicleBool()}
+                >
+                  <View elevation={5} style={buttonOtpStyle}>
+                    <Image
+                      style={{
+                        width: 95,
+                        height: 95,
+                        resizeMode: "contain",
+                        opacity: isHeavyVehicle ? 0.2 : 1
+                      }}
+                      source={HEAVY_VEHICLE}
+                    />
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => this.props.updateTowingServiceBool()}
+                >
+                  <View elevation={5} style={buttonOtpStyle1}>
+                    <Image
+                      style={{
+                        width: 95,
+                        height: 95,
+                        resizeMode: "contain",
+                        opacity: isTowingService ? 0.2 : 1
+                      }}
+                      source={TOWING}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+
+              <View style={modalButtonViewStyle}>
+                <TouchableOpacity
+                  onPress={() => this.props.updateTyreServiceBool()}
+                >
+                  <View elevation={5} style={buttonOtpStyle}>
+                    <Image
+                      style={{
+                        width: 95,
+                        height: 95,
+                        resizeMode: "contain",
+                        opacity: isTyreService ? 0.2 : 1
+                      }}
+                      source={TYRE}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </View>
+              </View>
+              <TouchableHighlight
+                disabled={
+                  isTwoWheeler || isFourWheeler || isHeavyVehicle || isTowingService || isTyreService ? false : true
+                }
+                onPress={() => {
+                  this.props.toggleModalOtp(false);
+                  Actions.profile();
+                }}
+                underlayColor="white"
+                style={[
+                  createButton,
+                  {
+                    marginTop: 13,
+                    opacity: isTwoWheeler || isFourWheeler || isHeavyVehicle || isTowingService || isTyreService ? 1 : 0.8
+                  }
+                ]}
+              >
+                <Text style={[buttonText, whiteText]}>Continue</Text>
+              </TouchableHighlight>
             </View>
           </Modal>
 
@@ -188,7 +247,7 @@ class RegisterOTP extends Component {
                 handleChange={code => this.props.onOTPChange(code)}
                 numberOfInputs={4}
                 inputStyles={otpInputStyle}
-                inputContainerStyles={{ backgroundColor: "white",}}
+                inputContainerStyles={{ backgroundColor: "white" }}
               />
             </View>
             {errors.otp ? (
@@ -255,6 +314,9 @@ const mapStateToProps = ({ register }) => {
   const {
     isTwoWheeler,
     isFourWheeler,
+    isHeavyVehicle,
+    isTowingService,
+    isTyreService,
     isVendor,
     otpTimeOut,
     otp,
@@ -265,6 +327,9 @@ const mapStateToProps = ({ register }) => {
   return {
     isTwoWheeler,
     isFourWheeler,
+    isHeavyVehicle,
+    isTowingService,
+    isTyreService,
     isVendor,
     otpTimeOut,
     otp,
@@ -280,11 +345,15 @@ export default connect(
   {
     updateVehicleBool,
     updateCarBool,
+    updateHeavyVehicleBool,
+    updateTowingServiceBool,
+    updateTyreServiceBool,
     updateOTPTimeOut,
     setTimeOut,
     onOTPChange,
     toggleModalOtp,
     updateOnSubmeetOtp,
-    requestOtp
+    requestOtp,
+    signupUser
   }
 )(withValidation(rules, RegisterOTP));

@@ -135,14 +135,13 @@ var styles = StyleSheet.create({
   },
   containertwo: {
     alignItems: "center",
-    marginTop: 0.19 * ScreenHeight,
+    marginTop: 0.08 * ScreenHeight,
     marginBottom: 0.1 * ScreenHeight,
     marginLeft: 20,
     marginRight: 20,
     backgroundColor: "#FFFFFF",
     justifyContent: "space-between",
-    alignItems:'center',
-    height: 0.55 * ScreenHeight,
+    height: 0.82 * ScreenHeight,
     borderRadius: 10,
     borderColor: "#7960FF",
     borderWidth: 1
@@ -357,8 +356,7 @@ var styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
-    alignItems: "center",
-    marginTop: 74
+    width:0.8 * ScreenWidth
   },
   imageMotorcycle: {
     width: 90,

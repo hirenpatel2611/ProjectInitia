@@ -1,6 +1,9 @@
 import {
   UPDATE_VEHICLE_BOOL,
   UPDATE_CAR_BOOL,
+  UPDATE_HEAVY_VEHICLE_BOOL,
+  UPDATE_TOWING_SERVICE_BOOL,
+  UPDATE_TYRE_SERVICE_BOOL,
   UPDATE_USER_TYPE,
   UPDATE_MOBILE_NO,
   UPDATE_OTP_TIMEOUT,
@@ -39,6 +42,9 @@ import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 const INITIAL_STATE = {
   isTwoWheeler: false,
   isFourWheeler: false,
+  isHeavyVehicle: false,
+  isTowingService: false,
+  isTyreService: false,
   isVendor: false,
   mobileno: "",
   otpTimeOut: 59,
@@ -46,7 +52,7 @@ const INITIAL_STATE = {
   otp: "",
   visibleModalProfile: false,
   visibleModalOtp: false,
-  workshop_name:"",
+  workshop_name: "",
   name: "",
   address: "",
   mobilenoProfile: "",
@@ -76,7 +82,7 @@ const INITIAL_STATE = {
   imageRegisterUri: "",
   documentRegisterUri: [],
   documentBase64Register: [],
-  gstin:''
+  gstin: ""
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -95,6 +101,33 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isFourWheeler: !state.isFourWheeler
+        };
+      }
+      break;
+
+    case UPDATE_HEAVY_VEHICLE_BOOL:
+      {
+        return {
+          ...state,
+          isHeavyVehicle: !state.isHeavyVehicle
+        };
+      }
+      break;
+
+    case UPDATE_TOWING_SERVICE_BOOL:
+      {
+        return {
+          ...state,
+          isTowingService: !state.isTowingService
+        };
+      }
+      break;
+
+    case UPDATE_TYRE_SERVICE_BOOL:
+      {
+        return {
+          ...state,
+          isTyreService: !state.isTyreService
         };
       }
       break;
@@ -168,14 +201,14 @@ export default (state = INITIAL_STATE, action) => {
       break;
 
     case UPDATE_WORSHOP_NAME:
-    {
-      return{
-        ...state,
-        workshop_name:action.payload,
-        onSubmeetSignupForm: false,
-      };
-    }
-    break;
+      {
+        return {
+          ...state,
+          workshop_name: action.payload,
+          onSubmeetSignupForm: false
+        };
+      }
+      break;
 
     case UPDATE_NAME:
       {
@@ -211,9 +244,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case UPDATE_GSTIN:
       {
-        return{
+        return {
           ...state,
-          gstin:action.payload
+          gstin: action.payload
         };
       }
       break;

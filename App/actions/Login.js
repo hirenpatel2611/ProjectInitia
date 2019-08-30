@@ -35,7 +35,7 @@ export const loginUser = () => async (dispatch, getState) => {
   const { mobileno, password } = getState().login;
 
   let test = new FormData();
-  let token = await Notifications.getExpoPushTokenAsync();
+  let token = Platform.OS === 'ios'?null:await Notifications.getExpoPushTokenAsync();
   test.append("username", mobileno);
   test.append("password", password);
   test.append("device_token", token);

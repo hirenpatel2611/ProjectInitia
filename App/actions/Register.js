@@ -9,6 +9,9 @@ import * as Location from "expo-location";
 
 export const UPDATE_VEHICLE_BOOL = "register/UPDATE_VEHICLE_BOOL";
 export const UPDATE_CAR_BOOL = "register/UPDATE_CAR_BOOL";
+export const UPDATE_HEAVY_VEHICLE_BOOL = "register/UPDATE_HEAVY_VEHICLE_BOOL";
+export const UPDATE_TOWING_SERVICE_BOOL = "register/UPDATE_TOWING_SERVICE_BOOL";
+export const UPDATE_TYRE_SERVICE_BOOL = "register/UPDATE_TYRE_SERVICE_BOOL";
 export const UPDATE_USER_TYPE = "register/UPDATE_USER_TYPE";
 export const UPDATE_MOBILE_NO = "register/UPDATE_MOBILE_NO";
 export const UPDATE_OTP_TIMEOUT = "register/UPDATE_OTP_TIMEOUT";
@@ -54,6 +57,23 @@ export const updateCarBool = () => async dispatch => {
     type: UPDATE_CAR_BOOL
   });
 };
+export const updateHeavyVehicleBool = () => dispatch => {
+  dispatch({
+    type: UPDATE_HEAVY_VEHICLE_BOOL
+  });
+};
+
+export const updateTowingServiceBool = () => async dispatch => {
+  dispatch({
+    type: UPDATE_TOWING_SERVICE_BOOL
+  });
+};
+
+export const updateTyreServiceBool = () => async dispatch => {
+  dispatch({
+    type: UPDATE_TYRE_SERVICE_BOOL
+  });
+};
 
 export const updateUserType = bool => dispatch => {
   dispatch({
@@ -69,12 +89,12 @@ export const updateMobileNo = val => (dispatch, getState) => {
   });
 };
 
-export const updateWorkshopName = val => (dispatch,getState) => {
+export const updateWorkshopName = val => (dispatch, getState) => {
   dispatch({
     type: UPDATE_WORSHOP_NAME,
     payload: val
   });
-}
+};
 
 export const requestOtp = () => (dispatch, getState) => {
   dispatch({
@@ -122,84 +142,84 @@ export const updateOTPTimeOut = () => (dispatch, getState) => {
   }, 1000);
 };
 
-export const onOTPChange = code => (dispatch) => {
+export const onOTPChange = code => dispatch => {
   dispatch({
     type: ON_OTP_CHANGE,
     payload: code
   });
 };
 
-export const toggleModalProfile = val => (dispatch) => {
+export const toggleModalProfile = val => dispatch => {
   dispatch({
     type: TOGGLE_MODAL_PROFILE,
     payload: val
   });
 };
 
-export const toggleModalOtp = () => (dispatch) => {
+export const toggleModalOtp = () => dispatch => {
   dispatch({
     type: TOGGLE_MODAL_OTP,
     payload: true
   });
 };
 
-export const updateName = val => (dispatch) => {
+export const updateName = val => dispatch => {
   dispatch({
     type: UPDATE_NAME,
     payload: val
   });
 };
 
-export const updateAddress = val => (dispatch) => {
+export const updateAddress = val => dispatch => {
   dispatch({
     type: UPDATE_ADDRESS,
     payload: val
   });
 };
 
-export const updateMobileNoProfile = val => (dispatch) => {
+export const updateMobileNoProfile = val => dispatch => {
   dispatch({
     type: UPDATE_MOBILE_NO_PROFILE,
     payload: val
   });
 };
 
-export const updateEmail = val => (dispatch) => {
+export const updateEmail = val => dispatch => {
   dispatch({
     type: UPDATE_EMAIL,
     payload: val
   });
 };
 
-export const updateGstin = val => (dispatch) => {
+export const updateGstin = val => dispatch => {
   dispatch({
     type: UPDATE_GSTIN,
     payload: val
   });
 };
 
-export const updateDateOfBirth = val => (dispatch) => {
+export const updateDateOfBirth = val => dispatch => {
   dispatch({
     type: UPDATE_DATE_OF_BIRTH,
     payload: val
   });
 };
 
-export const updatePasswordProfile = val => (dispatch) => {
+export const updatePasswordProfile = val => dispatch => {
   dispatch({
     type: UPDATE_PASSWORD_PROFILE,
     payload: val
   });
 };
 
-export const updateConfirmPassword = val => (dispatch) => {
+export const updateConfirmPassword = val => dispatch => {
   dispatch({
     type: UPDATE_CONFIRM_PASSWORD,
     payload: val
   });
 };
 
-export const updateLanguage = val => (dispatch) => {
+export const updateLanguage = val => dispatch => {
   dispatch({
     type: UPDATE_LANGUAGE,
     payload: val
@@ -223,18 +243,30 @@ export const signupUser = () => (dispatch, getState) => {
     isVendor,
     isTwoWheeler,
     isFourWheeler,
+    isHeavyVehicle,
+    isTowingService,
+    isTyreService,
     loadingSignupB,
     locationVendor,
     imageBase64Register,
     documentBase64Register
   } = getState().register;
-  let vehicle_type = "";
-  if (isTwoWheeler === true && isFourWheeler === false) {
-    vehicle_type = "bike";
-  } else if (isTwoWheeler === false && isFourWheeler === true) {
-    vehicle_type = "Car";
-  } else if (isTwoWheeler === true && isFourWheeler === true) {
-    vehicle_type = "Both";
+
+  let vehicle_type = [];
+  if (isTwoWheeler === true) {
+    vehicle_type = vehicle_type.concat("bike");
+  }
+  if (isFourWheeler === true) {
+    vehicle_type = vehicle_type.concat("car");
+  }
+  if (isHeavyVehicle === true) {
+    vehicle_type = vehicle_type.concat("Heavy Vehicle");
+  }
+  if (isTowingService === true) {
+    vehicle_type = vehicle_type.concat("Towing Service");
+  }
+  if (isTyreService === true) {
+    vehicle_type = vehicle_type.concat("Tyre Service");
   }
 
   let is_vendor = 0;
@@ -243,7 +275,7 @@ export const signupUser = () => (dispatch, getState) => {
   } else {
     is_vendor = 0;
   }
-
+console.log(vehicle_type);
   let test = new FormData();
 
   test.append("username", mobileno);

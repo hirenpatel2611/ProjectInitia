@@ -12,11 +12,14 @@ import {
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // import { Col, Row, Grid } from "react-native-easy-grid";
-import { MOTORCYCLE, CAR, BACK_ARROW } from "../../images";
+import { MOTORCYCLE, CAR, BACK_ARROW,HEAVY_VEHICLE,TOWING,TYRE } from "../../images";
 import { Actions } from "react-native-router-flux";
 import {
   updateFilterVehicleBool,
   updateFilterCarBool,
+  updateFilterHeavyVehicleBool,
+  updateFilterTowingServiceBool,
+  updateFilterTyreServiceBool,
   getFilterRating,
   getFilterDistance,
   resetFilter,
@@ -109,6 +112,63 @@ class filter extends Component {
                     ]}
                   >
                     <Image style={inStyle.imageMechanicType} source={CAR} />
+                  </View>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  activeOpacity={1}
+                  onPress={() => {
+                    this.props.updateFilterHeavyVehicleBool();
+                  }}
+                  style={inStyle.buttonMechanic}
+                >
+                  <View
+                    elevation={5}
+                    style={[
+                      inStyle.viewMechanicButton,
+                      {
+                        backgroundColor: this.props.isFilterHeavyVehicle ? "#7960FF" : "white"
+                      }
+                    ]}
+                  >
+                    <Image style={inStyle.imageMechanicType} source={HEAVY_VEHICLE} />
+                  </View>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  activeOpacity={1}
+                  onPress={() => {
+                    this.props.updateFilterTowingServiceBool();
+                  }}
+                  style={inStyle.buttonMechanic}
+                >
+                  <View
+                    elevation={5}
+                    style={[
+                      inStyle.viewMechanicButton,
+                      {
+                        backgroundColor: this.props.isFilterTowingService ? "#7960FF" : "white"
+                      }
+                    ]}
+                  >
+                    <Image style={inStyle.imageMechanicType} source={TOWING} />
+                  </View>
+                </TouchableHighlight>
+                <TouchableHighlight
+                  activeOpacity={1}
+                  onPress={() => {
+                    this.props.updateFilterTyreServiceBool();
+                  }}
+                  style={inStyle.buttonMechanic}
+                >
+                  <View
+                    elevation={5}
+                    style={[
+                      inStyle.viewMechanicButton,
+                      {
+                        backgroundColor: this.props.isFilterTyreService ? "#7960FF" : "white"
+                      }
+                    ]}
+                  >
+                    <Image style={inStyle.imageMechanicType} source={TYRE} />
                   </View>
                 </TouchableHighlight>
               </View>
@@ -221,7 +281,7 @@ const inStyle = {
     flexDirection: "row",
     padding: 10,
     justifyContent: "space-around",
-    width: 0.5 * ScreenWidth
+    width: 0.7 * ScreenWidth
   },
   buttonMechanic: {
     borderRadius: 100
@@ -291,12 +351,18 @@ const mapStateToProps = ({ customers }) => {
   const {
     isVehicle,
     isCar,
+    isFilterHeavyVehicle,
+    isFilterTowingService,
+    isFilterTyreService,
     rating,
     distance
   } = customers;
   return {
     isVehicle,
     isCar,
+    isFilterHeavyVehicle,
+    isFilterTowingService,
+    isFilterTyreService,
     rating,
     distance
   };
@@ -307,6 +373,9 @@ export default connect(
   {
     updateFilterVehicleBool,
     updateFilterCarBool,
+    updateFilterHeavyVehicleBool,
+    updateFilterTowingServiceBool,
+    updateFilterTyreServiceBool,
     getFilterRating,
     getFilterDistance,
     resetFilter,
