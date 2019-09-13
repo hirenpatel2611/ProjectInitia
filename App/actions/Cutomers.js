@@ -14,9 +14,10 @@ import { Alert } from "react-native";
 import {
   connectTosocket,
   connectTosocketReached,
-  connectTosocketBookingCancle,
+  connectTosocketBookingCancle
 } from "./Socket";
 import { getUserData } from "./ui";
+import { showMessage } from "react-native-flash-message";
 
 export const GET_VENDORS_START = "customers/GET_VENDORS_START";
 export const GET_VENDORS_SUCCESS = "customers/GET_VENDORS_SUCCESS";
@@ -31,18 +32,23 @@ export const GET_VENDOR_BOOKING_START = "customers/GET_VENDOR_BOOKING_START";
 export const GET_BOOKING_LIST_START = "customers/GET_BOOKING_LIST_START";
 export const GET_BOOKING_LIST_SUCCESS = "customers/GET_BOOKING_LIST_SUCCESS";
 export const GET_BOOKING_LIST_FAIL = "customers/GET_BOOKING_LIST_FAIL";
-export const UPDATE_FILTER_VEHICLE_BOOL = "customers/UPDATE_FILTER_VEHICLE_BOOL";
+export const UPDATE_FILTER_VEHICLE_BOOL =
+  "customers/UPDATE_FILTER_VEHICLE_BOOL";
 export const UPDATE_FILTER_CAR_BOOL = "customers/UPDATE_FILTER_CAR_BOOL";
-export const UPDATE_FILTER_HEAVY_VEHICLE_BOOL = "customers/UPDATE_FILTER_HEAVY_VEHICLE_BOOL";
-export const UPDATE_FILTER_TOWING_SERVICE_BOOL = "customers/UPDATE_FILTER_TOWING_SERVICE_BOOL";
-export const UPDATE_FILTER_TYRE_SERVICE_BOOL = "customers/UPDATE_FILTER_TYRE_SERVICE_BOOL";
+export const UPDATE_FILTER_HEAVY_VEHICLE_BOOL =
+  "customers/UPDATE_FILTER_HEAVY_VEHICLE_BOOL";
+export const UPDATE_FILTER_TOWING_SERVICE_BOOL =
+  "customers/UPDATE_FILTER_TOWING_SERVICE_BOOL";
+export const UPDATE_FILTER_TYRE_SERVICE_BOOL =
+  "customers/UPDATE_FILTER_TYRE_SERVICE_BOOL";
 export const UPDATE_FILTER_RATING = "customers/UPDATE_FILTER_RATING";
 export const UPDATE_FILTER_DISTANCE = "customers/UPDATE_FILTER_DISTANCE";
 export const RESET_FILTER = "customers/RESET_FILTER";
 export const VENDOR_DISTANCE = "customers/VENDOR_DISTANCE";
 export const GET_DISTANCE = "customers/GET_DISTANCE";
 export const GET_BOOKING_CANCLE_START = "customers/GET_BOOKING_CANCLE_START";
-export const GET_BOOKING_CANCLE_SUCCESS = "customers/GET_BOOKING_CANCLE_SUCCESS";
+export const GET_BOOKING_CANCLE_SUCCESS =
+  "customers/GET_BOOKING_CANCLE_SUCCESS";
 export const GET_BOOKING_CANCLE_FAIL = "customers/GET_BOOKING_CANCLE_FAIL";
 export const GET_BOOKING_STATUS = "customers/GET_BOOKING_STATUS";
 export const GET_BOOKING_CANCEL_BY_VENDOR =
@@ -52,7 +58,8 @@ export const GET_MECHANIC_CURREN_LOCATION =
 export const GET_DISTANCE_BETWEEN_USER_MECHANIC =
   "customers/GET_DISTANCE_BETWEEN_USER_MECHANIC";
 export const GET_BOOKING_UPDATE_START = "customers/GET_BOOKING_UPDATE_START";
-export const GET_BOOKING_UPDATE_SUCCESS = "customers/GET_BOOKING_UPDATE_SUCCESS";
+export const GET_BOOKING_UPDATE_SUCCESS =
+  "customers/GET_BOOKING_UPDATE_SUCCESS";
 export const GET_BOOKING_UPDATE_FAIL = "customers/GET_BOOKING_UPDATE_FAIL";
 export const GET_REASON_CHECKBOX = "customers/GET_REASON_CHECKBOX";
 export const GET_CANCEL_BOOKING_MODAL = "customers/GET_CANCEL_BOOKING_MODAL";
@@ -92,23 +99,29 @@ export const getVendors = () => async (dispatch, getState) => {
   const { vendorServiceType, rating, location, distance } = await getState()
     .customers;
   if (!location) {
-    var DistLatitude = '';
-    var DistLongitude = '';
+    var DistLatitude = "";
+    var DistLongitude = "";
   } else {
     DistLatitude = location.coords.latitude;
     DistLongitude = location.coords.longitude;
   }
+
   let test = new FormData();
   test.append("service_type", vendorServiceType);
   test.append("rating", rating);
   test.append("latitude", DistLatitude);
   test.append("longitude", DistLongitude);
   test.append("radius", distance);
+
   Api.post(GET_VENDOR, test)
     .then(response => {
+      console.log(test);
+      console.log(response.length);
+      console.log(response);
       if (response.status === 0) {
         if (getVendorsCounter < 5) {
           dispatch(getVendors());
+          getVendorsCounter = getVendorsCounter + 1;
         }
       } else {
         dispatch({
@@ -167,9 +180,21 @@ export const BookVendor = () => async (dispatch, getState) => {
           payload: response
         });
         dispatch(connectTosocket());
+        showMessage({
+          message: "SUCCESS",
+          description: "Wait for mechanic response",
+          type: "default",
+          position: "center"
+        });
       } else {
         dispatch({
           type: GET_BOOKING_FAIL
+        });
+        showMessage({
+          message: "Fail",
+          description: response.message,
+          type: "default",
+          position: "center"
         });
       }
     })
@@ -180,7 +205,7 @@ export const getBookingCancellation = () => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_CANCLE_START
   });
-  const { bookData, cancleReason,vendorsData } = getState().customers;
+  const { bookData, cancleReason, vendorsData } = getState().customers;
   let test = new FormData();
   test.append("booking_id", bookData.booking_id);
   test.append("status", "cancle");
@@ -191,16 +216,28 @@ export const getBookingCancellation = () => (dispatch, getState) => {
         dispatch({
           type: GET_BOOKING_CANCLE_SUCCESS
         });
-        var cancelData={
-          customer_id:bookData.vendor_id,
-          toToken:vendorsData.device_token
-        }
+        var cancelData = {
+          customer_id: bookData.vendor_id,
+          toToken: vendorsData.device_token
+        };
         dispatch(connectTosocketBookingCancle(cancelData));
         dispatch(getUserData());
         Actions.NearbyGaraje();
+        showMessage({
+          message: "SUCCESS",
+          description: "Booking Successfully cancel",
+          type: "default",
+          position: "bottom"
+        });
       } else {
         dispatch({
           type: GET_BOOKING_CANCLE_FAIL
+        });
+        showMessage({
+          message: "Fail",
+          description: response.message,
+          type: "default",
+          position: "bottom"
         });
       }
     })
@@ -217,6 +254,7 @@ export const getBookings = () => async (dispatch, getState) => {
 
   let test = new FormData();
   test.append("customer_id", userId);
+  test.append("page", 1);
   Api.post(GET_BOOKINGLIST, test)
     .then(response => {
       if (response.status === 0) {
@@ -243,30 +281,35 @@ export const updateFilterVehicleBool = () => dispatch => {
   dispatch({
     type: UPDATE_FILTER_VEHICLE_BOOL
   });
+  dispatch(getVendors());
 };
 
 export const updateFilterCarBool = () => async dispatch => {
   dispatch({
     type: UPDATE_FILTER_CAR_BOOL
   });
+  dispatch(getVendors());
 };
 
 export const updateFilterHeavyVehicleBool = () => async dispatch => {
   dispatch({
     type: UPDATE_FILTER_HEAVY_VEHICLE_BOOL
   });
+  dispatch(getVendors());
 };
 
 export const updateFilterTowingServiceBool = () => async dispatch => {
   dispatch({
     type: UPDATE_FILTER_TOWING_SERVICE_BOOL
   });
+  dispatch(getVendors());
 };
 
 export const updateFilterTyreServiceBool = () => async dispatch => {
   dispatch({
     type: UPDATE_FILTER_TYRE_SERVICE_BOOL
   });
+  dispatch(getVendors());
 };
 
 export const getFilterRating = val => async dispatch => {
@@ -379,7 +422,6 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
       });
       var sts = "reached";
       dispatch(getBookingUpdateUser(sts));
-      dispatch(connectTosocketReached());
     }
   }
 };
@@ -398,8 +440,10 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
     .then(response => {
       if (response.status !== 0) {
         if (val === "reached") {
-        obj.type = "REACHED";
-        dispatch(connectTosocketReached());
+          console.log("Booking update");
+          obj.type = "REACHED";
+          console.log("REACHED");
+
         }
         dispatch({
           type: GET_BOOKING_UPDATE_SUCCESS,
@@ -455,40 +499,42 @@ export const getRating = () => (dispatch, getState) => {
   dispatch({
     type: GET_RATING_START
   });
-  const { vendorRating, bookData,customerComment } = getState().customers;
+  const { vendorRating, bookData } = getState().customers;
 
-
-      let test = new FormData();
-      test.append("vendor_id", bookData.vendor_id);
-      test.append("rating", vendorRating);
-      Api.post(RATING_BY_CUSTOMER, test).then(responseRating => {
-
-        if(responseRating.status === 1){
-        dispatch({
-          type: GET_RATING_SUCCESS
-        });
-
-      } else {
-        dispatch({
-          type: GET_RATING_FAIL
-        });
-      }
-      let test1 = new FormData();
-      test1.append("booking_id", bookData.booking_id);
-      test1.append("comment", customerComment);
-      Api.post(CUSTOMER_COMMENT, test1).then(response => {
-        if(response.status === 1){
-        } else {
-          dispatch({
-            type:CUSTOMER_COMMENT_FAIL
-          });
-        }
-        Actions.NearbyGaraje();
+  let test = new FormData();
+  test.append("vendor_id", bookData.vendor_id);
+  test.append("rating", vendorRating);
+  Api.post(RATING_BY_CUSTOMER, test).then(responseRating => {
+    if (responseRating.status === 1) {
+      dispatch({
+        type: GET_RATING_SUCCESS
       });
+      dispatch(customerCommentForVendor())
+    } else {
+      dispatch({
+        type: GET_RATING_FAIL
+      });
+    }
 
-  })
+  });
   Actions.NearbyGaraje();
 };
+
+export const customerCommentForVendor= () => (dispatch, getState) => {
+  const { bookData, customerComment } = getState().customers;
+  let test1 = new FormData();
+  test1.append("booking_id", bookData.booking_id);
+  test1.append("comment", customerComment);
+  Api.post(CUSTOMER_COMMENT, test1).then(response => {
+    if (response.status === 1) {
+    } else {
+      dispatch({
+        type: CUSTOMER_COMMENT_FAIL
+      });
+    }
+    Actions.NearbyGaraje();
+  });
+}
 
 export const getVendorRating = rating => dispatch => {
   dispatch({
@@ -543,21 +589,35 @@ export const updateCustomerProfile = val => (dispatch, getState) => {
       dispatch({
         type: UPDATE_CUSTOMER_PROFILE_SUCCESS
       });
-      alert(response.message);
+      showMessage({
+        message: "SUCCESS",
+        description: response.message,
+        type: "default"
+      });
     } else {
       dispatch({
         type: UPDATE_CUSTOMER_PROFILE_FAIL
+      });
+      showMessage({
+        message: "FAIL",
+        description: response.message,
+        type: "default"
       });
     }
   });
 };
 
-export const upadteCustomerProfileImage = val => async dispatch => {
-
-};
+export const upadteCustomerProfileImage = val => async dispatch => {};
 
 export const getFilterSubmeet = () => (dispatch, getState) => {
-  const { isVehicle, isCar, rating,isFilterHeavyVehicle,isFilterTowingService,isFilterTyreService } = getState().customers;
+  const {
+    isVehicle,
+    isCar,
+    rating,
+    isFilterHeavyVehicle,
+    isFilterTowingService,
+    isFilterTyreService
+  } = getState().customers;
   let vehicle_type = [];
 
   if (isVehicle === true) {
@@ -567,13 +627,13 @@ export const getFilterSubmeet = () => (dispatch, getState) => {
     vehicle_type = vehicle_type.concat("car");
   }
   if (isFilterHeavyVehicle === true) {
-    vehicle_type = vehicle_type.concat("Heavy Vehicle");
+    vehicle_type = vehicle_type.concat("Heavy_Vehicle");
   }
   if (isFilterTowingService === true) {
-    vehicle_type = vehicle_type.concat("Towing Service");
+    vehicle_type = vehicle_type.concat("Towing_Service");
   }
   if (isFilterTyreService === true) {
-    vehicle_type = vehicle_type.concat("Tyre Service");
+    vehicle_type = vehicle_type.concat("Tyre_Service");
   }
 
   console.log(vehicle_type);
@@ -594,9 +654,9 @@ export const getVendorRatingModal = () => dispatch => {
   });
 };
 
-export const getCustomerComment = comment => (dispatch) =>{
+export const getCustomerComment = comment => dispatch => {
   dispatch({
-    type:GET_CUSTOMER_COMMENT,
-    payload:comment
+    type: GET_CUSTOMER_COMMENT,
+    payload: comment
   });
-}
+};

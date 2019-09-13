@@ -35,7 +35,9 @@ import {
   UPDATE_REGISTER_DOCUMENT_UPLOAD,
   DELETE_REGISTER_DOCUMENT,
   UPDATE_WORSHOP_NAME,
-  UPDATE_GSTIN
+  UPDATE_GSTIN,
+  READ_FROM_CLIP_BOARD,
+  UPDATE_REFERAL_CODE
 } from "../actions/Register";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -82,7 +84,8 @@ const INITIAL_STATE = {
   imageRegisterUri: "",
   documentRegisterUri: [],
   documentBase64Register: [],
-  gstin: ""
+  gstin: "",
+  referalCode:''
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -472,7 +475,25 @@ export default (state = INITIAL_STATE, action) => {
           ...INITIAL_STATE
         };
       }
-      break;
+    break;
+
+    case READ_FROM_CLIP_BOARD:
+    {
+      return{
+        ...state,
+        referalCode:action.payload
+      };
+    }
+    break;
+
+    case UPDATE_REFERAL_CODE:
+    {
+      return{
+        ...state,
+        referalCode:action.payload
+      }
+    }
+    break;
 
     default:
       return state;

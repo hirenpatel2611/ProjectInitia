@@ -43,7 +43,7 @@ import {
 import { FutureBookingList, Spinner } from "../../Common";
 import { CALL, BITMAP2 } from "../../images";
 import call from "react-native-phone-call";
-import CheckBox from "react-native-check-box";
+import CheckBox from 'react-native-checkbox';
 import { TaskManager } from "expo";
 import { Rating, AirbnbRating } from "react-native-ratings";
 
@@ -192,20 +192,6 @@ class FutureBooking extends Component {
                         marginTop: 10
                       }}
                     >
-                      <View style={{ width: 140 }}>
-                        <Text
-                          style={{
-                            fontSize: 10,
-                            color: "#7960FF",
-                            fontFamily: "circular-book",
-                            top: 4
-                          }}
-                          numberOfLines={1}
-                          ellipsizeMode="tail"
-                        >
-                          {item.customer.email}
-                        </Text>
-                      </View>
                     </View>
                     {item.status === "cancle" ||
                     item.status === "completed" ? null : (
@@ -782,34 +768,34 @@ class FutureBooking extends Component {
                   Reason of Cancel
                 </Text>
                 <CheckBox
-                  isChecked={this.props.reasonCheckboxVendor[0]}
-                  checkedCheckBoxColor="#7960FF"
-                  rightText="I am on another call."
-                  checkedIcon="dot-circle-o"
-                  uncheckedIcon="circle-o"
-                  onClick={() => {
-                    this.props.getReasonCheckboxVendor(0);
-                  }}
+                  label='I am on another call.'
+                  checked={this.props.reasonCheckboxVendor[0]}
+                  onChange={() => {
+                       this.props.getReasonCheckboxVendor(0);
+                    }}
+                  checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
+                  labelStyle={{fontFamily:'circular-bold'}}
+                  containerStyle={{padding:3}}
                 />
                 <CheckBox
-                  isChecked={this.props.reasonCheckboxVendor[1]}
-                  checkedCheckBoxColor="#7960FF"
-                  rightText="Customer is not done good deal."
-                  checkedIcon="dot-circle-o"
-                  uncheckedIcon="circle-o"
-                  onClick={() => {
-                    this.props.getReasonCheckboxVendor(1);
-                  }}
+                  label='Customer is not done good deal.'
+                  checked={this.props.reasonCheckboxVendor[1]}
+                  onChange={() => {
+                       this.props.getReasonCheckboxVendor(1);
+                    }}
+                  checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
+                  labelStyle={{fontFamily:'circular-bold'}}
+                  containerStyle={{padding:3}}
                 />
                 <CheckBox
-                  isChecked={this.props.reasonCheckboxVendor[2]}
-                  checkedCheckBoxColor="#7960FF"
-                  rightText="Today I m not Present."
-                  checkedIcon="dot-circle-o"
-                  uncheckedIcon="circle-o"
-                  onClick={() => {
-                    this.props.getReasonCheckboxVendor(2);
-                  }}
+                  label='Today I m not Present.'
+                  checked={this.props.reasonCheckboxVendor[2]}
+                  onChange={() => {
+                       this.props.getReasonCheckboxVendor(2);
+                    }}
+                  checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
+                  labelStyle={{fontFamily:'circular-bold'}}
+                  containerStyle={{padding:3}}
                 />
                 <TouchableOpacity
                   disabled={this.props.confirmDisableVendor ? false : true}

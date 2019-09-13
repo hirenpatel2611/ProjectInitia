@@ -45,6 +45,8 @@ import { connect } from "react-redux";
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
+
+
 class RouterComponent extends Component {
   componentWillMount() {
     this.props.loadFont();
@@ -58,7 +60,7 @@ class RouterComponent extends Component {
   }
   _handleNotification = async (notification) => {
       const isVen = await AsyncStorage.getItem("is_vendor");
-      
+
       switch (notification.data.data.type) {
 
         case 'BOOK':

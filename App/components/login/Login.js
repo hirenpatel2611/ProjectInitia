@@ -141,6 +141,9 @@ class Login extends Component {
             {errors.loginFailed ? (
               <Text style={styles.textError}>{errors.loginFailed[0]}</Text>
             ) : null}
+            {
+              this.props.LoginUserIssue? <Text style={styles.textError}>{this.props.LoginUserIssue}</Text>:null
+            }
             <TouchableHighlight
               onPress={() => {
                 this.props.updateOnSubmeetLoginForm();
@@ -197,7 +200,8 @@ const mapStateToProps = ({ login }) => {
     loading,
     loginFailed,
     onSubmeetLoginForm,
-    loginStatus
+    loginStatus,
+    LoginUserIssue
   } = login;
   return {
     mobileno,
@@ -206,6 +210,7 @@ const mapStateToProps = ({ login }) => {
     loginFailed,
     onSubmeetLoginForm,
     loginStatus,
+    LoginUserIssue,
     login,
 
   };

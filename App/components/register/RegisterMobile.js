@@ -11,14 +11,15 @@ import {
   Dimensions,
   Button,
   TouchableHighlight,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 // import { Col, Row, Grid } from "react-native-easy-grid";
 import { BITMAP } from "../../images";
 import { Actions } from "react-native-router-flux";
-import { updateMobileNo, requestOtp } from "../../actions";
+import { updateMobileNo, requestOtp,readFromClipboard } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
 import TimerMixin from "react-timer-mixin";
@@ -26,6 +27,12 @@ import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
 
 class RegisterMobile extends Component {
+  componentWillMount(){
+    this.props.readFromClipboard();
+  }
+
+
+
   render() {
     const {
       containerStyle,
@@ -68,6 +75,8 @@ class RegisterMobile extends Component {
     errors = this.props.onSubmeetMobileForm
       ? validate(this.props.register)
       : {};
+
+
 
     return (
       <View style={containerStyle}>
@@ -164,5 +173,5 @@ const mapStateToProps = ({ register }) => {
 
 export default connect(
   mapStateToProps,
-  { updateMobileNo, requestOtp }
+  { updateMobileNo, requestOtp,readFromClipboard }
 )(withValidation(rules, RegisterMobile));

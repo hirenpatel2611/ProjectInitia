@@ -1,4 +1,5 @@
 import TimerMixin from "react-timer-mixin";
+import { Clipboard } from "react-native";
 import Api from "../api/api";
 import { URL_USER_SIGNUP, URL_USER_OTP } from "../config";
 import { Actions } from "react-native-router-flux";
@@ -45,6 +46,8 @@ export const UPDATE_REGISTER_DOCUMENT_UPLOAD =
   "register/UPDATE_REGISTER_DOCUMENT_UPLOAD";
 export const DELETE_REGISTER_DOCUMENT = "register/DELETE_REGISTER_DOCUMENT";
 export const UPDATE_GSTIN = "register/UPDATE_GSTIN";
+export const READ_FROM_CLIP_BOARD = "register/READ_FROM_CLIP_BOARD";
+export const UPDATE_REFERAL_CODE = "register/UPDATE_REFERAL_CODE";
 
 export const updateVehicleBool = () => dispatch => {
   dispatch({
@@ -249,7 +252,8 @@ export const signupUser = () => (dispatch, getState) => {
     loadingSignupB,
     locationVendor,
     imageBase64Register,
-    documentBase64Register
+    documentBase64Register,
+    referalCode
   } = getState().register;
 
   let vehicle_type = [];
@@ -260,13 +264,13 @@ export const signupUser = () => (dispatch, getState) => {
     vehicle_type = vehicle_type.concat("car");
   }
   if (isHeavyVehicle === true) {
-    vehicle_type = vehicle_type.concat("Heavy Vehicle");
+    vehicle_type = vehicle_type.concat("Heavy_Vehicle");
   }
   if (isTowingService === true) {
-    vehicle_type = vehicle_type.concat("Towing Service");
+    vehicle_type = vehicle_type.concat("Towing_Service");
   }
   if (isTyreService === true) {
-    vehicle_type = vehicle_type.concat("Tyre Service");
+    vehicle_type = vehicle_type.concat("Tyre_Service");
   }
 
   let is_vendor = 0;
@@ -275,7 +279,8 @@ export const signupUser = () => (dispatch, getState) => {
   } else {
     is_vendor = 0;
   }
-console.log(vehicle_type);
+  vehicle_type = JSON.stringify(vehicle_type);
+  var DocumentBase64Register = JSON.stringify(documentBase64Register);
   let test = new FormData();
 
   test.append("username", mobileno);
@@ -290,14 +295,15 @@ console.log(vehicle_type);
   test.append("service_vehicle_type", vehicle_type);
   test.append("is_vendor", is_vendor);
   test.append("profile_image", imageBase64Register);
+  test.append("referal_code", referalCode);
   if (isVendor === true) {
     test.append("gstin", gstin);
     test.append("workshop_name", workshop_name);
     test.append("latitude", locationVendor.coords.latitude);
     test.append("longitude", locationVendor.coords.longitude);
-    // test.append("other_image", documentBase64Register);
+    test.append("other_image", DocumentBase64Register);
   }
-
+  console.log(test);
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
       console.log(response);
@@ -387,5 +393,21 @@ export const deleteRegisterDocument = documnet => (dispatch, getState) => {
   dispatch({
     type: DELETE_REGISTER_DOCUMENT,
     payload: documentRegisterUri
+  });
+};
+
+export const readFromClipboard = () => async dispatch => {
+  const content = await Clipboard.getString();
+  console.log(content);
+  dispatch({
+    type: READ_FROM_CLIP_BOARD,
+    payload: content
+  });
+};
+
+export const updateReferalCode = code => dispatch => {
+  dispatch({
+    type: UPDATE_REFERAL_CODE,
+    payload: code
   });
 };

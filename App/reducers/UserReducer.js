@@ -2,7 +2,6 @@ import { LOGIN_SUCCESSFUL } from "../actions/Login";
 import {
   SET_USER_INFO,
   GET_USER_PROFILE_DATA,
-  GET_USER_PROFILE_DATA_START,
   UPDATE_IS_VENDOR,
   SET_ALL_STATE_TO_INITIAL
 } from "../actions/ui";
@@ -47,8 +46,10 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           userData: {
-            uri: state.isVendorLoggedIn?action.payload.profile_image:null,
-            workshop_name:state.isVendorLoggedIn?action.payload.workshop_name:null,
+            uri: state.isVendorLoggedIn ? action.payload.profile_image : null,
+            workshop_name: state.isVendorLoggedIn
+              ? action.payload.workshop_name
+              : null,
             userId: action.payload.id,
             userEmail: action.payload.email,
             userMobileno: action.payload.mobile,
@@ -56,7 +57,8 @@ export default (state = INITIAL_STATE, action) => {
             userAddress: action.payload.address,
             userLatitude: action.payload.latitude,
             userLongitude: action.payload.longitude,
-            userVehicleType: action.payload.service_vehicle_type
+            userVehicleType: JSON.parse(action.payload.service_vehicle_type),
+            uderReferalCode: action.payload.referal_code
           },
           userCurrentBooking: action.payload.current_booking
         };
@@ -64,12 +66,12 @@ export default (state = INITIAL_STATE, action) => {
       break;
 
     case UPDATE_IS_VENDOR:
-    {
-      return {
-        ...state,
-        isVendorLoggedIn: action.payload
-      };
-    }
+      {
+        return {
+          ...state,
+          isVendorLoggedIn: action.payload
+        };
+      }
       break;
 
     case SET_ALL_STATE_TO_INITIAL:

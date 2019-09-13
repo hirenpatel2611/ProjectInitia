@@ -106,17 +106,17 @@ class RegisterOTP extends Component {
         <KeyboardAwareScrollView enableOnAndroid>
           <StatusBar backgroundColor="#7960FF" />
           <Modal
-            visible={visibleModalOtp ? true : true}
+            visible={visibleModalOtp ? true : false}
             onRequestClose={() => {}}
             animationType="slide"
             transparent={true}
           >
-            <View style={styles.containertwo}>
+            <View style={[styles.containertwo,,{marginTop: this.props.isVendor?0.08 * ScreenHeight:0.2 * ScreenHeight,height:this.props.isVendor? 0.82 * ScreenHeight:0.62 * ScreenHeight}]}>
               <Text style={modalHTextStyle}>
                 Select your{" "}
                 {isVendor ? <Text>Service</Text> : <Text>Vehicle</Text>} Type
               </Text>
-              <View style={{height:0.6 * ScreenHeight, flexDirection:'column',justifyContent:'space-around'}}>
+              <View style={{height:this.props.isVendor? 0.6 * ScreenHeight:0.38 * ScreenHeight, flexDirection:'column',justifyContent:'space-around'}}>
               <View style={[modalButtonViewStyle]}>
                 <TouchableOpacity
                   onPress={() => this.props.updateVehicleBool()}
@@ -164,7 +164,7 @@ class RegisterOTP extends Component {
                     />
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity
+                {this.props.isVendor?<TouchableOpacity
                   onPress={() => this.props.updateTowingServiceBool()}
                 >
                   <View elevation={5} style={buttonOtpStyle1}>
@@ -178,10 +178,10 @@ class RegisterOTP extends Component {
                       source={TOWING}
                     />
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity>:null}
               </View>
 
-              <View style={modalButtonViewStyle}>
+              {this.props.isVendor?<View style={modalButtonViewStyle}>
                 <TouchableOpacity
                   onPress={() => this.props.updateTyreServiceBool()}
                 >
@@ -197,7 +197,7 @@ class RegisterOTP extends Component {
                     />
                   </View>
                 </TouchableOpacity>
-              </View>
+              </View>:null}
               </View>
               <TouchableHighlight
                 disabled={
@@ -211,7 +211,7 @@ class RegisterOTP extends Component {
                 style={[
                   createButton,
                   {
-                    marginTop: 13,
+                    marginTop: this.props.isVendor?13:3,
                     opacity: isTwoWheeler || isFourWheeler || isHeavyVehicle || isTowingService || isTyreService ? 1 : 0.8
                   }
                 ]}

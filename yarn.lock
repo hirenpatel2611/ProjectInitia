@@ -11436,6 +11436,13 @@ react-native-check-box@^2.1.7:
   dependencies:
     prop-types "^15.5.7"
 
+react-native-checkbox@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-checkbox/-/react-native-checkbox-2.0.0.tgz#453bbfd2e055a21e69ebe7842414a055d50ff449"
+  integrity sha512-XTI7iZ0KuPYyNCvcg4p4eC5ZenuBkfraFUzec17Vao6DsIcn5AOUKkc6KSwLPVksJyWWlPc832M/HTvni5qk7A==
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-dismiss-keyboard@1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/react-native-dismiss-keyboard/-/react-native-dismiss-keyboard-1.0.0.tgz#32886242b3f2317e121f3aeb9b0a585e2b879b49"
@@ -11493,7 +11500,15 @@ react-native-expo-image-cache@^3.2.0:
     eslint-plugin-react-native "^3.2.1"
     lodash "^4.17.4"
 
-react-native-iphone-x-helper@^1.0.3:
+react-native-flash-message@^0.1.13:
+  version "0.1.13"
+  resolved "https://registry.yarnpkg.com/react-native-flash-message/-/react-native-flash-message-0.1.13.tgz#3ebf9cf17d5aabc61b923dc6dc37ce97a1ad4dd2"
+  integrity sha512-7P0cOyF7dRJL6tgwIhKs3V9QXRFa1qXDymCx1BmQLzdWyc3qyD5HMv2L5EbYk3wj1BirLjaL7tkYyEETg2jSNQ==
+  dependencies:
+    prop-types "^15.7.2"
+    react-native-iphone-x-helper "^1.2.0"
+
+react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha512-/VbpIEp8tSNNHIvstuA3Swx610whci1Zpc9mqNkqn14DkMbw+ORviln2u0XyHG1kPvvwTNGZY6QpeFwxYaSdbQ==

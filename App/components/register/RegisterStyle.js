@@ -135,13 +135,13 @@ var styles = StyleSheet.create({
   },
   containertwo: {
     alignItems: "center",
-    marginTop: 0.08 * ScreenHeight,
+    marginTop: 0.2 * ScreenHeight,
     marginBottom: 0.1 * ScreenHeight,
     marginLeft: 20,
     marginRight: 20,
     backgroundColor: "#FFFFFF",
     justifyContent: "space-between",
-    height: 0.82 * ScreenHeight,
+    height: 0.57 * ScreenHeight,
     borderRadius: 10,
     borderColor: "#7960FF",
     borderWidth: 1

@@ -26,6 +26,7 @@ import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import * as IntentLauncher from "expo-intent-launcher";
 import * as ImagePicker from "expo-image-picker";
+import { showMessage } from "react-native-flash-message";
 
 export const GET_FUTURE_BOOKING_LIST_START =
   "vendors/GET_FUTURE_BOOKING_LIST_START";
@@ -100,13 +101,19 @@ export const GET_WALLET_AMOUNT_SUCCESS = "vendors/GET_WALLET_AMOUNT_SUCCESS";
 export const ADD_WALLET_PAYMENT_SUCCESS = "vendors/ADD_WALLET_PAYMENT_SUCCESS";
 export const LOAD_MORE_BOOKING_LIST = "vendors/LOAD_MORE_BOOKING_LIST";
 export const UPDATE_VENDOR_WORSHOP_NAME = "vendors/UPDATE_VENDOR_WORSHOP_NAME";
+export const UPDATE_VENDOR_PROFILE_VEHICLE_BOOL =
+  "vendors/UPDATE_VENDOR_PROFILE_VEHICLE_BOOL";
+export const UPDATE_VENDOR_PROFILE_CAR_BOOL =
+  "vendors/UPDATE_VENDOR_PROFILE_CAR_BOOL";
+export const UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL =
+  "vendors/UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
     type: GET_FUTURE_BOOKING_LIST_START
   });
   const valueUserId = await AsyncStorage.getItem("user_id");
-  const { pages, vendorBookingList,paginate } = getState().vendors;
+  const { pages, vendorBookingList, paginate } = getState().vendors;
   let test = new FormData();
   test.append("vendor_id", valueUserId);
   test.append("page", pages);
@@ -114,10 +121,17 @@ export const getFutureBookings = () => async (dispatch, getState) => {
     .then(response => {
       if (response.status === 0) {
         if (response.message === "No booking found") {
-          dispatch({
-            type: GET_FUTURE_BOOKING_LIST_NO_FOUND
-          });
-          SplashScreen.hide();
+          if (pages === 1) {
+            dispatch({
+              type: GET_FUTURE_BOOKING_LIST_NO_FOUND
+            });
+            SplashScreen.hide();
+          } else {
+            dispatch({
+              type: GET_FUTURE_BOOKING_LIST_SUCCESS,
+              payload: vendorBookingList
+            });
+          }
         } else {
           dispatch({
             type: GET_FUTURE_BOOKING_LIST_FAIL,
@@ -126,7 +140,9 @@ export const getFutureBookings = () => async (dispatch, getState) => {
           dispatch(getFutureBookings());
         }
       } else {
-        var VendorBookingList = paginate?vendorBookingList.concat(response):response;
+        var VendorBookingList = paginate
+          ? vendorBookingList.concat(response)
+          : response;
         dispatch({
           type: GET_FUTURE_BOOKING_LIST_SUCCESS,
           payload: VendorBookingList
@@ -195,7 +211,7 @@ export const getBookingModal = val => async (dispatch, getState) => {
 
   dispatch({
     type: GET_BOOKING_MODAL,
-    payload:val
+    payload: val
   });
   const { customerLocation } = getState().vendors;
   let locations = [
@@ -312,11 +328,12 @@ export const BookingListCancle = () => (dispatch, getState) => {
   test.append("reason", cancleReasonVendor);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
+      console.log(response);
       if (response.status === 1) {
-        var cancelData={
-          customer_id:cancelBookingData.customer_id,
-          toToken:cancelBookingData.customerToken
-        }
+        var cancelData = {
+          customer_id: cancelBookingData.customer_id,
+          toToken: cancelBookingData.customerToken
+        };
         dispatch(connectTosocketBookingCancle(cancelData));
         FutureBookingList.map(booking => {
           if (booking.booking_id === cancelBookingData.booking_id) {
@@ -436,12 +453,12 @@ export const getCancelBookingModalCloseVendor = () => dispatch => {
   });
 };
 
-export const updateVendorWorkshopName = val => (dispatch,getState) => {
+export const updateVendorWorkshopName = val => (dispatch, getState) => {
   dispatch({
     type: UPDATE_VENDOR_WORSHOP_NAME,
     payload: val
   });
-}
+};
 
 export const updateVendorFullName = val => dispatch => {
   dispatch({
@@ -471,8 +488,23 @@ export const updateVendorProfile = val => (dispatch, getState) => {
     addressVendor,
     emailVendor,
     imageBase64Vendor,
-    workshop_nameVendor
+    workshop_nameVendor,
+    vendorProfileServiceType
   } = getState().vendors;
+  var service_type = [
+    "bike",
+    "car",
+    "Heavy_Vehicle",
+    "Towing_Service",
+    "Tyre_Service"
+  ];
+  var service_vehicle_type = [];
+  for (var i = 0; i < vendorProfileServiceType.length; i++) {
+    if (vendorProfileServiceType[i] === true) {
+      service_vehicle_type.push(service_type[i]);
+    }
+  }
+  service_vehicle_type = JSON.stringify(service_vehicle_type);
   const { userData } = getState().user;
   let test = new FormData();
   test.append("id", userData.userId);
@@ -480,15 +512,28 @@ export const updateVendorProfile = val => (dispatch, getState) => {
   test.append("address", addressVendor);
   test.append("profile_image", imageBase64Vendor);
   test.append("workshop_name", workshop_nameVendor);
+  test.append("service_vehicle_type", service_vehicle_type);
+  console.log(test);
   Api.post(UPDATE_PROFILE, test).then(response => {
+    console.log(response);
     if (response.status === 1) {
       dispatch({
         type: UPDATE_VENDOR_PROFILE_SUCCESS
       });
-      alert(response.message);
+      showMessage({
+        message: "SUCCESS",
+        description: response.message,
+        type: "default"
+      });
+      //alert(response.message);
     } else {
       dispatch({
         type: UPDATE_VENDOR_PROFILE_FAIL
+      });
+      showMessage({
+        message: "FAIL",
+        description: response.message,
+        type: "default"
       });
     }
   });
@@ -536,7 +581,7 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
       startMapData = {
         booking_id: response.booking.booking_id,
         customer_id: response.booking.customer.customer_id,
-        customerToken:startMapData.customerToken
+        customerToken: startMapData.customerToken
       };
 
       let test = new FormData();
@@ -545,7 +590,7 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
       Api.post(BOOKING_UPDATE, test).then(responseBooking => {
         if (responseBooking.status === 1) {
           dispatch(socketBookingOnTheWay(startMapData));
-          dispatch(socketVendorCurrentLocation());
+          dispatch(socketVendorCurrentLocation(startMapData));
           FutureBookingList.map(booking => {
             if (booking.booking_id === startMapData.booking_id) {
               booking.status = "on-the-way";
@@ -673,7 +718,6 @@ export const addBalanceRequest = () => (dispatch, getState) => {
   })
     .then(response => response.json())
     .then(responseJson => {
-
       dispatch({
         type: ADD_BALANCE_REQUEST_SUCCESS,
         payload: responseJson.order.id
@@ -735,12 +779,14 @@ export const addWalletPayment = () => async (dispatch, getState) => {
   test.append("payment_id", paymentId);
   test.append("amount", walletAmount);
   Api.post(ADD_PAYMENT, test).then(response => {
+    console.log(response);
     if (response.status === 1) {
       dispatch(getWalletAmount());
       dispatch({
         type: ADD_WALLET_PAYMENT_SUCCESS
       });
     } else {
+      dispatch(addWalletPayment());
     }
   });
 };
@@ -753,4 +799,50 @@ export const loadMoreBookingList = () => (dispatch, getState) => {
     payload: page
   });
   dispatch(getFutureBookings());
+};
+
+export const shareReferal = () => (dispatch, getState) => {
+  const { userData } = getState().user;
+
+  var playStoreUrl =
+    "http://103.50.153.25:3000/appRefer?referal_code=" +
+    userData.uderReferalCode;
+  Share.share({
+    message: playStoreUrl
+  }).then(response => {
+    console.log(response);
+  });
+};
+
+export const updateVenderProfileVehicleBool = () => (dispatch, getState) => {
+  const { vendorProfileServiceType } = getState().vendors;
+  var ServiceType = vendorProfileServiceType;
+  ServiceType[0] = !vendorProfileServiceType[0];
+  dispatch({
+    type: UPDATE_VENDOR_PROFILE_VEHICLE_BOOL,
+    payload: ServiceType
+  });
+};
+
+export const updateVendorProfileCarBool = () => (dispatch, getState) => {
+  const { vendorProfileServiceType } = getState().vendors;
+  var ServiceTypeCar = vendorProfileServiceType;
+  ServiceTypeCar[1] = !vendorProfileServiceType[1];
+  dispatch({
+    type: UPDATE_VENDOR_PROFILE_CAR_BOOL,
+    payload: ServiceTypeCar
+  });
+};
+
+export const updateVendorProfileHeavyVehicleBool = () => (
+  dispatch,
+  getState
+) => {
+  const { vendorProfileServiceType } = getState().vendors;
+  vendorProfileServiceType[2] = !vendorProfileServiceType[2];
+  console.log(vendorProfileServiceType);
+  dispatch({
+    type: UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL,
+    payload: vendorProfileServiceType
+  });
 };

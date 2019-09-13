@@ -62,7 +62,7 @@ import {
 const INITIAL_STATE = {
   loading: false,
   vendors: [],
-  vendorServiceType: "both",
+  vendorServiceType:"",
   vendorRating: 0,
   location: "",
   errorMessage: "",
@@ -72,13 +72,9 @@ const INITIAL_STATE = {
   loadingBookigList: false,
   isBookingListFail: false,
   vendorList: [],
-  isVehicle: false,
-  isCar: false,
-  isFilterHeavyVehicle: false,
-  isFilterTowingService: false,
-  isFilterTyreService: false,
+  isServiceType:[0,0,0,0,0],
   rating: 0,
-  distance: 10,
+  distance: "",
   isBookingSuccess: false,
   vendorDistance: "",
   vendorDistanceList: [],
@@ -231,7 +227,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          isVehicle: !state.isVehicle
+          isServiceType:[1,0,0,0,0],
+          vendorServiceType:'bike'
         };
       }
       break;
@@ -239,7 +236,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          isCar: !state.isCar
+          isServiceType:[0,1,0,0,0],
+          vendorServiceType:"car"
         };
       }
       break;
@@ -248,7 +246,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          isFilterHeavyVehicle: !state.isFilterHeavyVehicle
+          isServiceType:[0,0,1,0,0],
+          vendorServiceType:"Heavy_Vehicle"
         };
       }
       break;
@@ -256,7 +255,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          isFilterTowingService: !state.isFilterTowingService
+          isServiceType:[0,0,0,1,0],
+          vendorServiceType:"Towing_Service"
         };
       }
       break;
@@ -264,7 +264,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          isFilterTyreService: !state.isFilterTyreService
+          isServiceType:[0,0,0,0,1],
+          vendorServiceType:"Tyre_Service"
         };
       }
       break;
@@ -291,10 +292,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          isVehicle: false,
-          isCar: false,
           rating: 0,
-          distance: 10
+          distance: null
         };
       }
       break;
@@ -326,7 +325,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          loadingBookig: false
+          loadingBookig: false,
+          reasonCheckbox: [false, false, false]
         };
       }
       break;
@@ -427,6 +427,7 @@ export default (state = INITIAL_STATE, action) => {
 
     case GET_USER_BOOKING_STATUS_ACCEPT:
       {
+        console.log(action.payload.vendorData);
         return {
           ...state,
           bookingStatusRes: action.payload.bookingStatusRes,
@@ -605,7 +606,6 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          vendorServiceType: action.payload.vehicle_type,
           vendorRating: action.payload.rating
         };
       }

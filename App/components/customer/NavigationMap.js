@@ -34,7 +34,7 @@ import {
   getCustomerComment
 } from "../../actions";
 import  MapViewDirections  from "../../Common/MapViewDirection";
-import CheckBox from "react-native-check-box";
+import CheckBox from 'react-native-checkbox';
 import { BIKE_FOR_MAP,CALL } from "../../images";
 import {AirbnbRating } from "react-native-ratings";
 import call from "react-native-phone-call";
@@ -295,7 +295,7 @@ class NearbyGaraje extends Component {
                   style={{
                     fontSize: 18,
                     fontFamily: "circular-bold",
-                    alignSelf: "flex-start"
+                    alignSelf: "center"
                   }}
                 >
                   Reason of Cancel
@@ -318,29 +318,36 @@ class NearbyGaraje extends Component {
                 </TouchableOpacity>
                 </View>
                 <CheckBox
-                  isChecked={this.props.reasonCheckbox[0]}
-                  checkedCheckBoxColor="#7960FF"
-                  rightText="Mechanic is responding on booking."
-                  onClick={() => {
-                    this.props.getReasonCheckbox(0);
-                  }}
+                  label='Mechanic is not responding on booking.'
+                  checked={this.props.reasonCheckbox[0]}
+                  onChange={() => {
+                       this.props.getReasonCheckbox(0);
+                    }}
+                  checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
+                  labelStyle={{fontFamily:'circular-bold'}}
+                  containerStyle={{padding:3}}
                 />
                 <CheckBox
-                  isChecked={this.props.reasonCheckbox[1]}
-                  checkedCheckBoxColor="#7960FF"
-                  rightText="Mechanic is not good deal."
-                  onClick={() => {
-                    this.props.getReasonCheckbox(1);
-                  }}
+                  label='Mechanic is not done good deal.'
+                  checked={this.props.reasonCheckbox[1]}
+                  onChange={() => {
+                       this.props.getReasonCheckbox(1);
+                    }}
+                  checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
+                  labelStyle={{fontFamily:'circular-bold'}}
+                  containerStyle={{padding:3}}
                 />
                 <CheckBox
-                  isChecked={this.props.reasonCheckbox[2]}
-                  checkedCheckBoxColor="#7960FF"
-                  rightText="I Choose better option."
-                  onClick={() => {
-                    this.props.getReasonCheckbox(2);
-                  }}
+                  label='I Choose better option.'
+                  checked={this.props.reasonCheckbox[2]}
+                  onChange={() => {
+                       this.props.getReasonCheckbox(2);
+                    }}
+                  checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
+                  labelStyle={{fontFamily:'circular-bold'}}
+                  containerStyle={{padding:3}}
                 />
+
                 <TouchableOpacity
                   disabled={!this.props.confirmDisable}
                   style={{ alignSelf: "center",

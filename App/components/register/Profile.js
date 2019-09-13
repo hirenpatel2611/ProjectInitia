@@ -53,7 +53,8 @@ import {
   upadteRegisterProfileImage,
   addDocument,
   deleteRegisterDocument,
-  updateGstin
+  updateGstin,
+  updateReferalCode
 } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
@@ -209,7 +210,12 @@ class Profile extends Component {
           ])
         }
       >
-        <KeyboardAwareScrollView enableOnAndroid contentContainerStyle={{paddingBottom:this.props.isVendor? 180:null}}>
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          contentContainerStyle={{
+            paddingBottom: this.props.isVendor ? 180 : null
+          }}
+        >
           <StatusBar backgroundColor="#FFFFFFFF" />
 
           <View style={headerViewProfile}>
@@ -237,7 +243,7 @@ class Profile extends Component {
                       position: "absolute",
                       zIndex: 0,
                       borderWidth: 0.5,
-                      borderColor: "grey",
+                      borderColor: "grey"
                     }}
                     source={
                       this.props.imageRegisterUri
@@ -277,73 +283,81 @@ class Profile extends Component {
                   justifyContent: "space-around"
                 }}
               >
-              {this.props.isVendor?(<View style={subContainerProfile}>
+                {this.props.isVendor ? (
+                  <View style={subContainerProfile}>
+                    <TextInput
+                      style={[
+                        textInputProfilStyle,
+                        { fontSize: 15, fontFamily: "circular-bold" }
+                      ]}
+                      underlineColorAndroid="transparent"
+                      placeholderTextColor="#9D9D9D"
+                      placeholder="Workshop Name"
+                      value={this.props.workshop_name}
+                      onChangeText={text => {
+                        this.props.updateWorkshopName(text);
+                      }}
+                    />
+                    {this.props.isVendor ? (
+                      errors.workshop_name ? (
+                        <Text style={styles.textError2}>
+                          {errors.workshop_name[0]}
+                        </Text>
+                      ) : null
+                    ) : null}
+                  </View>
+                ) : null}
                 <TextInput
-                  style={[textInputProfilStyle,{fontSize:15,fontFamily:'circular-bold'}]}
+                  style={textInputProfilStyle}
                   underlineColorAndroid="transparent"
                   placeholderTextColor="#9D9D9D"
-                  placeholder="Workshop Name"
-                  value={this.props.workshop_name}
+                  placeholder="Name"
+                  value={this.props.name}
                   onChangeText={text => {
-                    this.props.updateWorkshopName(text);
+                    this.props.updateName(text);
                   }}
                 />
-                {this.props.isVendor ? (errors.workshop_name ? (
-                  <Text style={styles.textError2}>{errors.workshop_name[0]}</Text>
-                ) : null):null}
-              </View>):null}
-                  <TextInput
-                    style={textInputProfilStyle}
-                    underlineColorAndroid="transparent"
-                    placeholderTextColor="#9D9D9D"
-                    placeholder="Name"
-                    value={this.props.name}
-                    onChangeText={text => {
-                      this.props.updateName(text);
-                    }}
-                  />
-                  {errors.name ? (
-                    <Text style={styles.textError2}>{errors.name[0]}</Text>
-                  ) : null}
-                  <TextInput
-                    style={textInputProfilStyle}
-                    underlineColorAndroid="transparent"
-                    placeholder={
-                      this.props.isVendor ? "Address" : "Address (Optinal)"
-                    }
-                    placeholderTextColor="#9D9D9D"
-                    autoCapitalize="none"
-                    value={this.props.address}
-                    onChangeText={text => {
-                      this.props.updateAddress(text);
-                    }}
-                  />
-                  {this.props.isVendor ? (
-                    errors.address ? (
-                      <Text style={styles.textError2}>{errors.address[0]}</Text>
-                    ) : null
-                  ) : null}
+                {errors.name ? (
+                  <Text style={styles.textError2}>{errors.name[0]}</Text>
+                ) : null}
+                <TextInput
+                  style={textInputProfilStyle}
+                  underlineColorAndroid="transparent"
+                  placeholder={
+                    this.props.isVendor ? "Address" : "Address (Optinal)"
+                  }
+                  placeholderTextColor="#9D9D9D"
+                  autoCapitalize="none"
+                  value={this.props.address}
+                  onChangeText={text => {
+                    this.props.updateAddress(text);
+                  }}
+                />
+                {this.props.isVendor ? (
+                  errors.address ? (
+                    <Text style={styles.textError2}>{errors.address[0]}</Text>
+                  ) : null
+                ) : null}
 
-
-                  <TextInput
-                    style={textInputProfilStyle}
-                    underlineColorAndroid="transparent"
-                    placeholder={
-                      this.props.isVendor ? "Email" : "Email (Optinal)"
-                    }
-                    placeholderTextColor="#9D9D9D"
-                    autoCapitalize="none"
-                    value={this.props.email}
-                    onChangeText={text => {
-                      this.props.updateEmail(text);
-                    }}
-                  />
-                  {this.props.isVendor ? (
-                    errors.email ? (
-                      <Text style={styles.textError2}>{errors.email[0]}</Text>
-                    ) : null
-                  ) : null}
-                  {this.props.isVendor ?
+                <TextInput
+                  style={textInputProfilStyle}
+                  underlineColorAndroid="transparent"
+                  placeholder={
+                    this.props.isVendor ? "Email" : "Email (Optinal)"
+                  }
+                  placeholderTextColor="#9D9D9D"
+                  autoCapitalize="none"
+                  value={this.props.email}
+                  onChangeText={text => {
+                    this.props.updateEmail(text);
+                  }}
+                />
+                {this.props.isVendor ? (
+                  errors.email ? (
+                    <Text style={styles.textError2}>{errors.email[0]}</Text>
+                  ) : null
+                ) : null}
+                {this.props.isVendor ? (
                   <TextInput
                     style={textInputProfilStyle}
                     underlineColorAndroid="transparent"
@@ -355,118 +369,131 @@ class Profile extends Component {
                       this.props.updateGstin(text);
                     }}
                   />
-                  :null
-                 }
-                  {this.props.isVendor ? (
-                    errors.name ? (
-                      <Text style={styles.textError2}></Text>
-                    ) : null
-                  ) : null}
+                ) : null}
+                {this.props.isVendor ? (
+                  errors.name ? (
+                    <Text style={styles.textError2}></Text>
+                  ) : null
+                ) : null}
 
+                <TextInput
+                  style={textInputProfilStyle}
+                  underlineColorAndroid="transparent"
+                  placeholder="Password"
+                  placeholderTextColor="#9D9D9D"
+                  autoCapitalize="none"
+                  secureTextEntry={true}
+                  value={this.props.password}
+                  onChangeText={text => {
+                    this.props.updatePasswordProfile(text);
+                  }}
+                />
+                {this.props.password.length < 6 &&
+                this.props.password !== "" ? (
+                  <Text style={styles.textError2}>Minimum 6 Character</Text>
+                ) : null}
+                {errors.password ? (
+                  <Text style={styles.textError2}>{errors.password[0]}</Text>
+                ) : null}
+
+                <TextInput
+                  style={textInputProfilStyle}
+                  underlineColorAndroid="transparent"
+                  placeholder="Confirm Password"
+                  placeholderTextColor="#9D9D9D"
+                  autoCapitalize="none"
+                  secureTextEntry={true}
+                  value={this.props.confirmPassword}
+                  onChangeText={text => {
+                    this.props.updateConfirmPassword(text);
+                  }}
+                />
+                {errors.confirmPassword ? (
+                  <Text style={styles.textError2}>
+                    {errors.confirmPassword[0]}
+                  </Text>
+                ) : null}
+                {this.props.isVendor ? (
                   <TextInput
                     style={textInputProfilStyle}
                     underlineColorAndroid="transparent"
-                    placeholder="Password"
+                    placeholder="Referral Code"
                     placeholderTextColor="#9D9D9D"
                     autoCapitalize="none"
-                    secureTextEntry={true}
-                    value={this.props.password}
+                    maxLength={8}
+                    value={this.props.referalCode}
                     onChangeText={text => {
-                      this.props.updatePasswordProfile(text);
+                      this.props.updateReferalCode(text);
                     }}
                   />
-                  {this.props.password.length < 6 &&
-                  this.props.password !== "" ? (
-                    <Text style={styles.textError2}>Minimum 6 Character</Text>
-                  ) : null}
-                  {errors.password ? (
-                    <Text style={styles.textError2}>{errors.password[0]}</Text>
-                  ) : null}
-
-                  <TextInput
-                    style={textInputProfilStyle}
-                    underlineColorAndroid="transparent"
-                    placeholder="Confirm Password"
-                    placeholderTextColor="#9D9D9D"
-                    autoCapitalize="none"
-                    secureTextEntry={true}
-                    value={this.props.confirmPassword}
-                    onChangeText={text => {
-                      this.props.updateConfirmPassword(text);
-                    }}
-                  />
-                  {errors.confirmPassword ? (
-                    <Text style={styles.textError2}>
-                      {errors.confirmPassword[0]}
-                    </Text>
-                  ) : null}
-
+                ) : null}
               </View>
 
               {this.props.isVendor ? (
                 <View>
-                <Text
-                  style={{
-                    fontFamily: "circular-book",
-                    fontSize: 0.033 * ScreenWidth,
-                    marginTop:0.023 * ScreenHeight,
-                    marginLeft:16,
-                    marginBottom:5
-                  }}
-                >
-                Kindly add One of the following document-GST/AADHAR/LICENCE
-                </Text>
-                {errors.documentRegisterUri ? (
-                  <Text style={styles.textError2}>
-                    {errors.documentRegisterUri[0]}
-                  </Text>
-                ) : null}
-
-                <View
-                  style={{
-                    height: 0.22 * ScreenHeight,
-                    justifyContent: "space-between",
-                    marginLeft:16,
-                    marginRight:16
-                  }}
-                >
-                  <View style={{ flexDirection: "row" }}>
-                    {this.renderDocument()}
-                  </View>
-                  <TouchableOpacity
-                    underlayColor="white"
+                  <Text
                     style={{
-                      backgroundColor: "transparent",
-                      height: 25,
-                      width: 0.37 * ScreenWidth,
-                      borderRadius: 25,
-                      borderColor: "#7960FF",
-                      borderWidth: 1,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      alignSelf: "center",
-                      opacity:
-                        this.props.documentRegisterUri.length === 3 ? 0.5 : 1
-                    }}
-                    disabled={
-                      this.props.documentRegisterUri.length === 3 ? true : false
-                    }
-                    onPress={() => {
-                      this.props.addDocument();
+                      fontFamily: "circular-book",
+                      fontSize: 0.033 * ScreenWidth,
+                      marginTop: 0.023 * ScreenHeight,
+                      marginLeft: 16,
+                      marginBottom: 5
                     }}
                   >
-                    <Text
+                    Kindly add One of the following document-GST/AADHAR/LICENCE
+                  </Text>
+                  {errors.documentRegisterUri ? (
+                    <Text style={styles.textError2}>
+                      {errors.documentRegisterUri[0]}
+                    </Text>
+                  ) : null}
+
+                  <View
+                    style={{
+                      height: 0.22 * ScreenHeight,
+                      justifyContent: "space-between",
+                      marginLeft: 16,
+                      marginRight: 16
+                    }}
+                  >
+                    <View style={{ flexDirection: "row" }}>
+                      {this.renderDocument()}
+                    </View>
+                    <TouchableOpacity
+                      underlayColor="white"
                       style={{
-                        fontFamily: "circular-book",
-                        fontSize: 0.033 * ScreenWidth,
-                        color: "#7960FF"
+                        backgroundColor: "transparent",
+                        height: 25,
+                        width: 0.37 * ScreenWidth,
+                        borderRadius: 25,
+                        borderColor: "#7960FF",
+                        borderWidth: 1,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        alignSelf: "center",
+                        opacity:
+                          this.props.documentRegisterUri.length === 3 ? 0.5 : 1
+                      }}
+                      disabled={
+                        this.props.documentRegisterUri.length === 3
+                          ? true
+                          : false
+                      }
+                      onPress={() => {
+                        this.props.addDocument();
                       }}
                     >
-                      +Add Documents
-                    </Text>
-                  </TouchableOpacity>
-
-                </View>
+                      <Text
+                        style={{
+                          fontFamily: "circular-book",
+                          fontSize: 0.033 * ScreenWidth,
+                          color: "#7960FF"
+                        }}
+                      >
+                        +Add Documents
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
               ) : null}
 
@@ -520,34 +547,35 @@ class Profile extends Component {
                       height: 0.45 * ScreenHeight
                     }}
                   >
-                  {this.props.locationVendor ?  <MapView
-                      style={{
-                        ...StyleSheet.absoluteFillObject,
-                        borderRadius: 15,
-                        borderWidth: 1,
-                        borderColor: "#7960FF"
-                      }}
-                      provider={PROVIDER_GOOGLE}
-                      ref={component => (this._map = component)}
-                      onLayout={e => {
-                        this._map.animateToRegion(
-                          {
-                            latitude: this.props.locationVendor.coords.latitude,
-                            longitude: this.props.locationVendor.coords.longitude,
-                            latitudeDelta: 0.0922,
-                            longitudeDelta: 0.0421
-                          },
-                          1
-                        );
-                      }}
-                    >
-
+                    {this.props.locationVendor ? (
+                      <MapView
+                        style={{
+                          ...StyleSheet.absoluteFillObject,
+                          borderRadius: 15,
+                          borderWidth: 1,
+                          borderColor: "#7960FF"
+                        }}
+                        provider={PROVIDER_GOOGLE}
+                        ref={component => (this._map = component)}
+                        onLayout={e => {
+                          this._map.animateToRegion(
+                            {
+                              latitude: this.props.locationVendor.coords
+                                .latitude,
+                              longitude: this.props.locationVendor.coords
+                                .longitude,
+                              latitudeDelta: 0.0922,
+                              longitudeDelta: 0.0421
+                            },
+                            1
+                          );
+                        }}
+                      >
                         <MapView.Marker.Animated
                           coordinate={this.props.locationVendor.coords}
                         />
-
-                    </MapView>
-                    : null}
+                      </MapView>
+                    ) : null}
                   </View>
                   <TouchableHighlight
                     underlayColor="white"
@@ -629,11 +657,11 @@ const notEmpty = test => !isEmpty(test);
 const rules = [
   {
     field: "workshop_name",
-    condition: (confirmPassword, {isVendor}) => {
+    condition: (confirmPassword, { isVendor }) => {
       if (isVendor) {
-        return notEmpty
+        return notEmpty;
       }
-        return true;
+      return true;
     },
     error: "Workshop Name is Require"
   },
@@ -644,9 +672,9 @@ const rules = [
   },
   {
     field: "address",
-    condition: (confirmPassword, {isVendor}) => {
+    condition: (confirmPassword, { isVendor }) => {
       if (isVendor) {
-        return notEmpty
+        return notEmpty;
       }
       return true;
     },
@@ -654,9 +682,9 @@ const rules = [
   },
   {
     field: "email",
-    condition: (confirmPassword, {isVendor}) => {
+    condition: (confirmPassword, { isVendor }) => {
       if (isVendor) {
-        return notEmpty
+        return notEmpty;
       }
       return true;
     },
@@ -711,7 +739,8 @@ const mapStateToProps = ({ register }) => {
     imageRegisterUri,
     signupFail,
     documentRegisterUri,
-    workshop_name
+    workshop_name,
+    referalCode
   } = register;
   return {
     visibleModalProfile,
@@ -733,7 +762,8 @@ const mapStateToProps = ({ register }) => {
     imageRegisterUri,
     signupFail,
     documentRegisterUri,
-    workshop_name
+    workshop_name,
+    referalCode
   };
 };
 
@@ -757,6 +787,7 @@ export default connect(
     upadteRegisterProfileImage,
     addDocument,
     deleteRegisterDocument,
-    updateGstin
+    updateGstin,
+    updateReferalCode
   }
 )(withValidation(rules, Profile));

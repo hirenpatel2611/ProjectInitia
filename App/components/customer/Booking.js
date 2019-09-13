@@ -73,11 +73,6 @@ class Booking extends Component {
              <View
                style={inStyle.viewMarginDirection}
              >
-               <Text
-                 style={[inStyle.textFont14,{  color: "#7960FF",}]}
-               >
-                 {item.vendor.email}
-               </Text>
              </View>
            </View>
          )}

@@ -15,11 +15,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { MOTORCYCLE, CAR, BACK_ARROW,HEAVY_VEHICLE,TOWING,TYRE } from "../../images";
 import { Actions } from "react-native-router-flux";
 import {
-  updateFilterVehicleBool,
-  updateFilterCarBool,
-  updateFilterHeavyVehicleBool,
-  updateFilterTowingServiceBool,
-  updateFilterTyreServiceBool,
   getFilterRating,
   getFilterDistance,
   resetFilter,
@@ -69,109 +64,6 @@ class filter extends Component {
               </TouchableOpacity>
             </View>
             <View style={inStyle.bodyView}>
-              <Text style={inStyle.textMechanic}>Mechanic Type</Text>
-              <View style={inStyle.viewMechanic}>
-                <TouchableHighlight
-                  activeOpacity={1}
-                  onPress={() => {
-                    this.props.updateFilterVehicleBool();
-                  }}
-                  style={inStyle.buttonMechanic}
-                >
-                  <View
-                    elevation={5}
-                    style={[
-                      inStyle.viewMechanicButton,
-                      {
-                        backgroundColor: this.props.isVehicle
-                          ? "#7960FF"
-                          : "white"
-                      }
-                    ]}
-                  >
-                    <Image
-                      style={inStyle.imageMechanicType}
-                      source={MOTORCYCLE}
-                    />
-                  </View>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  activeOpacity={1}
-                  onPress={() => {
-                    this.props.updateFilterCarBool();
-                  }}
-                  style={inStyle.buttonMechanic}
-                >
-                  <View
-                    elevation={5}
-                    style={[
-                      inStyle.viewMechanicButton,
-                      {
-                        backgroundColor: this.props.isCar ? "#7960FF" : "white"
-                      }
-                    ]}
-                  >
-                    <Image style={inStyle.imageMechanicType} source={CAR} />
-                  </View>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  activeOpacity={1}
-                  onPress={() => {
-                    this.props.updateFilterHeavyVehicleBool();
-                  }}
-                  style={inStyle.buttonMechanic}
-                >
-                  <View
-                    elevation={5}
-                    style={[
-                      inStyle.viewMechanicButton,
-                      {
-                        backgroundColor: this.props.isFilterHeavyVehicle ? "#7960FF" : "white"
-                      }
-                    ]}
-                  >
-                    <Image style={inStyle.imageMechanicType} source={HEAVY_VEHICLE} />
-                  </View>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  activeOpacity={1}
-                  onPress={() => {
-                    this.props.updateFilterTowingServiceBool();
-                  }}
-                  style={inStyle.buttonMechanic}
-                >
-                  <View
-                    elevation={5}
-                    style={[
-                      inStyle.viewMechanicButton,
-                      {
-                        backgroundColor: this.props.isFilterTowingService ? "#7960FF" : "white"
-                      }
-                    ]}
-                  >
-                    <Image style={inStyle.imageMechanicType} source={TOWING} />
-                  </View>
-                </TouchableHighlight>
-                <TouchableHighlight
-                  activeOpacity={1}
-                  onPress={() => {
-                    this.props.updateFilterTyreServiceBool();
-                  }}
-                  style={inStyle.buttonMechanic}
-                >
-                  <View
-                    elevation={5}
-                    style={[
-                      inStyle.viewMechanicButton,
-                      {
-                        backgroundColor: this.props.isFilterTyreService ? "#7960FF" : "white"
-                      }
-                    ]}
-                  >
-                    <Image style={inStyle.imageMechanicType} source={TYRE} />
-                  </View>
-                </TouchableHighlight>
-              </View>
               <Text style={[inStyle.textMechanic, { paddingTop: 10 }]}>
                 Rating
               </Text>
@@ -196,7 +88,7 @@ class filter extends Component {
                   style={{ width: 0.92 * ScreenWidth }}
                   step={1}
                   minimumValue={5}
-                  maximumValue={15}
+                  maximumValue={50}
                   value={this.props.distance}
                   minimumTrackTintColor="#7960FF"
                   thumbTintColor="#7960FF"
@@ -277,29 +169,6 @@ const inStyle = {
     color: "#4A4A4A",
     fontFamily: "circular-book"
   },
-  viewMechanic: {
-    flexDirection: "row",
-    padding: 10,
-    justifyContent: "space-around",
-    width: 0.7 * ScreenWidth
-  },
-  buttonMechanic: {
-    borderRadius: 100
-  },
-  imageMechanicType: {
-    width: 33,
-    height: 33,
-    resizeMode: "contain"
-  },
-  viewMechanicButton: {
-    alignItems: "center",
-    padding: 4,
-    borderRadius: 60,
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 5,
-    shadowOpacity: 1.0
-  },
   ratingView: {
     alignItems: "flex-start",
     padding: 10,
@@ -349,20 +218,12 @@ const inStyle = {
 
 const mapStateToProps = ({ customers }) => {
   const {
-    isVehicle,
-    isCar,
-    isFilterHeavyVehicle,
-    isFilterTowingService,
-    isFilterTyreService,
+
     rating,
     distance
   } = customers;
   return {
-    isVehicle,
-    isCar,
-    isFilterHeavyVehicle,
-    isFilterTowingService,
-    isFilterTyreService,
+
     rating,
     distance
   };
@@ -371,11 +232,6 @@ const mapStateToProps = ({ customers }) => {
 export default connect(
   mapStateToProps,
   {
-    updateFilterVehicleBool,
-    updateFilterCarBool,
-    updateFilterHeavyVehicleBool,
-    updateFilterTowingServiceBool,
-    updateFilterTyreServiceBool,
     getFilterRating,
     getFilterDistance,
     resetFilter,

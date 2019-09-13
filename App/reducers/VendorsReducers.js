@@ -50,7 +50,10 @@ import {
   GET_WALLET_AMOUNT_SUCCESS,
   ADD_WALLET_PAYMENT_SUCCESS,
   LOAD_MORE_BOOKING_LIST,
-  UPDATE_VENDOR_WORSHOP_NAME
+  UPDATE_VENDOR_WORSHOP_NAME,
+  UPDATE_VENDOR_PROFILE_VEHICLE_BOOL,
+  UPDATE_VENDOR_PROFILE_CAR_BOOL,
+  UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -76,7 +79,7 @@ const INITIAL_STATE = {
   loadingConfirm: false,
   isFutureBookingNoFound: false,
   onSubmeetProfileVendorForm: false,
-  workshop_nameVendor:"",
+  workshop_nameVendor: "",
   fullNameVendor: "",
   addressVendor: "",
   emailVendor: "",
@@ -99,8 +102,9 @@ const INITIAL_STATE = {
   successPaymentModal: false,
   walletBalance: 0,
   pages: 1,
-  paginate:false,
-  bookingModalData:''
+  paginate: false,
+  bookingModalData: "",
+  vendorProfileServiceType: [false, false, false, false, false]
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -120,7 +124,7 @@ export default (state = INITIAL_STATE, action) => {
           loadingFutureBookigList: false,
           vendorBookingList: action.payload,
           isFutureBookingNoFound: false,
-          paginate:false
+          paginate: false
         };
       }
       break;
@@ -155,14 +159,14 @@ export default (state = INITIAL_STATE, action) => {
           bookingData: action.payload.message.bookData,
           bookUserData: action.payload.message.userData,
           customerLocation: action.payload.message.location,
-          bookingModalData:action.payload
+          bookingModalData: action.payload,
+          pages: 1
         };
       }
       break;
 
     case GET_CUSTOMER_CURRENT_DISTANCE:
       {
-        console.log(action.payload);
         return {
           ...state,
           customerDistance: action.payload
@@ -331,15 +335,14 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-      case UPDATE_VENDOR_WORSHOP_NAME:
-        {
-          return {
-            ...state,
-            workshop_nameVendor: action.payload,
-
-          };
-        }
-        break;
+    case UPDATE_VENDOR_WORSHOP_NAME:
+      {
+        return {
+          ...state,
+          workshop_nameVendor: action.payload
+        };
+      }
+      break;
 
     case UPDATE_VENDOR_FULL_NAME:
       {
@@ -401,14 +404,42 @@ export default (state = INITIAL_STATE, action) => {
 
     case LOAD_VENDOR_PROFILE:
       {
-        console.log(action.payload);
+        var vendorServiceType = [false, false, false, false, false];
+        action.payload.userVehicleType.map(VehicleType => {
+          switch (VehicleType) {
+            case "bike":
+              return (vendorServiceType[0] = true);
+              break;
+
+            case "car":
+              return (vendorServiceType[1] = true);
+              break;
+
+            case "Heavy_Vehicle":
+              return (vendorServiceType[2] = true);
+              break;
+
+            case "Towing_Service":
+              return (vendorServiceType[3] = true);
+              break;
+
+            case "Tyre_Service":
+              return (vendorServiceType[4] = true);
+              break;
+            default:
+              vendorServiceType;
+          }
+        });
+
+        console.log(vendorServiceType);
         return {
           ...state,
-          workshop_nameVendor:action.payload.workshop_name,
+          workshop_nameVendor: action.payload.workshop_name,
           fullNameVendor: action.payload.userFullName,
           addressVendor: action.payload.userAddress,
           emailVendor: action.payload.userEmail,
-          imageVendorUri: action.payload.uri
+          imageVendorUri: action.payload.uri,
+          vendorProfileServiceType: vendorServiceType
         };
       }
       break;
@@ -640,7 +671,34 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           pages: action.payload,
-          paginate:true
+          paginate: true
+        };
+      }
+      break;
+
+    case UPDATE_VENDOR_PROFILE_VEHICLE_BOOL:
+      {
+        return {
+          ...state,
+          vendorProfileServiceType: [...action.payload]
+        };
+      }
+      break;
+
+    case UPDATE_VENDOR_PROFILE_CAR_BOOL:
+      {
+        return {
+          ...state,
+          vendorProfileServiceType: [...action.payload]
+        };
+      }
+      break;
+
+    case UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL:
+      {
+        return {
+          ...state,
+          vendorProfileServiceType: [...action.payload]
         };
       }
       break;

@@ -22,6 +22,7 @@ var isVen = null;
 var disp = null;
 var bookingDetails = null;
 var vendorMobileno = null;
+var val = null;
 
 const LOCATION_TASK_NAME = "background-location-task";
 const LOCATION_TASK_NAME1 = "background-location-task-current";
@@ -181,7 +182,6 @@ export const connectTosocket = () => async (dispatch, getState) => {
   const { userId, userData } = getState().user;
   userData.userLatitude = location.coords.latitude;
   userData.userLongitude = location.coords.longitude;
-  console.log(vendorsData);
   chatSocket.emit("booking", {
     room: `${userId} ${vendorsData.id}`,
     message: { bookData, userData, vendorDistance, location},
@@ -197,7 +197,6 @@ export const connectTosocket = () => async (dispatch, getState) => {
 };
 
 export const connectTosocketApprov = val => async (dispatch, getState) => {
-  console.log(val);
   const { bookingData,bookingModalData } = getState().vendors;
   const { userId } = getState().user;
   chatSocket.emit("booking_status", {
@@ -220,7 +219,8 @@ export const connectTosocketBookingCancle = val => async (
   var toToken;
   if (isUserVendor === "1") {
     cancelData = bookingData;
-
+    Notifications.dismissAllNotificationsAsync()
+    Notifications.cancelAllScheduledNotificationsAsync();
   } else {
     cancelData = bookData;
   }
@@ -235,16 +235,16 @@ export const connectTosocketBookingCancle = val => async (
 };
 
 export const connectTosocketReached = val => async (dispatch, getState) => {
-  const { vendorsData, bookData } = getState().customers;
+  const { mechanicBookedData } = getState().vendors;
   const { userId } = getState().user;
 
   chatSocket.emit("booking_status", {
-    room: `${vendorsData.id} ${userId}`,
-    message: bookData,
+    room: `${val.id} ${userId}`,
+    message: mechanicBookedData,
     type: "REACHED",
-    toToken:vendorsData.device_token
+    toToken:val.customerToken //vendorsData.device_token
   });
-  channelName = `${userId} ${vendorsData.id}`;
+  channelName = `${userId} ${val.id}`;
 };
 
 export const socketLeave = () => async (dispatch, getState) => {
@@ -261,7 +261,7 @@ export const socketBookingOnTheWay = socketData => async (
   getState
 ) => {
   const { bookingData, mechanicBookedData } = getState().vendors;
-  console.log(socketData);
+
   chatSocket.emit("booking_status", {
     room: `${socketData.customer_id} ${mechanicBookedData.booking.vendor.vendor_id}`,
     message: mechanicBookedData,
@@ -280,6 +280,7 @@ export const socketVendorCurrentLocation = val => async (
   vendorMobileno = userData.userMobileno;
   bookingDetails = mechanicBookedData;
   disp = dispatch;
+  val= val;
   let { status } = await Permissions.askAsync(Permissions.LOCATION);
   if (status !== "granted") {
     // this.props.getUserLocationFail();
@@ -362,6 +363,7 @@ export const socketVendorCurrentLocation = val => async (
           toToken:null
         });
         channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
+
         Notifications.dismissAllNotificationsAsync()
         Notifications.cancelAllScheduledNotificationsAsync();
       }
@@ -386,7 +388,6 @@ TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
 
   if (bookingDetails) {
     const { locations } = data;
-    console.log(locations);
     var radlat1 = (Math.PI * bookingDetails.booking.booking_latitude) / 180;
 
     var radlat2 = (Math.PI * locations[0].coords.latitude) / 180;
@@ -428,6 +429,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
       });
       channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
       TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
+      disp(connectTosocketReached(val))
     }
   }
 });

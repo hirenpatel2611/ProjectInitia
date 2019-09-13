@@ -9,7 +9,8 @@ import {
   StyleSheet,
   Platform,
   Animated,
-  Modal
+  Modal,
+  TouchableHighlight
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -21,6 +22,11 @@ import * as Permissions from 'expo-permissions';
 import * as IntentLauncher from 'expo-intent-launcher';
 import * as Constants from 'expo-constants'
 import {
+  updateFilterVehicleBool,
+  updateFilterCarBool,
+  updateFilterHeavyVehicleBool,
+  updateFilterTowingServiceBool,
+  updateFilterTyreServiceBool,
   getVendors,
   getUserLocationFail,
   getUserLocationSuccess,
@@ -39,11 +45,12 @@ import {
   getUserData,
   getCancelBookingModalClose
 } from "../../actions";
-import { MECHANIC, USER2, FILTER } from "../../images";
+import { MECHANIC, USER2, FILTER,MOTORCYCLE, CAR, BACK_ARROW,HEAVY_VEHICLE,TOWING,TYRE } from "../../images";
 import { Rating, AirbnbRating } from "react-native-ratings";
-import CheckBox from "react-native-check-box";
+import CheckBox from 'react-native-checkbox';
 import {statusToPhrase} from '../../config';
 import * as Location from 'expo-location';
+import FlashMessage from "react-native-flash-message";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -55,8 +62,6 @@ class NearbyGaraje extends Component {
   };
 
   async componentWillMount() {
-    await this.props.getVendors();
-
     if (Platform.OS === "android" && !Constants.isDevice) {
       this._getLocationAsync();
     } else {
@@ -95,6 +100,7 @@ class NearbyGaraje extends Component {
     this.props.getUserLocationSuccess(location);
     {
       this.props.getUserData();
+      this.props.getVendors();
       this._map.animateToRegion(
         {
           latitude: this.props.location.coords.latitude,
@@ -147,6 +153,7 @@ class NearbyGaraje extends Component {
       <View style={containerStyle}>
         <Header headerText="Near by Partners" filterIcon={FILTER} filterPress={()=>{Actions.filter()}}/>
         <StatusBar backgroundColor="#7960FF" />
+
         <View
           style={[
             {
@@ -177,6 +184,59 @@ class NearbyGaraje extends Component {
             ) : null}
           </MapView>
 
+          <View style={inStyle.viewMechanic}>
+            <TouchableHighlight
+              disabled={this.props.isServiceType[0]===1}
+              activeOpacity={1}
+              elevation={5}
+              onPress={() => {
+                this.props.updateFilterVehicleBool();
+              }}
+              style={[inStyle.buttonMechanic,{
+                backgroundColor: this.props.isServiceType[0]===1
+                  ? "#7960FF"
+                  : "white"
+              }]}
+            >
+                <Image
+                  style={inStyle.imageMechanicType}
+                  source={MOTORCYCLE}
+                />
+            </TouchableHighlight>
+            <TouchableHighlight
+            disabled={this.props.isServiceType[1]===1}
+              activeOpacity={1}
+              elevation={5}
+              onPress={() => {
+                this.props.updateFilterCarBool();
+              }}
+              style={[inStyle.buttonMechanic,{
+                backgroundColor: this.props.isServiceType[1]===1
+                  ? "#7960FF"
+                  : "white"
+              }]}
+            >
+                <Image style={inStyle.imageMechanicType} source={CAR} />
+            </TouchableHighlight>
+            <TouchableHighlight
+            disabled={this.props.isServiceType[2]===1}
+              activeOpacity={1}
+              elevation={5}
+              onPress={() => {
+                this.props.updateFilterHeavyVehicleBool();
+              }}
+              style={[inStyle.buttonMechanic,{
+                backgroundColor: this.props.isServiceType[2]===1
+                  ? "#7960FF"
+                  : "white"
+              }]}
+            >
+                <Image style={inStyle.imageMechanicType} source={HEAVY_VEHICLE} />
+            </TouchableHighlight>
+
+
+          </View>
+
           <Modal
             visible={this.props.isBookModalVisible}
             onRequestClose={() => {
@@ -187,6 +247,7 @@ class NearbyGaraje extends Component {
             opacity={0.5}
             style={inStyle.modalStyle}
           >
+
             <TouchableOpacity
               style={{ height: ScreenHeight, paddingTop: 0.68 * ScreenHeight }}
               activeOpacity={1}
@@ -291,17 +352,12 @@ class NearbyGaraje extends Component {
             opacity={0.5}
             style={inStyle.modalStyle}
           >
-            <View
-              style={{
-                height: ScreenHeight
-              }}
-            >
               <View
                 style={{
                   marginTop: 0.4 * ScreenHeight,
                   alignSelf: "stretch",
                   backgroundColor: "#FFFFFF",
-                  height: 0.25 * ScreenHeight,
+                  height: 0.28 * ScreenHeight,
                   margin: 15,
                   borderRadius: 10,
                   padding: 10,
@@ -339,35 +395,47 @@ class NearbyGaraje extends Component {
                   Reason of Cancel
                 </Text>
                 <CheckBox
-                  isChecked={this.props.reasonCheckbox[0]}
-                  checkedCheckBoxColor="#7960FF"
-                  rightText="Mechanic is not responding on booking."
-                  checkedIcon="dot-circle-o"
-                  uncheckedIcon="circle-o"
-                  onClick={() => {
-                    this.props.getReasonCheckbox(0);
-                  }}
+                  label='Mechanic is not responding on booking.'
+                  checked={this.props.reasonCheckbox[0]}
+                  onChange={() => {
+                       this.props.getReasonCheckbox(0);
+                    }}
+                  checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
+                  labelStyle={{fontFamily:'circular-bold'}}
+                  containerStyle={{padding:3}}
                 />
-                <CheckBox
-                  isChecked={this.props.reasonCheckbox[1]}
-                  checkedCheckBoxColor="#7960FF"
-                  rightText="Mechanic is not done good deal."
-                  checkedIcon="dot-circle-o"
-                  uncheckedIcon="circle-o"
-                  onClick={() => {
-                    this.props.getReasonCheckbox(1);
+                {
+                // <CheckBox
+                //   isChecked={this.props.reasonCheckbox[0]}
+                //   checkedCheckBoxColor="#7960FF"
+                //   rightText="Mechanic is not responding on booking."
+                //   checkedIcon="dot-circle-o"
+                //   uncheckedIcon="circle-o"
+                //   onClick={() => {
+                //     this.props.getReasonCheckbox(0);
+                //   }}
+                // />
+              }
+              <CheckBox
+                label='Mechanic is not done good deal.'
+                checked={this.props.reasonCheckbox[1]}
+                onChange={() => {
+                     this.props.getReasonCheckbox(1);
                   }}
-                />
-                <CheckBox
-                  isChecked={this.props.reasonCheckbox[2]}
-                  checkedCheckBoxColor="#7960FF"
-                  rightText="I Choose better option."
-                  checkedIcon="dot-circle-o"
-                  uncheckedIcon="circle-o"
-                  onClick={() => {
-                    this.props.getReasonCheckbox(2);
+                checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
+                labelStyle={{fontFamily:'circular-bold'}}
+                containerStyle={{padding:3}}
+              />
+              <CheckBox
+                label='I Choose better option.'
+                checked={this.props.reasonCheckbox[2]}
+                onChange={() => {
+                     this.props.getReasonCheckbox(2);
                   }}
-                />
+                checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
+                labelStyle={{fontFamily:'circular-bold'}}
+                containerStyle={{padding:3}}
+              />
                 <TouchableOpacity
                   disabled={!this.props.confirmDisable}
                   style={{
@@ -397,8 +465,9 @@ class NearbyGaraje extends Component {
                   )}
                 </TouchableOpacity>
               </View>
-            </View>
+          
           </Modal>
+          <FlashMessage style={{backgroundColor: "#7960FF",color: "#fff"}}/>
         </View>
       </View>
     );
@@ -487,11 +556,35 @@ const inStyle = {
     width: 40,
     height: 40,
     resizeMode: "contain"
-  }
+  },
+  viewMechanic: {
+    flexDirection: "row",
+    padding: 10,
+    alignItems:'center',
+    justifyContent: "space-around",
+    width: ScreenWidth,
+    marginTop: 0.73 * ScreenHeight
+  },
+  buttonMechanic: {
+    borderRadius: 100,
+    alignItems: "center",
+    padding: 4,
+    borderRadius: 60,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowRadius: 5,
+    shadowOpacity: 1.0
+  },
+  imageMechanicType: {
+    width: 50,
+    height: 50,
+    resizeMode: "contain",
+  },
 };
 
 const mapStateToProps = ({ customers }) => {
   const {
+    isServiceType,
     loading,
     vendors,
     errorMessage,
@@ -507,6 +600,7 @@ const mapStateToProps = ({ customers }) => {
     confirmDisable
   } = customers;
   return {
+    isServiceType,
     loading,
     vendors,
     errorMessage,
@@ -526,6 +620,11 @@ const mapStateToProps = ({ customers }) => {
 export default connect(
   mapStateToProps,
   {
+    updateFilterVehicleBool,
+    updateFilterCarBool,
+    updateFilterHeavyVehicleBool,
+    updateFilterTowingServiceBool,
+    updateFilterTyreServiceBool,
     getVendors,
     getUserLocationFail,
     getUserLocationSuccess,

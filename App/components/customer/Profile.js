@@ -23,6 +23,7 @@ import {
 import withValidation from "simple-hoc-validator";
 import * as Permissions from 'expo-permissions';
 import * as Constants from 'expo-constants';
+import FlashMessage from "react-native-flash-message";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -57,6 +58,7 @@ getPermissionAsync = async () => {
       <View>
       <Header headerText="Profile"/>
       <KeyboardAwareScrollView enableOnAndroid>
+      <FlashMessage position="center" style={{marginTop:0.50 *ScreenHeight,backgroundColor: "#7960FF",color: "#fff"}}/>
       <View
         style={profileMainView}
       >

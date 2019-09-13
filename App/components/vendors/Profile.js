@@ -26,12 +26,16 @@ import {
   updateVendorEmail,
   updateVendorProfile,
   upadteVendorProfileImage,
-  updateVendorWorkshopName
+  updateVendorWorkshopName,
+  updateVenderProfileVehicleBool,
+  updateVendorProfileCarBool,
+  updateVendorProfileHeavyVehicleBool
 } from "../../actions";
-import { USER2, PENCIL } from "../../images";
+import { USER2, PENCIL, MOTORCYCLE, CAR, HEAVY_VEHICLE,TOWING } from "../../images";
 import { Asset } from "expo";
-import * as Constants from 'expo-constants'
-import * as Permissions from 'expo-permissions';
+import * as Constants from "expo-constants";
+import * as Permissions from "expo-permissions";
+import FlashMessage from "react-native-flash-message";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -41,7 +45,7 @@ class Profile extends Component {
     this.getPermissionAsync();
   }
   getPermissionAsync = async () => {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === "ios") {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status !== "granted") {
         alert("Sorry, we need camera roll permissions to make this work!");
@@ -50,7 +54,6 @@ class Profile extends Component {
   };
 
   render() {
-      console.log(this.props.imageVendorUri)
     const {
       containerStyle,
       subContainerProfile,
@@ -60,15 +63,13 @@ class Profile extends Component {
       <View>
         <Header headerText="Profile" />
         <KeyboardAwareScrollView enableOnAndroid>
-          <View
-            style={inStyle.containerStyle}
-          >
+          <View style={inStyle.containerStyle}>
             <Image
               style={inStyle.profileImageStyle}
               resizeMode={"cover"}
               source={
                 this.props.imageVendorUri
-                  ? {uri:this.props.imageVendorUri}
+                  ? { uri: this.props.imageVendorUri }
                   : USER2
               }
             />
@@ -79,17 +80,15 @@ class Profile extends Component {
                 this.props.upadteVendorProfileImage();
               }}
             >
-              <Image
-                style={inStyle.imagePencleStyle}
-                source={PENCIL}
-              />
+              <Image style={inStyle.imagePencleStyle} source={PENCIL} />
             </TouchableOpacity>
           </View>
-          <View
-            style={inStyle.viewSubContainer}
-          >
+          <View style={inStyle.viewSubContainer}>
             <TextInput
-              style={[textInputProfilStyle,{fontSize:15,fontFamily:'circular-bold'}]}
+              style={[
+                textInputProfilStyle,
+                { fontSize: 15, fontFamily: "circular-bold" }
+              ]}
               underlineColorAndroid="transparent"
               placeholderTextColor="#9D9D9D"
               placeholder="Workshop Name"
@@ -140,6 +139,87 @@ class Profile extends Component {
               }
             />
           </View>
+          <View style={inStyle.viewMechanic}>
+            <TouchableHighlight
+              activeOpacity={1}
+              elevation={5}
+              onPress={() => {
+                this.props.updateVenderProfileVehicleBool();
+              }}
+              style={[
+                inStyle.buttonMechanic,
+                {
+                  backgroundColor: this.props.vendorProfileServiceType[0]
+                    ? "#7960FF"
+                    : "white"
+                }
+              ]}
+            >
+              <Image style={inStyle.imageServiceType} source={MOTORCYCLE} />
+            </TouchableHighlight>
+            <TouchableHighlight
+              activeOpacity={1}
+              elevation={5}
+              onPress={() => {
+                this.props.updateVendorProfileCarBool();
+              }}
+              style={[
+                inStyle.buttonMechanic,
+                {
+                  backgroundColor: this.props.vendorProfileServiceType[1]
+                    ? "#7960FF"
+                    : "white"
+                }
+              ]}
+            >
+              <Image style={inStyle.imageServiceType} source={CAR} />
+            </TouchableHighlight>
+            <TouchableHighlight
+              activeOpacity={1}
+              elevation={5}
+              onPress={() => {
+                this.props.updateVendorProfileHeavyVehicleBool();
+              }}
+              style={[
+                inStyle.buttonMechanic,
+                {
+                  backgroundColor: this.props.vendorProfileServiceType[2]
+                    ? "#7960FF"
+                    : "white"
+                }
+              ]}
+            >
+              <Image style={inStyle.imageServiceType} source={HEAVY_VEHICLE} />
+            </TouchableHighlight>
+            {
+            // <TouchableHighlight
+            //   activeOpacity={1}
+            //   elevation={5}
+            //   onPress={() => {
+            //     this.props.updateVendorProfileHeavyVehicleBool();
+            //   }}
+            //   style={[
+            //     inStyle.buttonMechanic,
+            //     {
+            //       backgroundColor: this.props.vendorProfileServiceType[2]
+            //         ? "#7960FF"
+            //         : "white"
+            //     }
+            //   ]}
+            // >
+            //   <Image style={inStyle.imageServiceType} source={TOWING} />
+            // </TouchableHighlight>
+            }
+          </View>
+          <FlashMessage
+            position="center"
+            style={{
+              zIndex: 100,
+              marginTop: 0.5 * ScreenHeight,
+              backgroundColor: "#7960FF",
+              color: "#fff"
+            }}
+          />
           <TouchableHighlight
             onPress={() => {
               this.props.updateVendorProfile();
@@ -147,9 +227,7 @@ class Profile extends Component {
             underlayColor="white"
             style={inStyle.continueButton}
           >
-            <Text
-              style={inStyle.buttonTextStyle}
-            >
+            <Text style={inStyle.buttonTextStyle}>
               {this.props.loadingProfileUpdate ? "Loading..." : "Continue"}
             </Text>
           </TouchableHighlight>
@@ -160,7 +238,7 @@ class Profile extends Component {
 }
 
 const inStyle = {
-  containerStyle:{
+  containerStyle: {
     borderColor: "#7960FF",
     borderRadius: 60,
     width: 120,
@@ -169,52 +247,74 @@ const inStyle = {
     marginTop: 10,
     justifyContent: "center",
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: "black"
   },
- profileImageStyle:{
-   borderRadius: 60,
-   width: 120,
-   height: 120,
-   alignSelf: "center",
-   zIndex: -1,
-   position:'absolute'
- },
- touchableOpacityStyle:{
-   borderRadius: 15,
-   width: 23,
-   height: 23,
-   alignSelf: "flex-end",
-   backgroundColor: "#F5FCFF",
-   alignItems: "center",
-   justifyContent: "center"
- },
- imagePencleStyle:{
-   width: 15,
-   height: 15,
-   resizeMode: "contain",
- },
- viewSubContainer:{
-   marginTop: 0.001 * ScreenHeight,
-   height: 0.40 * ScreenHeight,
-   justifyContent: "space-around"
- },
- continueButton:{
-   marginTop: 0.20 * ScreenHeight,
-   alignSelf: "center",
-   backgroundColor: "#7960FF",
-   height: 44,
-   width: 0.78 * ScreenWidth,
-   borderRadius: 25,
-   alignItems: "center",
-   marginBottom: 10,
-   justifyContent: "center"
- },
- buttonTextStyle:{
-   padding: 10,
-   fontSize: 18,
-   fontFamily: "circular-book",
-   color: "white"
- }
+  profileImageStyle: {
+    borderRadius: 60,
+    width: 120,
+    height: 120,
+    alignSelf: "center",
+    zIndex: -1,
+    position: "absolute"
+  },
+  touchableOpacityStyle: {
+    borderRadius: 15,
+    width: 23,
+    height: 23,
+    alignSelf: "flex-end",
+    backgroundColor: "#F5FCFF",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  imagePencleStyle: {
+    width: 15,
+    height: 15,
+    resizeMode: "contain"
+  },
+  viewSubContainer: {
+    marginTop: 0.001 * ScreenHeight,
+    height: 0.4 * ScreenHeight,
+    justifyContent: "space-around"
+  },
+  continueButton: {
+    marginTop: 0.08 * ScreenHeight,
+    alignSelf: "center",
+    backgroundColor: "#7960FF",
+    height: 44,
+    width: 0.78 * ScreenWidth,
+    borderRadius: 25,
+    alignItems: "center",
+    marginBottom: 10,
+    justifyContent: "center"
+  },
+  buttonTextStyle: {
+    padding: 10,
+    fontSize: 18,
+    fontFamily: "circular-book",
+    color: "white"
+  },
+  viewMechanic: {
+    flexDirection: "row",
+    padding: 10,
+    alignItems: "center",
+    justifyContent: "space-around",
+    width: ScreenWidth
+  },
+  buttonMechanic: {
+    borderRadius: 100,
+    alignItems: "center",
+    padding: 4,
+    borderRadius: 60,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 5 },
+    shadowRadius: 5,
+    shadowOpacity: 1.0
+  },
+  imageServiceType: {
+    width: 50,
+    height: 50,
+    resizeMode: "contain"
+  }
 };
 
 const mapStateToProps = ({ user, vendors }) => {
@@ -225,7 +325,8 @@ const mapStateToProps = ({ user, vendors }) => {
     addressVendor,
     emailVendor,
     imageVendorUri,
-    loadingProfileUpdate
+    loadingProfileUpdate,
+    vendorProfileServiceType
   } = vendors;
   const { userData } = user;
   return {
@@ -236,7 +337,8 @@ const mapStateToProps = ({ user, vendors }) => {
     addressVendor,
     emailVendor,
     imageVendorUri,
-    loadingProfileUpdate
+    loadingProfileUpdate,
+    vendorProfileServiceType
   };
 };
 
@@ -250,6 +352,9 @@ export default connect(
     updateVendorEmail,
     updateVendorProfile,
     upadteVendorProfileImage,
-    updateVendorWorkshopName
+    updateVendorWorkshopName,
+    updateVenderProfileVehicleBool,
+    updateVendorProfileCarBool,
+    updateVendorProfileHeavyVehicleBool
   }
 )(Profile);

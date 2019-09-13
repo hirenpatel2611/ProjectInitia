@@ -18,7 +18,8 @@ import {
   addBalanceRequest,
   getWalletPaymentId,
   paymentSuccessOk,
-  getWalletAmount
+  getWalletAmount,
+  shareReferal
 } from "../../actions";
 import { SUCCESS, BITMAP2 } from "../../images";
 
@@ -35,7 +36,6 @@ class Wallet extends Component {
 
     const htmls =
       `
-
     <button id="rzp-button1">Pay</button>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
@@ -43,9 +43,9 @@ class Wallet extends Component {
         "key": "rzp_test_DsJMfn5t0GT1hK", // Enter the Key ID generated from the Dashboard
         "amount": "29935", // Amount is in currency subunits. Default currency is INR. Hence, 29935 refers to 29935 paise or INR 299.35.
         "currency": "INR",
-        "name": "Acme Corp",
-        "description": "A Wild Sheep Chase is the third novel by Japanese author  Haruki Murakami",
-        "image": "https://example.com/your_logo",
+        "name": "`+ this.props.userData.userFullName +`",
+        "description": "Don't Press Back Button",
+        "image": "../../../asset/icon2.png",
         "order_id": "` +
       this.props.WalletOrderId +
       `",
@@ -53,14 +53,18 @@ class Wallet extends Component {
            window.postMessage(response.razorpay_payment_id);
         },
         "prefill": {
-            "name": "Gaurav Kumar",
-            "email": "gaurav.kumar@example.com"
+            "name": "`+ this.props.userData.userFullName +`",
+            "email": "`+ this.props.userData.userEmail +`"
         },
         "notes": {
             "address": "note value"
         },
         "theme": {
-            "color": "#F37254"
+            "color": "#7960FF"
+        },
+        "modal":{
+          "backdropclose": "true",
+          "handleback":"false"
         }
     };
     var rzp1 = new Razorpay(options);
@@ -202,7 +206,7 @@ class Wallet extends Component {
             </TouchableHighlight>
 
             <TouchableHighlight
-              onPress={() => {}}
+              onPress={() => {this.props.shareReferal()}}
               underlayColor="white"
               style={{
                 alignSelf: "center",
@@ -249,7 +253,9 @@ class Wallet extends Component {
               alignSelf: "center",
               borderRadius: 10,
               justifyContent: "space-between",
-              padding: 10
+              padding: 10,
+              borderWidth:1,
+              borderColor:'#7960FF'
             }}
           >
             <Image
@@ -363,6 +369,7 @@ export default connect(
     addBalanceRequest,
     getWalletPaymentId,
     paymentSuccessOk,
-    getWalletAmount
+    getWalletAmount,
+    shareReferal
   }
 )(Wallet);
