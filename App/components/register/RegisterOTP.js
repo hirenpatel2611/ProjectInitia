@@ -175,7 +175,7 @@ class RegisterOTP extends Component {
                         resizeMode: "contain",
                         opacity: isTowingService ? 0.2 : 1
                       }}
-                      source={TOWING}
+                      source={{uri:'http://ilifenetwork.com/api/web/towing.png'}}
                     />
                   </View>
                 </TouchableOpacity>:null}
@@ -193,7 +193,7 @@ class RegisterOTP extends Component {
                         resizeMode: "contain",
                         opacity: isTyreService ? 0.2 : 1
                       }}
-                      source={TYRE}
+                      source={{uri:'http://ilifenetwork.com/api/web/tyre.png'}}
                     />
                   </View>
                 </TouchableOpacity>

@@ -846,3 +846,29 @@ export const updateVendorProfileHeavyVehicleBool = () => (
     payload: vendorProfileServiceType
   });
 };
+
+export const updateVendorProfileTowingBool = () => (
+  dispatch,
+  getState
+) => {
+  const { vendorProfileServiceType } = getState().vendors;
+  vendorProfileServiceType[3] = !vendorProfileServiceType[3];
+  console.log(vendorProfileServiceType);
+  dispatch({
+    type: UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL,
+    payload: vendorProfileServiceType
+  });
+};
+
+export const updateVendorProfileTyreBool = () => (
+  dispatch,
+  getState
+) => {
+  const { vendorProfileServiceType } = getState().vendors;
+  vendorProfileServiceType[4] = !vendorProfileServiceType[4];
+  console.log(vendorProfileServiceType);
+  dispatch({
+    type: UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL,
+    payload: vendorProfileServiceType
+  });
+};

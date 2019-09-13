@@ -29,7 +29,9 @@ import {
   updateVendorWorkshopName,
   updateVenderProfileVehicleBool,
   updateVendorProfileCarBool,
-  updateVendorProfileHeavyVehicleBool
+  updateVendorProfileHeavyVehicleBool,
+  updateVendorProfileTowingBool,
+  updateVendorProfileTyreBool
 } from "../../actions";
 import { USER2, PENCIL, MOTORCYCLE, CAR, HEAVY_VEHICLE,TOWING } from "../../images";
 import { Asset } from "expo";
@@ -61,7 +63,7 @@ class Profile extends Component {
     } = styles;
     return (
       <View>
-        <Header headerText="Profile" />
+        <Header headerText="Profil" />
         <KeyboardAwareScrollView enableOnAndroid>
           <View style={inStyle.containerStyle}>
             <Image
@@ -112,7 +114,7 @@ class Profile extends Component {
               style={textInputProfilStyle}
               underlineColorAndroid="transparent"
               placeholderTextColor="#9D9D9D"
-              placeholder="Address"
+              placeholder="State & State Code"
               value={this.props.addressVendor}
               multiline={true}
               onChangeText={text => {
@@ -191,25 +193,41 @@ class Profile extends Component {
             >
               <Image style={inStyle.imageServiceType} source={HEAVY_VEHICLE} />
             </TouchableHighlight>
-            {
-            // <TouchableHighlight
-            //   activeOpacity={1}
-            //   elevation={5}
-            //   onPress={() => {
-            //     this.props.updateVendorProfileHeavyVehicleBool();
-            //   }}
-            //   style={[
-            //     inStyle.buttonMechanic,
-            //     {
-            //       backgroundColor: this.props.vendorProfileServiceType[2]
-            //         ? "#7960FF"
-            //         : "white"
-            //     }
-            //   ]}
-            // >
-            //   <Image style={inStyle.imageServiceType} source={TOWING} />
-            // </TouchableHighlight>
-            }
+            <TouchableHighlight
+              activeOpacity={1}
+              elevation={5}
+              onPress={() => {
+                this.props.updateVendorProfileTowingBool();
+              }}
+              style={[
+                inStyle.buttonMechanic,
+                {
+                  backgroundColor: this.props.vendorProfileServiceType[3]
+                    ? "#7960FF"
+                    : "white"
+                }
+              ]}
+            >
+              <Image style={inStyle.imageServiceType} source={{uri:'http://ilifenetwork.com/api/web/towing.png'}} />
+            </TouchableHighlight>
+
+            <TouchableHighlight
+              activeOpacity={1}
+              elevation={5}
+              onPress={() => {
+                this.props.updateVendorProfileTyreBool();
+              }}
+              style={[
+                inStyle.buttonMechanic,
+                {
+                  backgroundColor: this.props.vendorProfileServiceType[4]
+                    ? "#7960FF"
+                    : "white"
+                }
+              ]}
+            >
+              <Image style={inStyle.imageServiceType} source={{uri:'http://ilifenetwork.com/api/web/tyre.png'}} />
+            </TouchableHighlight>
           </View>
           <FlashMessage
             position="center"
@@ -355,6 +373,8 @@ export default connect(
     updateVendorWorkshopName,
     updateVenderProfileVehicleBool,
     updateVendorProfileCarBool,
-    updateVendorProfileHeavyVehicleBool
+    updateVendorProfileHeavyVehicleBool,
+    updateVendorProfileTowingBool,
+    updateVendorProfileTyreBool
   }
 )(Profile);

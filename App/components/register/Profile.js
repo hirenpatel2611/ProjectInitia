@@ -324,7 +324,7 @@ class Profile extends Component {
                   style={textInputProfilStyle}
                   underlineColorAndroid="transparent"
                   placeholder={
-                    this.props.isVendor ? "Address" : "Address (Optinal)"
+                    this.props.isVendor ? "State & State Code" : "Address (Optinal)"
                   }
                   placeholderTextColor="#9D9D9D"
                   autoCapitalize="none"

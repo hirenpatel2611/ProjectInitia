@@ -155,6 +155,13 @@ var styles = StyleSheet.create({
     fontFamily: "circular-book",
     color: "#696969"
   },
+  midTextStyle1: {
+    fontSize: 16,
+    textAlign: "center",
+    width: 350,
+    fontFamily: "circular-book",
+    color: "#696969"
+  },
   mainViewStyle: {
     flex: 1,
     flexDirection: "column",

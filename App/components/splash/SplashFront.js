@@ -49,6 +49,7 @@ class SplashFront extends Component {
       themeColor,
       whiteText,
       midTextStyle,
+      midTextStyle1,
       mainViewStyle,
       imageViewstyle,
       imageMechanic,
@@ -73,35 +74,36 @@ class SplashFront extends Component {
           </View>
           <View style={subViewStyle}>
             <Text style={titleTextStyle}>Lets Get Started</Text>
-            <Text style={midTextStyle}>Sweet And Safe Voyage!!!</Text>
+            <Text style={midTextStyle}>Prompt breakdown service</Text>
+            <Text style={midTextStyle1}>On your finger tip</Text>
           </View>
         </View>
         <View style={buttonViewstyle}>
         {
-          <TouchableHighlight
-            onPress={() => {
-              this.props.updateUserType(true);
-              Actions.registerMobile();
-            }}
-            underlayColor="white"
-            style={createButton}
-          >
-              <Text style={[buttonText, whiteText]}>Join Our Network!</Text>
-          </TouchableHighlight>
-        }
-        {
-          //  <TouchableHighlight
+          // <TouchableHighlight
           //   onPress={() => {
-          //     this.props.updateUserType(false);
+          //     this.props.updateUserType(true);
           //     Actions.registerMobile();
           //   }}
           //   underlayColor="white"
           //   style={createButton}
           // >
-          //     <Text style={[buttonText, whiteText]}>
-          //       Looking for mechanic?
-          //     </Text>
+          //     <Text style={[buttonText, whiteText]}>Join Our Network!</Text>
           // </TouchableHighlight>
+        }
+        {
+           <TouchableHighlight
+            onPress={() => {
+              this.props.updateUserType(false);
+              Actions.registerMobile();
+            }}
+            underlayColor="white"
+            style={createButton}
+          >
+              <Text style={[buttonText, whiteText]}>
+                Looking for mechanic?
+              </Text>
+          </TouchableHighlight>
         }
 
           <TouchableHighlight

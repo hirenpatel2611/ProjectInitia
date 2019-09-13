@@ -1,11 +1,11 @@
-import { Asset, SplashScreen, ImagePicker, AppLoading } from "expo";
+import {  SplashScreen, ImagePicker, AppLoading } from "expo";
 import { AsyncStorage } from "react-native";
 import Api from "../api/api";
 import { GET_USER_DATA } from "../config";
 import { Actions } from "react-native-router-flux";
 import {loadVendorProfile} from './Vendors';
 import * as Font from 'expo-font';
-
+import { Asset } from 'expo-asset';
 export const LOAD_FONT_SUCCESS = "ui/LOAD_FONT_SUCCESS";
 export const UPDATE_LOGGED_IN_STATE = "ui/UPDATE_LOGGED_IN_STATE";
 export const UPDATE_IS_VENDOR = "user/UPDATE_IS_VENDOR";
@@ -17,6 +17,9 @@ export const GET_USER_BOOKING_STATUS_ACCEPT =
 export const SET_ALL_STATE_TO_INITIAL = "ui/SET_ALL_STATE_TO_INITIAL";
 
 export const loadFont = () => async dispatch => {
+  // await Asset.loadAsync([
+  //       require('../assets/images/tow-truck.png'),
+  //     ]),
   await Font.loadAsync({
     "open-sans-italic": require("../../assets/fonts/OpenSans-Italic.ttf"),
     "open-sans-bold": require("../../assets/fonts/OpenSans-Bold.ttf"),

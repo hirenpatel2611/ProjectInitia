@@ -233,7 +233,36 @@ class NearbyGaraje extends Component {
             >
                 <Image style={inStyle.imageMechanicType} source={HEAVY_VEHICLE} />
             </TouchableHighlight>
-
+            <TouchableHighlight
+            disabled={this.props.isServiceType[3]===1}
+              activeOpacity={1}
+              elevation={5}
+              onPress={() => {
+                this.props.updateFilterTowingServiceBool();
+              }}
+              style={[inStyle.buttonMechanic,{
+                backgroundColor: this.props.isServiceType[3]===1
+                  ? "#7960FF"
+                  : "white"
+              }]}
+            >
+                <Image style={inStyle.imageMechanicType} source={{uri:'http://ilifenetwork.com/api/web/towing.png'}} />
+            </TouchableHighlight>
+            <TouchableHighlight
+            disabled={this.props.isServiceType[4]===1}
+              activeOpacity={1}
+              elevation={5}
+              onPress={() => {
+                this.props.updateFilterTyreServiceBool();
+              }}
+              style={[inStyle.buttonMechanic,{
+                backgroundColor: this.props.isServiceType[4]===1
+                  ? "#7960FF"
+                  : "white"
+              }]}
+            >
+                <Image style={inStyle.imageMechanicType} source={{uri:'http://ilifenetwork.com/api/web/tyre.png'}} />
+            </TouchableHighlight>
 
           </View>
 
@@ -465,7 +494,7 @@ class NearbyGaraje extends Component {
                   )}
                 </TouchableOpacity>
               </View>
-          
+
           </Modal>
           <FlashMessage style={{backgroundColor: "#7960FF",color: "#fff"}}/>
         </View>
