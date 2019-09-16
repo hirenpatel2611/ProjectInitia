@@ -53,7 +53,8 @@ import {
   UPDATE_VENDOR_WORSHOP_NAME,
   UPDATE_VENDOR_PROFILE_VEHICLE_BOOL,
   UPDATE_VENDOR_PROFILE_CAR_BOOL,
-  UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL
+  UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL,
+  VENDER_ACTIVATION
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -104,7 +105,8 @@ const INITIAL_STATE = {
   pages: 1,
   paginate: false,
   bookingModalData: "",
-  vendorProfileServiceType: [false, false, false, false, false]
+  vendorProfileServiceType: [false, false, false, false, false],
+  isVendorActive:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -701,6 +703,15 @@ export default (state = INITIAL_STATE, action) => {
           vendorProfileServiceType: [...action.payload]
         };
       }
+      break;
+
+      case VENDER_ACTIVATION:
+        {
+          return {
+            ...state,
+            isVendorActive:!state.isVendorActive
+          };
+        }
       break;
 
     default:

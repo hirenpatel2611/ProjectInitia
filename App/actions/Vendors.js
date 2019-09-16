@@ -107,6 +107,8 @@ export const UPDATE_VENDOR_PROFILE_CAR_BOOL =
   "vendors/UPDATE_VENDOR_PROFILE_CAR_BOOL";
 export const UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL =
   "vendors/UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL";
+  export const VENDER_ACTIVATION =
+    "vendors/VENDER_ACTIVATION";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -885,3 +887,9 @@ export const updateVendorProfileTyreBool = () => (
     payload: vendorProfileServiceType
   });
 };
+
+export const venderActivation = () => (dispatch) =>{
+  dispatch({
+    type:VENDER_ACTIVATION
+  })
+}

@@ -6,7 +6,8 @@ import {
   ViewPropTypes,
   Image,
   AsyncStorage,
-  TouchableOpacity
+  TouchableOpacity,
+  Switch
 } from "react-native";
 import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
@@ -18,9 +19,10 @@ import {
   MECHANIC,
   HAND_HOLDING_UP,
   CAR_ENGINE,
-  TIMING_BELT
+  TIMING_BELT,
+  POWERBUTTON
 } from "../../images";
-import { socketLeave, setAllStateToInitial } from "../../actions";
+import { socketLeave, setAllStateToInitial,venderActivation } from "../../actions";
 
 class SideMenuVendor extends Component {
   _deleteUser = async () => {
@@ -160,6 +162,29 @@ class SideMenuVendor extends Component {
             Log Out
           </Button>
         </CardSection>
+        <CardSection
+          style={{
+            flexDirection: "column",
+            borderBottomWidth: 0,
+            borderTopWidth: 0,
+            alignItems:'center'
+          }}
+        >
+        <TouchableOpacity
+        onPress={()=>{
+          this.props.venderActivation()
+        }}
+        style={{marginTop:'50%'}}
+        >
+        <Image source={{uri:'http://ilifenetwork.com/api/web/PowerButton.png'}}
+        style={{height:50,width:50, tintColor:this.props.isVendorActive?"#7960FF":"grey"}}/>
+        </TouchableOpacity>
+        {
+         <Text
+         style={{fontSize:16,fontFamily:'circular-book',top:10,color:this.props.isVendorActive?"#7960FF":"grey"}}>
+         {this.props.isVendorActive?"Online":"Offline"}</Text>
+      }
+        </CardSection>
       </View>
     );
   }
@@ -167,10 +192,11 @@ class SideMenuVendor extends Component {
 
 const mapStateToProps = ({ forgot,vendors }) => {
   const { forgotOTP } = forgot;
-  const {walletBalance} = vendors;
+  const {walletBalance,isVendorActive} = vendors;
   return {
     forgotOTP,
-    walletBalance
+    walletBalance,
+    isVendorActive
   };
 };
 
@@ -178,6 +204,7 @@ export default connect(
   mapStateToProps,
   {
     socketLeave,
-    setAllStateToInitial
+    setAllStateToInitial,
+    venderActivation
   }
 )(SideMenuVendor);
