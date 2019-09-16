@@ -1,4 +1,5 @@
 import Api from "../api/api";
+import {Share} from 'react-native';
 import {
   GET_VENDOR,
   GET_BOOKING,
@@ -658,5 +659,18 @@ export const getCustomerComment = comment => dispatch => {
   dispatch({
     type: GET_CUSTOMER_COMMENT,
     payload: comment
+  });
+};
+
+export const shareCustomerReferal = () => (dispatch, getState) => {
+  const { userData } = getState().user;
+
+  var playStoreUrl =
+    "http://103.50.153.25:3000/shareCustomerRefer?referal_code=" +
+    userData.uderReferalCode;
+  Share.share({
+    message: playStoreUrl
+  }).then(response => {
+    console.log(response);
   });
 };

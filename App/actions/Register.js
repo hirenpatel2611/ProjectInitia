@@ -48,6 +48,8 @@ export const DELETE_REGISTER_DOCUMENT = "register/DELETE_REGISTER_DOCUMENT";
 export const UPDATE_GSTIN = "register/UPDATE_GSTIN";
 export const READ_FROM_CLIP_BOARD = "register/READ_FROM_CLIP_BOARD";
 export const UPDATE_REFERAL_CODE = "register/UPDATE_REFERAL_CODE";
+export const VERIFY_GSTIN_SUCCESS = "register/VERIFY_GSTIN_SUCCESS";
+export const VERIFY_GSTIN_FAIL = "register/VERIFY_GSTIN_FAIL";
 
 export const updateVehicleBool = () => dispatch => {
   dispatch({
@@ -199,6 +201,10 @@ export const updateGstin = val => dispatch => {
     type: UPDATE_GSTIN,
     payload: val
   });
+  console.log(val.length);
+  if(val.length === 15){
+    dispatch(verifyGSTIN())
+  }
 };
 
 export const updateDateOfBirth = val => dispatch => {
@@ -411,3 +417,23 @@ export const updateReferalCode = code => dispatch => {
     payload: code
   });
 };
+
+export const verifyGSTIN = () => (dispatch,getState) => {
+  const {gstin} = getState().register;
+  //https://appyflow.in/api/verifyGST?gstNo=24AAECS7339H1Z8&key_secret=KHhy1rgT2NhzI8PFZQrJxvq5f3l1
+  let url = `https://appyflow.in/api/verifyGST?gstNo=${gstin}&key_secret=KHhy1rgT2NhzI8PFZQrJxvq5f3l1`
+  console.log(url);
+  fetch(url).then((res)=>res.json())
+  .then(responseJson => {console.log(responseJson);
+    if(responseJson.error === true){
+      dispatch({
+        type:VERIFY_GSTIN_FAIL
+      })
+    }else {
+      console.log(responseJson.taxpayerInfo.lgnm);
+      dispatch({
+        type:VERIFY_GSTIN_SUCCESS
+      })
+    }
+  })
+}

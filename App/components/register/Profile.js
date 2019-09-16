@@ -54,7 +54,8 @@ import {
   addDocument,
   deleteRegisterDocument,
   updateGstin,
-  updateReferalCode
+  updateReferalCode,
+  verfyGSTIN
 } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
@@ -193,7 +194,7 @@ class Profile extends Component {
       profileButtonView,
       textError2
     } = styles;
-    const { validate, documentRegisterUri, isVendor } = this.props;
+    const { validate, documentRegisterUri, isVendor,gstin } = this.props;
     errors = this.props.onSubmeetSignupForm
       ? validate(this.props.register)
       : {};
@@ -365,14 +366,16 @@ class Profile extends Component {
                     placeholderTextColor="#9D9D9D"
                     autoCapitalize="none"
                     value={this.props.gstin}
+                    maxLength={15}
                     onChangeText={text => {
                       this.props.updateGstin(text);
                     }}
                   />
                 ) : null}
+
                 {this.props.isVendor ? (
-                  errors.name ? (
-                    <Text style={styles.textError2}></Text>
+                  this.props.isVerifed !== null? (
+                    <Text style={[styles.textError2,{color:this.props.isVerifed?"green":"red"}]}>{this.props.isVerifed?'Verifed':'Not Verifed'}</Text>
                   ) : null
                 ) : null}
 
@@ -740,6 +743,7 @@ const mapStateToProps = ({ register }) => {
     signupFail,
     documentRegisterUri,
     workshop_name,
+    isVerifed,
     referalCode
   } = register;
   return {
@@ -763,6 +767,7 @@ const mapStateToProps = ({ register }) => {
     signupFail,
     documentRegisterUri,
     workshop_name,
+    isVerifed,
     referalCode
   };
 };
@@ -788,6 +793,7 @@ export default connect(
     addDocument,
     deleteRegisterDocument,
     updateGstin,
-    updateReferalCode
+    updateReferalCode,
+    verfyGSTIN
   }
 )(withValidation(rules, Profile));

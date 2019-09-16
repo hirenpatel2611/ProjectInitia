@@ -89,7 +89,7 @@ class filter extends Component {
                   step={1}
                   minimumValue={5}
                   maximumValue={50}
-                  value={this.props.distance}
+                  value={this.props.distance?this.props.distance:5}
                   minimumTrackTintColor="#7960FF"
                   thumbTintColor="#7960FF"
                   onValueChange={val => this.setState({ km: val })}

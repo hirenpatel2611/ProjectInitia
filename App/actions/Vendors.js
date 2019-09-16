@@ -814,6 +814,19 @@ export const shareReferal = () => (dispatch, getState) => {
   });
 };
 
+export const referalToCustomer = () => (dispatch,getState) => {
+  const { userData } = getState().user;
+
+  var playStoreUrl =
+    "http://103.50.153.25:3000/shareCustomerRefer?referal_code=" +
+    userData.uderReferalCode;
+  Share.share({
+    message: playStoreUrl
+  }).then(response => {
+    console.log(response);
+  });
+}
+
 export const updateVenderProfileVehicleBool = () => (dispatch, getState) => {
   const { vendorProfileServiceType } = getState().vendors;
   var ServiceType = vendorProfileServiceType;

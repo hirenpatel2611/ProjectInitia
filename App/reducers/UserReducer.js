@@ -13,7 +13,7 @@ const INITIAL_STATE = {
   userAddress: "",
   isUserVendor: "",
   userData: "",
-  isVendorLoggedIn: false,
+  isVendorLoggedIn: true,
   userCurrentBooking: ""
 };
 

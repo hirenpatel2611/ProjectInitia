@@ -37,7 +37,9 @@ import {
   UPDATE_WORSHOP_NAME,
   UPDATE_GSTIN,
   READ_FROM_CLIP_BOARD,
-  UPDATE_REFERAL_CODE
+  UPDATE_REFERAL_CODE,
+  VERIFY_GSTIN_SUCCESS,
+  VERIFY_GSTIN_FAIL
 } from "../actions/Register";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -85,7 +87,8 @@ const INITIAL_STATE = {
   documentRegisterUri: [],
   documentBase64Register: [],
   gstin: "",
-  referalCode:''
+  referalCode:'',
+  isVerifed:null
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -491,6 +494,24 @@ export default (state = INITIAL_STATE, action) => {
       return{
         ...state,
         referalCode:action.payload
+      }
+    }
+    break;
+
+    case VERIFY_GSTIN_SUCCESS:
+    {
+      return{
+        ...state,
+        isVerifed:true
+      }
+    }
+    break;
+
+    case VERIFY_GSTIN_FAIL:
+    {
+      return{
+        ...state,
+        isVerifed:false
       }
     }
     break;

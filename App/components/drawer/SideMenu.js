@@ -131,6 +131,23 @@ class SideMenu extends Component {
             containerStyle={container}
             style={textStyle}
             onPress={() => {
+              Actions.customerWallet();
+            }}
+          >
+            Referral Wallet
+          </Button>
+        </CardSection>
+        <CardSection
+          style={{
+            flexDirection: "column",
+            borderBottomWidth: 0,
+            borderTopWidth: 0
+          }}
+        >
+          <Button
+            containerStyle={container}
+            style={textStyle}
+            onPress={() => {
               this._deleteUser();
               this.props.socketLeave();
               Actions.SplashFront();

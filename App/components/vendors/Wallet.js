@@ -19,7 +19,8 @@ import {
   getWalletPaymentId,
   paymentSuccessOk,
   getWalletAmount,
-  shareReferal
+  shareReferal,
+  referalToCustomer
 } from "../../actions";
 import { SUCCESS, BITMAP2 } from "../../images";
 
@@ -114,7 +115,7 @@ class Wallet extends Component {
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                height: 0.6 * ScreenHeight
+                height: 0.5 * ScreenHeight
               }}
             >
               <View
@@ -153,7 +154,6 @@ class Wallet extends Component {
             </View>
             <TextInput
               style={{
-                marginTop: 0.001 * ScreenHeight,
                 fontSize: 16,
                 fontFamily: "circular-bold",
                 paddingLeft: 16,
@@ -230,6 +230,33 @@ class Wallet extends Component {
                 }}
               >
                 Refer Someone
+              </Text>
+            </TouchableHighlight>
+            <TouchableHighlight
+              onPress={() => {this.props.referalToCustomer()}}
+              underlayColor="white"
+              style={{
+                alignSelf: "center",
+                backgroundColor: "#ffffff",
+                height: 44,
+                width: 0.78 * ScreenWidth,
+                borderRadius: 25,
+                alignItems: "center",
+                marginBottom: 10,
+                justifyContent: "center",
+                borderColor: "#7960FF",
+                borderWidth: 1
+              }}
+            >
+              <Text
+                style={{
+                  padding: 10,
+                  fontSize: 18,
+                  fontFamily: "circular-book",
+                  color: "#7960FF"
+                }}
+              >
+                Refer To Customer
               </Text>
             </TouchableHighlight>
           </KeyboardAwareScrollView>
@@ -370,6 +397,7 @@ export default connect(
     getWalletPaymentId,
     paymentSuccessOk,
     getWalletAmount,
-    shareReferal
+    shareReferal,
+    referalToCustomer
   }
 )(Wallet);
