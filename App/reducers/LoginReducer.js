@@ -27,7 +27,8 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           password: action.payload,
           onSubmeetLoginForm: false,
-          loginFailed: false
+          loginFailed: false,
+          LoginUserIssue:''
         };
       }
       break;
@@ -38,7 +39,8 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           mobileno: action.payload,
           onSubmeetLoginForm: false,
-          loginFailed: false
+          loginFailed: false,
+          LoginUserIssue:''
         };
       }
       break;

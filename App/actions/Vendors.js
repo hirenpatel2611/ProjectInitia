@@ -9,7 +9,8 @@ import {
   RATING_BY_CUSTOMER,
   GET_WALLET_AMOUNT,
   ADD_PAYMENT,
-  UPDATE_WALLET_AMOUNT
+  UPDATE_WALLET_AMOUNT,
+  VENDOR_STATUS
 } from "../config";
 import {
   connectTosocketApprov,
@@ -107,8 +108,9 @@ export const UPDATE_VENDOR_PROFILE_CAR_BOOL =
   "vendors/UPDATE_VENDOR_PROFILE_CAR_BOOL";
 export const UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL =
   "vendors/UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL";
-  export const VENDER_ACTIVATION =
-    "vendors/VENDER_ACTIVATION";
+export const GET_VENDOR_STATUS ="vendors/GET_VENDOR_STATUS";
+export const VENDER_ACTIVATION_SUCCESS ="vendors/VENDER_ACTIVATION_SUCCESS";
+export const VENDER_ACTIVATION_FAIL ="vendors/VENDER_ACTIVATION_FAIL";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -149,6 +151,7 @@ export const getFutureBookings = () => async (dispatch, getState) => {
           type: GET_FUTURE_BOOKING_LIST_SUCCESS,
           payload: VendorBookingList
         });
+
         dispatch(getCustomerDistanceList());
       }
     })
@@ -888,8 +891,43 @@ export const updateVendorProfileTyreBool = () => (
   });
 };
 
-export const venderActivation = () => (dispatch) =>{
+export const GetVenderStatus = () => async (dispatch,getState) =>{
+  const { userData } = await getState().user;
+  var userStatus= false
+  if(userData.userStatus === "Active"){
+    userStatus=true
+  }
+  console.log(userData.userStatus);
   dispatch({
-    type:VENDER_ACTIVATION
+    type:GET_VENDOR_STATUS,
+    payload:userStatus
   })
+}
+
+export const venderActivation = () => async (dispatch,getState) =>{
+
+  const { userData } = await getState().user;
+  const { isVendorActive } = getState().vendors;
+  var status =""
+  if(!isVendorActive){
+    status = "Active"
+  }else {
+    status = "In-active"
+  }
+  let test = new FormData();
+  test.append("customer_id", userData.userId);
+  test.append("status", status);
+  Api.post(VENDOR_STATUS, test).then(response => {
+    console.log(response);
+    if(response.status === 1){
+      dispatch({
+        type:VENDER_ACTIVATION_SUCCESS
+      })
+    } else {
+      dispatch({
+        type:VENDER_ACTIVATION_FAIL
+      })
+    }
+  });
+
 }

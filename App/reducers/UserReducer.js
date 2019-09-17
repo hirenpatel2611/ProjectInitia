@@ -58,7 +58,8 @@ export default (state = INITIAL_STATE, action) => {
             userLatitude: action.payload.latitude,
             userLongitude: action.payload.longitude,
             userVehicleType: JSON.parse(action.payload.service_vehicle_type),
-            uderReferalCode: action.payload.referal_code
+            uderReferalCode: action.payload.referal_code,
+            userStatus: action.payload.status
           },
           userCurrentBooking: action.payload.current_booking
         };

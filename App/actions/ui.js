@@ -3,7 +3,7 @@ import { AsyncStorage } from "react-native";
 import Api from "../api/api";
 import { GET_USER_DATA } from "../config";
 import { Actions } from "react-native-router-flux";
-import {loadVendorProfile} from './Vendors';
+import {loadVendorProfile,GetVenderStatus} from './Vendors';
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
 export const LOAD_FONT_SUCCESS = "ui/LOAD_FONT_SUCCESS";
@@ -80,10 +80,12 @@ export const getUserData = () => async (dispatch, getState) => {
         i++;
       }
     } else {
+
       dispatch({
       type: GET_USER_PROFILE_DATA,
       payload: response[0]
     });
+    dispatch(GetVenderStatus());
     dispatch(loadVendorProfile());
     const { userCurrentBooking } = getState().user;
     const { vendors, location } = getState().customers;

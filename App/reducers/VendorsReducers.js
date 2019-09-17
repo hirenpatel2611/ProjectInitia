@@ -54,7 +54,9 @@ import {
   UPDATE_VENDOR_PROFILE_VEHICLE_BOOL,
   UPDATE_VENDOR_PROFILE_CAR_BOOL,
   UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL,
-  VENDER_ACTIVATION
+  GET_VENDOR_STATUS,
+  VENDER_ACTIVATION_SUCCESS,
+  VENDER_ACTIVATION_FAIL
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -432,8 +434,6 @@ export default (state = INITIAL_STATE, action) => {
               vendorServiceType;
           }
         });
-
-        console.log(vendorServiceType);
         return {
           ...state,
           workshop_nameVendor: action.payload.workshop_name,
@@ -705,11 +705,29 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-      case VENDER_ACTIVATION:
+      case GET_VENDOR_STATUS:
         {
           return {
             ...state,
-            isVendorActive:!state.isVendorActive
+            isVendorActive:action.payload
+          };
+        }
+      break;
+
+      case VENDER_ACTIVATION_SUCCESS:
+        {
+          return {
+            ...state,
+            isVendorActive:true
+          };
+        }
+      break;
+
+      case VENDER_ACTIVATION_FAIL:
+        {
+          return {
+            ...state,
+            isVendorActive:false
           };
         }
       break;
