@@ -22,7 +22,7 @@ var isVen = null;
 var disp = null;
 var bookingDetails = null;
 var vendorMobileno = null;
-var val = null;
+var valReach = null;
 
 const LOCATION_TASK_NAME = "background-location-task";
 const LOCATION_TASK_NAME1 = "background-location-task-current";
@@ -237,14 +237,14 @@ export const connectTosocketBookingCancle = val => async (
 export const connectTosocketReached = val => async (dispatch, getState) => {
   const { mechanicBookedData } = getState().vendors;
   const { userId } = getState().user;
-
+console.log(val);
   chatSocket.emit("booking_status", {
-    room: `${val.id} ${userId}`,
+    room: `${val.customer_id} ${userId}`,
     message: mechanicBookedData,
     type: "REACHED",
     toToken:val.customerToken //vendorsData.device_token
   });
-  channelName = `${userId} ${val.id}`;
+  channelName = `${userId} ${val.customer_id}`;
 };
 
 export const socketLeave = () => async (dispatch, getState) => {
@@ -277,10 +277,11 @@ export const socketVendorCurrentLocation = val => async (
 ) => {
   const { mechanicBookedData } = getState().vendors;
   const { userData } = getState().user;
+  console.log(val);
   vendorMobileno = userData.userMobileno;
   bookingDetails = mechanicBookedData;
   disp = dispatch;
-  val= val;
+  valReach= val;
   let { status } = await Permissions.askAsync(Permissions.LOCATION);
   if (status !== "granted") {
     // this.props.getUserLocationFail();
@@ -429,7 +430,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
       });
       channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
       TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
-      disp(connectTosocketReached(val))
+      disp(connectTosocketReached(valReach))
     }
   }
 });
