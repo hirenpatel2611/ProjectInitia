@@ -20,7 +20,8 @@ import {
   paymentSuccessOk,
   getWalletAmount,
   shareReferal,
-  referalToCustomer
+  referalToCustomer,
+  closePaymentPage
 } from "../../actions";
 import { SUCCESS, BITMAP2 } from "../../images";
 
@@ -33,6 +34,9 @@ class Wallet extends Component {
   componentWillMount() {
     this.props.getWalletAmount();
   }
+  componentWillUnmount() {
+    this.props.closePaymentPage();
+  }
   render() {
 
     const htmls =
@@ -44,9 +48,9 @@ class Wallet extends Component {
         "key": "rzp_test_DsJMfn5t0GT1hK", // Enter the Key ID generated from the Dashboard
         "amount": "29935", // Amount is in currency subunits. Default currency is INR. Hence, 29935 refers to 29935 paise or INR 299.35.
         "currency": "INR",
-        "name": "`+ this.props.userData.userFullName +`",
+        "name": "ILife",
         "description": "Don't Press Back Button",
-        "image": "../../../asset/icon2.png",
+        "image": "http://ilifenetwork.com/api/web/icon2.png",
         "order_id": "` +
       this.props.WalletOrderId +
       `",
@@ -108,6 +112,7 @@ class Wallet extends Component {
                 decodeURI(decodeURI(event.nativeEvent.data))
               );
             }}
+            scrollEnabled={true}
           />
         ) : (
           <KeyboardAwareScrollView enableOnAndroid style={{ flex: 1 }}>
@@ -398,6 +403,7 @@ export default connect(
     paymentSuccessOk,
     getWalletAmount,
     shareReferal,
-    referalToCustomer
+    referalToCustomer,
+    closePaymentPage
   }
 )(Wallet);

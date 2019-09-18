@@ -56,7 +56,8 @@ import {
   UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL,
   GET_VENDOR_STATUS,
   VENDER_ACTIVATION_SUCCESS,
-  VENDER_ACTIVATION_FAIL
+  VENDER_ACTIVATION_FAIL,
+  CLOSE_PAYMENT_PAGE
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
@@ -728,6 +729,16 @@ export default (state = INITIAL_STATE, action) => {
           return {
             ...state,
             isVendorActive:false
+          };
+        }
+      break;
+
+      case CLOSE_PAYMENT_PAGE:
+        {
+          return {
+            ...state,
+            WalletOrderId:"",
+            walletAmount:""
           };
         }
       break;

@@ -111,6 +111,7 @@ export const UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL =
 export const GET_VENDOR_STATUS ="vendors/GET_VENDOR_STATUS";
 export const VENDER_ACTIVATION_SUCCESS ="vendors/VENDER_ACTIVATION_SUCCESS";
 export const VENDER_ACTIVATION_FAIL ="vendors/VENDER_ACTIVATION_FAIL";
+export const CLOSE_PAYMENT_PAGE ="vendors/CLOSE_PAYMENT_PAGE";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -902,6 +903,13 @@ export const GetVenderStatus = () => async (dispatch,getState) =>{
     type:GET_VENDOR_STATUS,
     payload:userStatus
   })
+}
+
+export const closePaymentPage = () => (dispatch) => {
+  dispatch({
+    type:CLOSE_PAYMENT_PAGE,
+  })
+  console.log('ksdufd');
 }
 
 export const venderActivation = () => async (dispatch,getState) =>{
