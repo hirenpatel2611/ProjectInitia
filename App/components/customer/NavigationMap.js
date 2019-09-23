@@ -31,7 +31,11 @@ import {
   getCancelBookingModal,
   getCancelBookingModalClose,
   getVendorRating,
-  getCustomerComment
+  getCustomerComment,
+  getpaymentAmountInput,
+  onPressModalYes,
+  onPressModalNo,
+  onPressModalPaytoVendor
 } from "../../actions";
 import  MapViewDirections  from "../../Common/MapViewDirection";
 import CheckBox from 'react-native-checkbox';
@@ -265,6 +269,101 @@ class NearbyGaraje extends Component {
             </View>
             </KeyboardAwareScrollView>
             </Modal>
+            <Modal
+              visible={this.props.isPaymentModal}
+              onRequestClose={() => {
+                console.log("Modal has been closed.");
+              }}
+              animationType="slide"
+              transparent={true}
+              opacity={0.5}
+              style={{
+                  height: 0.2 * ScreenHeight,
+
+                }}
+            >
+            <KeyboardAwareScrollView enableOnAndroid>
+            <View style={{marginTop: 0.30 * ScreenHeight,
+                          height:0.25 * ScreenHeight,
+                          margin:10,
+                          backgroundColor:'white',
+                          borderRadius:5,
+                          justifyContent:'space-around',
+                          borderColor: "#7960FF",
+                          borderWidth:1,
+                          }}>
+              <Text style={{fontFamily:'circular-book',alignSelf:'center',margin:3}}>
+              {this.props.isPayment?'Pay With Velway Wallet.':'Do you want to pay with Velway Wallet.'}
+              </Text>
+              <Text style={{fontFamily:'circular-book',alignSelf:'center',color:'#7960FF',margin:3}}>
+              Balance:100
+              </Text>
+                  {this.props.isPayment?<TextInput
+                    style={textInputProfilStyle}
+                    underlineColorAndroid="transparent"
+                    placeholderTextColor="#9D9D9D"
+                    placeholder="Amount..."
+                    multiline={true}
+                    value={this.props.paymentAmountInput}
+                    onChangeText={text => {
+                      this.props.getpaymentAmountInput(text);
+                    }}
+                  />:null}
+              <View style={{marginTop:0.02 * ScreenHeight,flexDirection:'row',justifyContent:'space-around',margin:10}}>
+                    {this.props.isPayment?<TouchableHighlight
+                      onPress={() => {
+                        this.props.onPressModalPaytoVendor();
+                      }}
+                      underlayColor="white"
+                      style={{
+                      height:0.05 * ScreenHeight,
+                      width: 0.40 * ScreenWidth,
+                      borderColor: "#7960FF",
+                      borderWidth:1,
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 25
+                    }}
+                    >
+                        <Text style={[buttonText,{color:'#7960FF'}]}>{this.props.isPaymentLoading?'Loading...':'Pay'}</Text>
+                    </TouchableHighlight>:
+                    <TouchableHighlight
+                      onPress={() => {
+                        this.props.onPressModalYes();
+                      }}
+                      underlayColor="white"
+                      style={{
+                      height:0.05 * ScreenHeight,
+                      width: 0.40 * ScreenWidth,
+                      backgroundColor: "#7960FF",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 25
+                    }}
+                    >
+                        <Text style={buttonText}>Yes</Text>
+                    </TouchableHighlight>
+                  }
+                    <TouchableHighlight
+                      onPress={() => {
+                        this.props.onPressModalNo();
+                      }}
+                      underlayColor="white"
+                      style={{
+                      height:0.05 * ScreenHeight,
+                      width: 0.40 * ScreenWidth,
+                      backgroundColor: "#7960FF",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      borderRadius: 25,
+                    }}
+                    >
+                        <Text style={buttonText}>No</Text>
+                    </TouchableHighlight>
+              </View>
+              </View>
+              </KeyboardAwareScrollView>
+              </Modal>
           <Modal
             visible={this.props.isBookCancelModal}
             onRequestClose={() => {
@@ -516,7 +615,11 @@ const mapStateToProps = ({ customers }) => {
     loadingRatingDone,
     mechanicDestance,
     mechanicDuration,
-    customerComment
+    customerComment,
+    paymentAmountInput,
+    isPayment,
+    isPaymentModal,
+    isPaymentLoading
   } = customers;
   return {
     location,
@@ -533,7 +636,11 @@ const mapStateToProps = ({ customers }) => {
     loadingRatingDone,
     mechanicDestance,
     mechanicDuration,
-    customerComment
+    customerComment,
+    paymentAmountInput,
+    isPayment,
+    isPaymentModal,
+    isPaymentLoading
   };
 };
 
@@ -548,6 +655,10 @@ export default connect(
     getCancelBookingModal,
     getCancelBookingModalClose,
     getVendorRating,
-    getCustomerComment
+    getCustomerComment,
+    getpaymentAmountInput,
+    onPressModalYes,
+    onPressModalNo,
+    onPressModalPaytoVendor,
   }
 )(NearbyGaraje);

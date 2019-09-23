@@ -53,7 +53,13 @@ import {
   GET_VENDOR_RATING_MODAL,
   GET_CUSTOMER_COMMENT,
   CUSTOMER_COMMENT_FAIL,
-  GET_RATING_FAIL
+  GET_RATING_FAIL,
+  GET_PAYMENT_AMOUNT_INPUT,
+  ON_PRESS_MODAL_YES,
+  ON_PRESS_MODAL_NO,
+  ON_PRESS_MODAL_PAY_TO_VENDOR_START,
+  ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS,
+  ON_PRESS_MODAL_PAY_TO_VENDOR_FAIL
 } from "../actions/Cutomers";
 import {
   GET_USER_BOOKING_STATUS_ACCEPT,
@@ -98,7 +104,11 @@ const INITIAL_STATE = {
   isVendorRatingModal: false,
   mechanicDestance: "",
   mechanicDuration: "",
-  customerComment: ""
+  customerComment: "",
+  paymentAmountInput:'',
+  isPayment:false,
+  isPaymentModal:false,
+  isPaymentLoading:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -625,7 +635,7 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          isVendorRatingModal: true
+          isPaymentModal:true
         };
       }
       break;
@@ -663,6 +673,68 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           ...INITIAL_STATE
         };
+      }
+      break;
+
+    case GET_PAYMENT_AMOUNT_INPUT:
+      {
+        return {
+          ...state,
+          paymentAmountInput:action.payload,
+          isPaymentLoading:false
+        };
+      }
+      break;
+
+    case ON_PRESS_MODAL_YES:
+      {
+        return {
+          ...state,
+          isPayment:true,
+        }
+      }
+      break;
+
+    case ON_PRESS_MODAL_NO:
+      {
+        return {
+          ...state,
+          isPayment:false,
+          isPaymentModal:false,
+          isVendorRatingModal:true,
+          paymentAmountInput:""
+        }
+      }
+      break;
+
+    case ON_PRESS_MODAL_PAY_TO_VENDOR_START:
+      {
+        return {
+          ...state,
+          isPaymentLoading:true
+        }
+      }
+    break;
+
+  case ON_PRESS_MODAL_PAY_TO_VENDOR_FAIL:
+    {
+      return {
+        ...state,
+        isPaymentLoading:false
+      }
+    }
+    break;
+
+    case ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS:
+      {
+        return {
+          ...state,
+          isPaymentLoading:false,
+          isPayment:false,
+          isPaymentModal:false,
+          isVendorRatingModal:true,
+          paymentAmountInput:""
+        }
       }
       break;
 

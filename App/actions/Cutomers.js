@@ -8,7 +8,8 @@ import {
   BOOKING_UPDATE,
   RATING_BY_CUSTOMER,
   UPDATE_PROFILE,
-  CUSTOMER_COMMENT
+  CUSTOMER_COMMENT,
+  MAKE_PAYMENT_CUSTOMER
 } from "../config";
 import { Actions } from "react-native-router-flux";
 import { Alert } from "react-native";
@@ -91,6 +92,12 @@ export const GET_VENDOR_RATING_MODAL = "customers/GET_VENDOR_RATING_MODAL";
 export const GET_CUSTOMER_COMMENT = "customers/GET_CUSTOMER_COMMENT";
 export const CUSTOMER_COMMENT_FAIL = "customers/CUSTOMER_COMMENT_FAIL";
 export const GET_RATING_FAIL = "customers/GET_RATING_FAIL";
+export const GET_PAYMENT_AMOUNT_INPUT = "customers/GET_PAYMENT_AMOUNT_INPUT";
+export const ON_PRESS_MODAL_YES = "customers/ON_PRESS_MODAL_YES";
+export const ON_PRESS_MODAL_NO = "customers/ON_PRESS_MODAL_NO";
+export const ON_PRESS_MODAL_PAY_TO_VENDOR_START = "customers/ON_PRESS_MODAL_PAY_TO_VENDOR_START";
+export const ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS = "customers/ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS";
+export const ON_PRESS_MODAL_PAY_TO_VENDOR_FAIL = "customers/ON_PRESS_MODAL_PAY_TO_VENDOR_FAIL";
 
 var cancelAlertCounter = 0;
 var getVendorsCounter = 0;
@@ -661,6 +668,7 @@ export const getFilterSubmeet = () => (dispatch, getState) => {
 };
 
 export const getVendorRatingModal = () => dispatch => {
+  console.log("pppp");
   dispatch({
     type: GET_VENDOR_RATING_MODAL
   });
@@ -685,3 +693,60 @@ export const shareCustomerReferal = () => (dispatch, getState) => {
     console.log(response);
   });
 };
+
+export const getpaymentAmountInput = amount => (dispatch) => {
+  dispatch({
+    type:GET_PAYMENT_AMOUNT_INPUT,
+    payload:amount
+  })
+}
+
+export const onPressModalYes = () => (dispatch) => {
+  dispatch({
+    type:ON_PRESS_MODAL_YES
+  })
+}
+
+export const onPressModalNo = () => (dispatch) => {
+  dispatch({
+    type:ON_PRESS_MODAL_NO
+  })
+}
+
+
+export const onPressModalPaytoVendor = () => (dispatch,getState) => {
+  dispatch({
+    type:ON_PRESS_MODAL_PAY_TO_VENDOR_START
+  })
+  const { paymentAmountInput, bookData } = getState().customers;
+  const { userData } = getState().user;
+  let test = new FormData();
+  test.append("amount", parseFloat(paymentAmountInput));
+  test.append("sender_id", userData.userId);
+  test.append("receiver_id", bookData.vendor_id);
+  Api.post(MAKE_PAYMENT_CUSTOMER, test).then(response => {
+    console.log(test);
+    console.log(response);
+    if(response.status === 1){
+    dispatch({
+      type:ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS
+    })
+    showMessage({
+      message: "SUCCESS",
+      description: "Successfully pay to Partner",
+      type: "default",
+      position: "top"
+    });
+  } else {
+    dispatch({
+      type:ON_PRESS_MODAL_PAY_TO_VENDOR_FAIL
+    })
+    showMessage({
+      message: "FAIL",
+      description: "Payment is Fail",
+      type: "default",
+      position: "top"
+    });
+  }
+  })
+}

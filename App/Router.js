@@ -245,12 +245,6 @@ class RouterComponent extends Component {
                 navTransparent="true"
               />
               <Scene
-                key="FutureBooking"
-                component={FutureBooking}
-                hideNavBar={true}
-                navTransparent="true"
-              />
-              <Scene
                 key="customerWallet"
                 component={CustomerWallet}
                 hideNavBar={true}
