@@ -22,6 +22,7 @@ import {
   GET_FUTURE_BOOKING_LIST_NO_FOUND,
   UPDATE_VENDOR_FULL_NAME,
   UPDATE_VENDOR_ADDRESS,
+  UPDATE_VENDOR_STATE_AND_CODE,
   UPDATE_VENDOR_EMAIL,
   UPDATE_VENDOR_PROFILE_START,
   LOAD_VENDOR_PROFILE,
@@ -60,6 +61,7 @@ import {
   CLOSE_PAYMENT_PAGE
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
+import {stateAndTin} from '../config'
 
 const INITIAL_STATE = {
   loadingFutureBookigList: false,
@@ -109,7 +111,17 @@ const INITIAL_STATE = {
   paginate: false,
   bookingModalData: "",
   vendorProfileServiceType: [false, false, false, false, false],
-  isVendorActive:false
+  isVendorActive:false,
+  ledgerHistory:[
+    {Booking_id:'18890',
+    Date:'20/08/2019',
+    Amount:123,
+    paymentId:'order_DFKDfub8L7o9ca'},
+    {Booking_id:'18890',
+    Date:'04/09/2019',
+    Amount:909,
+    paymentId:'order_DFKDfub8L7o9bg'}
+  ]
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -369,6 +381,15 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
+    case UPDATE_VENDOR_STATE_AND_CODE:
+    {
+      return {
+        ...state,
+        addressVendor:stateAndTin[action.payload]
+      }
+    }
+    break;
+
     case UPDATE_VENDOR_EMAIL:
       {
         return {
@@ -439,7 +460,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           workshop_nameVendor: action.payload.workshop_name,
           fullNameVendor: action.payload.userFullName,
-          addressVendor: action.payload.userAddress,
+          addressVendor: JSON.parse(action.payload.userAddress),
           emailVendor: action.payload.userEmail,
           imageVendorUri: action.payload.uri,
           vendorProfileServiceType: vendorServiceType
@@ -719,7 +740,7 @@ export default (state = INITIAL_STATE, action) => {
         {
           return {
             ...state,
-            isVendorActive:true
+            isVendorActive:!state.isVendorActive
           };
         }
       break;
@@ -728,7 +749,6 @@ export default (state = INITIAL_STATE, action) => {
         {
           return {
             ...state,
-            isVendorActive:false
           };
         }
       break;

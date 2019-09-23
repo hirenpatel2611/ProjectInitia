@@ -86,8 +86,7 @@ class SplashFront extends Component {
               Actions.registerMobile();
             }}
             underlayColor="white"
-            style={createButton}
-          >
+            style={createButton}>
               <Text style={[buttonText, whiteText]}>Join Our Network!</Text>
           </TouchableHighlight>
         }

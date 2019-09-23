@@ -18,7 +18,7 @@ import {
   UPDATE_DATE_OF_BIRTH,
   UPDATE_PASSWORD_PROFILE,
   UPDATE_CONFIRM_PASSWORD,
-  UPDATE_LANGUAGE,
+  UPDATE_STATE_AND_CODE,
   SIGNUP_START,
   SIGNUP_SUCCESSFUL,
   SIGNUP_FAIL,
@@ -41,6 +41,7 @@ import {
   VERIFY_GSTIN_SUCCESS,
   VERIFY_GSTIN_FAIL
 } from "../actions/Register";
+import {stateAndTin} from '../config'
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 
 const INITIAL_STATE = {
@@ -88,9 +89,9 @@ const INITIAL_STATE = {
   documentBase64Register: [],
   gstin: "",
   referalCode:'',
-  isVerifed:null
+  isVerifed:null,
+  sateAndCode:stateAndTin
 };
-
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case UPDATE_VEHICLE_BOOL:
@@ -297,11 +298,11 @@ export default (state = INITIAL_STATE, action) => {
       }
       break;
 
-    case UPDATE_LANGUAGE:
+    case UPDATE_STATE_AND_CODE:
       {
         return {
           ...state,
-          langauge: action.payload
+          address: stateAndTin[action.payload]
         };
       }
       break;

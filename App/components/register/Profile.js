@@ -28,6 +28,7 @@ import {
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Slider } from "react-native-elements";
 import CheckBox from "react-native-check-box";
+import { Dropdown } from 'react-native-material-dropdown';
 import {
   MECHANIC,
   HAND_HOLDING_UP,
@@ -55,7 +56,8 @@ import {
   deleteRegisterDocument,
   updateGstin,
   updateReferalCode,
-  verfyGSTIN
+  verfyGSTIN,
+  updateStateAndCode
 } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
@@ -321,11 +323,37 @@ class Profile extends Component {
                 {errors.name ? (
                   <Text style={styles.textError2}>{errors.name[0]}</Text>
                 ) : null}
-                <TextInput
+
+
+                {this.props.isVendor ?
+                  <View style={{marginLeft: 16,marginRight:16,flexDirection:'row',justifyContent:'space-between'}}>
+                      <Dropdown
+                          label='State'
+                          data={this.props.sateAndCode}
+                          dropdownOffset={ {top: 0, left: 0} }
+                          containerStyle={{width:'65%'}}
+                          itemTextStyle={{fontFamily:'circular-book',fontSize:16}}
+                          pickerStyle={{height:'50%'}}
+                          baseColor={this.props.address?'rgba(0, 0, 0,1)':'rgba(0, 0, 0,0.5)'}
+                          onChangeText={(value,index)=>{
+                              this.props.updateStateAndCode(index);
+                          }}
+                        />
+                        <Dropdown
+                            label='TIN'
+                            value={this.props.address.code}
+                            dropdownOffset={ {top: 0, left: 0} }
+                            containerStyle={{width:'30%'}}
+                            baseColor={this.props.address?'rgba(0, 0, 0,1)':'rgba(0, 0, 0,0.5)'}
+                            itemTextStyle={{fontFamily:'circular-book',fontSize:16}}
+                          />
+                    </View>
+                    :
+                  <TextInput
                   style={textInputProfilStyle}
                   underlineColorAndroid="transparent"
                   placeholder={
-                    this.props.isVendor ? "State & State Code" : "Address (Optinal)"
+                     "Address (Optinal)"
                   }
                   placeholderTextColor="#9D9D9D"
                   autoCapitalize="none"
@@ -333,7 +361,10 @@ class Profile extends Component {
                   onChangeText={text => {
                     this.props.updateAddress(text);
                   }}
-                />
+                />}
+                {
+                  console.log(this.props.address)
+                }
                 {this.props.isVendor ? (
                   errors.address ? (
                     <Text style={styles.textError2}>{errors.address[0]}</Text>
@@ -744,6 +775,7 @@ const mapStateToProps = ({ register }) => {
     documentRegisterUri,
     workshop_name,
     isVerifed,
+    sateAndCode,
     referalCode
   } = register;
   return {
@@ -768,6 +800,7 @@ const mapStateToProps = ({ register }) => {
     documentRegisterUri,
     workshop_name,
     isVerifed,
+    sateAndCode,
     referalCode
   };
 };
@@ -794,6 +827,7 @@ export default connect(
     deleteRegisterDocument,
     updateGstin,
     updateReferalCode,
-    verfyGSTIN
+    verfyGSTIN,
+    updateStateAndCode
   }
 )(withValidation(rules, Profile));

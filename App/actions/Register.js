@@ -28,7 +28,7 @@ export const UPDATE_MOBILE_NO_PROFILE = "register/UPDATE_MOBILE_NO_PROFILE";
 export const UPDATE_DATE_OF_BIRTH = "register/UPDATE_DATE_OF_BIRTH";
 export const UPDATE_PASSWORD_PROFILE = "register/UPDATE_PASSWORD_PROFILE";
 export const UPDATE_CONFIRM_PASSWORD = "register/UPDATE_CONFIRM_PASSWORD";
-export const UPDATE_LANGUAGE = "register/UPDATE_LANGUAGE";
+export const UPDATE_STATE_AND_CODE = "register/UPDATE_STATE_AND_CODE";
 export const SIGNUP_START = "register/SIGNUP_START";
 export const SIGNUP_SUCCESSFUL = "register/SIGNUP_SUCCESSFUL";
 export const SIGNUP_FAIL = "register/SIGNUP_FAIL";
@@ -182,6 +182,13 @@ export const updateAddress = val => dispatch => {
   });
 };
 
+export const updateStateAndCode = index => dispatch => {
+  dispatch({
+    type: UPDATE_STATE_AND_CODE,
+    payload: index
+  });
+}
+
 export const updateMobileNoProfile = val => dispatch => {
   dispatch({
     type: UPDATE_MOBILE_NO_PROFILE,
@@ -288,7 +295,6 @@ export const signupUser = () => (dispatch, getState) => {
   vehicle_type = JSON.stringify(vehicle_type);
   var DocumentBase64Register = JSON.stringify(documentBase64Register);
   let test = new FormData();
-
   test.append("username", mobileno);
   test.append("password", password);
   test.append("device_token", "djhsgdf87sfdfs7dfsfsfs");
@@ -296,7 +302,7 @@ export const signupUser = () => (dispatch, getState) => {
   test.append("first_name", name);
   test.append("last_name", name);
   test.append("mobile", mobileno);
-  test.append("address", address);
+  test.append("address", isVendor?JSON.stringify(address):address);
   test.append("email", email);
   test.append("service_vehicle_type", vehicle_type);
   test.append("is_vendor", is_vendor);

@@ -63,6 +63,7 @@ export const GET_FUTURE_BOOKING_LIST_NO_FOUND =
   "vendors/GET_FUTURE_BOOKING_LIST_NO_FOUND";
 export const UPDATE_VENDOR_FULL_NAME = "vendors/UPDATE_VENDOR_FULL_NAME";
 export const UPDATE_VENDOR_ADDRESS = "vendors/UPDATE_VENDOR_ADDRESS";
+export const UPDATE_VENDOR_STATE_AND_CODE = "vendors/UPDATE_VENDOR_STATE_AND_CODE";
 export const UPDATE_VENDOR_EMAIL = "vendors/UPDATE_VENDOR_EMAIL";
 export const UPDATE_VENDOR_PROFILE_START =
   "vendors/UPDATE_VENDOR_PROFILE_START";
@@ -253,6 +254,7 @@ export const getBookingUpdate = val => (dispatch, getState) => {
     type: GET_BOOKING_UAPDATE_START
   });
   const { bookingData, FutureBookingList, bookings } = getState().vendors;
+  const { userData } = getState().user;
   let test = new FormData();
   test.append("booking_id", val.Id);
   test.append("status", val.status);
@@ -260,6 +262,17 @@ export const getBookingUpdate = val => (dispatch, getState) => {
     .then(response => {
       if (response.status === 1) {
         if (val.status === "accept") {
+
+          // let test1 = new FormData();
+          // test1.append("customer_id", userData.userId);
+          // test1.append("order_id", "Ref_abcd0001");
+          // test1.append("payment_id", "Ref_abcd0001");
+          // test1.append("amount", -5);
+          // Api.post(ADD_PAYMENT, test1).then(res => {
+          //   console.log(test1);
+          //   console.log(res);
+          // })
+
           FutureBookingList.map(booking => {
             if (booking.booking_id === val.Id) {
               booking.status = "accept";
@@ -334,7 +347,6 @@ export const BookingListCancle = () => (dispatch, getState) => {
   test.append("reason", cancleReasonVendor);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log(response);
       if (response.status === 1) {
         var cancelData = {
           customer_id: cancelBookingData.customer_id,
@@ -478,6 +490,14 @@ export const updateVendorAddress = val => dispatch => {
     payload: val
   });
 };
+
+export const updateVendorStateAndCode = index => dispatch => {
+  dispatch({
+    type: UPDATE_VENDOR_STATE_AND_CODE,
+    payload: index
+  });
+};
+
 export const updateVendorEmail = val => dispatch => {
   dispatch({
     type: UPDATE_VENDOR_EMAIL,
@@ -515,12 +535,12 @@ export const updateVendorProfile = val => (dispatch, getState) => {
   let test = new FormData();
   test.append("id", userData.userId);
   test.append("first_name", fullNameVendor);
-  test.append("address", addressVendor);
+  test.append("address", JSON.stringify(addressVendor));
   test.append("profile_image", imageBase64Vendor);
   test.append("workshop_name", workshop_nameVendor);
   test.append("service_vehicle_type", service_vehicle_type);
-  console.log(test);
   Api.post(UPDATE_PROFILE, test).then(response => {
+    console.log(test);
     console.log(response);
     if (response.status === 1) {
       dispatch({
@@ -771,7 +791,6 @@ export const updateWalletAmount = () => async (dispatch, getState) => {
   let test = new FormData();
   test.append("customer_id", userData.userId);
   Api.post(UPDATE_WALLET_AMOUNT, test).then(response => {
-    console.log(response);
   });
 };
 
@@ -785,7 +804,7 @@ export const addWalletPayment = () => async (dispatch, getState) => {
   test.append("payment_id", paymentId);
   test.append("amount", walletAmount);
   Api.post(ADD_PAYMENT, test).then(response => {
-    console.log(response);
+
     if (response.status === 1) {
       dispatch(getWalletAmount());
       dispatch({
@@ -816,7 +835,6 @@ export const shareReferal = () => (dispatch, getState) => {
   Share.share({
     message: playStoreUrl
   }).then(response => {
-    console.log(response);
   });
 };
 
@@ -859,7 +877,6 @@ export const updateVendorProfileHeavyVehicleBool = () => (
 ) => {
   const { vendorProfileServiceType } = getState().vendors;
   vendorProfileServiceType[2] = !vendorProfileServiceType[2];
-  console.log(vendorProfileServiceType);
   dispatch({
     type: UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL,
     payload: vendorProfileServiceType
@@ -872,7 +889,6 @@ export const updateVendorProfileTowingBool = () => (
 ) => {
   const { vendorProfileServiceType } = getState().vendors;
   vendorProfileServiceType[3] = !vendorProfileServiceType[3];
-  console.log(vendorProfileServiceType);
   dispatch({
     type: UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL,
     payload: vendorProfileServiceType
@@ -885,7 +901,6 @@ export const updateVendorProfileTyreBool = () => (
 ) => {
   const { vendorProfileServiceType } = getState().vendors;
   vendorProfileServiceType[4] = !vendorProfileServiceType[4];
-  console.log(vendorProfileServiceType);
   dispatch({
     type: UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL,
     payload: vendorProfileServiceType
@@ -898,7 +913,6 @@ export const GetVenderStatus = () => async (dispatch,getState) =>{
   if(userData.userStatus === "Active"){
     userStatus=true
   }
-  console.log(userData.userStatus);
   dispatch({
     type:GET_VENDOR_STATUS,
     payload:userStatus
@@ -909,7 +923,6 @@ export const closePaymentPage = () => (dispatch) => {
   dispatch({
     type:CLOSE_PAYMENT_PAGE,
   })
-  console.log('ksdufd');
 }
 
 export const venderActivation = () => async (dispatch,getState) =>{
@@ -938,4 +951,8 @@ export const venderActivation = () => async (dispatch,getState) =>{
     }
   });
 
+}
+
+export const fetchLedgerHistory = () => (dispatch) => {
+  console.log('Hit Patel');
 }

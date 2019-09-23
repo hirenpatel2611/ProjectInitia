@@ -16,6 +16,7 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Dropdown } from 'react-native-material-dropdown';
 import styles from "./vendorStyle";
 import Header from "../../Common/Header";
 import {
@@ -31,13 +32,15 @@ import {
   updateVendorProfileCarBool,
   updateVendorProfileHeavyVehicleBool,
   updateVendorProfileTowingBool,
-  updateVendorProfileTyreBool
+  updateVendorProfileTyreBool,
+  updateVendorStateAndCode
 } from "../../actions";
 import { USER2, PENCIL, MOTORCYCLE, CAR, HEAVY_VEHICLE,TOWING } from "../../images";
 import { Asset } from "expo";
 import * as Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import FlashMessage from "react-native-flash-message";
+import {stateAndTin} from '../../config'
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -110,17 +113,33 @@ class Profile extends Component {
               }}
             />
 
-            <TextInput
-              style={textInputProfilStyle}
-              underlineColorAndroid="transparent"
-              placeholderTextColor="#9D9D9D"
-              placeholder="State & State Code"
-              value={this.props.addressVendor}
-              multiline={true}
-              onChangeText={text => {
-                this.props.updateVendorAddress(text);
-              }}
-            />
+            <View style={{marginLeft: 14,
+                          marginTop: 16,
+                          marginRight:14,
+                          flexDirection:'row',
+                          justifyContent:'space-between'}}>
+                <Dropdown
+                    label='State'
+                    data={stateAndTin}
+                    value={this.props.addressVendor.value}
+                    dropdownOffset={ {top: 0, left: 0} }
+                    containerStyle={{width:'65%'}}
+                    itemTextStyle={{fontFamily:'circular-book',fontSize:16}}
+                    pickerStyle={{height:'50%'}}
+                    baseColor='rgba(0, 0, 0,1)'
+                    onChangeText={(value,index)=>{
+                      this.props.updateVendorStateAndCode(index);
+                    }}
+                  />
+                  <Dropdown
+                      label='TIN'
+                      value={this.props.addressVendor.code}
+                      dropdownOffset={ {top: 0, left: 0} }
+                      containerStyle={{width:'30%'}}
+                      baseColor='rgba(0, 0, 0,1)'
+                      itemTextStyle={{fontFamily:'circular-book',fontSize:16}}
+                    />
+              </View>
             <TextInput
               style={textInputProfilStyle}
               underlineColorAndroid="transparent"
@@ -375,6 +394,7 @@ export default connect(
     updateVendorProfileCarBool,
     updateVendorProfileHeavyVehicleBool,
     updateVendorProfileTowingBool,
-    updateVendorProfileTyreBool
+    updateVendorProfileTyreBool,
+    updateVendorStateAndCode
   }
 )(Profile);

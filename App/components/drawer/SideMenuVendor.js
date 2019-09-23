@@ -62,6 +62,7 @@ class SideMenuVendor extends Component {
             borderTopWidth: 0
           }}
         />
+
         <View style={{ alignItems: "center" }}>
           <Image style={imageMechanic} source={MECHANIC} />
         </View>
@@ -70,6 +71,7 @@ class SideMenuVendor extends Component {
           <Image style={image3} source={CAR_ENGINE} />
           <Image style={image4} source={TIMING_BELT} />
         </View>
+        <Image style={{width:150,height:70,alignSelf:'center',marginBottom:10,top:10}} source={{uri:'http://ilifenetwork.com/api/web/velwayIcon.jpg'}} />
         <View
           style={{
             width: 170,
@@ -185,6 +187,17 @@ class SideMenuVendor extends Component {
          {this.props.isVendorActive?"Online":"Offline"}</Text>
       }
         </CardSection>
+        <CardSection
+        style={{marginTop:'40%',
+          flexDirection: "column",
+          borderBottomWidth: 0,
+          borderTopWidth: 0,
+          alignItems:'center'
+        }}
+        >
+
+        </CardSection>
+
       </View>
     );
   }

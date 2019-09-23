@@ -25,6 +25,7 @@ import ForgotMobile from "./components/forgotPassword/ForgotMobile";
 import ForgotOTP from "./components/forgotPassword/ForgotOTP";
 import ForgotResetPassword from "./components/forgotPassword/ForgotResetPassword";
 import Wallet from "./components/vendors/Wallet"
+import History from "./components/vendors/ledgerHistory"
 import CustomerWallet from "./components/customer/Wallet"
 
 import { Actions } from "react-native-router-flux";
@@ -302,6 +303,12 @@ class RouterComponent extends Component {
               <Scene
                 key="Wallet"
                 component={Wallet}
+                hideNavBar={true}
+                navTransparent="true"
+              />
+              <Scene
+                key="history"
+                component={History}
                 hideNavBar={true}
                 navTransparent="true"
               />

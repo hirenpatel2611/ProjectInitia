@@ -66,9 +66,7 @@ export const getUserData = () => async (dispatch, getState) => {
   let test = new FormData();
   test.append("id", valueUserId);
   Api.post(GET_USER_DATA, test).then(async(response) => {
-    console.log(response);
     if (response.status === 0) {
-
       if(response.message === "Not found user detail."){
         await AsyncStorage.removeItem("token")
         await AsyncStorage.removeItem("is_vendor")
@@ -86,7 +84,8 @@ export const getUserData = () => async (dispatch, getState) => {
       payload: response[0]
     });
     dispatch(GetVenderStatus());
-    dispatch(loadVendorProfile());
+
+    //dispatch(loadVendorProfile());
     const { userCurrentBooking } = getState().user;
     const { vendors, location } = getState().customers;
 

@@ -6,6 +6,7 @@ import {
   GET_BOOKING_SUCCESS,
   GET_BOOKING_FAIL,
   GET_VENDOR_DETAILS,
+  GET_VENDOR_DETAILS_ADDRESS,
   CLOSE_VENDOR_DETAIL_MODAL,
   GET_VENDOR_BOOKING_START,
   GET_BOOKING_LIST_START,
@@ -148,6 +149,15 @@ export default (state = INITIAL_STATE, action) => {
         };
       }
       break;
+
+    case GET_VENDOR_DETAILS_ADDRESS:
+        {
+          return {
+            ...state,
+            vendorsData: action.payload,
+          };
+        }
+        break;
 
     case CLOSE_VENDOR_DETAIL_MODAL:
       {

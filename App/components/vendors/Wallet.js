@@ -7,7 +7,8 @@ import {
   WebView,
   TextInput,
   Modal,
-  Image
+  Image,
+  TouchableOpacity
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";
@@ -25,8 +26,6 @@ import {
 } from "../../actions";
 import { SUCCESS, BITMAP2 } from "../../images";
 
-
-
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 
@@ -41,7 +40,8 @@ class Wallet extends Component {
 
     const htmls =
       `
-    <button id="rzp-button1">Pay</button>
+    <img src="http://ilifenetwork.com/api/web/icon2.png" style="display: inline-block; height:30%; width:50%; margin-Left:20%; ">
+    <button id="rzp-button1" style="width:50%; background-Color:#7960FF; color:#fff; font-Size:50; border-Radius:30px; margin-Top:20%; margin-Left:25%;">Pay</button>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
     var options = {
@@ -116,13 +116,21 @@ class Wallet extends Component {
           />
         ) : (
           <KeyboardAwareScrollView enableOnAndroid style={{ flex: 1 }}>
+          <TouchableOpacity
+              onPress={()=>{
+                Actions.history();
+              }}
+              style={{height:40,width:40,margin:20,alignSelf:'flex-end'}}>
+          <Image style={{height:40,width:40}} source={{uri:'http://ilifenetwork.com/api/web/history.png'}} />
+          </TouchableOpacity>
             <View
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                height: 0.5 * ScreenHeight
+                height: 0.4 * ScreenHeight
               }}
             >
+
               <View
                 style={{
                   borderColor: "#7960FF",

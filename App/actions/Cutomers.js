@@ -19,6 +19,7 @@ import {
 } from "./Socket";
 import { getUserData } from "./ui";
 import { showMessage } from "react-native-flash-message";
+import * as Location from 'expo-location';
 
 export const GET_VENDORS_START = "customers/GET_VENDORS_START";
 export const GET_VENDORS_SUCCESS = "customers/GET_VENDORS_SUCCESS";
@@ -26,6 +27,7 @@ export const GET_USER_LOCATION_FAIL = "customers/GET_USER_LOCATION_FAIL";
 export const GET_USER_LOCATION_SUCCESS = "customers/GET_USER_LOCATION_SUCCESS";
 export const IS_MENU_VISIBLE = "customers/IS_MENU_VISIBLE";
 export const GET_VENDOR_DETAILS = "customers/GET_VENDOR_DETAILS";
+export const GET_VENDOR_DETAILS_ADDRESS = "customers/GET_VENDOR_DETAILS_ADDRESS";
 export const CLOSE_VENDOR_DETAIL_MODAL = "customers/closeVendorDetailModal";
 export const GET_BOOKING_SUCCESS = "customers/GET_BOOKING_SUCCESS";
 export const GET_BOOKING_FAIL = "customers/GET_BOOKING_FAIL";
@@ -116,9 +118,6 @@ export const getVendors = () => async (dispatch, getState) => {
 
   Api.post(GET_VENDOR, test)
     .then(response => {
-      console.log(test);
-      console.log(response.length);
-      console.log(response);
       if (response.status === 0) {
         if (getVendorsCounter < 5) {
           dispatch(getVendors());
@@ -148,12 +147,28 @@ export const getUserLocationSuccess = location => (dispatch, getState) => {
   });
 };
 
-export const getVenderDetails = val => (dispatch, getState) => {
+export const getVenderDetails = val => async (dispatch, getState) => {
+  var location = {
+    latitude:parseFloat(val.latitude),
+    longitude:parseFloat(val.longitude)
+  }
+  console.log(location);
+    val.address=null
   dispatch({
     type: GET_VENDOR_DETAILS,
     payload: val
   });
+  await Location.reverseGeocodeAsync(location).then((res)=>{console.log(res);
+      val.address =  res[0].name + ","+res[0].city+"," +res[0].region +"-" +res[0].postalCode
+      dispatch({
+        type: GET_VENDOR_DETAILS_ADDRESS,
+        payload: val
+      });
+  })
+  console.log(val);
+
   dispatch(getDistance());
+
 };
 
 export const closeVendorDetailModal = () => async (dispatch, getState) => {
@@ -441,9 +456,7 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
     .then(response => {
       if (response.status !== 0) {
         if (val === "reached") {
-          console.log("Booking update");
           obj.type = "REACHED";
-          console.log("REACHED");
 
         }
         dispatch({
@@ -636,8 +649,6 @@ export const getFilterSubmeet = () => (dispatch, getState) => {
   if (isFilterTyreService === true) {
     vehicle_type = vehicle_type.concat("Tyre_Service");
   }
-
-  console.log(vehicle_type);
 
   var vendorPerameter = { vehicle_type: vehicle_type, rating: rating };
 

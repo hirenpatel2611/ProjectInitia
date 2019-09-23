@@ -237,7 +237,6 @@ export const connectTosocketBookingCancle = val => async (
 export const connectTosocketReached = val => async (dispatch, getState) => {
   const { mechanicBookedData } = getState().vendors;
   const { userId } = getState().user;
-console.log(val);
   chatSocket.emit("booking_status", {
     room: `${val.customer_id} ${userId}`,
     message: mechanicBookedData,
