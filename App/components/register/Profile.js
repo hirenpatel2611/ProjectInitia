@@ -27,7 +27,6 @@ import {
 } from "../../images";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Slider } from "react-native-elements";
-import CheckBox from "react-native-check-box";
 import { Dropdown } from 'react-native-material-dropdown';
 import {
   MECHANIC,
@@ -57,6 +56,7 @@ import {
   updateGstin,
   updateReferalCode,
   verfyGSTIN,
+  getagreeCheckbox,
   updateStateAndCode
 } from "../../actions";
 import _ from "lodash";
@@ -69,6 +69,7 @@ import * as IntentLauncher from "expo-intent-launcher";
 import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
 import * as Constants from "expo-constants";
+import CheckBox from 'react-native-checkbox';
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -196,7 +197,7 @@ class Profile extends Component {
       profileButtonView,
       textError2
     } = styles;
-    const { validate, documentRegisterUri, isVendor,gstin } = this.props;
+    const { validate, documentRegisterUri, isVendor,gstin,agreeCheckbox } = this.props;
     errors = this.props.onSubmeetSignupForm
       ? validate(this.props.register)
       : {};
@@ -326,7 +327,7 @@ class Profile extends Component {
 
 
                 {this.props.isVendor ?
-                  <View style={{marginLeft: 16,marginRight:16,flexDirection:'row',justifyContent:'space-between'}}>
+                  <View style={{marginLeft: 16,marginRight:16,marginTop:10,flexDirection:'row',justifyContent:'space-between'}}>
                       <Dropdown
                           label='State'
                           data={this.props.sateAndCode}
@@ -447,7 +448,6 @@ class Profile extends Component {
                     {errors.confirmPassword[0]}
                   </Text>
                 ) : null}
-                {this.props.isVendor ? (
                   <TextInput
                     style={textInputProfilStyle}
                     underlineColorAndroid="transparent"
@@ -460,7 +460,6 @@ class Profile extends Component {
                       this.props.updateReferalCode(text);
                     }}
                   />
-                ) : null}
               </View>
 
               {this.props.isVendor ? (
@@ -534,6 +533,26 @@ class Profile extends Component {
               <Text style={styles.textError2}>
                 {this.props.signupFail ? this.props.signupFail : null}
               </Text>
+
+              <View style={{marginLeft:16,flexDirection:'row',marginBottom:5}}>
+              <CheckBox
+                label='I agree,'
+                checked={this.props.agreeCheckbox}
+                onChange={() => {
+                     this.props.getagreeCheckbox();
+                  }}
+                checkboxStyle={{tintColor:'#7960FF',height:18,width:18}}
+                labelStyle={{fontFamily:'circular-bold'}}
+              />
+              <Text style={{fontFamily:'circular-book',color:'#7960FF'}}
+                    onPress={()=>{console.log('123');}}>
+               Terms and Conditions</Text>
+              </View>
+              {errors.agreeCheckbox ? (
+                <Text style={styles.textError2}>
+                  {errors.agreeCheckbox[0]}
+                </Text>
+              ) : null}
               <TouchableHighlight
                 onPress={() => {
                   this.props.updateOnSubmeetSignup();
@@ -745,6 +764,11 @@ const rules = [
       return true;
     },
     error: "Please Add Document"
+  },
+  {
+    field: "agreeCheckbox",
+    condition: (agreeCheckbox, { isVendor }) => {agreeCheckbox===true},
+    error: "Please agree terms and conditions."
   }
   // {
   //   field: 'avatar',
@@ -776,7 +800,8 @@ const mapStateToProps = ({ register }) => {
     workshop_name,
     isVerifed,
     sateAndCode,
-    referalCode
+    referalCode,
+    agreeCheckbox
   } = register;
   return {
     visibleModalProfile,
@@ -801,7 +826,8 @@ const mapStateToProps = ({ register }) => {
     workshop_name,
     isVerifed,
     sateAndCode,
-    referalCode
+    referalCode,
+    agreeCheckbox
   };
 };
 
@@ -828,6 +854,7 @@ export default connect(
     updateGstin,
     updateReferalCode,
     verfyGSTIN,
-    updateStateAndCode
+    updateStateAndCode,
+    getagreeCheckbox
   }
 )(withValidation(rules, Profile));

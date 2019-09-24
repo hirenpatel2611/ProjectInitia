@@ -17,7 +17,8 @@ import {
   connectTosocketBookingCancle,
   socketBookingOnTheWay,
   socketVendorCurrentLocation,
-  socketBookingCompleted
+  socketBookingCompleted,
+  socketLeaveClubRoom
 } from "./Socket";
 import { SplashScreen } from "expo";
 import { Actions } from "react-native-router-flux";
@@ -263,16 +264,6 @@ export const getBookingUpdate = val => (dispatch, getState) => {
       if (response.status === 1) {
         if (val.status === "accept") {
 
-          // let test1 = new FormData();
-          // test1.append("customer_id", userData.userId);
-          // test1.append("order_id", "Ref_abcd0001");
-          // test1.append("payment_id", "Ref_abcd0001");
-          // test1.append("amount", -5);
-          // Api.post(ADD_PAYMENT, test1).then(res => {
-          //   console.log(test1);
-          //   console.log(res);
-          // })
-
           FutureBookingList.map(booking => {
             if (booking.booking_id === val.Id) {
               booking.status = "accept";
@@ -340,6 +331,7 @@ export const BookingListCancle = () => (dispatch, getState) => {
     FutureBookingList,
     cancelBookingData
   } = getState().vendors;
+  const {userData} = getState().user;
 
   let test = new FormData();
   test.append("booking_id", cancelBookingData.booking_id);
@@ -350,7 +342,8 @@ export const BookingListCancle = () => (dispatch, getState) => {
       if (response.status === 1) {
         var cancelData = {
           customer_id: cancelBookingData.customer_id,
-          toToken: cancelBookingData.customerToken
+          toToken: cancelBookingData.customerToken,
+          sender_id:userData.userId
         };
         dispatch(connectTosocketBookingCancle(cancelData));
         FutureBookingList.map(booking => {
@@ -426,11 +419,12 @@ export const otpShare = val => (dispatch, getState) => {
 
 export const getBookingVendorStatus = data => (dispatch, getState) => {
   const { FutureBookingList, bookings } = getState().vendors;
-
+  console.log(data);
   FutureBookingList.map(booking => {
     if (booking.booking_id === data.message.booking_id) {
       if (data.type === "CANCEL") {
         booking.status = "cancle";
+        dispatch(socketLeaveClubRoom({receiver_id:data.message.customer_id,sender_id:data.message.vendor_id}))
       }
       if (data.type === "REACHED") {
         booking.status = "reached";
@@ -484,6 +478,7 @@ export const updateVendorFullName = val => dispatch => {
     payload: val
   });
 };
+
 export const updateVendorAddress = val => dispatch => {
   dispatch({
     type: UPDATE_VENDOR_ADDRESS,
@@ -540,8 +535,6 @@ export const updateVendorProfile = val => (dispatch, getState) => {
   test.append("workshop_name", workshop_nameVendor);
   test.append("service_vehicle_type", service_vehicle_type);
   Api.post(UPDATE_PROFILE, test).then(response => {
-    console.log(test);
-    console.log(response);
     if (response.status === 1) {
       dispatch({
         type: UPDATE_VENDOR_PROFILE_SUCCESS
@@ -847,7 +840,6 @@ export const referalToCustomer = () => (dispatch,getState) => {
   Share.share({
     message: playStoreUrl
   }).then(response => {
-    console.log(response);
   });
 }
 
@@ -939,7 +931,6 @@ export const venderActivation = () => async (dispatch,getState) =>{
   test.append("customer_id", userData.userId);
   test.append("status", status);
   Api.post(VENDOR_STATUS, test).then(response => {
-    console.log(response);
     if(response.status === 1){
       dispatch({
         type:VENDER_ACTIVATION_SUCCESS

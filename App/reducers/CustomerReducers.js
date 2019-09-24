@@ -59,7 +59,8 @@ import {
   ON_PRESS_MODAL_NO,
   ON_PRESS_MODAL_PAY_TO_VENDOR_START,
   ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS,
-  ON_PRESS_MODAL_PAY_TO_VENDOR_FAIL
+  ON_PRESS_MODAL_PAY_TO_VENDOR_FAIL,
+  GET_CUSTOMER_WALLET_AMOUNT_SUCCESS
 } from "../actions/Cutomers";
 import {
   GET_USER_BOOKING_STATUS_ACCEPT,
@@ -447,7 +448,6 @@ export default (state = INITIAL_STATE, action) => {
 
     case GET_USER_BOOKING_STATUS_ACCEPT:
       {
-        console.log(action.payload.vendorData);
         return {
           ...state,
           bookingStatusRes: action.payload.bookingStatusRes,
@@ -737,6 +737,14 @@ export default (state = INITIAL_STATE, action) => {
         }
       }
       break;
+
+    case GET_CUSTOMER_WALLET_AMOUNT_SUCCESS:
+    {
+      return {
+        ...state,
+        customerWalletAmount:action.payload.total
+      };
+    }
 
     default:
       return state;

@@ -27,6 +27,10 @@ import ForgotResetPassword from "./components/forgotPassword/ForgotResetPassword
 import Wallet from "./components/vendors/Wallet"
 import History from "./components/vendors/ledgerHistory"
 import CustomerWallet from "./components/customer/Wallet"
+import isEmpty from "is-empty";
+
+
+
 
 import { Actions } from "react-native-router-flux";
 import {
@@ -62,7 +66,7 @@ class RouterComponent extends Component {
   }
   _handleNotification = async (notification) => {
       const isVen = await AsyncStorage.getItem("is_vendor");
-
+      if(!isEmpty(notification.data)){
       switch (notification.data.data.type) {
 
         case 'BOOK':
@@ -105,6 +109,7 @@ class RouterComponent extends Component {
           return null;
         break;
       }
+    }
   };
   // componentWillUnmount() {
   //   AppState.removeEventListener("change", this._handleAppStateChange);

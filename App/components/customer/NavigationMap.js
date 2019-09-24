@@ -35,6 +35,7 @@ import {
   getpaymentAmountInput,
   onPressModalYes,
   onPressModalNo,
+  getCustomerWalletAmount,
   onPressModalPaytoVendor
 } from "../../actions";
 import  MapViewDirections  from "../../Common/MapViewDirection";
@@ -56,6 +57,7 @@ class NearbyGaraje extends Component {
     } else {
       await this._getLocationAsync();
     }
+    this.props.getCustomerWalletAmount();
   }
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
@@ -296,7 +298,7 @@ class NearbyGaraje extends Component {
               {this.props.isPayment?'Pay With Velway Wallet.':'Do you want to pay with Velway Wallet.'}
               </Text>
               <Text style={{fontFamily:'circular-book',alignSelf:'center',color:'#7960FF',margin:3}}>
-              Balance:100
+              Balance:{this.props.customerWalletAmount}
               </Text>
                   {this.props.isPayment?<TextInput
                     style={textInputProfilStyle}
@@ -619,7 +621,8 @@ const mapStateToProps = ({ customers }) => {
     paymentAmountInput,
     isPayment,
     isPaymentModal,
-    isPaymentLoading
+    isPaymentLoading,
+    customerWalletAmount
   } = customers;
   return {
     location,
@@ -640,7 +643,8 @@ const mapStateToProps = ({ customers }) => {
     paymentAmountInput,
     isPayment,
     isPaymentModal,
-    isPaymentLoading
+    isPaymentLoading,
+    customerWalletAmount
   };
 };
 
@@ -659,6 +663,7 @@ export default connect(
     getpaymentAmountInput,
     onPressModalYes,
     onPressModalNo,
+    getCustomerWalletAmount,
     onPressModalPaytoVendor,
   }
 )(NearbyGaraje);

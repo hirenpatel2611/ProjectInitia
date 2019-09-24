@@ -42,7 +42,6 @@ export const createSocketChannel = val => async (dispatch, getState) => {
   chatSocket.emit("self_room", { room: `${val}` });
 
   chatSocket.on("ping", function(data) {
-    console.log(data);
     chatSocket.emit("pong");
   });
 
@@ -199,13 +198,14 @@ export const connectTosocket = () => async (dispatch, getState) => {
 export const connectTosocketApprov = val => async (dispatch, getState) => {
   const { bookingData,bookingModalData } = getState().vendors;
   const { userId } = getState().user;
+
   chatSocket.emit("booking_status", {
-    room: `${val} ${userId}`,
+    room: `${val.customer_id} ${userId}`,
     message: bookingData,
     type: "ACCEPT",
     toToken:val.customerToken
   });
-  channelName = `${userId} ${val}`;
+  channelName = `${userId} ${val.customer_id}`;
 };
 
 export const connectTosocketBookingCancle = val => async (
@@ -232,6 +232,10 @@ export const connectTosocketBookingCancle = val => async (
     toToken:val.toToken,
   });
   channelName = `${userId} ${val}`;
+
+  dispatch(socketLeaveClubRoom({receiver_id:val.customer_id,sender_id:val.sender_id}))
+  Notifications.dismissAllNotificationsAsync();
+  TaskManager.unregisterAllTasksAsync();
 };
 
 export const connectTosocketReached = val => async (dispatch, getState) => {
@@ -255,6 +259,15 @@ export const socketLeave = () => async (dispatch, getState) => {
   channelName = `${userData.userId}`;
 };
 
+export const socketLeaveClubRoom = val => () => {
+  console.log(val, "Loave Club Room");
+  chatSocket.emit("leave_self_room", {
+    room: `${val.receiver_id} ${val.sender_id}`,
+    type: "LEAVE"
+  });
+  channelName = `${val.sender_id} ${val.receiver_id}`;
+};
+
 export const socketBookingOnTheWay = socketData => async (
   dispatch,
   getState
@@ -276,7 +289,6 @@ export const socketVendorCurrentLocation = val => async (
 ) => {
   const { mechanicBookedData } = getState().vendors;
   const { userData } = getState().user;
-  console.log(val);
   vendorMobileno = userData.userMobileno;
   bookingDetails = mechanicBookedData;
   disp = dispatch;
@@ -379,11 +391,12 @@ export const socketVendorCurrentLocation = val => async (
     distanceInterval: 0.5,
     showsBackgroundLocationIndicator: true
   });
+
 };
 
 TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
   if (error) {
-    return;
+    return console.log("You error");
   }
 
   if (bookingDetails) {
@@ -419,6 +432,7 @@ TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
       });
       channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
     } else {
+      console.log("You are");
       chatSocket.emit("booking_status", {
         room: `${bookingDetails.booking.customer.customer_id} ${bookingDetails.booking.vendor.vendor_id}`,
         message: locations,
@@ -428,8 +442,10 @@ TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
         toToken:null
       });
       channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
-      TaskManager.unregisterTaskAsync(LOCATION_TASK_NAME1);
+      TaskManager.unregisterAllTasksAsync();
+      //disp(socketLeaveClubRoom({receiver_id:bookingDetails.booking.customer.customer_id,sender_id:bookingDetails.booking.vendor.vendor_id}))
       disp(connectTosocketReached(valReach))
+      Notifications.dismissAllNotificationsAsync()
     }
   }
 });
@@ -445,46 +461,58 @@ export const socketBookingCompleted = val => (dispatch, getState) => {
     toToken:val.customer.device_token
   });
   channelName = `${userData.userId} ${val.customer.customer_id} ${val.booking_id}`;
+
+  chatSocket.emit("leave_self_room", {
+    room: `${val.customer.customer_id} ${userData.userId} ${val.booking_id}`,
+    type: "LEAVE"
+  });
+  channelName = `${userData.userId} ${val.customer.customer_id} ${val.booking_id}`;
+
+  dispatch(socketLeaveClubRoom({receiver_id:val.customer.customer_id,sender_id:userData.userId}))
+  Notifications.dismissAllNotificationsAsync()
+  Notifications.cancelAllScheduledNotificationsAsync();
+  TaskManager.unregisterAllTasksAsync();
+
 };
 
 
-async function registerForPushNotificationsAsync() {
-  const { status: existingStatus } = await Permissions.getAsync(
-    Permissions.NOTIFICATIONS
-  );
-  let finalStatus = existingStatus;
-
-  // only ask if permissions have not already been determined, because
-  // iOS won't necessarily prompt the user a second time.
-  if (existingStatus !== 'granted') {
-    // Android remote notification permissions are granted during the app
-    // install, so this will only ask on iOS
-    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-    finalStatus = status;
-  }
-
-  // Stop here if the user did not grant permissions
-  if (finalStatus !== 'granted') {
-    return;
-  }
-
-  // Get the token that uniquely identifies this device
-  let token = await Notifications.getExpoPushTokenAsync();
-
-  // POST the token to your backend server from where you can retrieve it to send push notifications.
-  return fetch(PUSH_ENDPOINT, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      token: {
-        value: token,
-      },
-      user: {
-        username: 'Brent',
-      },
-    }),
-  });
-}
+// async function registerForPushNotificationsAsync() {
+//   const { status: existingStatus } = await Permissions.getAsync(
+//     Permissions.NOTIFICATIONS
+//   );
+//   let finalStatus = existingStatus;
+//
+//   // only ask if permissions have not already been determined, because
+//   // iOS won't necessarily prompt the user a second time.
+//   if (existingStatus !== 'granted') {
+//     // Android remote notification permissions are granted during the app
+//     // install, so this will only ask on iOS
+//     const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+//     finalStatus = status;
+//   }
+//
+//   // Stop here if the user did not grant permissions
+//   if (finalStatus !== 'granted') {
+//     return;
+//   }
+//
+//   // Get the token that uniquely identifies this device
+//   let token = await Notifications.getExpoPushTokenAsync();
+//
+//   // POST the token to your backend server from where you can retrieve it to send push notifications.
+//   return fetch(PUSH_ENDPOINT, {
+//     method: 'POST',
+//     headers: {
+//       Accept: 'application/json',
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({
+//       token: {
+//         value: token,
+//       },
+//       user: {
+//         username: 'Brent',
+//       },
+//     }),
+//   });
+// }

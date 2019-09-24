@@ -6,6 +6,7 @@ import { Actions } from "react-native-router-flux";
 import {loadVendorProfile,GetVenderStatus} from './Vendors';
 import * as Font from 'expo-font';
 import { Asset } from 'expo-asset';
+import * as Location from 'expo-location';
 export const LOAD_FONT_SUCCESS = "ui/LOAD_FONT_SUCCESS";
 export const UPDATE_LOGGED_IN_STATE = "ui/UPDATE_LOGGED_IN_STATE";
 export const UPDATE_IS_VENDOR = "user/UPDATE_IS_VENDOR";
@@ -90,7 +91,7 @@ export const getUserData = () => async (dispatch, getState) => {
     const { vendors, location } = getState().customers;
 
     if (location) {
-      SplashScreen.hide();
+
       switch (response[0].current_booking.status) {
         case "pending":
           var vendorData;
@@ -99,6 +100,14 @@ export const getUserData = () => async (dispatch, getState) => {
               vendorData = vendor;
             }
           });
+
+          var loc = {
+            latitude:parseFloat(vendorData.latitude),
+            longitude:parseFloat(vendorData.longitude)
+          }
+          await Location.reverseGeocodeAsync(loc).then((res)=>{console.log(res);
+              vendorData.address =  res[0].name + ","+res[0].city+"," +res[0].region +"-" +res[0].postalCode
+          })
           var bookingStatusRes = { type: "PENDING" };
           var booking_id = {
             booking_id: response[0].current_booking.booking_id
@@ -116,6 +125,13 @@ export const getUserData = () => async (dispatch, getState) => {
               vendorData = vendor;
             }
           });
+          var loc = {
+            latitude:parseFloat(vendorData.latitude),
+            longitude:parseFloat(vendorData.longitude)
+          }
+          await Location.reverseGeocodeAsync(loc).then((res)=>{console.log(res);
+              vendorData.address =  res[0].name + ","+res[0].city+"," +res[0].region +"-" +res[0].postalCode
+          })
 
           var bookingStatusRes = { type: "ACCEPT" };
           var booking_id = {
@@ -125,6 +141,7 @@ export const getUserData = () => async (dispatch, getState) => {
             type: GET_USER_BOOKING_STATUS_ACCEPT,
             payload: { bookingStatusRes, vendorData, response }
           });
+
           break;
 
         case "on-the-way":
@@ -165,6 +182,7 @@ export const getUserData = () => async (dispatch, getState) => {
 
         default:
       }
+        SplashScreen.hide();
     }}
   });
 };

@@ -2,12 +2,15 @@ import React,{Component} from 'react';
 import {View,Text,Dimensions,TouchableHighlight} from 'react-native';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";
-import { shareCustomerReferal } from "../../actions";
+import { shareCustomerReferal,getCustomerWalletAmount } from "../../actions";
 import Header from "../../Common/Header";
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
 class Wallet extends Component {
+  componentWillMount(){
+    this.props.getCustomerWalletAmount()
+  }
   render(){
     return(
       <View style={inStyle.ContainerStyle}>
@@ -30,7 +33,7 @@ class Wallet extends Component {
               alignSelf: "center"
             }}
           >
-            100
+            {this.props.customerWalletAmount?this.props.customerWalletAmount:null}
           </Text>
         </View>
         <TouchableHighlight
@@ -98,11 +101,13 @@ const inStyle = {
 
 const mapStateToProps = ({ customers, user }) => {
   const {
-bookData
+bookData,
+customerWalletAmount
   } = customers;
   const { userData } = user;
   return {
     bookData,
+    customerWalletAmount,
     userData
   };
 };
@@ -110,6 +115,7 @@ bookData
 export default connect(
   mapStateToProps,
   {
-    shareCustomerReferal
+    shareCustomerReferal,
+    getCustomerWalletAmount
   }
 )(Wallet);

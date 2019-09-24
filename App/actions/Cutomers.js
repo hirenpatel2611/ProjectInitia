@@ -9,7 +9,8 @@ import {
   RATING_BY_CUSTOMER,
   UPDATE_PROFILE,
   CUSTOMER_COMMENT,
-  MAKE_PAYMENT_CUSTOMER
+  MAKE_PAYMENT_CUSTOMER,
+  GET_WALLET_AMOUNT
 } from "../config";
 import { Actions } from "react-native-router-flux";
 import { Alert } from "react-native";
@@ -98,6 +99,7 @@ export const ON_PRESS_MODAL_NO = "customers/ON_PRESS_MODAL_NO";
 export const ON_PRESS_MODAL_PAY_TO_VENDOR_START = "customers/ON_PRESS_MODAL_PAY_TO_VENDOR_START";
 export const ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS = "customers/ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS";
 export const ON_PRESS_MODAL_PAY_TO_VENDOR_FAIL = "customers/ON_PRESS_MODAL_PAY_TO_VENDOR_FAIL";
+export const GET_CUSTOMER_WALLET_AMOUNT_SUCCESS = "customers/GET_CUSTOMER_WALLET_AMOUNT_SUCCESS";
 
 var cancelAlertCounter = 0;
 var getVendorsCounter = 0;
@@ -159,20 +161,18 @@ export const getVenderDetails = val => async (dispatch, getState) => {
     latitude:parseFloat(val.latitude),
     longitude:parseFloat(val.longitude)
   }
-  console.log(location);
     val.address=null
   dispatch({
     type: GET_VENDOR_DETAILS,
     payload: val
   });
-  await Location.reverseGeocodeAsync(location).then((res)=>{console.log(res);
+  await Location.reverseGeocodeAsync(location).then((res)=>{
       val.address =  res[0].name + ","+res[0].city+"," +res[0].region +"-" +res[0].postalCode
       dispatch({
         type: GET_VENDOR_DETAILS_ADDRESS,
         payload: val
       });
   })
-  console.log(val);
 
   dispatch(getDistance());
 
@@ -229,6 +229,7 @@ export const getBookingCancellation = () => (dispatch, getState) => {
     type: GET_BOOKING_CANCLE_START
   });
   const { bookData, cancleReason, vendorsData } = getState().customers;
+  const { userData } = getState().user;
   let test = new FormData();
   test.append("booking_id", bookData.booking_id);
   test.append("status", "cancle");
@@ -241,7 +242,8 @@ export const getBookingCancellation = () => (dispatch, getState) => {
         });
         var cancelData = {
           customer_id: bookData.vendor_id,
-          toToken: vendorsData.device_token
+          toToken: vendorsData.device_token,
+          sender_id:userData.userId
         };
         dispatch(connectTosocketBookingCancle(cancelData));
         dispatch(getUserData());
@@ -448,7 +450,7 @@ export const getMechanicCurrentLocation = val => (dispatch, getState) => {
     }
   }
 };
-//
+
 export const getBookingUpdateUser = val => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_UPDATE_START
@@ -668,10 +670,10 @@ export const getFilterSubmeet = () => (dispatch, getState) => {
 };
 
 export const getVendorRatingModal = () => dispatch => {
-  console.log("pppp");
   dispatch({
     type: GET_VENDOR_RATING_MODAL
   });
+  dispatch(getCustomerWalletAmount())
 };
 
 export const getCustomerComment = comment => dispatch => {
@@ -690,7 +692,6 @@ export const shareCustomerReferal = () => (dispatch, getState) => {
   Share.share({
     message: playStoreUrl
   }).then(response => {
-    console.log(response);
   });
 };
 
@@ -725,8 +726,6 @@ export const onPressModalPaytoVendor = () => (dispatch,getState) => {
   test.append("sender_id", userData.userId);
   test.append("receiver_id", bookData.vendor_id);
   Api.post(MAKE_PAYMENT_CUSTOMER, test).then(response => {
-    console.log(test);
-    console.log(response);
     if(response.status === 1){
     dispatch({
       type:ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS
@@ -750,3 +749,20 @@ export const onPressModalPaytoVendor = () => (dispatch,getState) => {
   }
   })
 }
+
+export const getCustomerWalletAmount = () => async (dispatch, getState) => {
+  const { userData } = await getState().user;
+
+  let test = new FormData();
+  test.append("customer_id", userData.userId);
+  Api.post(GET_WALLET_AMOUNT, test).then(response => {
+    if (response.status === 1) {
+      dispatch({
+        type: GET_CUSTOMER_WALLET_AMOUNT_SUCCESS,
+        payload: response.data[0]
+      });
+    } else {
+      dispatch(getCustomerWalletAmount());
+    }
+  });
+};

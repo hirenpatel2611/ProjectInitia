@@ -50,6 +50,7 @@ export const READ_FROM_CLIP_BOARD = "register/READ_FROM_CLIP_BOARD";
 export const UPDATE_REFERAL_CODE = "register/UPDATE_REFERAL_CODE";
 export const VERIFY_GSTIN_SUCCESS = "register/VERIFY_GSTIN_SUCCESS";
 export const VERIFY_GSTIN_FAIL = "register/VERIFY_GSTIN_FAIL";
+export const GET_AGREE_CHECKBOX = "register/GET_AGREE_CHECKBOX";
 
 export const updateVehicleBool = () => dispatch => {
   dispatch({
@@ -441,5 +442,12 @@ export const verifyGSTIN = () => (dispatch,getState) => {
         type:VERIFY_GSTIN_SUCCESS
       })
     }
+  })
+}
+
+export const getagreeCheckbox = () => (dispatch) => {
+  console.log('hhh');
+  dispatch({
+    type:GET_AGREE_CHECKBOX,
   })
 }

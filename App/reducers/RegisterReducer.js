@@ -39,7 +39,8 @@ import {
   READ_FROM_CLIP_BOARD,
   UPDATE_REFERAL_CODE,
   VERIFY_GSTIN_SUCCESS,
-  VERIFY_GSTIN_FAIL
+  VERIFY_GSTIN_FAIL,
+  GET_AGREE_CHECKBOX
 } from "../actions/Register";
 import {stateAndTin} from '../config'
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
@@ -90,7 +91,8 @@ const INITIAL_STATE = {
   gstin: "",
   referalCode:'',
   isVerifed:null,
-  sateAndCode:stateAndTin
+  sateAndCode:stateAndTin,
+  agreeCheckbox:false
 };
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -514,6 +516,15 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         isVerifed:false
       }
+    }
+    break;
+
+    case GET_AGREE_CHECKBOX:
+    {
+        return{
+          ...state,
+          agreeCheckbox:!state.agreeCheckbox
+        }
     }
     break;
 
