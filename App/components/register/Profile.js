@@ -57,7 +57,8 @@ import {
   updateReferalCode,
   verfyGSTIN,
   getagreeCheckbox,
-  updateStateAndCode
+  updateStateAndCode,
+  onPressTermsAndCondition
 } from "../../actions";
 import _ from "lodash";
 import styles from "./RegisterStyle";
@@ -354,7 +355,7 @@ class Profile extends Component {
                   style={textInputProfilStyle}
                   underlineColorAndroid="transparent"
                   placeholder={
-                     "Address (Optinal)"
+                     "Address (Optional)"
                   }
                   placeholderTextColor="#9D9D9D"
                   autoCapitalize="none"
@@ -376,7 +377,7 @@ class Profile extends Component {
                   style={textInputProfilStyle}
                   underlineColorAndroid="transparent"
                   placeholder={
-                    this.props.isVendor ? "Email" : "Email (Optinal)"
+                    this.props.isVendor ? "Email" : "Email (optional)"
                   }
                   placeholderTextColor="#9D9D9D"
                   autoCapitalize="none"
@@ -542,10 +543,10 @@ class Profile extends Component {
                      this.props.getagreeCheckbox();
                   }}
                 checkboxStyle={{tintColor:'#7960FF',height:18,width:18}}
-                labelStyle={{fontFamily:'circular-bold'}}
+                labelStyle={{fontFamily:'circular-bold',fontSize:16,}}
               />
-              <Text style={{fontFamily:'circular-book',color:'#7960FF'}}
-                    onPress={()=>{console.log('123');}}>
+              <Text style={{fontFamily:'circular-book', fontSize:16, color:'#7960FF'}}
+                    onPress={()=>{this.props.onPressTermsAndCondition()}}>
                Terms and Conditions</Text>
               </View>
               {errors.agreeCheckbox ? (
@@ -767,7 +768,7 @@ const rules = [
   },
   {
     field: "agreeCheckbox",
-    condition: (agreeCheckbox, { isVendor }) => {agreeCheckbox===true},
+    condition: (agreeCheckbox, { isVendor }) => agreeCheckbox === true,
     error: "Please agree terms and conditions."
   }
   // {
@@ -855,6 +856,7 @@ export default connect(
     updateReferalCode,
     verfyGSTIN,
     updateStateAndCode,
-    getagreeCheckbox
+    getagreeCheckbox,
+    onPressTermsAndCondition
   }
 )(withValidation(rules, Profile));

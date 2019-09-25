@@ -233,7 +233,7 @@ export const connectTosocketBookingCancle = val => async (
   });
   channelName = `${userId} ${val}`;
 
-  dispatch(socketLeaveClubRoom({receiver_id:val.customer_id,sender_id:val.sender_id}))
+  dispatch(socketLeaveClubRoom({receiver_id:isUserVendor === "1"?val.customer_id:val.sender_id,sender_id:isUserVendor === "1"?val.sender_id:val.customer_id}))
   Notifications.dismissAllNotificationsAsync();
   TaskManager.unregisterAllTasksAsync();
 };

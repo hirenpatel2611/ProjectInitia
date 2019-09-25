@@ -823,7 +823,7 @@ export const shareReferal = () => (dispatch, getState) => {
   const { userData } = getState().user;
 
   var playStoreUrl =
-    "http://103.50.153.25:3000/appRefer?referal_code=" +
+    "http://ilifenetwork.com/api/web/addRefer.html?referal_code=" +
     userData.uderReferalCode;
   Share.share({
     message: playStoreUrl
@@ -835,7 +835,7 @@ export const referalToCustomer = () => (dispatch,getState) => {
   const { userData } = getState().user;
 
   var playStoreUrl =
-    "http://103.50.153.25:3000/shareCustomerRefer?referal_code=" +
+    "http://ilifenetwork.com/api/web/shareCustomerReferral.html?referal_code=" +
     userData.uderReferalCode;
   Share.share({
     message: playStoreUrl

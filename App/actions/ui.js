@@ -63,7 +63,7 @@ export const getUserData = () => async (dispatch, getState) => {
   });
 
   const valueUserId = await AsyncStorage.getItem("user_id");
-
+  const isVendorFlag = await AsyncStorage.getItem("is_vendor");
   let test = new FormData();
   test.append("id", valueUserId);
   Api.post(GET_USER_DATA, test).then(async(response) => {
@@ -85,8 +85,9 @@ export const getUserData = () => async (dispatch, getState) => {
       payload: response[0]
     });
     dispatch(GetVenderStatus());
-
-    //dispatch(loadVendorProfile());
+    console.log(isVendorFlag);
+    if(isVendorFlag === 1){
+    dispatch(loadVendorProfile());}
     const { userCurrentBooking } = getState().user;
     const { vendors, location } = getState().customers;
 

@@ -197,6 +197,7 @@ export const BookVendor = () => async (dispatch, getState) => {
   test.append("longitude", location.coords.longitude);
   Api.post(GET_BOOKING, test)
     .then(response => {
+      console.log(test);
       if (response.status === 1) {
         dispatch({
           type: GET_BOOKING_SUCCESS,
@@ -687,7 +688,7 @@ export const shareCustomerReferal = () => (dispatch, getState) => {
   const { userData } = getState().user;
 
   var playStoreUrl =
-    "http://103.50.153.25:3000/shareCustomerRefer?referal_code=" +
+  "http://ilifenetwork.com/api/web/shareCustomerReferral.html?referal_code="+
     userData.uderReferalCode;
   Share.share({
     message: playStoreUrl

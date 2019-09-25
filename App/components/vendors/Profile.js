@@ -66,7 +66,7 @@ class Profile extends Component {
     } = styles;
     return (
       <View>
-        <Header headerText="Profil" />
+        <Header headerText="Profile" />
         <KeyboardAwareScrollView enableOnAndroid>
           <View style={inStyle.containerStyle}>
             <Image

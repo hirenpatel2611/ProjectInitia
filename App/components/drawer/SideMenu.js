@@ -68,7 +68,7 @@ class SideMenu extends Component {
           <Image style={image3} source={CAR_ENGINE} />
           <Image style={image4} source={TIMING_BELT} />
         </View>
-        <Image style={{width:150,height:70,alignSelf:'center',marginBottom:10,top:10}} source={{uri:'http://ilifenetwork.com/api/web/velwayIcon.jpg'}} />
+        <Image style={{width:150,height:70,alignSelf:'center',marginBottom:10,top:10}} source={{uri:'http://ilifenetwork.com/api/web/velwayIcon.png'}} />
         <CardSection
           style={{
             flexDirection: "column",
@@ -100,7 +100,7 @@ class SideMenu extends Component {
               Actions.NearbyGaraje();
             }}
           >
-            Nearby Mechanic
+            Near by Workshops
           </Button>
         </CardSection>
         <CardSection

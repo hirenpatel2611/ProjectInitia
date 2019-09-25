@@ -57,7 +57,7 @@ export default (state = INITIAL_STATE, action) => {
             userAddress: action.payload.address,
             userLatitude: action.payload.latitude,
             userLongitude: action.payload.longitude,
-            userVehicleType: JSON.parse(action.payload.service_vehicle_type),
+            userVehicleType: state.isVendorLoggedIn ?JSON.parse(action.payload.service_vehicle_type):action.payload.service_vehicle_type,//JSON.parse(action.payload.service_vehicle_type),
             uderReferalCode: action.payload.referal_code,
             userStatus: action.payload.status
           },

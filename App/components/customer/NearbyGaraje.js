@@ -151,7 +151,7 @@ class NearbyGaraje extends Component {
     }
     return (
       <View style={containerStyle}>
-        <Header headerText="Near by Partners" filterIcon={FILTER} filterPress={()=>{Actions.filter()}}/>
+        <Header headerText="Near by Workshops" filterIcon={FILTER} filterPress={()=>{Actions.filter()}}/>
         <StatusBar backgroundColor="#7960FF" />
 
         <View

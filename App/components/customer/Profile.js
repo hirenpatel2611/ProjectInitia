@@ -76,7 +76,7 @@ getPermissionAsync = async () => {
         style={textInputProfilStyle}
         underlineColorAndroid="transparent"
         placeholderTextColor="#9D9D9D"
-        placeholder="Name"
+        placeholder="Address"
         value={this.props.addressCustomer}
         multiline={true}
         onChangeText={text => {
@@ -87,7 +87,7 @@ getPermissionAsync = async () => {
         style={textInputProfilStyle}
         underlineColorAndroid="transparent"
         placeholderTextColor="#9D9D9D"
-        placeholder="Name"
+        placeholder="Email"
         value={this.props.emailCustomer}
         onChangeText={text => {
           this.props.updateCustomerEmail(text);
@@ -97,7 +97,7 @@ getPermissionAsync = async () => {
         style={textInputProfilStyle}
         underlineColorAndroid="transparent"
         placeholderTextColor="#9D9D9D"
-        placeholder="Name"
+        placeholder="Mobile"
         value={this.props.userData?this.props.userData.userMobileno:null}
       />
       </View>

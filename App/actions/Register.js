@@ -1,5 +1,5 @@
 import TimerMixin from "react-timer-mixin";
-import { Clipboard } from "react-native";
+import { Clipboard,Linking } from "react-native";
 import Api from "../api/api";
 import { URL_USER_SIGNUP, URL_USER_OTP } from "../config";
 import { Actions } from "react-native-router-flux";
@@ -450,4 +450,9 @@ export const getagreeCheckbox = () => (dispatch) => {
   dispatch({
     type:GET_AGREE_CHECKBOX,
   })
+}
+
+export const onPressTermsAndCondition = () => () => {
+  //http://ilifenetwork.com/api/web/Vendor.pdf
+   Linking.openURL('http://ilifenetwork.com/api/web/Vendor.pdf');
 }
