@@ -127,6 +127,7 @@ export const getVendors = () => async (dispatch, getState) => {
 
   Api.post(GET_VENDOR, test)
     .then(response => {
+      console.log(response);
       if (response.status === 0) {
         if (getVendorsCounter < 5) {
           dispatch(getVendors());
@@ -433,23 +434,25 @@ export const getBookingStatus = val => async (dispatch, getState) => {
 };
 
 export const getMechanicCurrentLocation = val => (dispatch, getState) => {
-  dispatch({
-    type: GET_MECHANIC_CURREN_LOCATION,
-    payload: val
-  });
-  const { location } = getState().customers;
-  if (location) {
-    var dist = val.distance;
+      if(bookingStatusRes.type === "ON-THE-WAY"){
+          dispatch({
+          type: GET_MECHANIC_CURREN_LOCATION,
+          payload: val
+        });
+        const { location} = getState().customers;
+        if (location) {
+          var dist = val.distance;
 
-    if (dist < 0.055) {
-      dispatch({
-        type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
-        payload: dist
-      });
-      var sts = "reached";
-      dispatch(getBookingUpdateUser(sts));
-    }
-  }
+          if (dist < 0.055) {
+            dispatch({
+              type: GET_DISTANCE_BETWEEN_USER_MECHANIC,
+              payload: dist
+            });
+            var sts = "reached";
+            dispatch(getBookingUpdateUser(sts));
+          }
+        }
+      }
 };
 
 export const getBookingUpdateUser = val => (dispatch, getState) => {

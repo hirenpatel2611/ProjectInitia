@@ -48,6 +48,7 @@ let ScreenWidth = Dimensions.get("window").width;
 class Profile extends Component {
   componentWillMount() {
     this.getPermissionAsync();
+    this.props.loadVendorProfile()
   }
   getPermissionAsync = async () => {
     if (Platform.OS === "ios") {

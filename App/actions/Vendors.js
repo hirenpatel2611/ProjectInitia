@@ -270,7 +270,7 @@ export const getBookingUpdate = val => (dispatch, getState) => {
             }
           });
           dispatch(getMechanicOtp(val.Id));
-          dispatch(updateWalletAmount());
+          dispatch(getWalletAmount());
         }
         if (val.status === "completed") {
           FutureBookingList.map(booking => {
@@ -380,7 +380,7 @@ export const BookingListApprove = val => (dispatch, getState) => {
       if (response.status === 1) {
         dispatch(getMechanicOtp(val.booking_id));
         dispatch(connectTosocketApprov(val));
-        dispatch(updateWalletAmount());
+        dispatch(getWalletAmount());
         FutureBookingList.map(booking => {
           if (booking.booking_id === val.booking_id) {
             booking.status = "accept";

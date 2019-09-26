@@ -85,7 +85,6 @@ export const getUserData = () => async (dispatch, getState) => {
       payload: response[0]
     });
     dispatch(GetVenderStatus());
-    console.log(isVendorFlag);
     if(isVendorFlag === 1){
     dispatch(loadVendorProfile());}
     const { userCurrentBooking } = getState().user;

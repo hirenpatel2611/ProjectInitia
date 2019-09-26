@@ -34,11 +34,11 @@ export const createSocketChannel = val => async (dispatch, getState) => {
     reconnectionAttempts: Infinity,
     transports: ["websocket"],
   });
-  const { isUserVendor, userData } = getState().user;
-  isVen = isUserVendor;
+  const { isUserVendor,isVendorLoggedIn, userData } = getState().user;
+  isVen = isVendorLoggedIn;
   disp = dispatch;
 
-
+console.log(isVendorLoggedIn);
   chatSocket.emit("self_room", { room: `${val}` });
 
   chatSocket.on("ping", function(data) {
@@ -71,7 +71,7 @@ export const createSocketChannel = val => async (dispatch, getState) => {
         break;
 
       case "CANCEL":
-        if (isUserVendor !== "1") {
+        if (!isVendorLoggedIn) {
           dispatch(getBookingStatus(data));
         } else {
           dispatch(getBookingVendorStatus(data));

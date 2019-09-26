@@ -132,12 +132,13 @@ class NearbyGaraje extends Component {
               latitude: parseFloat(vendor.latitude),
               longitude: parseFloat(vendor.longitude)
             }}
+
             onPress={() => {
               this.props.getVenderDetails(vendor);
               //this.props.getDistance();
             }}
           >
-            <Image style={inStyle.imageVendor} resizeMode={"cover"} source={vendor.profile_image?{uri:vendor.profile_image}:USER2} />
+            <Image key={vendor.id} style={inStyle.imageVendor} resizeMode={"cover"} resizeMethod={'resize'} onerror={(err)=>{console.log(err);}} source={vendor.profile_image?{uri:vendor.profile_image}:USER2} />
           </MapView.Marker.Animated>
         );
       });

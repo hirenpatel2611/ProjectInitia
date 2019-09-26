@@ -198,7 +198,7 @@ class Profile extends Component {
       profileButtonView,
       textError2
     } = styles;
-    const { validate, documentRegisterUri, isVendor,gstin,agreeCheckbox } = this.props;
+    const { validate, documentRegisterUri,address,email,workshop_name ,isVendor,gstin,agreeCheckbox } = this.props;
     errors = this.props.onSubmeetSignupForm
       ? validate(this.props.register)
       : {};
@@ -364,9 +364,6 @@ class Profile extends Component {
                     this.props.updateAddress(text);
                   }}
                 />}
-                {
-                  console.log(this.props.address)
-                }
                 {this.props.isVendor ? (
                   errors.address ? (
                     <Text style={styles.textError2}>{errors.address[0]}</Text>
@@ -711,9 +708,9 @@ const notEmpty = test => !isEmpty(test);
 const rules = [
   {
     field: "workshop_name",
-    condition: (confirmPassword, { isVendor }) => {
+    condition: (workshop_name, { isVendor }) => {
       if (isVendor) {
-        return notEmpty;
+        return workshop_name===""?false:true;
       }
       return true;
     },
@@ -726,9 +723,9 @@ const rules = [
   },
   {
     field: "address",
-    condition: (confirmPassword, { isVendor }) => {
+    condition: (address,{ isVendor }) => {
       if (isVendor) {
-        return notEmpty;
+        return address===""?false:true;
       }
       return true;
     },
@@ -736,9 +733,9 @@ const rules = [
   },
   {
     field: "email",
-    condition: (confirmPassword, { isVendor }) => {
+    condition: (email, { isVendor }) => {
       if (isVendor) {
-        return notEmpty;
+        return email===""?false:true;
       }
       return true;
     },
