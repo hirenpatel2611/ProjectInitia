@@ -58,7 +58,8 @@ import {
   GET_VENDOR_STATUS,
   VENDER_ACTIVATION_SUCCESS,
   VENDER_ACTIVATION_FAIL,
-  CLOSE_PAYMENT_PAGE
+  CLOSE_PAYMENT_PAGE,
+  FETCH_LEDGER_HISTORY_SUCCESS
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 import {stateAndTin} from '../config'
@@ -112,16 +113,8 @@ const INITIAL_STATE = {
   bookingModalData: "",
   vendorProfileServiceType: [false, false, false, false, false],
   isVendorActive:false,
-  ledgerHistory:[
-    {Booking_id:'18890',
-    Date:'20/08/2019',
-    Amount:123,
-    paymentId:'order_DFKDfub8L7o9ca'},
-    {Booking_id:'18890',
-    Date:'04/09/2019',
-    Amount:909,
-    paymentId:'order_DFKDfub8L7o9bg'}
-  ]
+  ledgerHistory:[],
+  fetchLedgerHistorySuccess:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -759,6 +752,16 @@ export default (state = INITIAL_STATE, action) => {
             ...state,
             WalletOrderId:"",
             walletAmount:""
+          };
+        }
+      break;
+
+      case FETCH_LEDGER_HISTORY_SUCCESS:
+        {
+          return {
+            ...state,
+            ledgerHistory:action.payload.data,
+            fetchLedgerHistorySuccess:true
           };
         }
       break;

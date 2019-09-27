@@ -552,6 +552,7 @@ class Profile extends Component {
                 </Text>
               ) : null}
               <TouchableHighlight
+              disabled={this.props.loadingSignupB}
                 onPress={() => {
                   this.props.updateOnSubmeetSignup();
                   if (this.props.isValid(this.props.register)) {
@@ -633,7 +634,7 @@ class Profile extends Component {
                     onPress={() => {
                       this.props.signupUser();
                     }}
-                    disabled={this.props.locationVendor ? false : true}
+                    disabled={this.props.locationVendor ? this.props.loadingSignupB : true}
                     style={{
                       opacity: this.props.locationVendor ? 1 : 0.8,
                       backgroundColor: "#7960FF",

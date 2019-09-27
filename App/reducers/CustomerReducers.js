@@ -70,7 +70,7 @@ import {
 const INITIAL_STATE = {
   loading: false,
   vendors: [],
-  vendorServiceType:"",
+  vendorServiceType:"bike",
   vendorRating: 0,
   location: "",
   errorMessage: "",
@@ -80,7 +80,7 @@ const INITIAL_STATE = {
   loadingBookigList: false,
   isBookingListFail: false,
   vendorList: [],
-  isServiceType:[0,0,0,0,0],
+  isServiceType:[1,0,0,0,0],
   rating: 0,
   distance: "",
   isBookingSuccess: false,
@@ -512,7 +512,14 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loadingRatingDone: false,
           mechanicCurrentLocation: "",
-          customerComment: ""
+          customerComment: "",
+          mechanicDestance: "",
+          mechanicDuration: "",
+          bookingStatusRes: "",
+          isBookingSuccess: false,
+          isBookModalVisible: false,
+          isVendorRatingModal: false,
+          vendorRating: 0
         };
       }
       break;
@@ -521,13 +528,7 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          mechanicDestance: "",
-          mechanicDuration: "",
-          bookingStatusRes: "",
-          isBookingSuccess: false,
-          isBookModalVisible: false,
-          isVendorRatingModal: false,
-          vendorRating: 0
+        loadingRatingDone:true
         };
       }
       break;

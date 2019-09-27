@@ -138,7 +138,7 @@ class NearbyGaraje extends Component {
               //this.props.getDistance();
             }}
           >
-            <Image key={vendor.id} style={inStyle.imageVendor} resizeMode={"cover"} resizeMethod={'resize'} onerror={(err)=>{console.log(err);}} source={vendor.profile_image?{uri:vendor.profile_image}:USER2} />
+            <Image key={vendor.id} style={inStyle.imageVendor} resizeMode={"cover"} resizeMethod={'resize'} onerror={(err)=>{console.log(err);}} source={USER2} />
           </MapView.Marker.Animated>
         );
       });
@@ -152,7 +152,7 @@ class NearbyGaraje extends Component {
     }
     return (
       <View style={containerStyle}>
-        <Header headerText="Near by Workshops" filterIcon={FILTER} filterPress={()=>{Actions.filter()}}/>
+        <Header headerText="Near by Workshop" filterIcon={FILTER} filterPress={()=>{Actions.filter()}}/>
         <StatusBar backgroundColor="#7960FF" />
 
         <View

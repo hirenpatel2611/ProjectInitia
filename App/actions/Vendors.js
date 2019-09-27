@@ -10,7 +10,8 @@ import {
   GET_WALLET_AMOUNT,
   ADD_PAYMENT,
   UPDATE_WALLET_AMOUNT,
-  VENDOR_STATUS
+  VENDOR_STATUS,
+  FETCH_LEDGER_HISTORY
 } from "../config";
 import {
   connectTosocketApprov,
@@ -114,6 +115,7 @@ export const GET_VENDOR_STATUS ="vendors/GET_VENDOR_STATUS";
 export const VENDER_ACTIVATION_SUCCESS ="vendors/VENDER_ACTIVATION_SUCCESS";
 export const VENDER_ACTIVATION_FAIL ="vendors/VENDER_ACTIVATION_FAIL";
 export const CLOSE_PAYMENT_PAGE ="vendors/CLOSE_PAYMENT_PAGE";
+export const FETCH_LEDGER_HISTORY_SUCCESS ="vendors/FETCH_LEDGER_HISTORY_SUCCESS";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -250,10 +252,11 @@ export const getBookingModal = val => async (dispatch, getState) => {
   });
 };
 
-export const getBookingUpdate = val => (dispatch, getState) => {
+export const getBookingUpdate = (val,completedData) => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_UAPDATE_START
   });
+  console.log("this is complete",completedData);
   const { bookingData, FutureBookingList, bookings } = getState().vendors;
   const { userData } = getState().user;
   let test = new FormData();
@@ -261,6 +264,7 @@ export const getBookingUpdate = val => (dispatch, getState) => {
   test.append("status", val.status);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
+      console.log(response);
       if (response.status === 1) {
         if (val.status === "accept") {
 
@@ -270,9 +274,11 @@ export const getBookingUpdate = val => (dispatch, getState) => {
             }
           });
           dispatch(getMechanicOtp(val.Id));
+          dispatch(connectTosocketApprov(val))
           dispatch(getWalletAmount());
         }
         if (val.status === "completed") {
+            dispatch(socketBookingCompleted(completedData));
           FutureBookingList.map(booking => {
             if (booking.booking_id === val.Id) {
               booking.status = "completed";
@@ -383,7 +389,9 @@ export const BookingListApprove = val => (dispatch, getState) => {
         dispatch(getWalletAmount());
         FutureBookingList.map(booking => {
           if (booking.booking_id === val.booking_id) {
+            if(booking.status !== "cancle" || booking.status !== "completed"){
             booking.status = "accept";
+            }
           }
         });
         dispatch({
@@ -419,9 +427,9 @@ export const otpShare = val => (dispatch, getState) => {
 
 export const getBookingVendorStatus = data => (dispatch, getState) => {
   const { FutureBookingList, bookings } = getState().vendors;
-  console.log(data);
   FutureBookingList.map(booking => {
     if (booking.booking_id === data.message.booking_id) {
+      if(booking.status !== "cancle" || booking.status !== "completed"){
       if (data.type === "CANCEL") {
         booking.status = "cancle";
         dispatch(socketLeaveClubRoom({receiver_id:data.message.customer_id,sender_id:data.message.vendor_id}))
@@ -432,6 +440,7 @@ export const getBookingVendorStatus = data => (dispatch, getState) => {
       if (data.type === "ON-THE-WAY") {
         booking.status = "on-the-way";
       }
+    }
     }
     if (data.type === "COMPLETED") {
       if (booking.booking_id === data.message.booking.booking_id) {
@@ -674,12 +683,12 @@ export const getCustomerRatingModal = val => (dispatch, getState) => {
   dispatch({
     type: GET_CUSTOMER_RATING_MODAL
   });
-  dispatch(socketBookingCompleted(val));
+
   var CompleteValue = {
     status: "completed",
     Id: val.booking_id
   };
-  dispatch(getBookingUpdate(CompleteValue));
+  dispatch(getBookingUpdate(CompleteValue,val));
   dispatch({
     type: COMPELETE_BOOKING_BY_VENDOR,
     payload: {
@@ -944,6 +953,16 @@ export const venderActivation = () => async (dispatch,getState) =>{
 
 }
 
-export const fetchLedgerHistory = () => (dispatch) => {
-  console.log('Hit Patel');
+export const fetchLedgerHistory = () => async (dispatch,getState) => {
+  const { userData } = await getState().user;
+  let test = new FormData();
+  test.append("user_id", userData.userId);
+  Api.post(FETCH_LEDGER_HISTORY, test).then(response => {
+    if(response.status === 1){
+        dispatch({
+          type:FETCH_LEDGER_HISTORY_SUCCESS,
+          payload:response
+        })
+    }
+  })
 }

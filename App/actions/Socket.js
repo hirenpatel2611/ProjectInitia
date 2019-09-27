@@ -38,7 +38,6 @@ export const createSocketChannel = val => async (dispatch, getState) => {
   isVen = isVendorLoggedIn;
   disp = dispatch;
 
-console.log(isVendorLoggedIn);
   chatSocket.emit("self_room", { room: `${val}` });
 
   chatSocket.on("ping", function(data) {

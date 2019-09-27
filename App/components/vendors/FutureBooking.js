@@ -26,7 +26,6 @@ import {
   getBookingUpdate,
   connectTosocketApprov,
   otpShare,
-  connectTosocketBookingCancle,
   BookingListApprove,
   BookingListCancle,
   getCancleBookingModal,
@@ -80,7 +79,7 @@ class FutureBooking extends Component {
               : 1
         }}
       >
-        <Header headerText="Booking" />
+        <Header headerText="Bookings" />
         <ScrollView style={inStyle.ScrollViewStyle}>
           {this.props.isFutureBookingNoFound ? (
             <Text
@@ -230,7 +229,9 @@ class FutureBooking extends Component {
                             style={{
                               color: "white",
                               fontFamily: "circular-book",
-                              fontSize: 14
+                              fontSize: 14,
+                              width: 75,
+                              height: 28,
                             }}
                           >
                             {item.status === "reached"
@@ -268,7 +269,13 @@ class FutureBooking extends Component {
                         <TouchableOpacity
                           style={{
                             alignSelf: "flex-end",
-                            opacity: item.status === "pending" ? 1 : 0
+                            opacity: item.status === "pending" ? 1 : 0,
+                            width: 70,
+                            height: 28,
+                            backgroundColor: "#4EA352",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: 3
                           }}
                           disabled={item.status === "pending" ? false : true}
                           onPress={() => {
@@ -280,26 +287,17 @@ class FutureBooking extends Component {
                             this.props.BookingListApprove(data);
                           }}
                         >
-                          <View
-                            style={{
-                              width: 70,
-                              height: 28,
-                              backgroundColor: "#4EA352",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              borderRadius: 3
-                            }}
-                          >
                             <Text
                               style={{
-                                color: "white"
+                                color: "white",
+                                width: 70,
+                                height: 28,
                               }}
                             >
                               {this.props.loadingBookigUpdate
                                 ? "Loading..."
                                 : "Approve"}
                             </Text>
-                          </View>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -309,7 +307,13 @@ class FutureBooking extends Component {
                               item.status === "cancle" ||
                               item.status === "completed"
                                 ? 0
-                                : 1
+                                : 1,
+                                width: 70,
+                                height: 28,
+                                backgroundColor: "#D35400",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                borderRadius: 3
                           }}
                           disabled={
                             item.status === "cancle" ||
@@ -326,24 +330,15 @@ class FutureBooking extends Component {
                             this.props.getCancleBookingModal(cancleBookingData);
                           }}
                         >
-                          <View
-                            style={{
-                              width: 70,
-                              height: 28,
-                              backgroundColor: "#D35400",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              borderRadius: 3
-                            }}
-                          >
                             <Text
                               style={{
-                                color: "white"
+                                color: "white",
+                                width: 70,
+                                height: 28,
                               }}
                             >
                               Cancel
                             </Text>
-                          </View>
                         </TouchableOpacity>
                       </View>
                     )}
@@ -519,14 +514,11 @@ class FutureBooking extends Component {
                     onPress={async () => {
                       var val = {
                         status: "accept",
-                        Id: this.props.bookings.bookData.booking_id
-                      };
-                      var approve = {
+                        Id: this.props.bookings.bookData.booking_id,
                         customer_id:this.props.bookings.userData.userId,
                         customerToken:this.props.bookingModalData.fromToken
-                      }
+                      };
                       await this.props.getBookingUpdate(val);
-                      this.props.connectTosocketApprov(approve);
                     }}
                   >
                     <View
@@ -1002,7 +994,6 @@ export default connect(
     getBookingUpdate,
     connectTosocketApprov,
     otpShare,
-    connectTosocketBookingCancle,
     BookingListApprove,
     BookingListCancle,
     getCancleBookingModal,

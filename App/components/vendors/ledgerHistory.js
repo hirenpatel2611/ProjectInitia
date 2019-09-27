@@ -13,20 +13,23 @@ import {
 } from "../../actions";
 
 class LedgerHistory extends Component {
-  componentDidMount() {
-    this.props.fetchLedgerHistory();
+  async componentDidMount() {
+    await this.props.fetchLedgerHistory();
   }
   render() {
     return (
       <View>
         <Header headerText="History" />
         <ScrollView style={inStyle.ScrollViewStyle}>
-              <FlatList
+        {
+          console.log(this.props.ledgerHistory)
+        }
+              {this.props.fetchLedgerHistorySuccess?<FlatList
                 data={this.props.ledgerHistory}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item }) => (
                   <View
-                    key={item.Booking_id}
+                    key={item.id}
                     style={{
                       margin: 5,
                       backgroundColor: "white",
@@ -52,7 +55,7 @@ class LedgerHistory extends Component {
                           color: "#4A4A4A"
                         }}
                       >
-                        {item.Booking_id}
+                        {item.id}
                       </Text>
                       <Text
                         style={{
@@ -61,7 +64,7 @@ class LedgerHistory extends Component {
                           color: "#7960FF"
                         }}
                       >
-                        amount :{item.Amount}
+                        amount :{item.amount}
                       </Text>
                     </View>
                     <View
@@ -74,26 +77,33 @@ class LedgerHistory extends Component {
                       <Text
                         style={{
                           fontFamily: "circular-book",
-                          fontSize: 16,
-                          color: "#4A4A4A"
-                        }}
-                      >
-                        {item.Date}
-                      </Text>
-                      <Text
-                        style={{
-                          fontFamily: "circular-book",
                           fontSize: 14,
                           color: "#4A4A4A"
                         }}
                       >
-                        {item.paymentId}
+                        {item.updated_at}
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: "circular-book",
+                          fontSize: 12,
+                          color: "#4A4A4A"
+                        }}
+                      >
+                        {item.payment_id}
                       </Text>
                     </View>
 
                   </View>
                 )}
               />
+              :<Text
+              style={{
+                fontFamily: "circular-bold",
+                alignSelf: "center",
+                marginTop:50
+              }}
+              >No History</Text>}
 
         </ScrollView>
       </View>
@@ -112,9 +122,11 @@ const inStyle = {
 const mapStateToProps = ({ vendors }) => {
   const {
     ledgerHistory,
+    fetchLedgerHistorySuccess
   } = vendors;
   return {
-    ledgerHistory
+    ledgerHistory,
+    fetchLedgerHistorySuccess
   };
 };
 

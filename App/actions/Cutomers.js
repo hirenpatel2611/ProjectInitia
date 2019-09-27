@@ -138,6 +138,13 @@ export const getVendors = () => async (dispatch, getState) => {
           type: GET_VENDORS_SUCCESS,
           payload: response
         });
+        showMessage({
+          message: "For Service",
+          description: "Tap To Book Workshops",
+          type: "default",
+          position: "Top",
+          duration:8000
+        });
       }
     })
     .catch(error => {});
@@ -411,6 +418,10 @@ export const getBookingStatus = val => async (dispatch, getState) => {
   }
   if (val.type === "CANCEL") {
     if (cancelAlertCounter === 0) {
+      dispatch({
+        type: GET_BOOKING_CANCEL_BY_VENDOR
+      });
+      Actions.NearbyGaraje();
       Alert.alert(
         "Booking Cancelled",
         "Your Booking request is Cancelled by Mechanic, Please Find another Mechanic.",
@@ -434,6 +445,7 @@ export const getBookingStatus = val => async (dispatch, getState) => {
 };
 
 export const getMechanicCurrentLocation = val => (dispatch, getState) => {
+  const { bookingStatusRes} = getState().customers;
       if(bookingStatusRes.type === "ON-THE-WAY"){
           dispatch({
           type: GET_MECHANIC_CURREN_LOCATION,
@@ -526,17 +538,22 @@ export const getRating = () => (dispatch, getState) => {
   dispatch({
     type: GET_RATING_START
   });
-  const { vendorRating, bookData } = getState().customers;
+  const { vendorRating, bookData,customerComment } = getState().customers;
 
   let test = new FormData();
   test.append("vendor_id", bookData.vendor_id);
   test.append("rating", vendorRating);
   Api.post(RATING_BY_CUSTOMER, test).then(responseRating => {
     if (responseRating.status === 1) {
-      dispatch({
+      if(customerComment === ""){
+        dispatch({
         type: GET_RATING_SUCCESS
       });
+      Actions.NearbyGaraje();
+    }else {
       dispatch(customerCommentForVendor())
+    }
+
     } else {
       dispatch({
         type: GET_RATING_FAIL
@@ -544,7 +561,7 @@ export const getRating = () => (dispatch, getState) => {
     }
 
   });
-  Actions.NearbyGaraje();
+
 };
 
 export const customerCommentForVendor= () => (dispatch, getState) => {
@@ -554,12 +571,16 @@ export const customerCommentForVendor= () => (dispatch, getState) => {
   test1.append("comment", customerComment);
   Api.post(CUSTOMER_COMMENT, test1).then(response => {
     if (response.status === 1) {
+      dispatch({
+        type: GET_RATING_SUCCESS
+      });
+      Actions.NearbyGaraje();
     } else {
       dispatch({
         type: CUSTOMER_COMMENT_FAIL
       });
     }
-    Actions.NearbyGaraje();
+
   });
 }
 

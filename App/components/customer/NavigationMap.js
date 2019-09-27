@@ -225,6 +225,9 @@ class NearbyGaraje extends Component {
             <Text style={{fontFamily:'circular-book',alignSelf:'center',margin:0.01 * ScreenHeight}}>
             Rating for vendor service
             </Text>
+            {
+              console.log(this.props.loadingRatingDone)
+            }
                 <AirbnbRating
                   type="star"
                   ratingBackgroundColor="transparent"
@@ -297,6 +300,7 @@ class NearbyGaraje extends Component {
               <Text style={{fontFamily:'circular-book',alignSelf:'center',margin:3}}>
               {this.props.isPayment?'Pay With Velway Wallet.':'Do you want to pay with Velway Wallet.'}
               </Text>
+
               <Text style={{fontFamily:'circular-book',alignSelf:'center',color:'#7960FF',margin:3}}>
               Balance:{this.props.customerWalletAmount}
               </Text>
@@ -324,7 +328,8 @@ class NearbyGaraje extends Component {
                       borderWidth:1,
                       justifyContent: "center",
                       alignItems: "center",
-                      borderRadius: 25
+                      borderRadius: 25,
+                      opacity:this.props.paymentAmountInput?1:0.8
                     }}
                     >
                         <Text style={[buttonText,{color:'#7960FF'}]}>{this.props.isPaymentLoading?'Loading...':'Pay'}</Text>
