@@ -230,8 +230,6 @@ class FutureBooking extends Component {
                               color: "white",
                               fontFamily: "circular-book",
                               fontSize: 14,
-                              width: 75,
-                              height: 28,
                             }}
                           >
                             {item.status === "reached"
@@ -290,8 +288,6 @@ class FutureBooking extends Component {
                             <Text
                               style={{
                                 color: "white",
-                                width: 70,
-                                height: 28,
                               }}
                             >
                               {this.props.loadingBookigUpdate
@@ -333,8 +329,6 @@ class FutureBooking extends Component {
                             <Text
                               style={{
                                 color: "white",
-                                width: 70,
-                                height: 28,
                               }}
                             >
                               Cancel
@@ -516,7 +510,8 @@ class FutureBooking extends Component {
                         status: "accept",
                         Id: this.props.bookings.bookData.booking_id,
                         customer_id:this.props.bookings.userData.userId,
-                        customerToken:this.props.bookingModalData.fromToken
+                        customerToken:this.props.bookingModalData.fromToken,
+                        referralId:this.props.bookings.bookData.customer_id
                       };
                       await this.props.getBookingUpdate(val);
                     }}

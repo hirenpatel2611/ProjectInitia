@@ -274,6 +274,7 @@ export const getBookingUpdate = (val,completedData) => (dispatch, getState) => {
             }
           });
           dispatch(getMechanicOtp(val.Id));
+          dispatch(updateWalletAmount(val.referralId))
           dispatch(connectTosocketApprov(val))
           dispatch(getWalletAmount());
         }
@@ -386,6 +387,7 @@ export const BookingListApprove = val => (dispatch, getState) => {
       if (response.status === 1) {
         dispatch(getMechanicOtp(val.booking_id));
         dispatch(connectTosocketApprov(val));
+        dispatch(updateWalletAmount(val.customer_id))
         dispatch(getWalletAmount());
         FutureBookingList.map(booking => {
           if (booking.booking_id === val.booking_id) {
@@ -787,11 +789,12 @@ export const getWalletAmount = () => async (dispatch, getState) => {
   });
 };
 
-export const updateWalletAmount = () => async (dispatch, getState) => {
+export const updateWalletAmount = (val) => async (dispatch, getState) => {
   const { userData } = await getState().user;
 
   let test = new FormData();
   test.append("customer_id", userData.userId);
+  test.append("referal_from", val);
   Api.post(UPDATE_WALLET_AMOUNT, test).then(response => {
   });
 };
@@ -958,6 +961,7 @@ export const fetchLedgerHistory = () => async (dispatch,getState) => {
   let test = new FormData();
   test.append("user_id", userData.userId);
   Api.post(FETCH_LEDGER_HISTORY, test).then(response => {
+    console.log(response);
     if(response.status === 1){
         dispatch({
           type:FETCH_LEDGER_HISTORY_SUCCESS,

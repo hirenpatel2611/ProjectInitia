@@ -40,7 +40,8 @@ import {
   UPDATE_REFERAL_CODE,
   VERIFY_GSTIN_SUCCESS,
   VERIFY_GSTIN_FAIL,
-  GET_AGREE_CHECKBOX
+  GET_AGREE_CHECKBOX,
+  UPDATE_OTP_CHANGE_MINUTE
 } from "../actions/Register";
 import {stateAndTin} from '../config'
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
@@ -54,6 +55,7 @@ const INITIAL_STATE = {
   isVendor: false,
   mobileno: "",
   otpTimeOut: 59,
+  otpMinute:9,
   isOtpTimedOut: false,
   otp: "",
   visibleModalProfile: false,
@@ -167,8 +169,19 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           otpTimeOut: state.otpTimeOut - 1,
-          recievedOTP: state.otpTimeOut === 1 ? "" : state.recievedOTP
         };
+      }
+      break;
+
+    case UPDATE_OTP_CHANGE_MINUTE:
+      {
+        return {
+          ...state,
+          otpMinute:state.otpMinute - 1,
+          otpTimeOut: 59,
+          recievedOTP: state.otpMinute === 0 &&  state.otpTimeOut === 0? "" : state.recievedOTP
+
+        }
       }
       break;
 

@@ -23,7 +23,7 @@ export const UPDATE_WALLET_AMOUNT = "/wallets/update_wallet_amount";
 export const ADD_PAYMENT = "/payments/add_payment";
 export const VENDOR_STATUS = "/customers/update_status";
 export const MAKE_PAYMENT_CUSTOMER = "/wallets/update_wallets";
-export const FETCH_LEDGER_HISTORY = "/payments/get_histrory";
+export const FETCH_LEDGER_HISTORY = "/payments/get_history";
 export const WEBCALL_SUCCESSFUL_FLAG = 100;
 export const URL_USER_LOGOUT = "/app/api/logout";
 

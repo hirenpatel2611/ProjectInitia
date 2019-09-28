@@ -51,6 +51,7 @@ export const UPDATE_REFERAL_CODE = "register/UPDATE_REFERAL_CODE";
 export const VERIFY_GSTIN_SUCCESS = "register/VERIFY_GSTIN_SUCCESS";
 export const VERIFY_GSTIN_FAIL = "register/VERIFY_GSTIN_FAIL";
 export const GET_AGREE_CHECKBOX = "register/GET_AGREE_CHECKBOX";
+export const UPDATE_OTP_CHANGE_MINUTE = "register/UPDATE_OTP_CHANGE_MINUTE";
 
 export const updateVehicleBool = () => dispatch => {
   dispatch({
@@ -137,13 +138,21 @@ export const setTimeOut = () => dispatch => {
 };
 export const updateOTPTimeOut = () => (dispatch, getState) => {
   interval = TimerMixin.setInterval(() => {
-    const { otpTimeOut } = getState().register;
-    if (otpTimeOut <= 0) {
+    const { otpTimeOut,otpMinute } = getState().register;
+    if (otpMinute === 0 && otpTimeOut <= 0) {
+
       clearInterval(interval);
+
     } else {
+      if(otpTimeOut !== 0){
       dispatch({
         type: UPDATE_OTP_TIMEOUT
       });
+    }else {
+      dispatch({
+        type: UPDATE_OTP_CHANGE_MINUTE
+      });
+    }
     }
   }, 1000);
 };

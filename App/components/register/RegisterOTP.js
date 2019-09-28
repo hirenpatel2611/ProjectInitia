@@ -93,6 +93,7 @@ class RegisterOTP extends Component {
       isTyreService,
       isVendor,
       otpTimeOut,
+      otpMinute,
       otp,
       visibleModalOtp,
       mobileno,
@@ -268,11 +269,13 @@ class RegisterOTP extends Component {
                 <Text style={[buttonText, whiteText]}>Continue</Text>
               </View>
             </TouchableHighlight>
-
-            {otpTimeOut ? (
+            {
+              console.log(otpMinute)
+            }
+            {otpMinute >= -1? (
               <Text style={otpResendText}>
                 {" "}
-                Re-send code in 00:{otpTimeOut} Second
+                Re-send code in 0{otpMinute}:{otpTimeOut} Second
               </Text>
             ) : (
               <TouchableOpacity
@@ -319,6 +322,7 @@ const mapStateToProps = ({ register }) => {
     isTyreService,
     isVendor,
     otpTimeOut,
+    otpMinute,
     otp,
     visibleModalOtp,
     onSubmeetOtpForm,
@@ -332,6 +336,7 @@ const mapStateToProps = ({ register }) => {
     isTyreService,
     isVendor,
     otpTimeOut,
+    otpMinute,
     otp,
     visibleModalOtp,
     onSubmeetOtpForm,
