@@ -8,9 +8,8 @@ import {
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Header from "../../Common/Header";
-import {
-  fetchLedgerHistory,
-} from "../../actions";
+import {fetchLedgerHistory} from "../../actions";
+import {setLedgerHeader} from '../../config';
 
 class LedgerHistory extends Component {
   async componentDidMount() {
@@ -21,9 +20,6 @@ class LedgerHistory extends Component {
       <View>
         <Header headerText="History" />
         <ScrollView style={inStyle.ScrollViewStyle}>
-        {
-          console.log(this.props.ledgerHistory)
-        }
               {this.props.fetchLedgerHistorySuccess?<FlatList
                 data={this.props.ledgerHistory}
                 keyExtractor={(item, index) => index.toString()}
@@ -55,16 +51,19 @@ class LedgerHistory extends Component {
                           color: "#4A4A4A"
                         }}
                       >
-                        {item.id}
+                        {setLedgerHeader(item.payment_id).header}
+                        {
+                          console.log(setLedgerHeader(item.payment_id).header)
+                        }
                       </Text>
                       <Text
                         style={{
                           fontFamily: "circular-bold",
-                          fontSize: 14,
-                          color: "#7960FF"
+                          fontSize: 16,
+                          color: setLedgerHeader(item.payment_id).type === 'dr'?'#cc0000':"green"
                         }}
                       >
-                        amount :{item.amount}
+                        {item.amount}{" "}{setLedgerHeader(item.payment_id).type}
                       </Text>
                     </View>
                     <View
@@ -113,10 +112,11 @@ class LedgerHistory extends Component {
 const inStyle = {
   ScrollViewStyle: {
     paddingTop: 7,
-    paddingBottom: 20,
+    paddingBottom: 90,
     marginBottom: 60,
     paddingRight: 5,
-    paddingLeft: 5
+    paddingLeft: 5,
+    marginBottom:80
   },
 };
 const mapStateToProps = ({ vendors }) => {

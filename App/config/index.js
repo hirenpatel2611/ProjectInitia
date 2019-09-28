@@ -58,6 +58,37 @@ export const statusToPhrase = (sts)  => {
   }
 };
 
+export const setLedgerHeader = payment_id => {
+  //console.log(payment_id);
+  var res = payment_id.split("_");
+  console.log(res);
+  switch (res[0]) {
+    case "Cref":
+      return ({header:"Pay by customer",type:"cr"});
+      break;
+
+    case "Led":
+      return ({header:"Booking Lead",type:"dr"});
+      break;
+
+    case "pay":
+      return ({header:"Fund Transfer",type:"cr"});
+      break;
+
+    case "Ref":
+      return ({header:"Referral Bonus",type:"cr"});
+      break;
+
+    case "Inst":
+      return ({header:"Installation Bonus",type:"cr"});
+      break;
+
+    default:
+      return null;
+  }
+};
+
+
 export const stateAndTin =[
                   {value:'JAMMU AND KASHMIR'	,code:'1'},
                   {value:'HIMACHAL PRADESH'	,code:'2'},
