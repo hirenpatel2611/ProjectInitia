@@ -79,7 +79,7 @@ class FutureBooking extends Component {
               : 1
         }}
       >
-        <Header headerText="Bookings" />
+        <Header headerText="Booking" />
         <ScrollView style={inStyle.ScrollViewStyle}>
           {this.props.isFutureBookingNoFound ? (
             <Text

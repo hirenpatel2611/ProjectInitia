@@ -17,6 +17,7 @@ import {
   GET_CANCLE_BOOKING_MODAL,
   GET_REASON_CHECKBOX_VENDOR,
   BOOKING_LIST_CANCLE_SUCCESS,
+  BOOKING_LIST_CANCLE_FAIL,
   BOOKING_CANCLE_START,
   GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR,
   GET_FUTURE_BOOKING_LIST_NO_FOUND,
@@ -314,6 +315,15 @@ export default (state = INITIAL_STATE, action) => {
           reasonCheckboxVendor: [false, false, false],
           loadingConfirm: false
         };
+      }
+      break;
+
+    case BOOKING_LIST_CANCLE_FAIL:
+      {
+        return {
+          ...state,
+          loadingConfirm:false
+        }
       }
       break;
 

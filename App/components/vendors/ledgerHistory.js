@@ -52,9 +52,6 @@ class LedgerHistory extends Component {
                         }}
                       >
                         {setLedgerHeader(item.payment_id).header}
-                        {
-                          console.log(setLedgerHeader(item.payment_id).header)
-                        }
                       </Text>
                       <Text
                         style={{
@@ -63,8 +60,32 @@ class LedgerHistory extends Component {
                           color: setLedgerHeader(item.payment_id).type === 'dr'?'#cc0000':"green"
                         }}
                       >
-                        {item.amount}{" "}{setLedgerHeader(item.payment_id).type}
+                        Pts {item.amount}{" "}{setLedgerHeader(item.payment_id).type}
                       </Text>
+                    </View>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}>
+                    <Text
+                      style={{
+                        fontFamily: "circular-book",
+                        fontSize: 14,
+                        color: "#4A4A4A"
+                      }}
+                    >
+                    {item.referal_detail?('xxxxxx'+item.referal_detail.slice(-4)):null}
+                    </Text>
+                    <Text
+                      style={{
+                        fontFamily: "circular-book",
+                        fontSize: 14,
+                        color: "#4A4A4A"
+                      }}
+                    >
+                    {setLedgerHeader(item.payment_id).value?("("+item.amount+" "+setLedgerHeader(item.payment_id).value+")"):null}
+                    </Text>
                     </View>
                     <View
                       style={{

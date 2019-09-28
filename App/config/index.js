@@ -64,23 +64,23 @@ export const setLedgerHeader = payment_id => {
   console.log(res);
   switch (res[0]) {
     case "Cref":
-      return ({header:"Pay by customer",type:"cr"});
+      return ({header:"Pay by customer",type:"cr",value:""});
       break;
 
     case "Led":
-      return ({header:"Booking Lead",type:"dr"});
+      return ({header:"Booking Lead",type:"dr",value:""});
       break;
 
     case "pay":
-      return ({header:"Fund Transfer",type:"cr"});
+      return ({header:"Fund Transfer",type:"cr",value:"INR"});
       break;
 
     case "Ref":
-      return ({header:"Referral Bonus",type:"cr"});
+      return ({header:"Referral Bonus",type:"cr",value:""});
       break;
 
     case "Inst":
-      return ({header:"Installation Bonus",type:"cr"});
+      return ({header:"Installation Bonus",type:"cr",value:""});
       break;
 
     default:

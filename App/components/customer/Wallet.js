@@ -33,7 +33,7 @@ class Wallet extends Component {
               alignSelf: "center"
             }}
           >
-            {this.props.customerWalletAmount?this.props.customerWalletAmount:null}
+            {this.props.customerWalletAmount?this.props.customerWalletAmount:0}
           </Text>
         </View>
         <TouchableHighlight

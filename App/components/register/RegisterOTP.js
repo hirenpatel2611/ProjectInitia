@@ -269,10 +269,7 @@ class RegisterOTP extends Component {
                 <Text style={[buttonText, whiteText]}>Continue</Text>
               </View>
             </TouchableHighlight>
-            {
-              console.log(otpMinute)
-            }
-            {otpMinute >= -1? (
+            {otpMinute !== -1? (
               <Text style={otpResendText}>
                 {" "}
                 Re-send code in 0{otpMinute}:{otpTimeOut} Second

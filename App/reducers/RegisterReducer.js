@@ -189,7 +189,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          otpTimeOut: INITIAL_STATE.otpTimeOut
+          otpTimeOut: INITIAL_STATE.otpTimeOut,
+          otpMinute:INITIAL_STATE.otpMinute
         };
       }
       break;

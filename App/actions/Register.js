@@ -139,7 +139,7 @@ export const setTimeOut = () => dispatch => {
 export const updateOTPTimeOut = () => (dispatch, getState) => {
   interval = TimerMixin.setInterval(() => {
     const { otpTimeOut,otpMinute } = getState().register;
-    if (otpMinute === 0 && otpTimeOut <= 0) {
+    if (otpMinute === -1) {
 
       clearInterval(interval);
 

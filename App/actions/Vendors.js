@@ -58,6 +58,8 @@ export const GET_CANCLE_BOOKING_MODAL = "vendors/GET_CANCLE_BOOKING_MODAL";
 export const GET_REASON_CHECKBOX_VENDOR = "vendors/GET_REASON_CHECKBOX_VENDOR";
 export const BOOKING_LIST_CANCLE_SUCCESS =
   "vendors/BOOKING_LIST_CANCLE_SUCCESS";
+  export const BOOKING_LIST_CANCLE_FAIL =
+    "vendors/BOOKING_LIST_CANCLE_FAIL";
 export const BOOKING_CANCLE_START = "vendors/BOOKING_CANCLE_START";
 export const GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR =
   "vendors/GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR";
@@ -346,23 +348,28 @@ export const BookingListCancle = () => (dispatch, getState) => {
   test.append("reason", cancleReasonVendor);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
+      console.log(response);
       if (response.status === 1) {
         var cancelData = {
           customer_id: cancelBookingData.customer_id,
           toToken: cancelBookingData.customerToken,
           sender_id:userData.userId
         };
-        dispatch(connectTosocketBookingCancle(cancelData));
         FutureBookingList.map(booking => {
           if (booking.booking_id === cancelBookingData.booking_id) {
             booking.status = "cancle";
           }
         });
+        dispatch(connectTosocketBookingCancle(cancelData));
+
         dispatch({
           type: BOOKING_LIST_CANCLE_SUCCESS,
           payload: { FutureBookingList }
         });
       } else {
+        dispatch({
+          type: BOOKING_LIST_CANCLE_FAIL,
+        });
         if (response.message === "something went wrong") {
           BookingListCancle();
         }
