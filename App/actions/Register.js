@@ -421,10 +421,16 @@ export const deleteRegisterDocument = documnet => (dispatch, getState) => {
 export const readFromClipboard = () => async dispatch => {
   const content = await Clipboard.getString();
   console.log(content);
-  dispatch({
-    type: READ_FROM_CLIP_BOARD,
-    payload: content
-  });
+  if(content.length === 8){
+    let contentArray = content.split(/(\d+)/);
+    console.log(contentArray);
+    if(contentArray[0].length === 3 && contentArray[1] === 5){
+      dispatch({
+        type: READ_FROM_CLIP_BOARD,
+        payload: content
+      });
+    }
+  }
 };
 
 export const updateReferalCode = code => dispatch => {

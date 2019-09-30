@@ -209,6 +209,7 @@ export const BookVendor = () => async (dispatch, getState) => {
   });
   const { vendorsData, location } = getState().customers;
   const { userData } = getState().user;
+  console.log(vendorsData);
   let test = new FormData();
   test.append("customer_id", userData.userId);
   test.append("vendor_id", vendorsData.id);
@@ -216,12 +217,15 @@ export const BookVendor = () => async (dispatch, getState) => {
   test.append("longitude", location.coords.longitude);
   Api.post(GET_BOOKING, test)
     .then(response => {
-      console.log(test);
+
       if (response.status === 1) {
+        var message = "You have Booking from "+userData.userFullName;
+
         dispatch({
           type: GET_BOOKING_SUCCESS,
           payload: response
         });
+        dispatch(smsSendByCustomer(vendorsData.mobile,message))
         dispatch(connectTosocket());
         showMessage({
           message: "SUCCESS",
@@ -244,6 +248,14 @@ export const BookVendor = () => async (dispatch, getState) => {
     .catch(error => {});
 };
 
+export const smsSendByCustomer = (mobile,message) => (dispatch,getState) => {
+  var url = 'http://anysms.in/api.php?username=devansh&password=502963&sender=VELWAY&sendto='+ mobile +'&message='+message;
+  fetch(url)
+    .then(res => {
+      console.log(res);
+    })
+}
+
 export const getBookingCancellation = () => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_CANCLE_START
@@ -265,6 +277,8 @@ export const getBookingCancellation = () => (dispatch, getState) => {
           toToken: vendorsData.device_token,
           sender_id:userData.userId
         };
+        var message = "Booking is cancel by "+ userData.userFullName +" for this reason : "+ cancleReason;
+        dispatch(smsSendByCustomer(vendorsData.mobile,message))
         dispatch(connectTosocketBookingCancle(cancelData));
         dispatch(getUserData());
         Actions.NearbyGaraje();
@@ -482,7 +496,8 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_UPDATE_START
   });
-  const { bookingStatusRes, bookData } = getState().customers;
+  const { bookingStatusRes, bookData,vendorsData } = getState().customers;
+  const {userData} = getState().user;
   obj = Object.assign({}, bookingStatusRes);
 
   let test = new FormData();
@@ -502,7 +517,8 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
 
         if (val === "completed") {
           dispatch(getRating());
-
+          var message = "Booking Complete by "+ userData.userFullName;
+          dispatch(smsSendByCustomer(vendorsData.mobile,message))
           dispatch({
             type: GET_BOOKING_COMPLETE
           });

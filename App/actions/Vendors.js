@@ -279,6 +279,8 @@ export const getBookingUpdate = (val,completedData) => (dispatch, getState) => {
           dispatch(updateWalletAmount(val.referralId))
           dispatch(connectTosocketApprov(val))
           dispatch(getWalletAmount());
+          var message = "Booking is Approve by "+ userData.userFullName;
+          dispatch(smsSendByVendor(val.customer_Mobile,message))
         }
         if (val.status === "completed") {
             dispatch(socketBookingCompleted(completedData));
@@ -287,6 +289,8 @@ export const getBookingUpdate = (val,completedData) => (dispatch, getState) => {
               booking.status = "completed";
             }
           });
+          var message = "Booking is Complete by "+ userData.userFullName;
+          dispatch(smsSendByVendor(completedData.customer.mobile,message))
         }
 
         dispatch({
@@ -360,6 +364,8 @@ export const BookingListCancle = () => (dispatch, getState) => {
             booking.status = "cancle";
           }
         });
+        var message = "Booking is cancle by "+ userData.userFullName + " for this reason : " + cancleReasonVendor;
+        dispatch(smsSendByVendor(cancelBookingData.customer_Mobile,message))
         dispatch(connectTosocketBookingCancle(cancelData));
 
         dispatch({
@@ -385,7 +391,7 @@ export const BookingListApprove = val => (dispatch, getState) => {
     type: GET_BOOKINGLIST_APPROVE_START
   });
   const { FutureBookingList } = getState().vendors;
-
+  const {userData} = getState().user;
   let test = new FormData();
   test.append("booking_id", val.booking_id);
   test.append("status", "accept");
@@ -403,6 +409,9 @@ export const BookingListApprove = val => (dispatch, getState) => {
             }
           }
         });
+
+        var message = "Booking is Approve by "+ userData.userFullName;
+        dispatch(smsSendByVendor(val.customer_Mobile,message))
         dispatch({
           type: GET_BOOKINGLIST_APPROVE_SUCCESS,
           payload: { val, FutureBookingList }
@@ -976,4 +985,14 @@ export const fetchLedgerHistory = () => async (dispatch,getState) => {
         })
     }
   })
+}
+
+export const smsSendByVendor = (mobile,message) => (dispatch,getState) => {
+  console.log(mobile);
+  console.log(message);
+  var url = 'http://anysms.in/api.php?username=devansh&password=502963&sender=VELWAY&sendto='+ mobile +'&message='+message;
+  fetch(url)
+    .then(res => {
+      console.log(res);
+    })
 }

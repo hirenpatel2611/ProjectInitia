@@ -280,7 +280,8 @@ class FutureBooking extends Component {
                             var data = {
                               booking_id: item.booking_id,
                               customer_id: item.customer.customer_id,
-                              customerToken:item.customer.device_token
+                              customerToken:item.customer.device_token,
+                              customer_Mobile:item.customer.mobile
                             };
                             this.props.BookingListApprove(data);
                           }}
@@ -321,7 +322,8 @@ class FutureBooking extends Component {
                             var cancleBookingData = {
                               booking_id: item.booking_id,
                               customer_id: item.customer.customer_id,
-                              customerToken:item.customer.device_token
+                              customerToken:item.customer.device_token,
+                              customer_Mobile:item.customer.mobile
                             };
                             this.props.getCancleBookingModal(cancleBookingData);
                           }}
@@ -511,7 +513,8 @@ class FutureBooking extends Component {
                         Id: this.props.bookings.bookData.booking_id,
                         customer_id:this.props.bookings.userData.userId,
                         customerToken:this.props.bookingModalData.fromToken,
-                        referralId:this.props.bookings.bookData.customer_id
+                        referralId:this.props.bookings.bookData.customer_id,
+                        customer_Mobile:this.props.bookings.userData.userMobileno
                       };
                       await this.props.getBookingUpdate(val);
                     }}
@@ -544,7 +547,8 @@ class FutureBooking extends Component {
                       var cancleBookingData = {
                         booking_id: this.props.bookings.bookData.booking_id,
                         customer_id: this.props.bookings.userData.userId,
-                        customerToken:this.props.bookingModalData.fromToken
+                        customerToken:this.props.bookingModalData.fromToken,
+                        customer_Mobile:this.props.bookings.userData.userMobileno,
                       };
                       this.props.getCancleBookingModal(cancleBookingData);
                     }}

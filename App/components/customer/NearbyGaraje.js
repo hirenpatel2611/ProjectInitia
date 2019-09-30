@@ -339,7 +339,7 @@ class NearbyGaraje extends Component {
                     />
                   </View>
                 </View>
-                <Text style={[inStyle.modalTextAddress,{height:30}]}>
+                <Text style={inStyle.modalTextAddress}>
                   {this.props.vendorsData
                     ? this.props.vendorsData.address
                     : null}
