@@ -152,7 +152,7 @@ class NearbyGaraje extends Component {
     }
     return (
       <View style={containerStyle}>
-        <Header headerText="Near by Workshop" filterIcon={FILTER} filterPress={()=>{Actions.filter()}}/>
+        <Header headerText="Near by Workshops" filterIcon={FILTER} filterPress={()=>{Actions.filter()}}/>
         <StatusBar backgroundColor="#7960FF" />
 
         <View
@@ -339,7 +339,7 @@ class NearbyGaraje extends Component {
                     />
                   </View>
                 </View>
-                <Text style={inStyle.modalTextAddress}>
+                <Text style={[inStyle.modalTextAddress,{height:30}]}>
                   {this.props.vendorsData
                     ? this.props.vendorsData.address
                     : null}
@@ -371,6 +371,34 @@ class NearbyGaraje extends Component {
                 )}
               </View>
             </TouchableOpacity>
+          </Modal>
+          <Modal
+            visible={this.props.isServiceNotAvilable}
+            onRequestClose={() => {
+              console.log("Modal has been closed.");
+            }}
+            animationType="slide"
+            transparent={true}
+            opacity={0.5}
+            style={inStyle.modalStyle}
+          >
+          <View style={{
+            height: 0.20 * ScreenHeight,
+            margin: 15,
+            padding: 10,
+            backgroundColor: "#FFFFFF",
+            marginTop: 0.35 * ScreenHeight,
+            borderRadius:10,
+            borderWidth:1,
+            borderColor:"#7960FF"
+          }}>
+            <Image style={{width:150,height:70,alignSelf:'center',marginBottom:10,top:10}} source={{uri:'http://ilifenetwork.com/api/web/velwayIcon.png'}} />
+
+            <Text style={{
+              fontFamily:"circular-book",
+              alignSelf:"center"
+            }}>Sorry, We are not Available Now for this area.</Text>
+          </View>
           </Modal>
           <Modal
             visible={this.props.isBookCancelModal}
@@ -627,7 +655,8 @@ const mapStateToProps = ({ customers }) => {
     bookingStatusRes,
     reasonCheckbox,
     isBookCancelModal,
-    confirmDisable
+    confirmDisable,
+    isServiceNotAvilable
   } = customers;
   return {
     isServiceType,
@@ -643,7 +672,8 @@ const mapStateToProps = ({ customers }) => {
     bookingStatusRes,
     reasonCheckbox,
     isBookCancelModal,
-    confirmDisable
+    confirmDisable,
+    isServiceNotAvilable
   };
 };
 

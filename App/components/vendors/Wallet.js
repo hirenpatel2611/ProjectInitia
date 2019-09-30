@@ -45,11 +45,11 @@ class Wallet extends Component {
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
     var options = {
-        "key": "rzp_test_DsJMfn5t0GT1hK", // Enter the Key ID generated from the Dashboard
+        "key": "rzp_live_nkpgAouOwojYJs", // Enter the Key ID generated from the Dashboard
         "amount": "29935", // Amount is in currency subunits. Default currency is INR. Hence, 29935 refers to 29935 paise or INR 299.35.
         "currency": "INR",
-        "name": "ILife",
-        "description": "Don't Press Back Button",
+        "name": "Velway Partner",
+        "description": "Prompt breakdown service at your finger tip",
         "image": "http://ilifenetwork.com/api/web/icon2.png",
         "order_id": "` +
       this.props.WalletOrderId +

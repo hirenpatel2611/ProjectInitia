@@ -60,7 +60,8 @@ import {
   ON_PRESS_MODAL_PAY_TO_VENDOR_START,
   ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS,
   ON_PRESS_MODAL_PAY_TO_VENDOR_FAIL,
-  GET_CUSTOMER_WALLET_AMOUNT_SUCCESS
+  GET_CUSTOMER_WALLET_AMOUNT_SUCCESS,
+  GET_VENDORS_NOT_AVAILABLE_AT_AREA
 } from "../actions/Cutomers";
 import {
   GET_USER_BOOKING_STATUS_ACCEPT,
@@ -109,7 +110,8 @@ const INITIAL_STATE = {
   paymentAmountInput:'',
   isPayment:false,
   isPaymentModal:false,
-  isPaymentLoading:false
+  isPaymentLoading:false,
+  isServiceNotAvilable:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -746,6 +748,16 @@ export default (state = INITIAL_STATE, action) => {
         customerWalletAmount:action.payload.total
       };
     }
+    break;
+
+    case GET_VENDORS_NOT_AVAILABLE_AT_AREA:
+    {
+      return {
+        ...state,
+        isServiceNotAvilable:true
+      };
+    }
+    break;
 
     default:
       return state;

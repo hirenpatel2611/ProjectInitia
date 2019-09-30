@@ -100,6 +100,7 @@ export const ON_PRESS_MODAL_PAY_TO_VENDOR_START = "customers/ON_PRESS_MODAL_PAY_
 export const ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS = "customers/ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS";
 export const ON_PRESS_MODAL_PAY_TO_VENDOR_FAIL = "customers/ON_PRESS_MODAL_PAY_TO_VENDOR_FAIL";
 export const GET_CUSTOMER_WALLET_AMOUNT_SUCCESS = "customers/GET_CUSTOMER_WALLET_AMOUNT_SUCCESS";
+export const GET_VENDORS_NOT_AVAILABLE_AT_AREA = "customers/GET_VENDORS_NOT_AVAILABLE_AT_AREA";
 
 var cancelAlertCounter = 0;
 var getVendorsCounter = 0;
@@ -127,14 +128,17 @@ export const getVendors = () => async (dispatch, getState) => {
 
   Api.post(GET_VENDOR, test)
     .then(response => {
-      console.log(response);
+
       if (response.status === 0) {
+
         if (getVendorsCounter < 5) {
           dispatch(getVendors());
           getVendorsCounter = getVendorsCounter + 1;
         }
       } else {
-        dispatch({
+        console.log(response.length);
+        if(response.length > 0){
+          dispatch({
           type: GET_VENDORS_SUCCESS,
           payload: response
         });
@@ -145,6 +149,12 @@ export const getVendors = () => async (dispatch, getState) => {
           position: "Top",
           duration:8000
         });
+      }else {
+        console.log(response);
+        dispatch({
+        type: GET_VENDORS_NOT_AVAILABLE_AT_AREA,
+      });
+      }
       }
     })
     .catch(error => {});
@@ -175,11 +185,12 @@ export const getVenderDetails = val => async (dispatch, getState) => {
     payload: val
   });
   await Location.reverseGeocodeAsync(location).then((res)=>{
-      val.address =  res[0].name + ","+res[0].city+"," +res[0].region +"-" +res[0].postalCode
+      val.address = res[0].street+"," +res[0].city+"," +res[0].region +"-" +res[0].postalCode
       dispatch({
         type: GET_VENDOR_DETAILS_ADDRESS,
         payload: val
       });
+      console.log(res);
   })
 
   dispatch(getDistance());
