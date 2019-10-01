@@ -8,8 +8,9 @@ import {
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Header from "../../Common/Header";
-import {fetchLedgerHistory} from "../../actions";
-import {setLedgerHeader} from '../../config';
+import {fetchLedgerHistory,historyDropdown} from "../../actions";
+import {setLedgerHeader,filterHistory,getLedgerHeader} from '../../config';
+import { Dropdown } from 'react-native-material-dropdown';
 
 class LedgerHistory extends Component {
   async componentDidMount() {
@@ -17,9 +18,23 @@ class LedgerHistory extends Component {
   }
   render() {
     return (
-      <View>
+      <View style={{flexDirection:'column'}}>
         <Header headerText="History" />
+        <View style={{bottom:10,top:3}}>
+        <Dropdown
+            label='Filter'
+            data={filterHistory}
+            containerStyle={{marginLeft:16,width:'50%'}}
+            itemTextStyle={{fontFamily:'circular-book',fontSize:16}}
+            pickerStyle={{height:'25%'}}
+            baseColor={'rgba(0, 0, 0,1)'}
+            onChangeText={(value,index)=>{
+                this.props.historyDropdown(getLedgerHeader(value));
+            }}
+          />
+        </View>
         <ScrollView style={inStyle.ScrollViewStyle}>
+
               {this.props.fetchLedgerHistorySuccess?<FlatList
                 data={this.props.ledgerHistory}
                 keyExtractor={(item, index) => index.toString()}
@@ -132,7 +147,7 @@ class LedgerHistory extends Component {
 }
 const inStyle = {
   ScrollViewStyle: {
-    paddingTop: 7,
+    top:10,
     paddingBottom: 90,
     marginBottom: 60,
     paddingRight: 5,
@@ -155,5 +170,6 @@ export default connect(
   mapStateToProps,
   {
     fetchLedgerHistory,
+    historyDropdown
   }
 )(LedgerHistory);

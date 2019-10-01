@@ -8,7 +8,8 @@ import {
   TextInput,
   Modal,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { connect } from "react-redux";
@@ -88,9 +89,7 @@ class Wallet extends Component {
         }}
       >
         <Header headerText="Wallet" />
-
         {this.props.WalletOrderId ? (
-
           <WebView
             source={{ html: htmls }}
             javaScriptEnabled={true}

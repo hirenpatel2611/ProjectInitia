@@ -55,10 +55,10 @@ class FutureBooking extends Component {
     this.props.getFutureBookings();
     this.props.getWalletAmount();
   }
-  calltocutomer() {
+  calltocutomer(mobileno) {
     const args = {
-      number: this.props.bookUserData
-        ? this.props.bookUserData.userMobileno
+      number: mobileno
+        ? mobileno
         : 0,
       prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call
     };
@@ -155,15 +155,30 @@ class FutureBooking extends Component {
                         marginTop: 10
                       }}
                     >
+                    <TouchableOpacity
+                    onPress={()=>{
+                      item.status === "pending" || item.status === "cancle" ||
+                      item.status === "completed" ?null:this.calltocutomer(item.customer.mobile)}}
+                    style={{flexDirection:'row'}}
+                    >
                       <Text
                         style={{
                           fontSize: 16,
                           color: "#4A4A4A",
                           fontFamily: "circular-book"
                         }}
+
                       >
-                        {item.customer.mobile}
+
+                        {item.status === "pending" || item.status === "cancle" ||
+                        item.status === "completed"  ?('xxxxxx'+item.customer.mobile.slice(-4)):item.customer.mobile}
                       </Text>
+                      <Image
+
+                        style={{ height: 20, width: 20, borderRadius: 10 }}
+                        source={CALL}
+                      />
+                      </TouchableOpacity>
                       <Text
                         style={{
                           fontSize: 16,
@@ -448,7 +463,7 @@ class FutureBooking extends Component {
                         flexDirection: "row"
                       }}
                       onPress={() => {
-                        this.calltocutomer();
+                        console.log('hh');
                       }}
                     >
                       <Text
@@ -460,13 +475,9 @@ class FutureBooking extends Component {
                         }}
                       >
                         {this.props.bookings
-                          ? this.props.bookings.userData.userMobileno
+                          ? ("xxxxxx"+this.props.bookings.userData.userMobileno.slice(-4))
                           : null}
                       </Text>
-                      <Image
-                        style={{ height: 20, width: 20, borderRadius: 10 }}
-                        source={CALL}
-                      />
                     </TouchableOpacity>
                   </View>
                   <View
@@ -506,7 +517,13 @@ class FutureBooking extends Component {
                   }}
                 >
                   <TouchableOpacity
-                    style={{ alignSelf: "flex-end" }}
+                    style={{ alignSelf: "flex-end",
+                              width: 80,
+                              height: 28,
+                              backgroundColor: "#4EA352",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: 3}}
                     onPress={async () => {
                       var val = {
                         status: "accept",
@@ -519,16 +536,6 @@ class FutureBooking extends Component {
                       await this.props.getBookingUpdate(val);
                     }}
                   >
-                    <View
-                      style={{
-                        width: 80,
-                        height: 28,
-                        backgroundColor: "#4EA352",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 3
-                      }}
-                    >
                       <Text
                         style={{
                           color: "white"
@@ -538,11 +545,16 @@ class FutureBooking extends Component {
                           ? "loading..."
                           : "Approve"}
                       </Text>
-                    </View>
                   </TouchableOpacity>
 
                   <TouchableOpacity
-                    style={{ alignSelf: "flex-end" }}
+                    style={{ alignSelf: "flex-end",
+                              width: 80,
+                              height: 28,
+                              backgroundColor: "#D35400",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              borderRadius: 3}}
                     onPress={() => {
                       var cancleBookingData = {
                         booking_id: this.props.bookings.bookData.booking_id,
@@ -553,16 +565,6 @@ class FutureBooking extends Component {
                       this.props.getCancleBookingModal(cancleBookingData);
                     }}
                   >
-                    <View
-                      style={{
-                        width: 80,
-                        height: 28,
-                        backgroundColor: "#D35400",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 3
-                      }}
-                    >
                       <Text
                         style={{
                           color: "white"
@@ -570,7 +572,6 @@ class FutureBooking extends Component {
                       >
                         Cancel
                       </Text>
-                    </View>
                   </TouchableOpacity>
                 </View>
               </View>

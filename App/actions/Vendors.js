@@ -118,6 +118,7 @@ export const VENDER_ACTIVATION_SUCCESS ="vendors/VENDER_ACTIVATION_SUCCESS";
 export const VENDER_ACTIVATION_FAIL ="vendors/VENDER_ACTIVATION_FAIL";
 export const CLOSE_PAYMENT_PAGE ="vendors/CLOSE_PAYMENT_PAGE";
 export const FETCH_LEDGER_HISTORY_SUCCESS ="vendors/FETCH_LEDGER_HISTORY_SUCCESS";
+export const HISTORY_DROPDOWN_FILTER ="vendors/HISTORY_DROPDOWN_FILTER";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -979,6 +980,7 @@ export const fetchLedgerHistory = () => async (dispatch,getState) => {
   Api.post(FETCH_LEDGER_HISTORY, test).then(response => {
     console.log(response);
     if(response.status === 1){
+
         dispatch({
           type:FETCH_LEDGER_HISTORY_SUCCESS,
           payload:response
@@ -987,7 +989,7 @@ export const fetchLedgerHistory = () => async (dispatch,getState) => {
   })
 }
 
-export const smsSendByVendor = (mobile,message) => (dispatch,getState) => {
+export const smsSendByVendor = (mobile,message) => (dispatch) => {
   console.log(mobile);
   console.log(message);
   var url = 'http://anysms.in/api.php?username=devansh&password=502963&sender=VELWAY&sendto='+ mobile +'&message='+message;
@@ -995,4 +997,23 @@ export const smsSendByVendor = (mobile,message) => (dispatch,getState) => {
     .then(res => {
       console.log(res);
     })
+}
+
+export const historyDropdown = (val) => async(dispatch,getState) => {
+  const { ledgerHistoryFilter } = await getState().vendors;
+  if(val !== "All"){
+      var hh = ledgerHistoryFilter.filter((item)=>{
+          return item.payment_id.split("_")[0]===val;
+      })
+      dispatch({
+        type:HISTORY_DROPDOWN_FILTER,
+        payload:hh
+      })
+  } else {
+    dispatch({
+      type:HISTORY_DROPDOWN_FILTER,
+      payload:ledgerHistoryFilter
+    })
+  }
+  console.log(hh);
 }

@@ -60,7 +60,8 @@ import {
   VENDER_ACTIVATION_SUCCESS,
   VENDER_ACTIVATION_FAIL,
   CLOSE_PAYMENT_PAGE,
-  FETCH_LEDGER_HISTORY_SUCCESS
+  FETCH_LEDGER_HISTORY_SUCCESS,
+  HISTORY_DROPDOWN_FILTER
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
 import {stateAndTin} from '../config'
@@ -115,6 +116,7 @@ const INITIAL_STATE = {
   vendorProfileServiceType: [false, false, false, false, false],
   isVendorActive:false,
   ledgerHistory:[],
+  ledgerHistoryFilter:[],
   fetchLedgerHistorySuccess:false
 };
 
@@ -771,6 +773,17 @@ export default (state = INITIAL_STATE, action) => {
           return {
             ...state,
             ledgerHistory:action.payload.data,
+            ledgerHistoryFilter:action.payload.data,
+            fetchLedgerHistorySuccess:true
+          };
+        }
+      break;
+
+      case HISTORY_DROPDOWN_FILTER:
+        {
+          return {
+            ...state,
+            ledgerHistory:[...action.payload],
             fetchLedgerHistorySuccess:true
           };
         }

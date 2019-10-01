@@ -64,7 +64,7 @@ export const setLedgerHeader = payment_id => {
   console.log(res);
   switch (res[0]) {
     case "Cref":
-      return ({header:"Pay by customer",type:"cr",value:""});
+      return ({header:"Paid by Customer",type:"cr",value:""});
       break;
 
     case "Led":
@@ -88,6 +88,49 @@ export const setLedgerHeader = payment_id => {
   }
 };
 
+export const getLedgerHeader = header => {
+  //console.log(payment_id);
+
+
+  switch (header) {
+    case "All":
+      return "All"
+      break;
+
+    case "Paid by Customer":
+      return "Cref"
+      break;
+
+    case "Booking Lead":
+      return "Led"
+      break;
+
+    case "Fund Transfer":
+      return "pay"
+      break;
+
+    case "Referral Bonus":
+      return "Ref"
+      break;
+
+    case "Installation Bonus":
+      return "Inst";
+      break;
+
+    default:
+      return null;
+  }
+};
+
+
+export const filterHistory =[
+  {value:"All"},
+  {value:"Paid by Customer"},
+  {value:"Booking Lead"},
+  {value:"Fund Transfer"},
+  {value:"Referral Bonus"},
+  {value:"Installation Bonus"}
+]
 
 export const stateAndTin =[
                   {value:'JAMMU AND KASHMIR'	,code:'1'},
