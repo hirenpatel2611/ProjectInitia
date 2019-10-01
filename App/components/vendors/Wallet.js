@@ -128,7 +128,7 @@ class Wallet extends Component {
               style={{
                 alignItems: "center",
                 justifyContent: "center",
-                height: 0.4 * ScreenHeight
+                height: 0.2 * ScreenHeight
               }}
             >
 
@@ -184,7 +184,7 @@ class Wallet extends Component {
               }}
               underlayColor="white"
               style={{
-                marginTop: 0.05 * ScreenHeight,
+                marginTop: 10,
                 alignSelf: "center",
                 backgroundColor: "#7960FF",
                 height: 44,
@@ -207,7 +207,17 @@ class Wallet extends Component {
                 {this.props.loadingAddBalace ? "Loading..." : "Add Balance"}
               </Text>
             </TouchableHighlight>
-
+            <Text
+              style={{
+                marginTop: 0.07 * ScreenHeight,
+                padding: 10,
+                fontSize: 22,
+                fontFamily: "circular-bold",
+                alignSelf:'center'
+              }}
+            >
+            Referral And Earn
+            </Text>
             <TouchableHighlight
               onPress={() => {this.props.shareReferal()}}
               underlayColor="white"
@@ -221,7 +231,8 @@ class Wallet extends Component {
                 marginBottom: 10,
                 justifyContent: "center",
                 borderColor: "#7960FF",
-                borderWidth: 1
+                borderWidth: 1,
+                marginTop:20
               }}
             >
               <Text
@@ -248,7 +259,8 @@ class Wallet extends Component {
                 marginBottom: 10,
                 justifyContent: "center",
                 borderColor: "#7960FF",
-                borderWidth: 1
+                borderWidth: 1,
+                marginTop:5
               }}
             >
               <Text

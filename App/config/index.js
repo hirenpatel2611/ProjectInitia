@@ -128,6 +128,7 @@ export const paymentAmount = [
   {value:'1500 + Gst',amount:1500},
   {value:'2000 + Gst',amount:2000},
   {value:'5000 + Gst',amount:5000},
+  {value:'10000 + Gst',amount:10000},
 ];
 
 export const filterHistory =[
