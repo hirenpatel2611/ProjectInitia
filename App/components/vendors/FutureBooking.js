@@ -170,8 +170,8 @@ class FutureBooking extends Component {
 
                       >
 
-                        {item.status === "pending" || item.status === "cancle" ||
-                        item.status === "completed"  ?('xxxxxx'+item.customer.mobile.slice(-4)):item.customer.mobile}
+                        {item.customer.mobile?item.status === "pending" || item.status === "cancle" ||
+                        item.status === "completed"  ?('xxxxxx'+item.customer.mobile.slice(-4)):item.customer.mobile:null}
                       </Text>
                       <Image
 

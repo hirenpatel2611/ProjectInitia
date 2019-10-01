@@ -9,7 +9,9 @@ import {
   Modal,
   Image,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  DeviceEventEmitter,
+  Keyboard
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Dropdown } from 'react-native-material-dropdown';
@@ -34,15 +36,32 @@ let ScreenWidth = Dimensions.get("window").width;
 
 class Wallet extends Component {
   componentWillMount() {
+
     this.props.getWalletAmount();
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow.bind(this));
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide.bind(this));
+
   }
+  state ={keyboardSpace:ScreenHeight}
+  _keyboardDidShow(e) {
+this.setState(()=>{keyboardSpace:e.endCoordinates.height})
+}
+
+_keyboardDidHide() {
+
+this.setState(()=>{keyboardSpace:0})
+}
   componentWillUnmount() {
     this.props.closePaymentPage();
+    this.keyboardDidShowListener.remove();
+   this.keyboardDidHideListener.remove();
+
   }
   render() {
 
     const htmls =
       `
+
     <img src="http://ilifenetwork.com/api/web/icon2.png" style="display: inline-block; height:30%; width:50%; margin-Left:20%; ">
     <button id="rzp-button1" style="width:50%; background-Color:#7960FF; color:#fff; font-Size:50; border-Radius:30px; margin-Top:20%; margin-Left:25%;">Pay</button>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -80,13 +99,14 @@ class Wallet extends Component {
         rzp1.open();
         e.preventDefault();
     }
-    </script>`;
+    </script>
+    `;
 
     return (
-      <View
+      <ScrollView
         style={{
           backgroundColor: "white",
-          flex: 1,
+
           opacity: this.props.successPaymentModal ? 0.3 : 1
         }}
       >
@@ -113,6 +133,7 @@ class Wallet extends Component {
                 decodeURI(decodeURI(event.nativeEvent.data))
               );
             }}
+            style={{height:this.state.keyboardSpace}}
             scrollEnabled={true}
           />
         ) : (
@@ -167,7 +188,7 @@ class Wallet extends Component {
               </View>
             </View>
             <Dropdown
-                label='Amount'
+                label='Select a Plan'
                 data={paymentAmount}
                 containerStyle={{width:'74%',alignSelf: "center"}}
                 itemTextStyle={{fontFamily:'circular-bold',fontSize:16}}
@@ -378,7 +399,7 @@ class Wallet extends Component {
             </TouchableHighlight>
           </View>
         </Modal>
-      </View>
+      </ScrollView>
     );
   }
 }
