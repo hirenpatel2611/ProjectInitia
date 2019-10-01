@@ -12,6 +12,7 @@ import {
   ScrollView
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Dropdown } from 'react-native-material-dropdown';
 import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
 import Header from "../../Common/Header";
@@ -26,6 +27,7 @@ import {
   closePaymentPage
 } from "../../actions";
 import { SUCCESS, BITMAP2 } from "../../images";
+import {paymentAmount} from '../../config'
 
 let ScreenHeight = Dimensions.get("window").height;
 let ScreenWidth = Dimensions.get("window").width;
@@ -164,28 +166,17 @@ class Wallet extends Component {
                 </Text>
               </View>
             </View>
-            <TextInput
-              style={{
-                fontSize: 16,
-                fontFamily: "circular-bold",
-                paddingLeft: 16,
-                borderBottomWidth: 1,
-                borderColor: "grey",
-                minHeight: 0.05 * ScreenHeight,
-                marginLeft: 10,
-                marginRight: 10,
-                width: 0.74 * ScreenWidth,
-                alignSelf: "center"
-              }}
-              underlineColorAndroid="transparent"
-              placeholderTextColor="#9D9D9D"
-              placeholder="Enter Amount"
-              value={this.props.walletAmount}
-              keyboardType={"phone-pad"}
-              onChangeText={text => {
-                this.props.getInputWalletAmount(text);
-              }}
-            />
+            <Dropdown
+                label='Amount'
+                data={paymentAmount}
+                containerStyle={{width:'74%',alignSelf: "center"}}
+                itemTextStyle={{fontFamily:'circular-bold',fontSize:16}}
+                pickerStyle={{height:'25%'}}
+                baseColor={'rgba(0, 0, 0,1)'}
+                onChangeText={(value,index)=>{
+                  this.props.getInputWalletAmount(index);
+                }}
+              />
             <TouchableHighlight
               disabled={this.props.walletAmount ? false : true}
               onPress={() => {

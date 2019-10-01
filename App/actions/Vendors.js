@@ -11,8 +11,10 @@ import {
   ADD_PAYMENT,
   UPDATE_WALLET_AMOUNT,
   VENDOR_STATUS,
-  FETCH_LEDGER_HISTORY
+  FETCH_LEDGER_HISTORY,
+
 } from "../config";
+import {paymentAmount} from '../config'
 import {
   connectTosocketApprov,
   connectTosocketBookingCancle,
@@ -118,6 +120,8 @@ export const VENDER_ACTIVATION_SUCCESS ="vendors/VENDER_ACTIVATION_SUCCESS";
 export const VENDER_ACTIVATION_FAIL ="vendors/VENDER_ACTIVATION_FAIL";
 export const CLOSE_PAYMENT_PAGE ="vendors/CLOSE_PAYMENT_PAGE";
 export const FETCH_LEDGER_HISTORY_SUCCESS ="vendors/FETCH_LEDGER_HISTORY_SUCCESS";
+export const FETCH_LEDGER_HISTORY_START ="vendors/FETCH_LEDGER_HISTORY_START";
+export const FETCH_LEDGER_HISTORY_FAIL ="vendors/FETCH_LEDGER_HISTORY_FAIL";
 export const HISTORY_DROPDOWN_FILTER ="vendors/HISTORY_DROPDOWN_FILTER";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
@@ -739,9 +743,13 @@ export const getRatingToCustomer = val => (dispatch, getState) => {
 };
 
 export const getInputWalletAmount = val => dispatch => {
+
+var amount = ((paymentAmount[val].amount*18)/100);
+  amount = amount+paymentAmount[val].amount;
+console.log(amount);
   dispatch({
     type: GET_INPUT_WALLET_AMOUNT,
-    payload: val
+    payload:amount
   });
 };
 
@@ -974,7 +982,11 @@ export const venderActivation = () => async (dispatch,getState) =>{
 }
 
 export const fetchLedgerHistory = () => async (dispatch,getState) => {
+  dispatch({
+    type:FETCH_LEDGER_HISTORY_START,
+  })
   const { userData } = await getState().user;
+
   let test = new FormData();
   test.append("user_id", userData.userId);
   Api.post(FETCH_LEDGER_HISTORY, test).then(response => {
@@ -985,6 +997,10 @@ export const fetchLedgerHistory = () => async (dispatch,getState) => {
           type:FETCH_LEDGER_HISTORY_SUCCESS,
           payload:response
         })
+    } else {
+      dispatch({
+        type:FETCH_LEDGER_HISTORY_FAIL,
+      })
     }
   })
 }

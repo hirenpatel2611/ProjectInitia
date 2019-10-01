@@ -8,6 +8,7 @@ import {
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Header from "../../Common/Header";
+import { Spinner } from "../../Common";
 import {fetchLedgerHistory,historyDropdown} from "../../actions";
 import {setLedgerHeader,filterHistory,getLedgerHeader} from '../../config';
 import { Dropdown } from 'react-native-material-dropdown';
@@ -25,7 +26,7 @@ class LedgerHistory extends Component {
             label='Filter'
             data={filterHistory}
             containerStyle={{marginLeft:16,width:'50%'}}
-            itemTextStyle={{fontFamily:'circular-book',fontSize:16}}
+            itemTextStyle={{fontFamily:'circular-bold',fontSize:16}}
             pickerStyle={{height:'25%'}}
             baseColor={'rgba(0, 0, 0,1)'}
             onChangeText={(value,index)=>{
@@ -132,13 +133,15 @@ class LedgerHistory extends Component {
                   </View>
                 )}
               />
-              :<Text
+              :this.props.loadingHistory?<Spinner />:<Text
               style={{
                 fontFamily: "circular-bold",
                 alignSelf: "center",
                 marginTop:50
               }}
-              >No History</Text>}
+              >No History Found</Text>
+
+            }
 
         </ScrollView>
       </View>
@@ -158,11 +161,13 @@ const inStyle = {
 const mapStateToProps = ({ vendors }) => {
   const {
     ledgerHistory,
-    fetchLedgerHistorySuccess
+    fetchLedgerHistorySuccess,
+    loadingHistory
   } = vendors;
   return {
     ledgerHistory,
-    fetchLedgerHistorySuccess
+    fetchLedgerHistorySuccess,
+    loadingHistory
   };
 };
 

@@ -122,6 +122,13 @@ export const getLedgerHeader = header => {
   }
 };
 
+export const paymentAmount = [
+  {value:'500 + Gst',amount:500},
+  {value:'1000 + Gst',amount:1000},
+  {value:'1500 + Gst',amount:1500},
+  {value:'2000 + Gst',amount:2000},
+  {value:'5000 + Gst',amount:5000},
+];
 
 export const filterHistory =[
   {value:"All"},
