@@ -136,7 +136,6 @@ export const getVendors = () => async (dispatch, getState) => {
           getVendorsCounter = getVendorsCounter + 1;
         }
       } else {
-        console.log(response.length);
         if(response.length > 0){
           dispatch({
           type: GET_VENDORS_SUCCESS,
@@ -150,7 +149,6 @@ export const getVendors = () => async (dispatch, getState) => {
           duration:8000
         });
       }else {
-        console.log(response);
         dispatch({
         type: GET_VENDORS_NOT_AVAILABLE_AT_AREA,
       });
@@ -190,7 +188,6 @@ export const getVenderDetails = val => async (dispatch, getState) => {
         type: GET_VENDOR_DETAILS_ADDRESS,
         payload: val
       });
-      console.log(res);
   })
 
   dispatch(getDistance());
@@ -209,7 +206,6 @@ export const BookVendor = () => async (dispatch, getState) => {
   });
   const { vendorsData, location } = getState().customers;
   const { userData } = getState().user;
-  console.log(vendorsData);
   let test = new FormData();
   test.append("customer_id", userData.userId);
   test.append("vendor_id", vendorsData.id);
@@ -219,7 +215,7 @@ export const BookVendor = () => async (dispatch, getState) => {
     .then(response => {
 
       if (response.status === 1) {
-        var message = "You have Booking from "+userData.userFullName;
+        var message = 'Dear Velway Partner, You have a Booking from '+userData.userFullName+ ', Kindly update as soon as possible.';
 
         dispatch({
           type: GET_BOOKING_SUCCESS,
@@ -251,8 +247,7 @@ export const BookVendor = () => async (dispatch, getState) => {
 export const smsSendByCustomer = (mobile,message) => (dispatch,getState) => {
   var url = 'http://anysms.in/api.php?username=devansh&password=502963&sender=VELWAY&sendto='+ mobile +'&message='+message;
   fetch(url)
-    .then(res => {
-      console.log(res);
+    .then(() => {
     })
 }
 
@@ -277,7 +272,7 @@ export const getBookingCancellation = () => (dispatch, getState) => {
           toToken: vendorsData.device_token,
           sender_id:userData.userId
         };
-        var message = "Booking is cancel by "+ userData.userFullName +" for this reason : "+ cancleReason;
+        var message = "Dear Velway Partner, We are very sorry, your Booking is cancel by "+ userData.userFullName +" for this reason : "+ cancleReason;
         dispatch(smsSendByCustomer(vendorsData.mobile,message))
         dispatch(connectTosocketBookingCancle(cancelData));
         dispatch(getUserData());

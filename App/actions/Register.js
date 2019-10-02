@@ -113,7 +113,6 @@ export const requestOtp = () => (dispatch, getState) => {
   test.append("mobile", mobileno);
   Api.post(URL_USER_OTP, test)
     .then(response => {
-      console.log(response);
       if (response.loggedIn === 1) {
         dispatch({
           type: REQUEST_OTP_SUCCESS,
@@ -218,7 +217,6 @@ export const updateGstin = val => dispatch => {
     type: UPDATE_GSTIN,
     payload: val
   });
-  console.log(val.length);
   if(val.length === 15){
     dispatch(verifyGSTIN())
   }
@@ -325,10 +323,8 @@ export const signupUser = () => (dispatch, getState) => {
     test.append("longitude", locationVendor.coords.longitude);
     test.append("other_image", DocumentBase64Register);
   }
-  console.log(test);
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
-      console.log(response);
       if (response.status === 1) {
         dispatch({
           type: SIGNUP_SUCCESSFUL,
@@ -420,10 +416,8 @@ export const deleteRegisterDocument = documnet => (dispatch, getState) => {
 
 export const readFromClipboard = () => async dispatch => {
   const content = await Clipboard.getString();
-  console.log(content);
   if(content.length === 8){
     let contentArray = content.split(/(\d+)/);
-    console.log(contentArray);
     if(contentArray[0].length === 3 && contentArray[1] === 5){
       dispatch({
         type: READ_FROM_CLIP_BOARD,
@@ -444,15 +438,13 @@ export const verifyGSTIN = () => (dispatch,getState) => {
   const {gstin} = getState().register;
   //https://appyflow.in/api/verifyGST?gstNo=24AAECS7339H1Z8&key_secret=KHhy1rgT2NhzI8PFZQrJxvq5f3l1
   let url = `https://appyflow.in/api/verifyGST?gstNo=${gstin}&key_secret=KHhy1rgT2NhzI8PFZQrJxvq5f3l1`
-  console.log(url);
   fetch(url).then((res)=>res.json())
-  .then(responseJson => {console.log(responseJson);
+  .then(responseJson => {
     if(responseJson.error === true){
       dispatch({
         type:VERIFY_GSTIN_FAIL
       })
     }else {
-      console.log(responseJson.taxpayerInfo.lgnm);
       dispatch({
         type:VERIFY_GSTIN_SUCCESS
       })
@@ -461,7 +453,6 @@ export const verifyGSTIN = () => (dispatch,getState) => {
 }
 
 export const getagreeCheckbox = () => (dispatch) => {
-  console.log('hhh');
   dispatch({
     type:GET_AGREE_CHECKBOX,
   })

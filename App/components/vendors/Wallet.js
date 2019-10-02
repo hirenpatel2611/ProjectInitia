@@ -61,9 +61,10 @@ this.setState(()=>{keyboardSpace:0})
 
     const htmls =
       `
-
-    <img src="http://ilifenetwork.com/api/web/icon2.png" style="display: inline-block; height:30%; width:50%; margin-Left:20%; ">
-    <button id="rzp-button1" style="width:50%; background-Color:#7960FF; color:#fff; font-Size:50; border-Radius:30px; margin-Top:20%; margin-Left:25%;">Pay</button>
+    <div style="text-align:center;">
+    <img src="http://ilifenetwork.com/api/web/icon2.png" style="display: inline-block; height:30%; width:70%; ">
+    <button id="rzp-button1" style="width:50%; background-Color:#7960FF; color:#fff; font-Size:50; border-Radius:30px; margin-Top:20%;">Pay</button>
+    </div>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
     var options = {
@@ -237,7 +238,7 @@ this.setState(()=>{keyboardSpace:0})
                 alignSelf:'center'
               }}
             >
-            Referral And Earn
+            Refer & Earn
             </Text>
             <TouchableHighlight
               onPress={() => {this.props.shareReferal()}}
@@ -264,7 +265,7 @@ this.setState(()=>{keyboardSpace:0})
                   color: "#7960FF"
                 }}
               >
-                Refer Someone
+                Refer a Workshop
               </Text>
             </TouchableHighlight>
             <TouchableHighlight
@@ -292,7 +293,7 @@ this.setState(()=>{keyboardSpace:0})
                   color: "#7960FF"
                 }}
               >
-                Refer To Customer
+                Refer a Customer
               </Text>
             </TouchableHighlight>
           </KeyboardAwareScrollView>
@@ -371,7 +372,6 @@ this.setState(()=>{keyboardSpace:0})
             <TouchableHighlight
               onPress={() => {
                 this.props.paymentSuccessOk();
-                console.log();
               }}
               underlayColor="white"
               style={{

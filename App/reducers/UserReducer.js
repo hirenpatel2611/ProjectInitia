@@ -33,7 +33,6 @@ export default (state = INITIAL_STATE, action) => {
 
     case SET_USER_INFO:
       {
-        console.log(action.isUserVendor);
         return {
           ...state,
           userId: action.userId,

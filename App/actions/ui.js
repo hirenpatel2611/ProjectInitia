@@ -16,6 +16,7 @@ export const GET_USER_PROFILE_DATA = "ui/GET_USER_PROFILE_DATA";
 export const GET_USER_BOOKING_STATUS_ACCEPT =
   "ui/GET_USER_BOOKING_STATUS_ACCEPT";
 export const SET_ALL_STATE_TO_INITIAL = "ui/SET_ALL_STATE_TO_INITIAL";
+export const GET_USER_STATUS_PENDING = "ui/GET_USER_STATUS_PENDING"
 
 export const loadFont = () => async dispatch => {
   // await Asset.loadAsync([
@@ -80,6 +81,11 @@ export const getUserData = () => async (dispatch, getState) => {
       }
     } else {
 
+      if(response[0].status === "Pending"){
+        dispatch({
+        type: GET_USER_STATUS_PENDING,
+        })
+      }
       dispatch({
       type: GET_USER_PROFILE_DATA,
       payload: response[0]
@@ -105,7 +111,7 @@ export const getUserData = () => async (dispatch, getState) => {
             latitude:parseFloat(vendorData.latitude),
             longitude:parseFloat(vendorData.longitude)
           }
-          await Location.reverseGeocodeAsync(loc).then((res)=>{console.log(res);
+          await Location.reverseGeocodeAsync(loc).then((res)=>{
               vendorData.address =  res[0].name + ","+res[0].city+"," +res[0].region +"-" +res[0].postalCode
           })
           var bookingStatusRes = { type: "PENDING" };
@@ -129,7 +135,7 @@ export const getUserData = () => async (dispatch, getState) => {
             latitude:parseFloat(vendorData.latitude),
             longitude:parseFloat(vendorData.longitude)
           }
-          await Location.reverseGeocodeAsync(loc).then((res)=>{console.log(res);
+          await Location.reverseGeocodeAsync(loc).then((res)=>{
               vendorData.address =  res[0].name + ","+res[0].city+"," +res[0].region +"-" +res[0].postalCode
           })
 

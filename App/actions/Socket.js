@@ -35,7 +35,7 @@ export const createSocketChannel = val => async (dispatch, getState) => {
     transports: ["websocket"],
   });
   const { isUserVendor,isVendorLoggedIn, userData } = getState().user;
-  isVen = isVendorLoggedIn;
+  isVen = isUserVendor;
   disp = dispatch;
 
   chatSocket.emit("self_room", { room: `${val}` });
@@ -70,7 +70,7 @@ export const createSocketChannel = val => async (dispatch, getState) => {
         break;
 
       case "CANCEL":
-        if (!isVendorLoggedIn) {
+        if (isUserVendor !== "1") {
           dispatch(getBookingStatus(data));
         } else {
           dispatch(getBookingVendorStatus(data));
@@ -259,7 +259,6 @@ export const socketLeave = () => async (dispatch, getState) => {
 };
 
 export const socketLeaveClubRoom = val => () => {
-  console.log(val, "Loave Club Room");
   chatSocket.emit("leave_self_room", {
     room: `${val.receiver_id} ${val.sender_id}`,
     type: "LEAVE"
@@ -351,7 +350,6 @@ export const socketVendorCurrentLocation = val => async (
       dist = (dist * 180) / Math.PI;
       dist = dist * 60 * 1.1515;
       dist = dist * 1.609344;
-      console.log(dist);
       dist = parseFloat(dist.toFixed(3));
       disp(createSocketChannel(bookingDetails.booking.vendor.vendor_id));
       if (dist > 0.05) {
@@ -431,7 +429,6 @@ TaskManager.defineTask(LOCATION_TASK_NAME1, async ({ data, error }) => {
       });
       channelName = `${bookingDetails.booking.vendor.vendor_id} ${bookingDetails.booking.customer.customer_id}`;
     } else {
-      console.log("You are");
       chatSocket.emit("booking_status", {
         room: `${bookingDetails.booking.customer.customer_id} ${bookingDetails.booking.vendor.vendor_id}`,
         message: locations,

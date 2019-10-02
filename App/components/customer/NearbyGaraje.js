@@ -101,14 +101,16 @@ class NearbyGaraje extends Component {
     {
       this.props.getUserData();
       this.props.getVendors();
-      this._map.animateToRegion(
-        {
+    await this._map.animateCamera(
+      {  center:{
           latitude: this.props.location.coords.latitude,
           longitude: this.props.location.coords.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421
         },
-        1
+        zoom: 18
+      }
+
       );
     }
     await Location.watchPositionAsync(
@@ -138,7 +140,7 @@ class NearbyGaraje extends Component {
               //this.props.getDistance();
             }}
           >
-            <Image key={vendor.id} style={inStyle.imageVendor} resizeMode={"cover"} resizeMethod={'resize'} onerror={(err)=>{console.log(err);}} source={USER2} />
+            <Image key={vendor.id} style={inStyle.imageVendor} resizeMode={"cover"} resizeMethod={'resize'} onerror={(err)=>{}} source={USER2} />
           </MapView.Marker.Animated>
         );
       });
@@ -152,7 +154,7 @@ class NearbyGaraje extends Component {
     }
     return (
       <View style={containerStyle}>
-        <Header headerText="Near by Workshops" filterIcon={FILTER} filterPress={()=>{Actions.filter()}}/>
+        <Header headerText="Near by Workshop" filterIcon={FILTER} filterPress={()=>{Actions.filter()}}/>
         <StatusBar backgroundColor="#7960FF" />
 
         <View
@@ -383,7 +385,7 @@ class NearbyGaraje extends Component {
             style={inStyle.modalStyle}
           >
           <View style={{
-            height: 0.20 * ScreenHeight,
+            height: 0.25 * ScreenHeight,
             margin: 15,
             padding: 10,
             backgroundColor: "#FFFFFF",
@@ -398,6 +400,13 @@ class NearbyGaraje extends Component {
               fontFamily:"circular-book",
               alignSelf:"center"
             }}>Sorry, We are not Available Now for this area.</Text>
+            <Text style={{
+              fontFamily:"circular-book",
+              alignSelf:"center",
+              fontSize:18,
+              color:"#7960FF",
+              top:5
+            }}>Coming Soon...</Text>
           </View>
           </Modal>
           <Modal

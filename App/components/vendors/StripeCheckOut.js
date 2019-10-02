@@ -17,8 +17,6 @@ class StripeCheckout extends Component {
       onPaymentSuccess,
       onClose
     } = this.props;
-    console.log(this.props);
-
     const jsCode = `(function() {
                     var originalPostMessage = window.postMessage;
 

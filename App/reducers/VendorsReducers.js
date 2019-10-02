@@ -63,9 +63,10 @@ import {
   FETCH_LEDGER_HISTORY_START,
   FETCH_LEDGER_HISTORY_SUCCESS,
   FETCH_LEDGER_HISTORY_FAIL,
-  HISTORY_DROPDOWN_FILTER
+  HISTORY_DROPDOWN_FILTER,
+  ON_PRESS_OK_PENDING_MODAL
 } from "../actions/Vendors";
-import { SET_ALL_STATE_TO_INITIAL } from "../actions/ui";
+import { SET_ALL_STATE_TO_INITIAL,GET_USER_STATUS_PENDING } from "../actions/ui";
 import {stateAndTin} from '../config'
 
 const INITIAL_STATE = {
@@ -120,7 +121,8 @@ const INITIAL_STATE = {
   ledgerHistory:[],
   ledgerHistoryFilter:[],
   fetchLedgerHistorySuccess:false,
-  loadingHistory:false
+  loadingHistory:false,
+  isStatusPendingModal:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -801,6 +803,24 @@ export default (state = INITIAL_STATE, action) => {
           };
         }
       break;
+
+    case GET_USER_STATUS_PENDING:
+      {
+        return {
+          ...state,
+          isStatusPendingModal:true
+        }
+      }
+      break;
+
+    case ON_PRESS_OK_PENDING_MODAL:
+    {
+      return {
+        ...state,
+        isStatusPendingModal:false
+      }
+    }
+    break;
 
       case HISTORY_DROPDOWN_FILTER:
         {

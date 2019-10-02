@@ -89,14 +89,16 @@ class NearbyGaraje extends Component {
     });
     this.props.getUserLocationSuccess(location);
     {
-      this._map.animateToRegion(
-        {
+    await this._map.animateCamera(
+      {  center:{
           latitude: this.props.location.coords.latitude,
           longitude: this.props.location.coords.longitude,
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421
         },
-        1
+        zoom: 18
+      }
+
       );
     }
     await Location.watchPositionAsync(
@@ -225,9 +227,6 @@ class NearbyGaraje extends Component {
             <Text style={{fontFamily:'circular-book',alignSelf:'center',margin:0.01 * ScreenHeight}}>
             Rating for vendor service
             </Text>
-            {
-              console.log(this.props.loadingRatingDone)
-            }
                 <AirbnbRating
                   type="star"
                   ratingBackgroundColor="transparent"
@@ -424,7 +423,7 @@ class NearbyGaraje extends Component {
                 </TouchableOpacity>
                 </View>
                 <CheckBox
-                  label='Mechanic is not responding on booking.'
+                  label='No Response Mechanic is not responding on booking.'
                   checked={this.props.reasonCheckbox[0]}
                   onChange={() => {
                        this.props.getReasonCheckbox(0);
@@ -444,7 +443,7 @@ class NearbyGaraje extends Component {
                   containerStyle={{padding:3}}
                 />
                 <CheckBox
-                  label='I Choose better option.'
+                  label='I Chose better option.'
                   checked={this.props.reasonCheckbox[2]}
                   onChange={() => {
                        this.props.getReasonCheckbox(2);

@@ -16,6 +16,8 @@ import {
   FlatList
 } from "react-native";
 import { connect } from "react-redux";
+import isEmpty from "is-empty";
+import {statusForVendor} from "../../config";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import styles from "./vendorStyle";
 import Header from "../../Common/Header";
@@ -38,6 +40,7 @@ import {
   getRatingToCustomer,
   getWalletAmount,
   loadMoreBookingList,
+  onPressOkPendingModal
 } from "../../actions";
 import { FutureBookingList, Spinner } from "../../Common";
 import { CALL, BITMAP2 } from "../../images";
@@ -54,6 +57,7 @@ class FutureBooking extends Component {
   componentDidMount() {
     this.props.getFutureBookings();
     this.props.getWalletAmount();
+
   }
   calltocutomer(mobileno) {
     const args = {
@@ -196,7 +200,7 @@ class FutureBooking extends Component {
                           color: "#7960FF"
                         }}
                       >
-                        Status :{item.status}
+                        Status :{statusForVendor(item.status)}
                       </Text>
                     </View>
                     <View
@@ -463,7 +467,6 @@ class FutureBooking extends Component {
                         flexDirection: "row"
                       }}
                       onPress={() => {
-                        console.log('hh');
                       }}
                     >
                       <Text
@@ -887,6 +890,41 @@ class FutureBooking extends Component {
               </TouchableOpacity>
             </View>
           </Modal>
+          <Modal
+            visible={this.props.isStatusPendingModal}
+            onRequestClose={() => {
+              console.log("Modal has been closed.");
+            }}
+            animationType="slide"
+            transparent={true}
+            opacity={0.5}
+            style={inStyle.modalStyle}
+          >
+          <View
+            style={{
+              marginTop: 0.4 * ScreenHeight,
+              alignSelf: "center",
+              backgroundColor: "#FFFFFF",
+              height: "28%",
+              borderRadius: 10,
+              padding: 15,
+              borderWidth:1,
+              borderColor:'#7960FF',
+              justifyContent:'center'
+            }}
+          >
+          <Image style={{width:150,height:70,alignSelf:'center',marginBottom:3}} source={{uri:'http://ilifenetwork.com/api/web/velwayIcon.png'}} />
+          <Text style={{fontFamily:'circular-book',alignSelf:'center',fontSize:18}}>
+          We will get back to you
+          </Text>
+          <Text style={{fontFamily:'circular-book',alignSelf:'center',fontSize:18}}>
+           after we verify your documents.
+          </Text>
+          <Text style={{alignSelf:'center',fontFamily:'circular-bold',color:'#7960FF',top:10,fontSize:18}} onPress={()=>{this.props.onPressOkPendingModal()}}>
+          OK
+          </Text>
+          </View>
+          </Modal>
         </ScrollView>
       </View>
     );
@@ -955,7 +993,8 @@ const mapStateToProps = ({ vendors }) => {
     customerRating,
     loadingRating,
     bookingModalData,
-    bookings
+    bookings,
+    isStatusPendingModal
   } = vendors;
   return {
     loadingFutureBookigList,
@@ -981,7 +1020,8 @@ const mapStateToProps = ({ vendors }) => {
     customerRating,
     loadingRating,
     bookings,
-    bookingModalData
+    bookingModalData,
+    isStatusPendingModal
   };
 };
 
@@ -1006,6 +1046,6 @@ export default connect(
     getRatingToCustomer,
     getWalletAmount,
     loadMoreBookingList,
-
+    onPressOkPendingModal
   }
 )(FutureBooking);

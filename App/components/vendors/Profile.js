@@ -67,6 +67,9 @@ class Profile extends Component {
     } = styles;
     return (
       <View>
+      {
+        console.log(this.props.imageVendorUri)
+      }
         <Header headerText="Profile" />
         <KeyboardAwareScrollView enableOnAndroid>
           <View style={inStyle.containerStyle}>

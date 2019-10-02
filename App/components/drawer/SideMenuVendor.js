@@ -164,7 +164,7 @@ class SideMenuVendor extends Component {
             Log Out
           </Button>
         </CardSection>
-        <CardSection
+        {this.props.userData.userStatus === "Pending" || this.props.userData.userStatus === ""?null:<CardSection
           style={{
             flexDirection: "column",
             borderBottomWidth: 0,
@@ -181,12 +181,11 @@ class SideMenuVendor extends Component {
         <Image source={{uri:'http://ilifenetwork.com/api/web/PowerButton.png'}}
         style={{height:50,width:50, tintColor:this.props.isVendorActive?"#7960FF":"grey"}}/>
         </TouchableOpacity>
-        {
+
          <Text
          style={{fontSize:16,fontFamily:'circular-book',top:10,color:this.props.isVendorActive?"#7960FF":"grey"}}>
          {this.props.isVendorActive?"Online":"Offline"}</Text>
-      }
-        </CardSection>
+        </CardSection>}
         <CardSection
         style={{marginTop:'40%',
           flexDirection: "column",
@@ -203,13 +202,15 @@ class SideMenuVendor extends Component {
   }
 }
 
-const mapStateToProps = ({ forgot,vendors }) => {
+const mapStateToProps = ({ forgot,vendors,user }) => {
   const { forgotOTP } = forgot;
+  const {userData} = user;
   const {walletBalance,isVendorActive} = vendors;
   return {
     forgotOTP,
     walletBalance,
-    isVendorActive
+    isVendorActive,
+    userData
   };
 };
 

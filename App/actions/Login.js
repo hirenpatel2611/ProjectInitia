@@ -45,7 +45,6 @@ export const loginUser = () => async (dispatch, getState) => {
   test.append("device_type", Platform.OS);
   Api.post(URL_USER_LOGIN, test)
     .then(async response => {
-      console.log(response);
       if (response.status === 1) {
         await AsyncStorage.setItem("device_token", response.data.device_token);
         await AsyncStorage.setItem("token", response.token);

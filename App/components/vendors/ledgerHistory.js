@@ -21,7 +21,16 @@ class LedgerHistory extends Component {
     return (
       <View style={{flexDirection:'column'}}>
         <Header headerText="History" />
-        <View style={{bottom:10,top:3}}>
+        <View style={{
+          bottom:10,
+          top:3,
+          borderBottomWidth:15,
+          borderColor:'#ffffff',
+          shadowColor: "#000000",
+          shadowOffset: { width: 0, height: 3 },
+          shadowRadius: 5,
+          shadowOpacity: 0.5
+          }}>
         <Dropdown
             label='Filter'
             data={filterHistory}
@@ -150,12 +159,11 @@ class LedgerHistory extends Component {
 }
 const inStyle = {
   ScrollViewStyle: {
-    top:10,
-    paddingBottom: 90,
-    marginBottom: 60,
+    top:5,
+    paddingBottom: 160,
+    marginBottom: 190,
     paddingRight: 5,
     paddingLeft: 5,
-    marginBottom:80
   },
 };
 const mapStateToProps = ({ vendors }) => {

@@ -123,6 +123,7 @@ export const FETCH_LEDGER_HISTORY_SUCCESS ="vendors/FETCH_LEDGER_HISTORY_SUCCESS
 export const FETCH_LEDGER_HISTORY_START ="vendors/FETCH_LEDGER_HISTORY_START";
 export const FETCH_LEDGER_HISTORY_FAIL ="vendors/FETCH_LEDGER_HISTORY_FAIL";
 export const HISTORY_DROPDOWN_FILTER ="vendors/HISTORY_DROPDOWN_FILTER";
+export const ON_PRESS_OK_PENDING_MODAL ="vendors/ON_PRESS_OK_PENDING_MODAL";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -263,7 +264,6 @@ export const getBookingUpdate = (val,completedData) => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_UAPDATE_START
   });
-  console.log("this is complete",completedData);
   const { bookingData, FutureBookingList, bookings } = getState().vendors;
   const { userData } = getState().user;
   let test = new FormData();
@@ -271,7 +271,6 @@ export const getBookingUpdate = (val,completedData) => (dispatch, getState) => {
   test.append("status", val.status);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log(response);
       if (response.status === 1) {
         if (val.status === "accept") {
 
@@ -284,7 +283,7 @@ export const getBookingUpdate = (val,completedData) => (dispatch, getState) => {
           dispatch(updateWalletAmount(val.referralId))
           dispatch(connectTosocketApprov(val))
           dispatch(getWalletAmount());
-          var message = "Booking is Approve by "+ userData.userFullName;
+          var message = "Dear Velway Customer, Your Booking has been Accepted by "+ userData.userFullName+", Please bear with us. Our Partner will there in a while.";
           dispatch(smsSendByVendor(val.customer_Mobile,message))
         }
         if (val.status === "completed") {
@@ -294,7 +293,7 @@ export const getBookingUpdate = (val,completedData) => (dispatch, getState) => {
               booking.status = "completed";
             }
           });
-          var message = "Booking is Complete by "+ userData.userFullName;
+          var message = "Dear Velway Customer,Booking is Complete by "+ userData.userFullName + ", We are very happy to help you.";
           dispatch(smsSendByVendor(completedData.customer.mobile,message))
         }
 
@@ -357,7 +356,6 @@ export const BookingListCancle = () => (dispatch, getState) => {
   test.append("reason", cancleReasonVendor);
   Api.post(BOOKING_UPDATE, test)
     .then(response => {
-      console.log(response);
       if (response.status === 1) {
         var cancelData = {
           customer_id: cancelBookingData.customer_id,
@@ -369,7 +367,7 @@ export const BookingListCancle = () => (dispatch, getState) => {
             booking.status = "cancle";
           }
         });
-        var message = "Booking is cancle by "+ userData.userFullName + " for this reason : " + cancleReasonVendor;
+        var message = "Dear Velway Customer, we are very sorry but Booking has cancel by "+ userData.userFullName + " for this reason : " + cancleReasonVendor;
         dispatch(smsSendByVendor(cancelBookingData.customer_Mobile,message))
         dispatch(connectTosocketBookingCancle(cancelData));
 
@@ -414,8 +412,8 @@ export const BookingListApprove = val => (dispatch, getState) => {
             }
           }
         });
+        var message = "Dear Velway Customer, Your Booking has been Accepted by "+ userData.userFullName+", Please bear with us. Our Partner will there in a while.";
 
-        var message = "Booking is Approve by "+ userData.userFullName;
         dispatch(smsSendByVendor(val.customer_Mobile,message))
         dispatch({
           type: GET_BOOKINGLIST_APPROVE_SUCCESS,
@@ -641,13 +639,19 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
       Api.post(BOOKING_UPDATE, test).then(responseBooking => {
         if (responseBooking.status === 1) {
           dispatch(socketBookingOnTheWay(startMapData));
-          dispatch(socketVendorCurrentLocation(startMapData));
+dispatch(socketVendorCurrentLocation(startMapData));
           FutureBookingList.map(booking => {
             if (booking.booking_id === startMapData.booking_id) {
               booking.status = "on-the-way";
             }
           });
 
+          dispatch({
+            type: START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
+            payload: { FutureBookingList }
+          });
+        } else if (responseBooking.status === 3){
+          dispatch(socketVendorCurrentLocation(startMapData));
           dispatch({
             type: START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
             payload: { FutureBookingList }
@@ -746,7 +750,6 @@ export const getInputWalletAmount = val => dispatch => {
 
 var amount = ((paymentAmount[val].amount*18)/100);
   amount = amount+paymentAmount[val].amount;
-console.log(amount);
   dispatch({
     type: GET_INPUT_WALLET_AMOUNT,
     payload:amount
@@ -990,7 +993,6 @@ export const fetchLedgerHistory = () => async (dispatch,getState) => {
   let test = new FormData();
   test.append("user_id", userData.userId);
   Api.post(FETCH_LEDGER_HISTORY, test).then(response => {
-    console.log(response);
     if(response.status === 1){
 
         dispatch({
@@ -1006,12 +1008,9 @@ export const fetchLedgerHistory = () => async (dispatch,getState) => {
 }
 
 export const smsSendByVendor = (mobile,message) => (dispatch) => {
-  console.log(mobile);
-  console.log(message);
   var url = 'http://anysms.in/api.php?username=devansh&password=502963&sender=VELWAY&sendto='+ mobile +'&message='+message;
   fetch(url)
     .then(res => {
-      console.log(res);
     })
 }
 
@@ -1031,5 +1030,10 @@ export const historyDropdown = (val) => async(dispatch,getState) => {
       payload:ledgerHistoryFilter
     })
   }
-  console.log(hh);
+}
+
+export const onPressOkPendingModal = () => (dispatch) => {
+  dispatch({
+    type:ON_PRESS_OK_PENDING_MODAL,
+  })
 }
