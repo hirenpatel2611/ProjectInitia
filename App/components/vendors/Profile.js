@@ -94,6 +94,7 @@ class Profile extends Component {
           </View>
           <View style={inStyle.viewSubContainer}>
             <TextInput
+            editable={false}
               style={[
                 textInputProfilStyle,
                 { fontSize: 15, fontFamily: "circular-bold" }
@@ -107,6 +108,7 @@ class Profile extends Component {
               }}
             />
             <TextInput
+            editable={false}
               style={textInputProfilStyle}
               underlineColorAndroid="transparent"
               placeholderTextColor="#9D9D9D"
@@ -124,7 +126,6 @@ class Profile extends Component {
                           justifyContent:'space-between'}}>
                 <Dropdown
                     label='State'
-                    data={stateAndTin}
                     value={this.props.addressVendor.value}
                     dropdownOffset={ {top: 0, left: 0} }
                     containerStyle={{width:'65%'}}
@@ -145,6 +146,7 @@ class Profile extends Component {
                     />
               </View>
             <TextInput
+
               style={textInputProfilStyle}
               underlineColorAndroid="transparent"
               placeholderTextColor="#9D9D9D"
@@ -155,6 +157,7 @@ class Profile extends Component {
               }}
             />
             <TextInput
+              editable={false}
               style={textInputProfilStyle}
               underlineColorAndroid="transparent"
               placeholderTextColor="#9D9D9D"

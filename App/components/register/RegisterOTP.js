@@ -299,7 +299,7 @@ const rules = [
   {
     field: "otp",
     condition: (otp, state) => otp === state.recievedOTP,
-    error: "OTP not verify"
+    error: "OTP deos not match"
   }
 
   // {

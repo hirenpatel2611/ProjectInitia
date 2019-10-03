@@ -734,7 +734,7 @@ export const shareCustomerReferal = () => (dispatch, getState) => {
   const { userData } = getState().user;
 
   var playStoreUrl =
-  "http://ilifenetwork.com/api/web/shareCustomerReferral.html?referal_code="+
+  "Join Velway app and become a Velway customer and find help for breakdown services of your vehicle anywhere and everywhere in near future, become worry free when you travel, link of our app: http://ilifenetwork.com/api/web/shareCustomerReferral.html?referal_code="+
     userData.uderReferalCode;
   Share.share({
     message: playStoreUrl

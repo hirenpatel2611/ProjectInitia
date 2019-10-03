@@ -7,7 +7,7 @@ import {
   Image,
   AsyncStorage,
   TouchableOpacity,
-  Switch
+  Share
 } from "react-native";
 import { connect } from "react-redux";
 import { Actions } from "react-native-router-flux";
@@ -35,7 +35,15 @@ class SideMenuVendor extends Component {
       // Error retrieving data
       console.log(error.message);
     }
-  };
+  };//https://play.google.com/apps/internaltest/4700479554932908572
+
+  shareMechanicApp = () => {
+    var playStoreUrl ="https://play.google.com/apps/internaltest/4700479554932908572"
+    Share.share({
+      message: playStoreUrl
+    }).then(response => {
+    });
+  }
 
   render() {
     const {
@@ -162,6 +170,23 @@ class SideMenuVendor extends Component {
             }}
           >
             Log Out
+          </Button>
+        </CardSection>
+        <CardSection
+          style={{
+            flexDirection: "column",
+            borderBottomWidth: 0,
+            borderTopWidth: 0
+          }}
+          >
+            <Button
+              containerStyle={container}
+              style={textStyle}
+              onPress={() => {
+              this.shareMechanicApp();
+              }}
+            >
+            App For Staff
           </Button>
         </CardSection>
         {this.props.userData.userStatus === "Pending" || this.props.userData.userStatus === ""?null:<CardSection

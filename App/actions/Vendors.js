@@ -293,7 +293,7 @@ export const getBookingUpdate = (val,completedData) => (dispatch, getState) => {
               booking.status = "completed";
             }
           });
-          var message = "Dear Velway Customer,Booking is Complete by "+ userData.userFullName + ", We are very happy to help you.";
+          var message = "Dear Velway Customer, Booking is Complete by "+ userData.userFullName + ", We are glad to help you.";
           dispatch(smsSendByVendor(completedData.customer.mobile,message))
         }
 
@@ -367,7 +367,7 @@ export const BookingListCancle = () => (dispatch, getState) => {
             booking.status = "cancle";
           }
         });
-        var message = "Dear Velway Customer, we are very sorry but Booking has cancel by "+ userData.userFullName + " for this reason : " + cancleReasonVendor;
+        var message = "Dear Velway Customer, we are very sorry but you current Booking has been cancel by "+ userData.userFullName + " for this reason : " + cancleReasonVendor;
         dispatch(smsSendByVendor(cancelBookingData.customer_Mobile,message))
         dispatch(connectTosocketBookingCancle(cancelData));
 
@@ -863,7 +863,7 @@ export const shareReferal = () => (dispatch, getState) => {
   const { userData } = getState().user;
 
   var playStoreUrl =
-    "http://ilifenetwork.com/api/web/addRefer.html?referal_code=" +
+    "Join us and become a Velway Partner in to order increase your customer base and make your business grow beyond your expectation, Download: http://ilifenetwork.com/api/web/addRefer.html?referal_code=" +
     userData.uderReferalCode;
   Share.share({
     message: playStoreUrl
@@ -875,7 +875,7 @@ export const referalToCustomer = () => (dispatch,getState) => {
   const { userData } = getState().user;
 
   var playStoreUrl =
-    "http://ilifenetwork.com/api/web/shareCustomerReferral.html?referal_code=" +
+    "Join Velway app and become a Velway customer to find help for breakdown services of your vehicle anywhere and everywhere in near future, become worry free when you travel, Download : http://ilifenetwork.com/api/web/shareCustomerReferral.html?referal_code=" +
     userData.uderReferalCode;
   Share.share({
     message: playStoreUrl

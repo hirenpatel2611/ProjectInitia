@@ -63,7 +63,7 @@ this.setState(()=>{keyboardSpace:0})
       `
     <div style="text-align:center;">
     <img src="http://ilifenetwork.com/api/web/icon2.png" style="display: inline-block; height:30%; width:70%; ">
-    <button id="rzp-button1" style="width:50%; background-Color:#7960FF; color:#fff; font-Size:50; border-Radius:30px; margin-Top:20%;">Pay</button>
+    <button id="rzp-button1" style="width:50%; background-Color:#7960FF; color:#fff; border:0; font-Size:50; border-Radius:30px; margin-Top:20%;">Pay</button>
     </div>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>

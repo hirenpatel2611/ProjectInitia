@@ -24,12 +24,6 @@ class LedgerHistory extends Component {
         <View style={{
           bottom:10,
           top:3,
-          borderBottomWidth:15,
-          borderColor:'#ffffff',
-          shadowColor: "#000000",
-          shadowOffset: { width: 0, height: 3 },
-          shadowRadius: 5,
-          shadowOpacity: 0.5
           }}>
         <Dropdown
             label='Filter'

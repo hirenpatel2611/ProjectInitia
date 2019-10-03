@@ -158,7 +158,7 @@ const rules = [
   {
     field: "forgotOTP",
     condition: (forgotOTP, state) => forgotOTP !== state.recievedForgotOTP,
-    error: "OTP not verify"
+    error: "OTP deos not match"
   }
 
   // {

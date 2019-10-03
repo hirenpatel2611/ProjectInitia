@@ -360,7 +360,7 @@ class FutureBooking extends Component {
                   </View>
                 )}
               />
-              {this.props.FutureBookingList.length >= 10 ? (
+              {this.props.FutureBookingList.length > 20 ? (
                 <TouchableOpacity
                   onPress={() => {
                     this.props.loadMoreBookingList();
