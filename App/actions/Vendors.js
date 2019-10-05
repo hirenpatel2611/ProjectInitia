@@ -11,10 +11,9 @@ import {
   ADD_PAYMENT,
   UPDATE_WALLET_AMOUNT,
   VENDOR_STATUS,
-  FETCH_LEDGER_HISTORY,
-
+  FETCH_LEDGER_HISTORY
 } from "../config";
-import {paymentAmount} from '../config'
+import { paymentAmount } from "../config";
 import {
   connectTosocketApprov,
   connectTosocketBookingCancle,
@@ -23,6 +22,7 @@ import {
   socketBookingCompleted,
   socketLeaveClubRoom
 } from "./Socket";
+import * as ImageManipulator from 'expo-image-manipulator';
 import { SplashScreen } from "expo";
 import { Actions } from "react-native-router-flux";
 import openMap from "react-native-open-maps";
@@ -60,8 +60,7 @@ export const GET_CANCLE_BOOKING_MODAL = "vendors/GET_CANCLE_BOOKING_MODAL";
 export const GET_REASON_CHECKBOX_VENDOR = "vendors/GET_REASON_CHECKBOX_VENDOR";
 export const BOOKING_LIST_CANCLE_SUCCESS =
   "vendors/BOOKING_LIST_CANCLE_SUCCESS";
-  export const BOOKING_LIST_CANCLE_FAIL =
-    "vendors/BOOKING_LIST_CANCLE_FAIL";
+export const BOOKING_LIST_CANCLE_FAIL = "vendors/BOOKING_LIST_CANCLE_FAIL";
 export const BOOKING_CANCLE_START = "vendors/BOOKING_CANCLE_START";
 export const GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR =
   "vendors/GET_CANCEL_BOOKING_MODAL_CLOSE_VENDOR";
@@ -69,7 +68,8 @@ export const GET_FUTURE_BOOKING_LIST_NO_FOUND =
   "vendors/GET_FUTURE_BOOKING_LIST_NO_FOUND";
 export const UPDATE_VENDOR_FULL_NAME = "vendors/UPDATE_VENDOR_FULL_NAME";
 export const UPDATE_VENDOR_ADDRESS = "vendors/UPDATE_VENDOR_ADDRESS";
-export const UPDATE_VENDOR_STATE_AND_CODE = "vendors/UPDATE_VENDOR_STATE_AND_CODE";
+export const UPDATE_VENDOR_STATE_AND_CODE =
+  "vendors/UPDATE_VENDOR_STATE_AND_CODE";
 export const UPDATE_VENDOR_EMAIL = "vendors/UPDATE_VENDOR_EMAIL";
 export const UPDATE_VENDOR_PROFILE_START =
   "vendors/UPDATE_VENDOR_PROFILE_START";
@@ -115,15 +115,19 @@ export const UPDATE_VENDOR_PROFILE_CAR_BOOL =
   "vendors/UPDATE_VENDOR_PROFILE_CAR_BOOL";
 export const UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL =
   "vendors/UPDATE_VENDOR_PROFILE_HEAVYVEHICLE_BOOL";
-export const GET_VENDOR_STATUS ="vendors/GET_VENDOR_STATUS";
-export const VENDER_ACTIVATION_SUCCESS ="vendors/VENDER_ACTIVATION_SUCCESS";
-export const VENDER_ACTIVATION_FAIL ="vendors/VENDER_ACTIVATION_FAIL";
-export const CLOSE_PAYMENT_PAGE ="vendors/CLOSE_PAYMENT_PAGE";
-export const FETCH_LEDGER_HISTORY_SUCCESS ="vendors/FETCH_LEDGER_HISTORY_SUCCESS";
-export const FETCH_LEDGER_HISTORY_START ="vendors/FETCH_LEDGER_HISTORY_START";
-export const FETCH_LEDGER_HISTORY_FAIL ="vendors/FETCH_LEDGER_HISTORY_FAIL";
-export const HISTORY_DROPDOWN_FILTER ="vendors/HISTORY_DROPDOWN_FILTER";
-export const ON_PRESS_OK_PENDING_MODAL ="vendors/ON_PRESS_OK_PENDING_MODAL";
+export const GET_VENDOR_STATUS = "vendors/GET_VENDOR_STATUS";
+export const VENDER_ACTIVATION_SUCCESS = "vendors/VENDER_ACTIVATION_SUCCESS";
+export const VENDER_ACTIVATION_FAIL = "vendors/VENDER_ACTIVATION_FAIL";
+export const CLOSE_PAYMENT_PAGE = "vendors/CLOSE_PAYMENT_PAGE";
+export const FETCH_LEDGER_HISTORY_SUCCESS =
+  "vendors/FETCH_LEDGER_HISTORY_SUCCESS";
+export const FETCH_LEDGER_HISTORY_START = "vendors/FETCH_LEDGER_HISTORY_START";
+export const FETCH_LEDGER_HISTORY_FAIL = "vendors/FETCH_LEDGER_HISTORY_FAIL";
+export const HISTORY_DROPDOWN_FILTER = "vendors/HISTORY_DROPDOWN_FILTER";
+export const ON_PRESS_OK_PENDING_MODAL = "vendors/ON_PRESS_OK_PENDING_MODAL";
+export const ON_PRESS_HELP = "vendors/ON_PRESS_HELP";
+export const ON_CLOSE_HELP_MODAL = "vendors/ON_CLOSE_HELP_MODAL";
+export const UPDATE_VENDOR_DOCUMENT_UPLOAD = "vendors/UPDATE_VENDOR_DOCUMENT_UPLOAD";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -178,14 +182,13 @@ export const getCustomerDistanceList = val => async (dispatch, getState) => {
   var FutureBookingList = [];
   var url = "";
   const APIKEY = "AIzaSyAm_cQCYcozNa9WUVmASmSABGuuS6OSsIw";
-  var url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${userData.userLatitude},${userData.userLongitude}&destinations=${vendorBookingList[0].booking_latitude},${vendorBookingList[0].booking_longitude}`;
+  var url = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${userData.userLatitude},${userData.userLongitude}&destinations=`;
   vendorBookingList.map(customer => {
     url =
       url + "|" + `${customer.booking_latitude},${customer.booking_longitude}`;
   });
 
   url = url + `&key=${APIKEY}`;
-
   await fetch(url)
     .then(response => response.json())
     .then(responseJson => {
@@ -197,17 +200,41 @@ export const getCustomerDistanceList = val => async (dispatch, getState) => {
         disMile = disMile.split(" ", 2);
         var disUnit = disMile[1];
         var dis = disMile[0];
-        if (disUnit !== "mi") {
-          if (dis > 100) {
-            dis = dis / 3280.8;
-            dis = parseFloat(dis.toFixed(3)) + " " + "km";
-          } else {
-            dis = responseJson.rows[0].elements[0].distance.text;
+        switch (disMile[1]) {
+          case "mi":
+            {
+                return{
+                  dis : dis * 1.609,
+                  dis : parseFloat(dis.toFixed(1)) + " " + "km"
+                }
+              }
+            break;
+
+          case "ft":
+          {
+            return {
+                dis : dis / 3280.8,
+                dis : parseFloat(dis.toFixed(3)) + " " + "km",
+              }
           }
-        } else {
-          dis = dis * 1.609;
-          dis = parseFloat(dis.toFixed(1)) + " " + "km";
+          break;
+
+          default:
+          return dis = responseJson.rows[0].elements[0].distance.text;
+
         }
+        // if (disUnit !== "mi") {
+        //   if (dis > 100) {
+        //     dis = dis / 3280.8;
+        //     dis = parseFloat(dis.toFixed(3)) + " " + "km";
+        //   } else {
+        //     dis = responseJson.rows[0].elements[0].distance.text;
+        //   }
+        // } else {
+        // dis : dis * 1.609,
+        // dis : parseFloat(dis.toFixed(1)) + " " + "km"
+        //
+        // }
         vendorBookingList[i].customer.distance = dis;
       }
     })
@@ -260,7 +287,10 @@ export const getBookingModal = val => async (dispatch, getState) => {
   });
 };
 
-export const getBookingUpdate = (val,completedData) => (dispatch, getState) => {
+export const getBookingUpdate = (val, completedData) => (
+  dispatch,
+  getState
+) => {
   dispatch({
     type: GET_BOOKING_UAPDATE_START
   });
@@ -273,28 +303,33 @@ export const getBookingUpdate = (val,completedData) => (dispatch, getState) => {
     .then(response => {
       if (response.status === 1) {
         if (val.status === "accept") {
-
           FutureBookingList.map(booking => {
             if (booking.booking_id === val.Id) {
               booking.status = "accept";
             }
           });
           dispatch(getMechanicOtp(val.Id));
-          dispatch(updateWalletAmount(val.referralId))
-          dispatch(connectTosocketApprov(val))
-          dispatch(getWalletAmount());
-          var message = "Dear Velway Customer, Your Booking has been Accepted by "+ userData.userFullName+", Please bear with us. Our Partner will there in a while.";
-          dispatch(smsSendByVendor(val.customer_Mobile,message))
+          dispatch(updateWalletAmount(val.referralId));
+          dispatch(connectTosocketApprov(val));
+
+          var message =
+            "Dear Velway Customer, Your Booking has been Accepted by " +
+            userData.userFullName +
+            ", Please bear with us. Our Partner will there in a while.";
+          dispatch(smsSendByVendor(val.customer_Mobile, message));
         }
         if (val.status === "completed") {
-            dispatch(socketBookingCompleted(completedData));
+          dispatch(socketBookingCompleted(completedData));
           FutureBookingList.map(booking => {
             if (booking.booking_id === val.Id) {
               booking.status = "completed";
             }
           });
-          var message = "Dear Velway Customer, Booking is Complete by "+ userData.userFullName + ", We are glad to help you.";
-          dispatch(smsSendByVendor(completedData.customer.mobile,message))
+          var message =
+            "Dear Velway Customer, Booking is Complete by " +
+            userData.userFullName +
+            ", We are glad to help you.";
+          dispatch(smsSendByVendor(completedData.customer.mobile, message));
         }
 
         dispatch({
@@ -348,7 +383,7 @@ export const BookingListCancle = () => (dispatch, getState) => {
     FutureBookingList,
     cancelBookingData
   } = getState().vendors;
-  const {userData} = getState().user;
+  const { userData } = getState().user;
 
   let test = new FormData();
   test.append("booking_id", cancelBookingData.booking_id);
@@ -360,15 +395,16 @@ export const BookingListCancle = () => (dispatch, getState) => {
         var cancelData = {
           customer_id: cancelBookingData.customer_id,
           toToken: cancelBookingData.customerToken,
-          sender_id:userData.userId
+          sender_id: userData.userId
         };
         FutureBookingList.map(booking => {
           if (booking.booking_id === cancelBookingData.booking_id) {
             booking.status = "cancle";
           }
         });
-        var message = "Dear Velway Customer, we are very sorry but you current Booking has been cancel by "+ userData.userFullName + " for this reason : " + cancleReasonVendor;
-        dispatch(smsSendByVendor(cancelBookingData.customer_Mobile,message))
+        var message =
+          "Dear Velway Customer, we are very sorry that your booking got cancelled, Kindly book another Workshop. We apologies for the inconvenience caused";
+        dispatch(smsSendByVendor(cancelBookingData.customer_Mobile, message));
         dispatch(connectTosocketBookingCancle(cancelData));
 
         dispatch({
@@ -377,7 +413,7 @@ export const BookingListCancle = () => (dispatch, getState) => {
         });
       } else {
         dispatch({
-          type: BOOKING_LIST_CANCLE_FAIL,
+          type: BOOKING_LIST_CANCLE_FAIL
         });
         if (response.message === "something went wrong") {
           BookingListCancle();
@@ -394,7 +430,7 @@ export const BookingListApprove = val => (dispatch, getState) => {
     type: GET_BOOKINGLIST_APPROVE_START
   });
   const { FutureBookingList } = getState().vendors;
-  const {userData} = getState().user;
+  const { userData } = getState().user;
   let test = new FormData();
   test.append("booking_id", val.booking_id);
   test.append("status", "accept");
@@ -403,18 +439,20 @@ export const BookingListApprove = val => (dispatch, getState) => {
       if (response.status === 1) {
         dispatch(getMechanicOtp(val.booking_id));
         dispatch(connectTosocketApprov(val));
-        dispatch(updateWalletAmount(val.customer_id))
-        dispatch(getWalletAmount());
+        dispatch(updateWalletAmount(val.customer_id));
         FutureBookingList.map(booking => {
           if (booking.booking_id === val.booking_id) {
-            if(booking.status !== "cancle" || booking.status !== "completed"){
-            booking.status = "accept";
+            if (booking.status !== "cancle" || booking.status !== "completed") {
+              booking.status = "accept";
             }
           }
         });
-        var message = "Dear Velway Customer, Your Booking has been Accepted by "+ userData.userFullName+", Please bear with us. Our Partner will there in a while.";
+        var message =
+          "Dear Velway Customer, Your Booking has been Accepted by " +
+          userData.userFullName +
+          ", Please bear with us. Our Partner will there in a while.";
 
-        dispatch(smsSendByVendor(val.customer_Mobile,message))
+        dispatch(smsSendByVendor(val.customer_Mobile, message));
         dispatch({
           type: GET_BOOKINGLIST_APPROVE_SUCCESS,
           payload: { val, FutureBookingList }
@@ -450,18 +488,23 @@ export const getBookingVendorStatus = data => (dispatch, getState) => {
   const { FutureBookingList, bookings } = getState().vendors;
   FutureBookingList.map(booking => {
     if (booking.booking_id === data.message.booking_id) {
-      if(booking.status !== "cancle" || booking.status !== "completed"){
-      if (data.type === "CANCEL") {
-        booking.status = "cancle";
-        dispatch(socketLeaveClubRoom({receiver_id:data.message.customer_id,sender_id:data.message.vendor_id}))
+      if (booking.status !== "cancle" || booking.status !== "completed") {
+        if (data.type === "CANCEL") {
+          booking.status = "cancle";
+          dispatch(
+            socketLeaveClubRoom({
+              receiver_id: data.message.customer_id,
+              sender_id: data.message.vendor_id
+            })
+          );
+        }
+        if (data.type === "REACHED") {
+          booking.status = "reached";
+        }
+        if (data.type === "ON-THE-WAY") {
+          booking.status = "on-the-way";
+        }
       }
-      if (data.type === "REACHED") {
-        booking.status = "reached";
-      }
-      if (data.type === "ON-THE-WAY") {
-        booking.status = "on-the-way";
-      }
-    }
     }
     if (data.type === "COMPLETED") {
       if (booking.booking_id === data.message.booking.booking_id) {
@@ -540,7 +583,8 @@ export const updateVendorProfile = val => (dispatch, getState) => {
     emailVendor,
     imageBase64Vendor,
     workshop_nameVendor,
-    vendorProfileServiceType
+    vendorProfileServiceType,
+    documentVendorBase64
   } = getState().vendors;
   var service_type = [
     "bike",
@@ -556,6 +600,9 @@ export const updateVendorProfile = val => (dispatch, getState) => {
     }
   }
   service_vehicle_type = JSON.stringify(service_vehicle_type);
+  var documentBase64  = JSON.stringify(documentVendorBase64);
+  console.log(documentVendorBase64);
+
   const { userData } = getState().user;
   let test = new FormData();
   test.append("id", userData.userId);
@@ -564,6 +611,7 @@ export const updateVendorProfile = val => (dispatch, getState) => {
   test.append("profile_image", imageBase64Vendor);
   test.append("workshop_name", workshop_nameVendor);
   test.append("service_vehicle_type", service_vehicle_type);
+  //test.append("other_image", documentBase64);
   Api.post(UPDATE_PROFILE, test).then(response => {
     if (response.status === 1) {
       dispatch({
@@ -588,8 +636,19 @@ export const updateVendorProfile = val => (dispatch, getState) => {
   });
 };
 
-export const loadVendorProfile = () => (dispatch, getState) => {
+export const loadVendorProfile = () => async (dispatch, getState) => {
   const { userData } = getState().user;
+  var image64arr = []
+      await userData.other_image.map(async (imageUri)=>{
+
+      const manipResult = await ImageManipulator.manipulateAsync(
+        imageUri,[{ resize: { width:50, height: 50 } }],{base64: true,}
+      );
+      image64arr.push(manipResult.base64)
+
+    })
+
+userData.image64arr=image64arr;
 
   dispatch({
     type: LOAD_VENDOR_PROFILE,
@@ -639,7 +698,7 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
       Api.post(BOOKING_UPDATE, test).then(responseBooking => {
         if (responseBooking.status === 1) {
           dispatch(socketBookingOnTheWay(startMapData));
-dispatch(socketVendorCurrentLocation(startMapData));
+          dispatch(socketVendorCurrentLocation(startMapData));
           FutureBookingList.map(booking => {
             if (booking.booking_id === startMapData.booking_id) {
               booking.status = "on-the-way";
@@ -650,7 +709,7 @@ dispatch(socketVendorCurrentLocation(startMapData));
             type: START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
             payload: { FutureBookingList }
           });
-        } else if (responseBooking.status === 3){
+        } else if (responseBooking.status === 3) {
           dispatch(socketVendorCurrentLocation(startMapData));
           dispatch({
             type: START_MAP_VENDOR_BOOKING_UPDATE_SUCCESS,
@@ -715,7 +774,7 @@ export const getCustomerRatingModal = val => (dispatch, getState) => {
     status: "completed",
     Id: val.booking_id
   };
-  dispatch(getBookingUpdate(CompleteValue,val));
+  dispatch(getBookingUpdate(CompleteValue, val));
   dispatch({
     type: COMPELETE_BOOKING_BY_VENDOR,
     payload: {
@@ -747,12 +806,9 @@ export const getRatingToCustomer = val => (dispatch, getState) => {
 };
 
 export const getInputWalletAmount = val => dispatch => {
-
-var amount = ((paymentAmount[val].amount*18)/100);
-  amount = amount+paymentAmount[val].amount;
   dispatch({
     type: GET_INPUT_WALLET_AMOUNT,
-    payload:amount
+    payload: paymentAmount[val]
   });
 };
 
@@ -768,7 +824,7 @@ export const addBalanceRequest = () => (dispatch, getState) => {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      amount: parseInt(walletAmount), // amount in the smallest currency unit
+      amount: parseInt(walletAmount.amount + walletAmount.gst), // amount in the smallest currency unit
       currency: "INR",
       receipt: "order_rcptid_11",
       payment_capture: "0"
@@ -811,19 +867,23 @@ export const getWalletAmount = () => async (dispatch, getState) => {
         type: GET_WALLET_AMOUNT_SUCCESS,
         payload: response.data[0]
       });
+      if (response.data[0].total < 24) {
+        alert("Your Balance is low Please Add Balance Points");
+      }
     } else {
       dispatch(getWalletAmount());
     }
   });
 };
 
-export const updateWalletAmount = (val) => async (dispatch, getState) => {
+export const updateWalletAmount = val => async (dispatch, getState) => {
   const { userData } = await getState().user;
 
   let test = new FormData();
   test.append("customer_id", userData.userId);
   test.append("referal_from", val);
   Api.post(UPDATE_WALLET_AMOUNT, test).then(response => {
+    dispatch(getWalletAmount());
   });
 };
 
@@ -835,9 +895,10 @@ export const addWalletPayment = () => async (dispatch, getState) => {
   test.append("customer_id", userData.userId);
   test.append("order_id", WalletOrderId);
   test.append("payment_id", paymentId);
-  test.append("amount", walletAmount);
+  test.append("amount", walletAmount.amount);
+  test.append("pts", walletAmount.point);
+  test.append("gst", walletAmount.gst);
   Api.post(ADD_PAYMENT, test).then(response => {
-
     if (response.status === 1) {
       dispatch(getWalletAmount());
       dispatch({
@@ -867,11 +928,10 @@ export const shareReferal = () => (dispatch, getState) => {
     userData.uderReferalCode;
   Share.share({
     message: playStoreUrl
-  }).then(response => {
-  });
+  }).then(response => {});
 };
 
-export const referalToCustomer = () => (dispatch,getState) => {
+export const referalToCustomer = () => (dispatch, getState) => {
   const { userData } = getState().user;
 
   var playStoreUrl =
@@ -879,9 +939,8 @@ export const referalToCustomer = () => (dispatch,getState) => {
     userData.uderReferalCode;
   Share.share({
     message: playStoreUrl
-  }).then(response => {
-  });
-}
+  }).then(response => {});
+};
 
 export const updateVenderProfileVehicleBool = () => (dispatch, getState) => {
   const { vendorProfileServiceType } = getState().vendors;
@@ -915,10 +974,7 @@ export const updateVendorProfileHeavyVehicleBool = () => (
   });
 };
 
-export const updateVendorProfileTowingBool = () => (
-  dispatch,
-  getState
-) => {
+export const updateVendorProfileTowingBool = () => (dispatch, getState) => {
   const { vendorProfileServiceType } = getState().vendors;
   vendorProfileServiceType[3] = !vendorProfileServiceType[3];
   dispatch({
@@ -927,10 +983,7 @@ export const updateVendorProfileTowingBool = () => (
   });
 };
 
-export const updateVendorProfileTyreBool = () => (
-  dispatch,
-  getState
-) => {
+export const updateVendorProfileTyreBool = () => (dispatch, getState) => {
   const { vendorProfileServiceType } = getState().vendors;
   vendorProfileServiceType[4] = !vendorProfileServiceType[4];
   dispatch({
@@ -939,101 +992,131 @@ export const updateVendorProfileTyreBool = () => (
   });
 };
 
-export const GetVenderStatus = () => async (dispatch,getState) =>{
+export const GetVenderStatus = () => async (dispatch, getState) => {
   const { userData } = await getState().user;
-  var userStatus= false
-  if(userData.userStatus === "Active"){
-    userStatus=true
+  var userStatus = false;
+  if (userData.userStatus === "Active") {
+    userStatus = true;
   }
   dispatch({
-    type:GET_VENDOR_STATUS,
-    payload:userStatus
-  })
-}
+    type: GET_VENDOR_STATUS,
+    payload: userStatus
+  });
+};
 
-export const closePaymentPage = () => (dispatch) => {
+export const closePaymentPage = () => dispatch => {
   dispatch({
-    type:CLOSE_PAYMENT_PAGE,
-  })
-}
+    type: CLOSE_PAYMENT_PAGE
+  });
+};
 
-export const venderActivation = () => async (dispatch,getState) =>{
-
+export const venderActivation = () => async (dispatch, getState) => {
   const { userData } = await getState().user;
   const { isVendorActive } = getState().vendors;
-  var status =""
-  if(!isVendorActive){
-    status = "Active"
-  }else {
-    status = "In-active"
+  var status = "";
+  if (!isVendorActive) {
+    status = "Active";
+  } else {
+    status = "In-active";
   }
   let test = new FormData();
   test.append("customer_id", userData.userId);
   test.append("status", status);
   Api.post(VENDOR_STATUS, test).then(response => {
-    if(response.status === 1){
+    if (response.status === 1) {
       dispatch({
-        type:VENDER_ACTIVATION_SUCCESS
-      })
+        type: VENDER_ACTIVATION_SUCCESS
+      });
     } else {
       dispatch({
-        type:VENDER_ACTIVATION_FAIL
-      })
+        type: VENDER_ACTIVATION_FAIL
+      });
     }
   });
+};
 
-}
-
-export const fetchLedgerHistory = () => async (dispatch,getState) => {
+export const fetchLedgerHistory = () => async (dispatch, getState) => {
   dispatch({
-    type:FETCH_LEDGER_HISTORY_START,
-  })
+    type: FETCH_LEDGER_HISTORY_START
+  });
   const { userData } = await getState().user;
 
   let test = new FormData();
   test.append("user_id", userData.userId);
   Api.post(FETCH_LEDGER_HISTORY, test).then(response => {
-    if(response.status === 1){
-
-        dispatch({
-          type:FETCH_LEDGER_HISTORY_SUCCESS,
-          payload:response
-        })
+    if (response.status === 1) {
+      dispatch({
+        type: FETCH_LEDGER_HISTORY_SUCCESS,
+        payload: response
+      });
     } else {
       dispatch({
-        type:FETCH_LEDGER_HISTORY_FAIL,
-      })
+        type: FETCH_LEDGER_HISTORY_FAIL
+      });
     }
-  })
-}
+  });
+};
 
-export const smsSendByVendor = (mobile,message) => (dispatch) => {
-  var url = 'http://anysms.in/api.php?username=devansh&password=502963&sender=VELWAY&sendto='+ mobile +'&message='+message;
-  fetch(url)
-    .then(res => {
-    })
-}
+export const smsSendByVendor = (mobile, message) => dispatch => {
+  var url =
+    "http://anysms.in/api.php?username=devansh&password=502963&sender=VELWAY&sendto=" +
+    mobile +
+    "&message=" +
+    message;
+  fetch(url).then(res => {});
+};
 
-export const historyDropdown = (val) => async(dispatch,getState) => {
+export const historyDropdown = val => async (dispatch, getState) => {
   const { ledgerHistoryFilter } = await getState().vendors;
-  if(val !== "All"){
-      var hh = ledgerHistoryFilter.filter((item)=>{
-          return item.payment_id.split("_")[0]===val;
-      })
-      dispatch({
-        type:HISTORY_DROPDOWN_FILTER,
-        payload:hh
-      })
+  if (val !== "All") {
+    var hh = ledgerHistoryFilter.filter(item => {
+      return item.payment_id.split("_")[0] === val;
+    });
+    dispatch({
+      type: HISTORY_DROPDOWN_FILTER,
+      payload: hh
+    });
   } else {
     dispatch({
-      type:HISTORY_DROPDOWN_FILTER,
-      payload:ledgerHistoryFilter
-    })
+      type: HISTORY_DROPDOWN_FILTER,
+      payload: ledgerHistoryFilter
+    });
   }
-}
+};
 
-export const onPressOkPendingModal = () => (dispatch) => {
+export const onPressOkPendingModal = () => dispatch => {
   dispatch({
-    type:ON_PRESS_OK_PENDING_MODAL,
+    type: ON_PRESS_OK_PENDING_MODAL
+  });
+};
+
+export const onPressHelp = () => dispatch => {
+  dispatch({
+    type:ON_PRESS_HELP,
   })
 }
+
+export const onCloseHelpModal = () => dispatch => {
+  dispatch({
+    type:ON_CLOSE_HELP_MODAL,
+  })
+}
+
+export const updateDocument = () => async dispatch => {
+  let result = await ImagePicker.launchImageLibraryAsync({
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    base64: true,
+    allowsEditing: true,
+    aspect: [4, 4],
+    key: "123"
+  });
+
+  console.log(result);
+
+  if (!result.cancelled) {
+    dispatch({
+      type: UPDATE_VENDOR_DOCUMENT_UPLOAD,
+      payload: result
+    });
+  }
+};

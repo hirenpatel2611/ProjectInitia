@@ -91,7 +91,7 @@ const INITIAL_STATE = {
   bookingStatusRes: "",
   mechanicCurrentLocation: "",
   distanceBetweenUserMechanic: "",
-  reasonCheckbox: [false, false, false],
+  reasonCheckbox: [false, false, false,false],
   cancleReason: "",
   isBookCancelModal: false,
   confirmDisable: false,
@@ -339,7 +339,7 @@ export default (state = INITIAL_STATE, action) => {
           isBookingSuccess: false,
           isBookCancelModal: false,
           confirmDisable: false,
-          reasonCheckbox: [false, false, false]
+          reasonCheckbox: [false, false, false,false]
         };
       }
       break;
@@ -349,7 +349,7 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           loadingBookig: false,
-          reasonCheckbox: [false, false, false]
+          reasonCheckbox: [false, false, false,false]
         };
       }
       break;
@@ -403,12 +403,13 @@ export default (state = INITIAL_STATE, action) => {
 
     case GET_REASON_CHECKBOX:
       {
-        newReasonCheckbox = [false, false, false];
+        newReasonCheckbox = [false, false, false,false];
         newReasonCheckbox[action.payload] = true;
         newCancleReason = [
-          "Mechanic is not responding on booking.",
-          "Mechanic is not done good deal.",
-          "I Choose better option."
+          "No Response from the Mechanic",
+          "Did not match my price.",
+          "I Chose a better option.",
+          "Bad behaviour of Mechanic."
         ];
         return {
           ...state,
@@ -434,7 +435,9 @@ export default (state = INITIAL_STATE, action) => {
         return {
           ...state,
           isBookModalVisible: true,
-          isBookCancelModal: false
+          isBookCancelModal: false,
+          confirmDisable: false,
+          reasonCheckbox: [false, false, false,false]
         };
       }
       break;
@@ -638,7 +641,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          isPaymentModal:true
+          isPaymentModal:state.customerWalletAmount < 10? false:true,
+          isVendorRatingModal:state.customerWalletAmount < 10? true:false,
         };
       }
       break;

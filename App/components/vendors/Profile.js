@@ -12,7 +12,8 @@ import {
   Platform,
   TextInput,
   AsyncStorage,
-  ScrollView
+  ScrollView,
+  Modal
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -33,11 +34,16 @@ import {
   updateVendorProfileHeavyVehicleBool,
   updateVendorProfileTowingBool,
   updateVendorProfileTyreBool,
-  updateVendorStateAndCode
+  updateVendorStateAndCode,
+  onPressHelp,
+  onCloseHelpModal,
+  updateDocument
 } from "../../actions";
-import { USER2, PENCIL, MOTORCYCLE, CAR, HEAVY_VEHICLE,TOWING } from "../../images";
+import { USER2, PENCIL, MOTORCYCLE, CAR, HEAVY_VEHICLE,TOWING,CALL } from "../../images";
 import { Asset } from "expo";
 import * as Constants from "expo-constants";
+import * as OpenAnything from 'react-native-openanything';
+import call from "react-native-phone-call";
 import * as Permissions from "expo-permissions";
 import FlashMessage from "react-native-flash-message";
 import {stateAndTin} from '../../config'
@@ -50,6 +56,22 @@ class Profile extends Component {
     this.getPermissionAsync();
     this.props.loadVendorProfile()
   }
+
+  calltocutomer(mobileno) {
+    const args = {
+      number:'+919601944914',
+      prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call
+    };
+
+    call(args).catch(console.error);
+    this.props.onCloseHelpModal();
+  }
+
+  mailTo(){
+    OpenAnything.Email('hirenchopara@gmail.com')
+        this.props.onCloseHelpModal();
+  }
+
   getPermissionAsync = async () => {
     if (Platform.OS === "ios") {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -59,6 +81,49 @@ class Profile extends Component {
     }
   };
 
+  renderDocument() {
+    arr = this.props.documentVendorUri.map(documentUri => {
+      return (
+        <View
+          key={documentUri}
+          style={{ width: 0.1 * ScreenHeight, margin: 0.009 * ScreenHeight }}
+        >
+          <Image
+            style={{
+              width: 0.1 * ScreenHeight,
+              height: 0.1 * ScreenHeight,
+              resizeMode: "contain",
+              borderRadius: 10,
+              position: "absolute"
+            }}
+            source={{ uri: documentUri }}
+          />
+          <TouchableOpacity
+            style={{
+              height: 17,
+              width: 17,
+              borderRadius: 10,
+              backgroundColor: "#FFFFFFFF",
+              alignSelf: "center",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: 0.04 * ScreenHeight
+            }}
+            onPress={() => {
+              console.log('iii');
+              //this.props.deleteRegisterDocument(documentUri);
+            }}
+          >
+            <Text style={{ color: "#7960FF", fontFamily: "circular-bold" }}>
+              X
+            </Text>
+          </TouchableOpacity>
+        </View>
+      );
+    });
+    return arr;
+  }
+
   render() {
     const {
       containerStyle,
@@ -66,11 +131,15 @@ class Profile extends Component {
       textInputProfilStyle
     } = styles;
     return (
-      <View>
-      {
-        console.log(this.props.imageVendorUri)
-      }
-        <Header headerText="Profile" />
+      <ScrollView style={{opacity:this.props.isHelpModal?0.5:1}}>
+        <Header headerText="Profile"
+          filterText="Help"
+          filterPress={()=>{this.props.onPressHelp()}}
+          filterTextStyle={{fontFamily:'circular-bold',
+          color:"#7960FF",
+          fontSize:16,
+          bottom:13}}
+        />
         <KeyboardAwareScrollView enableOnAndroid>
           <View style={inStyle.containerStyle}>
             <Image
@@ -264,6 +333,39 @@ class Profile extends Component {
               color: "#fff"
             }}
           />
+
+          <View style={{flexDirection:'row',margin:"2%",padding:15}}>
+          {this.renderDocument()}
+          </View>
+          <TouchableOpacity
+            underlayColor="white"
+            style={{
+              backgroundColor: "transparent",
+              height: 25,
+              width: 0.37 * ScreenWidth,
+              borderRadius: 25,
+              borderColor: "#7960FF",
+              borderWidth: 1,
+              alignItems: "center",
+              justifyContent: "center",
+              alignSelf: "center",
+            }}
+
+            onPress={() => {
+              this.props.updateDocument();
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "circular-book",
+                fontSize: 0.033 * ScreenWidth,
+                color: "#7960FF"
+              }}
+            >
+              +Add Documents
+            </Text>
+          </TouchableOpacity>
+
           <TouchableHighlight
             onPress={() => {
               this.props.updateVendorProfile();
@@ -276,7 +378,90 @@ class Profile extends Component {
             </Text>
           </TouchableHighlight>
         </KeyboardAwareScrollView>
-      </View>
+        <Modal
+          visible={this.props.isHelpModal}
+          onRequestClose={() => {
+            console.log("Modal has been closed.");
+          }}
+          animationType="slide"
+          transparent={true}
+          opacity={0.5}
+          style={inStyle.modalStyle}
+        >
+        <View style={{
+          marginTop: 0.4 * ScreenHeight,
+          alignSelf: "center",
+          backgroundColor: "#FFFFFF",
+          height: 150,
+          margin: 15,
+          borderRadius: 10,
+          paddingBottom: 10,
+          paddingRight:5,
+          justifyContent: "space-around",
+          width:250,
+          alignItems:'center',
+          borderWidth:1,
+          borderColor:"#7960FF"
+        }}>
+              <Text style={{
+                fontSize:17,
+                fontFamily:'circular-bold',
+                color:"#7960FF",
+                alignSelf:'flex-end',
+                height: 20,
+                width: 20
+              }}
+              onPress={()=>{
+                this.props.onCloseHelpModal()
+              }}
+              >
+              X
+              </Text>
+
+            <TouchableOpacity
+            style={{flexDirection:'row',width:"48%",top:-10,justifyContent:"space-between"}}
+            onPress={()=>{this.mailTo()}}
+            >
+            <Image
+
+              style={{ height: 20, width: 20 }}
+              source={{uri:"http://ilifenetwork.com/api/web/email.png"}}
+            />
+            <Text style={{
+              fontSize:20,
+              fontFamily:'circular-bold',
+            }}>
+            Via Email
+            </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+            style={{
+              flexDirection:'row',
+              width:"48%",
+              bottom:10,
+              justifyContent:"space-between",
+
+            }}
+            onPress={()=>{this.calltocutomer()}}
+            >
+            <Image
+
+              style={{ height: 20, width: 20}}
+              source={CALL}
+            />
+            <Text style={{
+              fontSize:20,
+              fontFamily:'circular-bold',
+            }}>
+            Via Phone
+            </Text>
+            </TouchableOpacity>
+
+
+
+        </View>
+        </Modal>
+      </ScrollView>
     );
   }
 }
@@ -321,7 +506,7 @@ const inStyle = {
     justifyContent: "space-around"
   },
   continueButton: {
-    marginTop: 0.08 * ScreenHeight,
+    marginTop:'2%',
     alignSelf: "center",
     backgroundColor: "#7960FF",
     height: 44,
@@ -358,6 +543,11 @@ const inStyle = {
     width: 50,
     height: 50,
     resizeMode: "contain"
+  },
+  modalStyle: {
+    height: 0.2 * ScreenHeight,
+    backgroundColor: "rgba(0,0,0,0.5)",
+    justifyContent: "flex-end"
   }
 };
 
@@ -370,7 +560,9 @@ const mapStateToProps = ({ user, vendors }) => {
     emailVendor,
     imageVendorUri,
     loadingProfileUpdate,
-    vendorProfileServiceType
+    vendorProfileServiceType,
+    isHelpModal,
+    documentVendorUri
   } = vendors;
   const { userData } = user;
   return {
@@ -382,7 +574,9 @@ const mapStateToProps = ({ user, vendors }) => {
     emailVendor,
     imageVendorUri,
     loadingProfileUpdate,
-    vendorProfileServiceType
+    vendorProfileServiceType,
+    isHelpModal,
+    documentVendorUri
   };
 };
 
@@ -402,6 +596,9 @@ export default connect(
     updateVendorProfileHeavyVehicleBool,
     updateVendorProfileTowingBool,
     updateVendorProfileTyreBool,
-    updateVendorStateAndCode
+    updateVendorStateAndCode,
+    onPressHelp,
+    onCloseHelpModal,
+    updateDocument
   }
 )(Profile);

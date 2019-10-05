@@ -158,6 +158,23 @@ class SideMenuVendor extends Component {
             borderBottomWidth: 0,
             borderTopWidth: 0
           }}
+          >
+            <Button
+              containerStyle={container}
+              style={textStyle}
+              onPress={() => {
+              this.shareMechanicApp();
+              }}
+            >
+            App For Staff
+          </Button>
+        </CardSection>
+        <CardSection
+          style={{
+            flexDirection: "column",
+            borderBottomWidth: 0,
+            borderTopWidth: 0
+          }}
         >
           <Button
             containerStyle={container}
@@ -172,23 +189,7 @@ class SideMenuVendor extends Component {
             Log Out
           </Button>
         </CardSection>
-        <CardSection
-          style={{
-            flexDirection: "column",
-            borderBottomWidth: 0,
-            borderTopWidth: 0
-          }}
-          >
-            <Button
-              containerStyle={container}
-              style={textStyle}
-              onPress={() => {
-              this.shareMechanicApp();
-              }}
-            >
-            App For Staff
-          </Button>
-        </CardSection>
+
         {this.props.userData.userStatus === "Pending" || this.props.userData.userStatus === ""?null:<CardSection
           style={{
             flexDirection: "column",
@@ -201,7 +202,7 @@ class SideMenuVendor extends Component {
         onPress={()=>{
           this.props.venderActivation()
         }}
-        style={{marginTop:'50%'}}
+        style={{marginTop:'30%'}}
         >
         <Image source={{uri:'http://ilifenetwork.com/api/web/PowerButton.png'}}
         style={{height:50,width:50, tintColor:this.props.isVendorActive?"#7960FF":"grey"}}/>

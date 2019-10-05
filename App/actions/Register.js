@@ -113,6 +113,7 @@ export const requestOtp = () => (dispatch, getState) => {
   test.append("mobile", mobileno);
   Api.post(URL_USER_OTP, test)
     .then(response => {
+      console.log(response);
       if (response.loggedIn === 1) {
         dispatch({
           type: REQUEST_OTP_SUCCESS,
@@ -325,16 +326,32 @@ export const signupUser = () => (dispatch, getState) => {
   }
   Api.post(URL_USER_SIGNUP, test)
     .then(response => {
+      console.log(response);
       if (response.status === 1) {
         dispatch({
           type: SIGNUP_SUCCESSFUL,
           payload: response
         });
       } else {
-        dispatch({
-          type: SIGNUP_FAIL,
-          payload: response.message
-        });
+        var responseKey = Object.keys(response);
+        responseKey.map((key)=>{
+          if(key === "errors"){
+            var errorKey = Object.keys(response.errors);
+            errorKey.map((errKey)=>{
+              if(errKey === "email"){
+                dispatch({
+                  type: SIGNUP_FAIL,
+                  payload: response.errors.email[0]
+                });
+              }
+            })
+          } else {
+            dispatch({
+              type: SIGNUP_FAIL,
+              payload: response.message
+            });
+          }
+        })
       }
     })
     .catch(err => {
@@ -416,9 +433,12 @@ export const deleteRegisterDocument = documnet => (dispatch, getState) => {
 
 export const readFromClipboard = () => async dispatch => {
   const content = await Clipboard.getString();
+  console.log(content);
   if(content.length === 8){
     let contentArray = content.split(/(\d+)/);
-    if(contentArray[0].length === 3 && contentArray[1] === 5){
+    console.log(contentArray);
+    if(contentArray[0].length === 3 && contentArray[1].length === 5){
+
       dispatch({
         type: READ_FROM_CLIP_BOARD,
         payload: content

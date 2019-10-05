@@ -56,6 +56,7 @@ const Header = props => {
           }}
           source={props.filterIcon}
         />
+        <Text style={props.filterTextStyle}>{props.filterText}</Text>
         </TouchableOpacity>
 
     </View>
@@ -87,6 +88,6 @@ const styles = {
   // },
   // shadowOpacity: 0.4,
   elevation: 2,
-  }
+  },
 };
 export default Header;

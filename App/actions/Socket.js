@@ -229,6 +229,7 @@ export const connectTosocketBookingCancle = val => async (
     message: cancelData,
     type: "CANCEL",
     toToken:val.toToken,
+    isUserVendor:isUserVendor
   });
   channelName = `${userId} ${val}`;
 

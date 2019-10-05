@@ -7,7 +7,8 @@ import {
   StatusBar,
   Dimensions,
   TouchableHighlight,
-  Slider
+  Slider,
+  BackHandler
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -34,6 +35,17 @@ class filter extends Component {
   constructor(props) {
     super(props);
     this.state = { km: 10 };
+  }
+
+  componentDidMount() {
+   this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+   // works best when the goBack is async
+     return true;
+   });
+  }
+
+  componentWillUnmount() {
+   this.backHandler.remove();
   }
 
   render() {

@@ -11,8 +11,7 @@ import {
   Dimensions,
   Button,
   TouchableHighlight,
-  KeyboardAvoidingView,
-
+  KeyboardAvoidingView
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -25,13 +24,29 @@ import styles from "./RegisterStyle";
 import TimerMixin from "react-timer-mixin";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions';
+
 
 class RegisterMobile extends Component {
   componentWillMount(){
     this.props.readFromClipboard();
+    this._getLocationAsync();
   }
 
 
+
+  _getLocationAsync = async () => {
+     let { status } = await Permissions.askAsync(Permissions.LOCATION);
+     if (status !== 'granted') {
+       this.setState({
+         errorMessage: 'Permission to access location was denied',
+       });
+     }
+
+     let location = await Location.getCurrentPositionAsync({});
+     console.log(location);
+   };
 
   render() {
     const {

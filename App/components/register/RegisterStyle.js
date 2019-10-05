@@ -7,7 +7,8 @@ var styles = StyleSheet.create({
   containerStyle: {
     justifyContent: "space-around",
     backgroundColor: "#F7F6FB",
-    height: ScreenHeight
+    height: ScreenHeight,
+    flex:1
   },
   topImageStyle: {
     height: ScreenHeight * 0.247376,

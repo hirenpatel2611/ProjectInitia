@@ -64,10 +64,13 @@ import {
   FETCH_LEDGER_HISTORY_SUCCESS,
   FETCH_LEDGER_HISTORY_FAIL,
   HISTORY_DROPDOWN_FILTER,
-  ON_PRESS_OK_PENDING_MODAL
+  ON_PRESS_OK_PENDING_MODAL,
+  ON_PRESS_HELP,
+  ON_CLOSE_HELP_MODAL,
+  UPDATE_VENDOR_DOCUMENT_UPLOAD
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL,GET_USER_STATUS_PENDING } from "../actions/ui";
-import {stateAndTin} from '../config'
+import {stateAndTin} from '../config';
 
 const INITIAL_STATE = {
   loadingFutureBookigList: false,
@@ -122,7 +125,10 @@ const INITIAL_STATE = {
   ledgerHistoryFilter:[],
   fetchLedgerHistorySuccess:false,
   loadingHistory:false,
-  isStatusPendingModal:false
+  isStatusPendingModal:false,
+  isHelpModal:false,
+  documentVendorUri:[],
+  documentVendorBase64:[]
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -296,12 +302,13 @@ export default (state = INITIAL_STATE, action) => {
 
     case GET_REASON_CHECKBOX_VENDOR:
       {
-        newReasonCheckbox = [false, false, false];
+        newReasonCheckbox = [false, false, false,false];
         newReasonCheckbox[action.payload] = true;
         newCancleReason = [
           "I am on another call.",
-          "Customer is not done good deal.",
-          "Today I m not Present."
+          "Did not match my price.",
+          "Bad behaviour of customer",
+          "Not Available."
         ];
         return {
           ...state,
@@ -319,7 +326,7 @@ export default (state = INITIAL_STATE, action) => {
           FutureBookingList: [...action.payload.FutureBookingList],
           isConfirmModal: false,
           cancleReasonVendor: null,
-          reasonCheckboxVendor: [false, false, false],
+          reasonCheckboxVendor: [false, false, false,false],
           loadingConfirm: false
         };
       }
@@ -347,7 +354,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          isConfirmModal: false
+          isConfirmModal: false,
+          reasonCheckboxVendor: [false, false, false,false],
         };
       }
       break;
@@ -466,6 +474,7 @@ export default (state = INITIAL_STATE, action) => {
               vendorServiceType;
           }
         });
+        console.log(action.payload.image64arr);
         return {
           ...state,
           workshop_nameVendor: action.payload.workshop_name,
@@ -473,7 +482,9 @@ export default (state = INITIAL_STATE, action) => {
           addressVendor: JSON.parse(action.payload.userAddress),
           emailVendor: action.payload.userEmail,
           imageVendorUri: action.payload.uri,
-          vendorProfileServiceType: vendorServiceType
+          vendorProfileServiceType: vendorServiceType,
+          documentVendorUri:action.payload.other_image,
+          documentVendorBase64:[...action.payload.image64arr]
         };
       }
       break;
@@ -831,6 +842,40 @@ export default (state = INITIAL_STATE, action) => {
           };
         }
       break;
+
+    case ON_PRESS_HELP:
+    {
+      return {
+        ...state,
+        isHelpModal:true
+      };
+    }
+    break;
+
+    case ON_CLOSE_HELP_MODAL:
+    {
+      return {
+        ...state,
+        isHelpModal:false
+      };
+    }
+    break;
+
+    case UPDATE_VENDOR_DOCUMENT_UPLOAD:
+    {
+      return {
+        ...state,
+        documentVendorUri: [
+          ...state.documentVendorUri,
+          action.payload.uri
+        ],
+        documentVendorBase64: [
+          ...state.documentVendorBase64,
+          action.payload.base64
+        ]
+      };
+    }
+    break;
 
     default:
       return state;

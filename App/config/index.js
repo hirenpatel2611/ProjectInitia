@@ -91,27 +91,27 @@ export const setLedgerHeader = payment_id => {
 export const statusForVendor = status =>{
   switch (status) {
     case "cancle":
-      return "CANCELLED";
+      return "cancelled";
       break;
 
     case "pending":
-      return "PENDING";
+      return "pending";
       break;
 
     case "accept":
-      return "ACCEPT";
+      return "accept";
       break;
 
     case "on-the-way":
-      return "ON-THE-WAY";
+      return "on-the-way";
       break;
 
     case "reached":
-      return "REACHED";
+      return "reached";
       break;
 
       case "completed":
-        return "COMPLETED";
+        return "completed";
         break;
 
     default:
@@ -152,11 +152,12 @@ export const getLedgerHeader = header => {
 };
 
 export const paymentAmount = [
-  {value:'500 + GST (500pts)',amount:500,point:500},
-  {value:'1000 + GST (1050pts)',amount:1000,point:1050},
-  {value:'2500 + GST (2650pts)',amount:1500,point:2650},
-  {value:'5000 + GST (5400pts)',amount:5000,point:5400},
-  {value:'10000 + GST (11000pts)',amount:10000,point:11000},
+  {value:'100 + GST (100pts)',amount:100,gst:18,point:100},
+  {value:'500 + GST (525pts)',amount:500,gst:90,point:525},
+  {value:'1000 + GST (1050pts)',amount:1000,gst:180,point:1050},
+  {value:'2500 + GST (2650pts)',amount:1500,gst:270,point:2650},
+  {value:'5000 + GST (5400pts)',amount:5000,gst:900,point:5400},
+  {value:'10000 + GST (11000pts)',amount:10000,gst:1800,point:11000},
 ];
 
 export const filterHistory =[

@@ -10,7 +10,8 @@ import {
   Platform,
   Animated,
   Modal,
-  TouchableHighlight
+  TouchableHighlight,
+  BackHandler
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -62,11 +63,20 @@ class NearbyGaraje extends Component {
   };
 
   async componentWillMount() {
-    if (Platform.OS === "android" && !Constants.isDevice) {
-      this._getLocationAsync();
-    } else {
-      await this._getLocationAsync();
-    }
+
+    await this._getLocationAsync();
+
+  }
+
+  componentDidMount() {
+   this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+   // works best when the goBack is async
+     return true;
+   });
+  }
+
+  componentWillUnmount() {
+   this.backHandler.remove();
   }
 
   _getLocationAsync = async () => {
@@ -375,7 +385,7 @@ class NearbyGaraje extends Component {
             </TouchableOpacity>
           </Modal>
           <Modal
-            visible={this.props.isServiceNotAvilable}
+            visible={this.props.isServiceNotAvilable?false:false}
             onRequestClose={() => {
               console.log("Modal has been closed.");
             }}
@@ -424,7 +434,7 @@ class NearbyGaraje extends Component {
                   marginTop: 0.4 * ScreenHeight,
                   alignSelf: "stretch",
                   backgroundColor: "#FFFFFF",
-                  height: 0.28 * ScreenHeight,
+                  height: 0.30 * ScreenHeight,
                   margin: 15,
                   borderRadius: 10,
                   padding: 10,
@@ -462,7 +472,7 @@ class NearbyGaraje extends Component {
                   Reason of Cancel
                 </Text>
                 <CheckBox
-                  label='Mechanic is not responding on booking.'
+                  label='No Response from the Mechanic'
                   checked={this.props.reasonCheckbox[0]}
                   onChange={() => {
                        this.props.getReasonCheckbox(0);
@@ -484,7 +494,7 @@ class NearbyGaraje extends Component {
                 // />
               }
               <CheckBox
-                label='Mechanic is not done good deal.'
+                label='Did not match my price.'
                 checked={this.props.reasonCheckbox[1]}
                 onChange={() => {
                      this.props.getReasonCheckbox(1);
@@ -494,10 +504,20 @@ class NearbyGaraje extends Component {
                 containerStyle={{padding:3}}
               />
               <CheckBox
-                label='I Choose better option.'
+                label='I Chose a better option.'
                 checked={this.props.reasonCheckbox[2]}
                 onChange={() => {
                      this.props.getReasonCheckbox(2);
+                  }}
+                checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
+                labelStyle={{fontFamily:'circular-bold'}}
+                containerStyle={{padding:3}}
+              />
+              <CheckBox
+                label='Bad behaviour of Mechanic.'
+                checked={this.props.reasonCheckbox[3]}
+                onChange={() => {
+                     this.props.getReasonCheckbox(3);
                   }}
                 checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
                 labelStyle={{fontFamily:'circular-bold'}}

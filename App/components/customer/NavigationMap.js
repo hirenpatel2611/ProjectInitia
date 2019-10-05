@@ -12,7 +12,8 @@ import {
   Platform,
   Animated,
   Modal,
-  Linking
+  Linking,
+  BackHandler
 } from "react-native";
 import { connect } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -53,12 +54,21 @@ let longitude_Delta =0.0922 * ASPECT_RATIO;
 
 class NearbyGaraje extends Component {
   async componentWillMount() {
-    if (Platform.OS === "android" && !Constants.isDevice) {
-    } else {
       await this._getLocationAsync();
-    }
     this.props.getCustomerWalletAmount();
   }
+
+  componentDidMount() {
+   this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+   // works best when the goBack is async
+     return true;
+   });
+  }
+
+  componentWillUnmount() {
+   this.backHandler.remove();
+  }
+
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
 
@@ -89,6 +99,16 @@ class NearbyGaraje extends Component {
     });
     this.props.getUserLocationSuccess(location);
     {
+
+    }
+    await Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.BestForNavigation
+      },
+      location => {
+        this.props.getUserLocationSuccess(location);
+      }
+    );
     await this._map.animateCamera(
       {  center:{
           latitude: this.props.location.coords.latitude,
@@ -100,15 +120,6 @@ class NearbyGaraje extends Component {
       }
 
       );
-    }
-    await Location.watchPositionAsync(
-      {
-        accuracy: Location.Accuracy.BestForNavigation
-      },
-      location => {
-        this.props.getUserLocationSuccess(location);
-      }
-    );
   };
   callToMechanic()
     {
@@ -308,7 +319,7 @@ class NearbyGaraje extends Component {
                     underlineColorAndroid="transparent"
                     placeholderTextColor="#9D9D9D"
                     placeholder="Amount..."
-                    multiline={true}
+                    keyboardType={"phone-pad"}
                     value={this.props.paymentAmountInput}
                     onChangeText={text => {
                       this.props.getpaymentAmountInput(text);
@@ -378,9 +389,6 @@ class NearbyGaraje extends Component {
             animationType="slide"
             transparent={true}
             opacity={0.5}
-            style={{
-                height: 0.2 * ScreenHeight,
-              }}
           >
 
               <View
@@ -388,7 +396,7 @@ class NearbyGaraje extends Component {
                   marginTop:0.40 * ScreenHeight,
                   alignSelf: "stretch",
                   backgroundColor: "#FFFFFF",
-                  height: 0.25 * ScreenHeight,
+                  height: 0.30 * ScreenHeight,
                   margin: 15,
                   borderRadius: 10,
                   padding: 10,
@@ -423,7 +431,7 @@ class NearbyGaraje extends Component {
                 </TouchableOpacity>
                 </View>
                 <CheckBox
-                  label='No Response Mechanic is not responding on booking.'
+                  label='No Response from the Mechanic'
                   checked={this.props.reasonCheckbox[0]}
                   onChange={() => {
                        this.props.getReasonCheckbox(0);
@@ -433,7 +441,7 @@ class NearbyGaraje extends Component {
                   containerStyle={{padding:3}}
                 />
                 <CheckBox
-                  label='Mechanic is not done good deal.'
+                  label='Did not match my price.'
                   checked={this.props.reasonCheckbox[1]}
                   onChange={() => {
                        this.props.getReasonCheckbox(1);
@@ -443,7 +451,7 @@ class NearbyGaraje extends Component {
                   containerStyle={{padding:3}}
                 />
                 <CheckBox
-                  label='I Chose better option.'
+                  label='I Chose a better option.'
                   checked={this.props.reasonCheckbox[2]}
                   onChange={() => {
                        this.props.getReasonCheckbox(2);
@@ -452,7 +460,16 @@ class NearbyGaraje extends Component {
                   labelStyle={{fontFamily:'circular-bold'}}
                   containerStyle={{padding:3}}
                 />
-
+                <CheckBox
+                  label='Bad behaviour of Mechanic.'
+                  checked={this.props.reasonCheckbox[3]}
+                  onChange={() => {
+                       this.props.getReasonCheckbox(3);
+                    }}
+                  checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
+                  labelStyle={{fontFamily:'circular-bold'}}
+                  containerStyle={{padding:3}}
+                />
                 <TouchableOpacity
                   disabled={!this.props.confirmDisable}
                   style={{ alignSelf: "center",

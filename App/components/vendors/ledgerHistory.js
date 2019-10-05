@@ -79,7 +79,7 @@ class LedgerHistory extends Component {
                           color: setLedgerHeader(item.payment_id).type === 'dr'?'#cc0000':"green"
                         }}
                       >
-                        Pts {item.amount}{" "}{setLedgerHeader(item.payment_id).type}
+                        Pts {item.points}{" "}{setLedgerHeader(item.payment_id).type}
                       </Text>
                     </View>
                     <View
@@ -136,13 +136,13 @@ class LedgerHistory extends Component {
                   </View>
                 )}
               />
-              :this.props.loadingHistory?<Spinner />:<Text
+              :this.props.loadingHistory?<View style={{marginTop:"60%"}}><Spinner /></View>:<Text
               style={{
                 fontFamily: "circular-bold",
                 alignSelf: "center",
-                marginTop:50
+                marginTop:"60%"
               }}
-              >No History Found</Text>
+              >No Prior Transactions Found</Text>
 
             }
 

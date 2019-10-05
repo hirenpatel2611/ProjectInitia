@@ -83,7 +83,6 @@ class ForgotResetPassword extends Component {
             placeholder="New Password"
             placeholderTextColor="#9D9D9D"
             autoCapitalize="none"
-            keyboardType={"phone-pad"}
             secureTextEntry={true}
             onChangeText={val => {this.props.updateForgotEnetrPassword(val)}}
             value={this.props.forgotEnterPassword}
@@ -94,7 +93,6 @@ class ForgotResetPassword extends Component {
             placeholder="Re-Enter Password"
             placeholderTextColor="#9D9D9D"
             autoCapitalize="none"
-            keyboardType={"phone-pad"}
             secureTextEntry={true}
             onChangeText={val => {this.props.updateForgotReEnetrPassword(val)}}
             value={this.props.forgotReEnterPassword}

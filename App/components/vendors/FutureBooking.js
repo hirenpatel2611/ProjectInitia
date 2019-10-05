@@ -13,7 +13,8 @@ import {
   Animated,
   AsyncStorage,
   ScrollView,
-  FlatList
+  FlatList,
+  BackHandler
 } from "react-native";
 import { connect } from "react-redux";
 import isEmpty from "is-empty";
@@ -57,7 +58,14 @@ class FutureBooking extends Component {
   componentDidMount() {
     this.props.getFutureBookings();
     this.props.getWalletAmount();
+    this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+    // works best when the goBack is async
+      return true;
+    });
+  }
 
+  componentWillUnmount() {
+   this.backHandler.remove();
   }
   calltocutomer(mobileno) {
     const args = {
@@ -286,15 +294,15 @@ class FutureBooking extends Component {
                         <TouchableOpacity
                           style={{
                             alignSelf: "flex-end",
-                            opacity: item.status === "pending" ? 1 : 0,
+                            opacity: item.status === "pending" ? this.props.walletBalance < 24?0.5:1 : 0,
                             width: 70,
                             height: 28,
                             backgroundColor: "#4EA352",
                             alignItems: "center",
                             justifyContent: "center",
-                            borderRadius: 3
+                            borderRadius: 3,
                           }}
-                          disabled={item.status === "pending" ? false : true}
+                          disabled={this.props.walletBalance < 24?true:item.status === "pending" ? false : true}
                           onPress={() => {
                             var data = {
                               booking_id: item.booking_id,
@@ -520,13 +528,15 @@ class FutureBooking extends Component {
                   }}
                 >
                   <TouchableOpacity
+                  disabled={this.props.walletBalance < 24?true:false}
                     style={{ alignSelf: "flex-end",
                               width: 80,
                               height: 28,
                               backgroundColor: "#4EA352",
                               alignItems: "center",
                               justifyContent: "center",
-                              borderRadius: 3}}
+                              borderRadius: 3,
+                              opacity:this.props.walletBalance < 24?0.5:1}}
                     onPress={async () => {
                       var val = {
                         status: "accept",
@@ -725,7 +735,7 @@ class FutureBooking extends Component {
                   marginTop: 0.4 * ScreenHeight,
                   alignSelf: "stretch",
                   backgroundColor: "#FFFFFF",
-                  height: 0.25 * ScreenHeight,
+                  height: 0.30 * ScreenHeight,
                   margin: 15,
                   borderRadius: 10,
                   padding: 10,
@@ -773,7 +783,7 @@ class FutureBooking extends Component {
                   containerStyle={{padding:3}}
                 />
                 <CheckBox
-                  label='Customer is not done good deal.'
+                  label='Did not match my price.'
                   checked={this.props.reasonCheckboxVendor[1]}
                   onChange={() => {
                        this.props.getReasonCheckboxVendor(1);
@@ -783,10 +793,20 @@ class FutureBooking extends Component {
                   containerStyle={{padding:3}}
                 />
                 <CheckBox
-                  label='Today I m not Present.'
+                  label='Bad behaviour of customer.'
                   checked={this.props.reasonCheckboxVendor[2]}
                   onChange={() => {
                        this.props.getReasonCheckboxVendor(2);
+                    }}
+                  checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
+                  labelStyle={{fontFamily:'circular-bold'}}
+                  containerStyle={{padding:3}}
+                />
+                <CheckBox
+                  label='Not Available.'
+                  checked={this.props.reasonCheckboxVendor[3]}
+                  onChange={() => {
+                       this.props.getReasonCheckboxVendor(3);
                     }}
                   checkboxStyle={{tintColor:'#7960FF',height:22,width:22}}
                   labelStyle={{fontFamily:'circular-bold'}}
@@ -994,7 +1014,8 @@ const mapStateToProps = ({ vendors }) => {
     loadingRating,
     bookingModalData,
     bookings,
-    isStatusPendingModal
+    isStatusPendingModal,
+    walletBalance
   } = vendors;
   return {
     loadingFutureBookigList,
@@ -1021,7 +1042,8 @@ const mapStateToProps = ({ vendors }) => {
     loadingRating,
     bookings,
     bookingModalData,
-    isStatusPendingModal
+    isStatusPendingModal,
+    walletBalance
   };
 };
 

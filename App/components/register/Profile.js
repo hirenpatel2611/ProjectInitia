@@ -13,7 +13,8 @@ import {
   Button,
   TouchableHighlight,
   StyleSheet,
-  Platform
+  Platform,
+  BackHandler
 } from "react-native";
 import { connect } from "react-redux";
 import {
@@ -23,17 +24,15 @@ import {
   MOTORCYCLE,
   ICON_REFRESH,
   PENCIL,
-  USER2
-} from "../../images";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { Slider } from "react-native-elements";
-import { Dropdown } from 'react-native-material-dropdown';
-import {
+  USER2,
   MECHANIC,
   HAND_HOLDING_UP,
   CAR_ENGINE,
   TIMING_BELT
 } from "../../images";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Slider } from "react-native-elements";
+import { Dropdown } from 'react-native-material-dropdown';
 import { Actions } from "react-native-router-flux";
 import {
   toggleModalProfile,
@@ -80,13 +79,20 @@ class Profile extends Component {
     super(props);
     this.locationIsEnabled = false;
   }
+  componentDidMount() {
+   this.backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+   // works best when the goBack is async
+     return true;
+   });
+ }
+
+ componentWillUnmount() {
+   this.backHandler.remove();
+ }
 
   componentWillMount() {
-    if (Platform.OS === "android" && !Constants.isDevice) {
+
       this._getLocationAsync();
-    } else {
-      this._getLocationAsync();
-    }
     this.getPermissionAsync();
   }
 
@@ -730,7 +736,7 @@ const rules = [
       }
       return true;
     },
-    error: "Address is Require"
+    error: "State is Require"
   },
   {
     field: "email",
@@ -768,6 +774,22 @@ const rules = [
     field: "agreeCheckbox",
     condition: (agreeCheckbox, { isVendor }) => agreeCheckbox === true,
     error: "Please agree terms and conditions."
+  },
+  {
+    field: "email",
+    condition: (email, { isVendor }) => {
+      if (isVendor) {
+        const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+              if (reg.test(email) === true){
+                  return true;
+              }else {
+                return false;
+              }
+      }
+      return true;
+    },
+    error: "Please Enter correct Email"
+
   }
   // {
   //   field: 'avatar',

@@ -59,7 +59,8 @@ export default (state = INITIAL_STATE, action) => {
             userLongitude: action.payload.longitude,
             userVehicleType: state.isVendorLoggedIn ?JSON.parse(action.payload.service_vehicle_type):action.payload.service_vehicle_type,//JSON.parse(action.payload.service_vehicle_type),
             uderReferalCode: action.payload.referal_code,
-            userStatus: action.payload.status
+            userStatus: action.payload.status,
+            other_image:action.payload.other_image
           },
           userCurrentBooking: action.payload.current_booking
         };

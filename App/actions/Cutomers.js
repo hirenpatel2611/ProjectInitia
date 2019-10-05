@@ -215,7 +215,7 @@ export const BookVendor = () => async (dispatch, getState) => {
     .then(response => {
 
       if (response.status === 1) {
-        var message = 'Dear Velway Partner, You have a Booking from '+userData.userFullName+ ', Kindly update as soon as possible.';
+        var message = 'Dear Velway Partner, You have a Booking from '+userData.userFullName+ ', Kindly Open our App and contact the customer as early as possible.';
 
         dispatch({
           type: GET_BOOKING_SUCCESS,
@@ -272,7 +272,7 @@ export const getBookingCancellation = () => (dispatch, getState) => {
           toToken: vendorsData.device_token,
           sender_id:userData.userId
         };
-        var message = "Dear Velway Partner, We are very sorry, your Booking is cancel by "+ userData.userFullName +" for this reason : "+ cancleReason;
+        var message = "Dear Velway Partner, We are very sorry, your Booking is cancelled by "+ userData.userFullName +" for this reason : "+ cancleReason;
         dispatch(smsSendByCustomer(vendorsData.mobile,message))
         dispatch(connectTosocketBookingCancle(cancelData));
         dispatch(getUserData());
@@ -428,15 +428,27 @@ export const getDistance = () => async (dispatch, getState) => {
 };
 
 export const getBookingStatus = val => async (dispatch, getState) => {
-  dispatch({
-    type: GET_BOOKING_STATUS,
-    payload: val
-  });
-
+  const { bookingStatusRes} = getState().customers;
+  console.log(bookingStatusRes);
+  if(bookingStatusRes.type === "PENDING"){
+    dispatch({
+      type: GET_BOOKING_STATUS,
+      payload: val
+    });
+  }
   if (val.type === "ON-THE-WAY") {
-    Actions.NavigationMap();
+    if(bookingStatusRes.type === "ACCEPT"){
+      dispatch({
+        type: GET_BOOKING_STATUS,
+        payload: val
+      });
+    Actions.NavigationMap();}
   }
   if (val.type === "CANCEL") {
+    dispatch({
+      type: GET_BOOKING_STATUS,
+      payload: val
+    });
     if (cancelAlertCounter === 0) {
       dispatch({
         type: GET_BOOKING_CANCEL_BY_VENDOR
@@ -491,7 +503,7 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
   dispatch({
     type: GET_BOOKING_UPDATE_START
   });
-  const { bookingStatusRes, bookData,vendorsData } = getState().customers;
+  const { bookingStatusRes, bookData,vendorsData,customerWalletAmount } = getState().customers;
   const {userData} = getState().user;
   obj = Object.assign({}, bookingStatusRes);
 
@@ -512,7 +524,7 @@ export const getBookingUpdateUser = val => (dispatch, getState) => {
 
         if (val === "completed") {
           dispatch(getRating());
-          var message = "Booking Complete by "+ userData.userFullName;
+          var message = "Booking Complete by "+ userData.userFullName + ", We are glad to help you.";
           dispatch(smsSendByCustomer(vendorsData.mobile,message))
           dispatch({
             type: GET_BOOKING_COMPLETE
@@ -716,7 +728,8 @@ export const getFilterSubmeet = () => (dispatch, getState) => {
   dispatch(getVendors());
 };
 
-export const getVendorRatingModal = () => dispatch => {
+export const getVendorRatingModal = () => (dispatch,getState) => {
+  const {customerWalletAmount} = getState().vendors
   dispatch({
     type: GET_VENDOR_RATING_MODAL
   });
@@ -777,6 +790,7 @@ export const onPressModalPaytoVendor = () => (dispatch,getState) => {
     dispatch({
       type:ON_PRESS_MODAL_PAY_TO_VENDOR_SUCCESS
     })
+    dispatch(getCustomerWalletAmount())
     showMessage({
       message: "SUCCESS",
       description: "Successfully pay to Partner",
