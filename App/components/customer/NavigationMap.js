@@ -20,7 +20,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Actions } from "react-native-router-flux";
 import styles from "./customersStyle";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import { IntentLauncher } from "expo";
 import * as Permissions from 'expo-permissions';
 import * as Constants from 'expo-constants'
 import {
@@ -70,29 +69,16 @@ class NearbyGaraje extends Component {
   }
 
   _getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
-
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+    }
     if (status !== "granted") {
       this.props.getUserLocationFail();
     }
-    await Location.hasServicesEnabledAsync()
-      .then(async res => {
-        if (!res) {
-          perm = await IntentLauncher.startActivityAsync(
-            IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
-          );
-        }
-        await Location.hasServicesEnabledAsync()
-          .then(async res => {
-            this.locationIsEnabled = res;
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+
 
     let location = await Location.getCurrentPositionAsync({
       accuracy: Location.Accuracy.BestForNavigation

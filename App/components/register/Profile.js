@@ -65,7 +65,6 @@ import TimerMixin from "react-timer-mixin";
 import withValidation from "simple-hoc-validator";
 import isEmpty from "is-empty";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
-import * as IntentLauncher from "expo-intent-launcher";
 import * as Permissions from "expo-permissions";
 import * as Location from "expo-location";
 import * as Constants from "expo-constants";
@@ -107,29 +106,16 @@ class Profile extends Component {
 
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+    }
 
     if (status !== "granted") {
       this.props.getUserLocationFail();
     }
 
-    await Location.hasServicesEnabledAsync()
-      .then(async res => {
-        if (!res) {
-          perm = await IntentLauncher.startActivityAsync(
-            IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
-          );
-        }
-        await Location.hasServicesEnabledAsync()
-          .then(async res => {
-            this.locationIsEnabled = res;
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      })
-      .catch(err => {
-        console.error(err);
-      });
     let location = await Location.getCurrentPositionAsync({
       accuracy: Location.Accuracy.BestForNavigation
     });

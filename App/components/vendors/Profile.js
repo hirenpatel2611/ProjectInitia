@@ -37,7 +37,9 @@ import {
   updateVendorStateAndCode,
   onPressHelp,
   onCloseHelpModal,
-  updateDocument
+  updateDocument,
+  getUserData,
+  onDeleteVendorDocument
 } from "../../actions";
 import { USER2, PENCIL, MOTORCYCLE, CAR, HEAVY_VEHICLE,TOWING,CALL } from "../../images";
 import { Asset } from "expo";
@@ -53,13 +55,14 @@ let ScreenWidth = Dimensions.get("window").width;
 
 class Profile extends Component {
   componentWillMount() {
+    this.props.getUserData()
     this.getPermissionAsync();
     this.props.loadVendorProfile()
   }
 
   calltocutomer(mobileno) {
     const args = {
-      number:'+919601944914',
+      number:'+919158797607',
       prompt: false // Optional boolean property. Determines if the user should be prompt prior to the call
     };
 
@@ -68,7 +71,7 @@ class Profile extends Component {
   }
 
   mailTo(){
-    OpenAnything.Email('hirenchopara@gmail.com')
+    OpenAnything.Email('help.partner@velway.in')
         this.props.onCloseHelpModal();
   }
 
@@ -110,8 +113,7 @@ class Profile extends Component {
               margin: 0.04 * ScreenHeight
             }}
             onPress={() => {
-              console.log('iii');
-              //this.props.deleteRegisterDocument(documentUri);
+              this.props.onDeleteVendorDocument(documentUri);
             }}
           >
             <Text style={{ color: "#7960FF", fontFamily: "circular-bold" }}>
@@ -141,6 +143,7 @@ class Profile extends Component {
           bottom:13}}
         />
         <KeyboardAwareScrollView enableOnAndroid>
+
           <View style={inStyle.containerStyle}>
             <Image
               style={inStyle.profileImageStyle}
@@ -324,20 +327,16 @@ class Profile extends Component {
               <Image style={inStyle.imageServiceType} source={{uri:'http://ilifenetwork.com/api/web/tyre.png'}} />
             </TouchableHighlight>
           </View>
-          <FlashMessage
-            position="center"
-            style={{
-              zIndex: 100,
-              marginTop: 0.5 * ScreenHeight,
-              backgroundColor: "#7960FF",
-              color: "#fff"
-            }}
-          />
 
-          <View style={{flexDirection:'row',margin:"2%",padding:15}}>
-          {this.renderDocument()}
+{
+  console.log(this.props.loadingImageBase64)
+}
+          <View style={{flexDirection:'row',margin:"2%"}}>
+          {this.props.userData.userStatus ==="Pending" ?this.props.loadingImageBase64?<Text style={{margin:5,height:30,marginLeft:"30%",color:"#7960FF"}}>Loading Images...</Text>:this.renderDocument():null}
+
           </View>
-          <TouchableOpacity
+          {this.props.userData.userStatus ==="Pending" ?<TouchableOpacity
+            disabled={this.props.documentVendorUri.length === 3 ? true:false}
             underlayColor="white"
             style={{
               backgroundColor: "transparent",
@@ -349,6 +348,7 @@ class Profile extends Component {
               alignItems: "center",
               justifyContent: "center",
               alignSelf: "center",
+              opacity:this.props.documentVendorUri.length === 3 ? 0.5:1
             }}
 
             onPress={() => {
@@ -364,7 +364,7 @@ class Profile extends Component {
             >
               +Add Documents
             </Text>
-          </TouchableOpacity>
+          </TouchableOpacity>:null}
 
           <TouchableHighlight
             onPress={() => {
@@ -377,6 +377,7 @@ class Profile extends Component {
               {this.props.loadingProfileUpdate ? "Loading..." : "Continue"}
             </Text>
           </TouchableHighlight>
+
         </KeyboardAwareScrollView>
         <Modal
           visible={this.props.isHelpModal}
@@ -461,6 +462,14 @@ class Profile extends Component {
 
         </View>
         </Modal>
+        <FlashMessage
+          position="center"
+          style={{
+            zIndex: 100,
+            backgroundColor: "#7960FF",
+            color: "#fff"
+          }}
+        />
       </ScrollView>
     );
   }
@@ -562,7 +571,8 @@ const mapStateToProps = ({ user, vendors }) => {
     loadingProfileUpdate,
     vendorProfileServiceType,
     isHelpModal,
-    documentVendorUri
+    documentVendorUri,
+    loadingImageBase64
   } = vendors;
   const { userData } = user;
   return {
@@ -576,6 +586,7 @@ const mapStateToProps = ({ user, vendors }) => {
     loadingProfileUpdate,
     vendorProfileServiceType,
     isHelpModal,
+    loadingImageBase64,
     documentVendorUri
   };
 };
@@ -599,6 +610,8 @@ export default connect(
     updateVendorStateAndCode,
     onPressHelp,
     onCloseHelpModal,
-    updateDocument
+    updateDocument,
+    getUserData,
+    onDeleteVendorDocument
   }
 )(Profile);

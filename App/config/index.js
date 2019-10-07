@@ -152,12 +152,12 @@ export const getLedgerHeader = header => {
 };
 
 export const paymentAmount = [
-  {value:'100 + GST (100pts)',amount:100,gst:18,point:100},
-  {value:'500 + GST (525pts)',amount:500,gst:90,point:525},
-  {value:'1000 + GST (1050pts)',amount:1000,gst:180,point:1050},
-  {value:'2500 + GST (2650pts)',amount:1500,gst:270,point:2650},
-  {value:'5000 + GST (5400pts)',amount:5000,gst:900,point:5400},
-  {value:'10000 + GST (11000pts)',amount:10000,gst:1800,point:11000},
+  {value:'100 INR + GST (100pts)',amount:100,gst:18,point:100},
+  {value:'500 INR + GST (525pts)',amount:500,gst:90,point:525},
+  {value:'1000 INR + GST (1050pts)',amount:1000,gst:180,point:1050},
+  {value:'2500 INR + GST (2650pts)',amount:1500,gst:270,point:2650},
+  {value:'5000 INR + GST (5400pts)',amount:5000,gst:900,point:5400},
+  {value:'10000 INR + GST (11000pts)',amount:10000,gst:1800,point:11000},
 ];
 
 export const filterHistory =[

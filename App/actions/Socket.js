@@ -13,7 +13,6 @@ import * as Location from "expo-location";
 import * as Constants from "expo-constants";
 import * as Permissions from "expo-permissions";
 import * as TaskManager from "expo-task-manager";
-import * as IntentLauncher from "expo-intent-launcher";
 
 export const CONNECT_TO_SOCKET = "socket/connectTosocket";
 export const CREATE_SOCKET_CHANNEL = "socket/createSocketChannel";
@@ -292,29 +291,14 @@ export const socketVendorCurrentLocation = val => async (
   bookingDetails = mechanicBookedData;
   disp = dispatch;
   valReach= val;
-  let { status } = await Permissions.askAsync(Permissions.LOCATION);
-  if (status !== "granted") {
-    // this.props.getUserLocationFail();
-  }
 
-  await Location.hasServicesEnabledAsync()
-    .then(async res => {
-      if (!res) {
-        perm = await IntentLauncher.startActivityAsync(
-          IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
-        );
-      }
-      await Location.hasServicesEnabledAsync()
-        .then(async res => {
-          this.locationIsEnabled = res;
-        })
-        .catch(err => {
-          console.error(err);
-        });
-    })
-    .catch(err => {
-      console.error(err);
+
+  let { Lstatus } = await Permissions.askAsync(Permissions.LOCATION);
+  if (Lstatus !== 'granted') {
+    this.setState({
+      errorMessage: 'Permission to access location was denied',
     });
+  }
   // console.error(Location.getHeadingAsync());
 
   dispatch(goToMap());

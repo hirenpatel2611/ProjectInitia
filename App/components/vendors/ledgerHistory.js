@@ -155,7 +155,7 @@ const inStyle = {
   ScrollViewStyle: {
     top:5,
     paddingBottom: 160,
-    marginBottom: 190,
+    marginBottom: 180,
     paddingRight: 5,
     paddingLeft: 5,
   },

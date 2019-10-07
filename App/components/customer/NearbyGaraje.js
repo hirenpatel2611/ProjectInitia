@@ -20,7 +20,6 @@ import styles from "./customersStyle";
 import Header from "../../Common/Header";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import * as Permissions from 'expo-permissions';
-import * as IntentLauncher from 'expo-intent-launcher';
 import * as Constants from 'expo-constants'
 import {
   updateFilterVehicleBool,
@@ -81,28 +80,16 @@ class NearbyGaraje extends Component {
 
   _getLocationAsync = async () => {
     let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+    }
 
     if (status !== "granted") {
       this.props.getUserLocationFail();
     }
-    await Location.hasServicesEnabledAsync()
-      .then(async res => {
-        if (!res) {
-          perm = await IntentLauncher.startActivityAsync(
-            IntentLauncher.ACTION_LOCATION_SOURCE_SETTINGS
-          );
-        }
-        await Location.hasServicesEnabledAsync()
-          .then(async res => {
-            this.locationIsEnabled = res;
-          })
-          .catch(err => {
-            console.error(err);
-          });
-      })
-      .catch(err => {
-        console.error(err);
-      });
+
 
     let location = await Location.getCurrentPositionAsync({
      accuracy: Location.Accuracy.BestForNavigation,

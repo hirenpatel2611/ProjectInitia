@@ -67,7 +67,11 @@ import {
   ON_PRESS_OK_PENDING_MODAL,
   ON_PRESS_HELP,
   ON_CLOSE_HELP_MODAL,
-  UPDATE_VENDOR_DOCUMENT_UPLOAD
+  UPDATE_VENDOR_DOCUMENT_UPLOAD,
+  LOAD_VENDOR_PROFILE_URI_TO_BASE64,
+  ON_DELETE_VENDOR_DOCUMENT,
+  LOAD_VENDOR_PROFILE_URI_TO_BASE64_START,
+  LOAD_VENDOR_PROFILE_URI_TO_BASE64_SUCCESS
 } from "../actions/Vendors";
 import { SET_ALL_STATE_TO_INITIAL,GET_USER_STATUS_PENDING } from "../actions/ui";
 import {stateAndTin} from '../config';
@@ -128,7 +132,8 @@ const INITIAL_STATE = {
   isStatusPendingModal:false,
   isHelpModal:false,
   documentVendorUri:[],
-  documentVendorBase64:[]
+  documentVendorBase64:[],
+  loadingImageBase64:false
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -474,9 +479,9 @@ export default (state = INITIAL_STATE, action) => {
               vendorServiceType;
           }
         });
-        console.log(action.payload.image64arr);
         return {
           ...state,
+          loadingImageBase64:true,
           workshop_nameVendor: action.payload.workshop_name,
           fullNameVendor: action.payload.userFullName,
           addressVendor: JSON.parse(action.payload.userAddress),
@@ -484,8 +489,22 @@ export default (state = INITIAL_STATE, action) => {
           imageVendorUri: action.payload.uri,
           vendorProfileServiceType: vendorServiceType,
           documentVendorUri:action.payload.other_image,
-          documentVendorBase64:[...action.payload.image64arr]
+
         };
+      }
+      break;
+
+    case LOAD_VENDOR_PROFILE_URI_TO_BASE64:
+      {
+        var sss = false
+        if(state.documentVendorBase64.length === state.documentVendorUri.length - 1){
+          sss=true
+        }
+        return {
+          ...state,
+          documentVendorBase64:[...state.documentVendorBase64,action.payload],
+          loadingImageBase64:false
+        }
       }
       break;
 
@@ -874,6 +893,38 @@ export default (state = INITIAL_STATE, action) => {
           action.payload.base64
         ]
       };
+    }
+    break;
+
+    case ON_DELETE_VENDOR_DOCUMENT:
+    {
+      return {
+        ...state,
+        documentVendorUri: [
+          ...action.payload.documentVendorUri
+        ],
+        documentVendorBase64: [
+          ...action.payload.documentVendorBase64
+        ]
+      }
+    }
+    break;
+
+    case LOAD_VENDOR_PROFILE_URI_TO_BASE64_START:
+    {
+      return {
+        ...state,
+        loadingImageBase64:true
+      }
+    }
+    break;
+
+    case LOAD_VENDOR_PROFILE_URI_TO_BASE64_SUCCESS:
+    {
+      return {
+        ...state,
+        loadingImageBase64:false
+      }
     }
     break;
 
