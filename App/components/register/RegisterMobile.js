@@ -45,7 +45,7 @@ class RegisterMobile extends Component {
      }
 
      let location = await Location.getCurrentPositionAsync({});
-     console.log(location);
+    
    };
 
   render() {

@@ -437,7 +437,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          loadingProfileUpdate: false
+          loadingProfileUpdate: false,
+          documentVendorBase64:[]
         };
       }
       break;
@@ -446,7 +447,8 @@ export default (state = INITIAL_STATE, action) => {
       {
         return {
           ...state,
-          loadingProfileUpdate: false
+          loadingProfileUpdate: false,
+          documentVendorBase64:[]
         };
       }
       break;
@@ -481,7 +483,6 @@ export default (state = INITIAL_STATE, action) => {
         });
         return {
           ...state,
-          loadingImageBase64:true,
           workshop_nameVendor: action.payload.workshop_name,
           fullNameVendor: action.payload.userFullName,
           addressVendor: JSON.parse(action.payload.userAddress),
@@ -496,13 +497,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case LOAD_VENDOR_PROFILE_URI_TO_BASE64:
       {
-        var sss = false
-        if(state.documentVendorBase64.length === state.documentVendorUri.length - 1){
-          sss=true
-        }
+
         return {
           ...state,
-          documentVendorBase64:[...state.documentVendorBase64,action.payload],
           loadingImageBase64:false
         }
       }
@@ -888,10 +885,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state.documentVendorUri,
           action.payload.uri
         ],
-        documentVendorBase64: [
-          ...state.documentVendorBase64,
-          action.payload.base64
-        ]
+        loadingImageBase64:false
       };
     }
     break;
@@ -903,9 +897,7 @@ export default (state = INITIAL_STATE, action) => {
         documentVendorUri: [
           ...action.payload.documentVendorUri
         ],
-        documentVendorBase64: [
-          ...action.payload.documentVendorBase64
-        ]
+        loadingImageBase64:false
       }
     }
     break;

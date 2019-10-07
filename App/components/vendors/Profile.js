@@ -99,7 +99,7 @@ class Profile extends Component {
               borderRadius: 10,
               position: "absolute"
             }}
-            source={{ uri: documentUri }}
+            source={{ uri: documentUri}}
           />
           <TouchableOpacity
             style={{
@@ -328,11 +328,11 @@ class Profile extends Component {
             </TouchableHighlight>
           </View>
 
-{
-  console.log(this.props.loadingImageBase64)
-}
+
           <View style={{flexDirection:'row',margin:"2%"}}>
-          {this.props.userData.userStatus ==="Pending" ?this.props.loadingImageBase64?<Text style={{margin:5,height:30,marginLeft:"30%",color:"#7960FF"}}>Loading Images...</Text>:this.renderDocument():null}
+          {this.props.userData.userStatus ==="Pending" ?this.props.loadingImageBase64?this.props.documentVendorUri.length?<Text style={{margin:5,height:30,marginLeft:"30%",color:"#7960FF"}}>Loading Images...</Text>
+          :null
+          :this.renderDocument():null}
 
           </View>
           {this.props.userData.userStatus ==="Pending" ?<TouchableOpacity
@@ -572,7 +572,8 @@ const mapStateToProps = ({ user, vendors }) => {
     vendorProfileServiceType,
     isHelpModal,
     documentVendorUri,
-    loadingImageBase64
+    loadingImageBase64,
+    documentVendorBase64
   } = vendors;
   const { userData } = user;
   return {
@@ -587,7 +588,8 @@ const mapStateToProps = ({ user, vendors }) => {
     vendorProfileServiceType,
     isHelpModal,
     loadingImageBase64,
-    documentVendorUri
+    documentVendorUri,
+    documentVendorBase64
   };
 };
 

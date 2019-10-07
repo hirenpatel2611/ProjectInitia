@@ -14,7 +14,7 @@ import {
   FETCH_LEDGER_HISTORY
 } from "../config";
 import { paymentAmount } from "../config";
-import {getUserData} from "./ui";
+import { getUserData } from "./ui";
 import {
   connectTosocketApprov,
   connectTosocketBookingCancle,
@@ -23,7 +23,7 @@ import {
   socketBookingCompleted,
   socketLeaveClubRoom
 } from "./Socket";
-import * as ImageManipulator from 'expo-image-manipulator';
+import * as ImageManipulator from "expo-image-manipulator";
 import { SplashScreen } from "expo";
 import { Actions } from "react-native-router-flux";
 import openMap from "react-native-open-maps";
@@ -127,12 +127,15 @@ export const HISTORY_DROPDOWN_FILTER = "vendors/HISTORY_DROPDOWN_FILTER";
 export const ON_PRESS_OK_PENDING_MODAL = "vendors/ON_PRESS_OK_PENDING_MODAL";
 export const ON_PRESS_HELP = "vendors/ON_PRESS_HELP";
 export const ON_CLOSE_HELP_MODAL = "vendors/ON_CLOSE_HELP_MODAL";
-export const UPDATE_VENDOR_DOCUMENT_UPLOAD = "vendors/UPDATE_VENDOR_DOCUMENT_UPLOAD";
-export const LOAD_VENDOR_PROFILE_URI_TO_BASE64 = "vendors/LOAD_VENDOR_PROFILE_URI_TO_BASE64";
+export const UPDATE_VENDOR_DOCUMENT_UPLOAD =
+  "vendors/UPDATE_VENDOR_DOCUMENT_UPLOAD";
+export const LOAD_VENDOR_PROFILE_URI_TO_BASE64 =
+  "vendors/LOAD_VENDOR_PROFILE_URI_TO_BASE64";
 export const ON_DELETE_VENDOR_DOCUMENT = "vendors/ON_DELETE_VENDOR_DOCUMENT";
-export const LOAD_VENDOR_PROFILE_URI_TO_BASE64_START = "vendors/LOAD_VENDOR_PROFILE_URI_TO_BASE64_START";
-export const LOAD_VENDOR_PROFILE_URI_TO_BASE64_SUCCESS = "vendors/LOAD_VENDOR_PROFILE_URI_TO_BASE64_SUCCESS";
-
+export const LOAD_VENDOR_PROFILE_URI_TO_BASE64_START =
+  "vendors/LOAD_VENDOR_PROFILE_URI_TO_BASE64_START";
+export const LOAD_VENDOR_PROFILE_URI_TO_BASE64_SUCCESS =
+  "vendors/LOAD_VENDOR_PROFILE_URI_TO_BASE64_SUCCESS";
 
 export const getFutureBookings = () => async (dispatch, getState) => {
   dispatch({
@@ -208,25 +211,24 @@ export const getCustomerDistanceList = val => async (dispatch, getState) => {
         switch (disMile[1]) {
           case "mi":
             {
-                return{
-                  dis : dis * 1.609,
-                  dis : parseFloat(dis.toFixed(1)) + " " + "km"
-                }
-              }
+              return {
+                dis: dis * 1.609,
+                dis: parseFloat(dis.toFixed(1)) + " " + "km"
+              };
+            }
             break;
 
           case "ft":
-          {
-            return {
-                dis : dis / 3280.8,
-                dis : parseFloat(dis.toFixed(3)) + " " + "km",
-              }
-          }
-          break;
+            {
+              return {
+                dis: dis / 3280.8,
+                dis: parseFloat(dis.toFixed(3)) + " " + "km"
+              };
+            }
+            break;
 
           default:
-          return dis = responseJson.rows[0].elements[0].distance.text;
-
+            return (dis = responseJson.rows[0].elements[0].distance.text);
         }
         // if (disUnit !== "mi") {
         //   if (dis > 100) {
@@ -578,7 +580,7 @@ export const updateVendorEmail = val => dispatch => {
   });
 };
 
-export const updateVendorProfile = val => (dispatch, getState) => {
+export const updateVendorProfile = val => async (dispatch, getState) => {
   dispatch({
     type: UPDATE_VENDOR_PROFILE_START
   });
@@ -589,8 +591,11 @@ export const updateVendorProfile = val => (dispatch, getState) => {
     imageBase64Vendor,
     workshop_nameVendor,
     vendorProfileServiceType,
-    documentVendorBase64
+    documentVendorBase64,
+    documentVendorUri
   } = getState().vendors;
+  const { userData } = getState().user;
+
   var service_type = [
     "bike",
     "car",
@@ -605,10 +610,31 @@ export const updateVendorProfile = val => (dispatch, getState) => {
     }
   }
   service_vehicle_type = JSON.stringify(service_vehicle_type);
-  var documentBase64  = JSON.stringify(documentVendorBase64);
-  console.log(documentVendorBase64.length);
 
-  const { userData } = getState().user;
+  let documentBase64 = "";
+  let documentBase = "";
+  for (var i = 0; i < documentVendorUri.length; i++) {
+    const manipResult = await ImageManipulator.manipulateAsync(
+      documentVendorUri[i],
+      [],
+      { base64: true }
+    );
+    var ff = manipResult.base64;
+    documentVendorBase64.push(ff);
+  }
+  // await documentVendorUri.map(async (imageUri)=>{
+  //   if(userData.userStatus === "Pending"){
+  // const manipResult = await ImageManipulator.manipulateAsync(
+  //   imageUri,[],{base64: true,}
+  // );
+  // var ff = manipResult.base64
+  //
+  // documentVendorBase64.push(ff);
+  // console.log('hi');
+  // }
+  // })
+  documentBase = await JSON.stringify(documentVendorBase64);
+
   let test = new FormData();
   test.append("id", userData.userId);
   test.append("first_name", fullNameVendor);
@@ -616,9 +642,10 @@ export const updateVendorProfile = val => (dispatch, getState) => {
   test.append("profile_image", imageBase64Vendor);
   test.append("workshop_name", workshop_nameVendor);
   test.append("service_vehicle_type", service_vehicle_type);
-  userData.userStatus === "Pending"?test.append("other_image", documentBase64):null
+  userData.userStatus === "Pending"
+    ? test.append("other_image", documentBase)
+    : null;
   Api.post(UPDATE_PROFILE, test).then(response => {
-    console.log(response.message);
     if (response.status === 1) {
       dispatch({
         type: UPDATE_VENDOR_PROFILE_SUCCESS
@@ -643,34 +670,12 @@ export const updateVendorProfile = val => (dispatch, getState) => {
 };
 
 export const loadVendorProfile = () => async (dispatch, getState) => {
-
-
-
   const { userData } = getState().user;
 
   dispatch({
     type: LOAD_VENDOR_PROFILE,
     payload: userData
   });
-
-     if(userData.userStatus === "Pending"){
-       dispatch({
-         type: LOAD_VENDOR_PROFILE_URI_TO_BASE64_START,
-       });
-      await userData.other_image.map(async (imageUri)=>{
-
-      const manipResult = await ImageManipulator.manipulateAsync(
-        imageUri,[],{base64: true,}
-      );
-      dispatch({
-        type: LOAD_VENDOR_PROFILE_URI_TO_BASE64,
-        payload: manipResult.base64
-      });
-
-    })
-  }
-
-
 };
 
 export const upadteVendorProfileImage = () => async dispatch => {
@@ -744,9 +749,9 @@ export const startMapVendor = startMapData => (dispatch, getState) => {
 
 export const goToMap = () => async (dispatch, getState) => {
   let { status } = await Permissions.askAsync(Permissions.LOCATION);
-  if (status !== 'granted') {
+  if (status !== "granted") {
     this.setState({
-      errorMessage: 'Permission to access location was denied',
+      errorMessage: "Permission to access location was denied"
     });
   }
   let location = await Location.getCurrentPositionAsync({
@@ -1097,15 +1102,15 @@ export const onPressOkPendingModal = () => dispatch => {
 
 export const onPressHelp = () => dispatch => {
   dispatch({
-    type:ON_PRESS_HELP,
-  })
-}
+    type: ON_PRESS_HELP
+  });
+};
 
 export const onCloseHelpModal = () => dispatch => {
   dispatch({
-    type:ON_CLOSE_HELP_MODAL,
-  })
-}
+    type: ON_CLOSE_HELP_MODAL
+  });
+};
 
 export const updateDocument = () => async dispatch => {
   let result = await ImagePicker.launchImageLibraryAsync({
@@ -1116,8 +1121,6 @@ export const updateDocument = () => async dispatch => {
     key: "123"
   });
 
-  console.log(result);
-
   if (!result.cancelled) {
     dispatch({
       type: UPDATE_VENDOR_DOCUMENT_UPLOAD,
@@ -1126,17 +1129,14 @@ export const updateDocument = () => async dispatch => {
   }
 };
 
-export const onDeleteVendorDocument = (val) => (dispatch,getState) => {
-  console.log(val);
-
-  const { documentVendorUri,documentVendorBase64 } = getState().vendors;
+export const onDeleteVendorDocument = val => (dispatch, getState) => {
+  const { documentVendorUri } = getState().vendors;
 
   var index = documentVendorUri.indexOf(val);
   documentVendorUri.splice(index, 1);
-  documentVendorBase64.splice(index,1);
+  //documentVendorBase64.splice(index,1);
   dispatch({
     type: ON_DELETE_VENDOR_DOCUMENT,
-    payload:{documentVendorUri:documentVendorUri,documentVendorBase64:documentVendorBase64}
+    payload: { documentVendorUri: documentVendorUri }
   });
-console.log(documentVendorUri);
-}
+};
