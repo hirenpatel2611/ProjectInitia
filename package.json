@@ -27,7 +27,7 @@
     "@expo/samples": "2.1.1",
     "@expo/vector-icons": "^10.0.1",
     "@ptomasroos/react-native-multi-slider": "https://github.com/Kif11/react-native-multi-slider",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-eslint": "8.1.1",
     "crypto": "^1.0.1",
     "dotenv-webpack": "^1.7.0",
